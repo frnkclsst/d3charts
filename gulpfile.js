@@ -38,12 +38,17 @@ gulp.task('copy-src', function() {
 		.pipe(gulp.dest(buildOptions.distPath));
 });
 
-gulp.task('clean', function (cb) {
-    fs.remove(buildOptions.distPath, cb);
+gulp.task('clean', function () {
+    fs.remove(buildOptions.distPath);
 });
 
 gulp.task('build', ['copy-src', 'compile-typescript']);
 
-gulp.task('default', function (cb) {
-    runSequence('clean', 'build', cb);
+gulp.task('serve', function(){
+    runSequence('clean', 'build');
+	//TODO 
+});
+
+gulp.task('default', function () {
+    runSequence('clean', 'build');
 });

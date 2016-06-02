@@ -18,7 +18,7 @@
     <script src="js/d3chart.js"></script>
 </head>
 <body>
-    <h1>LiveContent Monitor</h1>
+    <h1>Dashboard</h1>
     <div class="filter">
         <div class="dropdown">
             <div class="dropdown-label">
@@ -60,7 +60,7 @@
             // Initialize
             var settings = $.parseJSON(data);
             // Draw initial chart
-            var chart = new SDL.UI.Charts.LineChart(settings, "#chart");
+            var chart = new frnk.UI.Charts.LineChart(settings, "#chart");
             chart.draw();
 
             // Change Type
@@ -73,23 +73,23 @@
                 var val = this.options[this.selectedIndex].value;
                 switch (val) {
                     case "bar":
-                        var chart = new SDL.UI.Charts.BarChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.BarChart(settings, "#chart");
                         chart.draw();
                         break;
                     case "stackedbar":
-                        var chart = new SDL.UI.Charts.StackedBarChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.StackedBarChart(settings, "#chart");
                         chart.draw();
                         break;
                     case "line":
-                        var chart = new SDL.UI.Charts.LineChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.LineChart(settings, "#chart");
                         chart.draw();
                         break;
                     case "stackedline":
-                        var chart = new SDL.UI.Charts.StackedLineChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.StackedLineChart(settings, "#chart");
                         chart.draw();
                         break;
                     case "pie":
-                        var chart = new SDL.UI.Charts.PieChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.PieChart(settings, "#chart");
                         chart.draw();
                         break;
                 }
