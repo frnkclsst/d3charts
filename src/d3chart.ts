@@ -1,7 +1,7 @@
 ﻿/// <reference path="lib/typings/d3/d3.d.ts" />
 "use strict";
 
-module SDL.UI.Charts {
+module FRNK.UI.Charts {
 
     export class Settings {
         settings: string;
@@ -177,7 +177,7 @@ module SDL.UI.Charts {
                         
         getMaxValue() {
             var matrix = null;
-            if ((this._chart instanceof SDL.UI.Charts.StackedBarChart || this._chart instanceof SDL.UI.Charts.StackedLineChart) && this._items.length > 1) // can only be stacked if you have more than 1 series defined
+            if ((this._chart instanceof FRNK.UI.Charts.StackedBarChart || this._chart instanceof FRNK.UI.Charts.StackedLineChart) && this._items.length > 1) // can only be stacked if you have more than 1 series defined
                 return d3.max(this.matrix, function (array) {
                     return d3.max(array, function (d: any) {
                         return d.y0 + d.y;
@@ -193,7 +193,7 @@ module SDL.UI.Charts {
 
         getMinValue() {
             var matrix = null;
-            if ((this._chart instanceof SDL.UI.Charts.StackedBarChart || this._chart instanceof SDL.UI.Charts.StackedLineChart) && this._items.length > 1) // can only be stacked if you have more than 1 series defined
+            if ((this._chart instanceof FRNK.UI.Charts.StackedBarChart || this._chart instanceof FRNK.UI.Charts.StackedLineChart) && this._items.length > 1) // can only be stacked if you have more than 1 series defined
                 return d3.min(this.matrix, function (array) {
                     return d3.min(array, function (d: any) {
                         return d.y0 + d.y;
@@ -1314,7 +1314,7 @@ module SDL.UI.Charts {
     }
 }
 
-module SDL.UI.Charts.ColorPalette {
+module FRNK.UI.Charts.ColorPalette {
 
     export function getColor(i: number): string {
         var _colors =
