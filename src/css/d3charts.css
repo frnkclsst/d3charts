@@ -1,0 +1,128 @@
+html {
+    font-family: 'Lucida Sans', Arial;
+    font-size: 11px;
+}
+
+/* Charts */
+svg {
+	background-color: #fafafa;
+	border: 1px solid #eeeeee;
+	border-radius:3px;
+    margin-left: 12px;
+}
+.title {
+	fill: #000000;
+	font-size: 14px;
+	font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Legend */
+.sep {
+	stroke: #EEEEEE;
+	stroke-width: 1;
+}
+.legend {
+	font-family: Arial, sans-serif;
+	font-size: 9px;
+}
+
+/* Axis */
+.axis path,
+.axis line {
+	fill: none;
+	stroke: #dddddd;
+	stroke-width:1px;
+	shape-rendering: crispEdges;
+}
+.axis text {
+	font-family: Arial, sans-serif;
+	font-size: 9px;
+	text-transform: uppercase;
+    word-spacing: -1px;
+    fill: #878787;
+}
+/* Gridlines */
+.grid .tick {
+	stroke: #eeeeee;
+    opacity: 0.7;
+}
+.grid path {
+	stroke-width: 1;
+}
+.grid .zero-line line {
+    stroke: #ccdddd;
+    stroke-width: 1px;
+	shape-rendering: crispEdges;
+}
+/* Line Chart */
+.series .line {
+    opacity: 1;
+	stroke-width:2px;
+}
+.series .line:hover {
+    opacity: 0.6;
+}
+.series .marker {
+	stroke-width:2px;
+    fill: #ffffff;
+}
+.series .marker:hover {
+	stroke-width:2px;
+    fill: #fff;
+}
+/* Area Chart */
+.series .area {
+	fill: steelblue;
+}
+
+/* Bar Chart */
+.bar {
+    opacity: 0.8;
+    stroke: #fff;  /* separates the bars with a white stroke */
+    stroke-width:1px;
+}
+.bar:hover {
+	opacity: 0.6;
+    stroke: #fff; /* separates the bars with a white stroke */
+    stroke-width:1px;
+}
+
+/* Pie Chart */
+.slice text {
+    fill: #fff;
+    font-size: 9px;
+    opacity:0.8;
+}
+.slice:hover {
+    opacity: 0.6;
+}
+
+/* Tooltip */
+#tooltip {
+        position: absolute;
+        width: 200px;
+        height: auto;
+        padding: 10px;
+        background-color: white;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        pointer-events: none;
+}
+
+#tooltip.hidden {
+        display: none;
+}
+
+#tooltip p {
+        margin: 0;
+        font-family: sans-serif;
+        font-size: 16px;
+        line-height: 20px;
+}
+
+

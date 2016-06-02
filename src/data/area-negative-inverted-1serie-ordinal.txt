@@ -1,0 +1,61 @@
+{
+    "canvas": {
+        "height": 300,
+        "width": 600,
+        "padding": 80
+    },
+	"piechart": {
+		"innerRadius": 1
+	},
+    "legend": {
+       	"title": "",
+        "width": 200
+    },
+    "title": {
+        "text": "Object Types / Status"
+    },
+    "subtitle": {
+        "text": "subtitle" 
+    },
+    "xAxis": {
+        "categories": ["Draft", "Expired", "In Translation", "Out of date", "Released", "System", "System Read-only", "To be Reviewed", "To be Translated", "Translated"],
+        "format": "%s", 
+        "gridlines": "major",
+        "position": "bottom",
+		"labels": {
+			"rotate": "-45"
+		},
+        "title": { 
+            "text": "Status"
+        }
+    },
+    "yAxis": {
+        "format": "%n",
+        "gridlines": "major",
+        "position": "left",
+        "ticks": 5,
+		"title": {
+            "text": "# objects in this publication"
+        }
+    },
+    "tooltip": { 
+        "valueSuffix": " millions"
+    },
+    "series": 
+			[{
+            "data": [-50, -10, 0, 10, 20, 30, 40, 80, 90, 100],
+            "name": "Topics"
+			}]
+    ,
+    "plotOptions": {
+        "general": { 
+            "innerPadding": 0.1,
+			"outerPadding": 0.5
+        },
+		"line": {
+			"interpolation": "linear",
+			"showMarkers": "yes",
+			"stacking": "normal"
+		}
+    }
+}

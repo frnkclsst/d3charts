@@ -1,0 +1,66 @@
+{
+    "canvas": {
+        "height": 300,
+        "width": 300,
+        "padding": 80
+    },
+	"piechart": {
+		"innerRadius": 1
+	},
+    "legend": {
+       	"title": "",
+        "width": 200
+    },
+    "title": {
+        "text": "Object Types / Status", 
+		"align": "left"
+    },
+    "subtitle": {
+        "text": "subtitle" 
+    },
+    "xAxis": {
+        "categories": ["A", "B", "C", "D", "E", "F", "G"],
+        "format": "%s", 
+        "gridlines": "major",
+        "position": "bottom",
+		"labels": {
+			"rotate": "-45"
+		},
+        "title": { 
+            "text": "Status"
+        }
+    },
+    "yAxis": {
+        "format": "%n",
+        "gridlines": "major",
+        "position": "left",
+        "ticks": 20,
+		"title": {
+            "text": "# objects in this publication"
+        }
+    },
+    "tooltip": { 
+        "valueSuffix": " millions"
+    },
+    "series": 
+			[{
+                "name": "Asia",
+                "data": [-1, 2, 3, 4, 5, 6, 7]
+            }, 
+			{
+                "name": "Africa",
+                "data": [2, 4, 6, 8, 10, 12, 14]
+            }]
+    ,
+    "plotOptions": {
+        "general": { 
+            "innerPadding": 0.1,
+			"outerPadding": 0.5
+        },
+		"line": {
+			"interpolation": "linear",
+			"showMarkers": "yes", 
+			"fillArea": "yes"
+		}
+    }
+}

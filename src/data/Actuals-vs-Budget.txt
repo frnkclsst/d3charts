@@ -1,0 +1,62 @@
+{
+    "canvas": {
+        "height": 300,
+        "width": 600,
+        "padding": 110
+	},
+    "legend": {
+       	"title": "",
+        "width": 200
+    },
+    "title": {
+        "text": "Budget vs Actuals vs Prior Year"
+    },
+    "subtitle": {
+        "text": "subtitle" 
+    },
+    "xAxis": {
+        "categories": ["Budget", "Actuals", "Prior Year"],
+        "format": "%s", 
+        "gridlines": "none",
+        "position": "bottom",
+        "title": { 
+            "text": "Type"
+        }
+    },
+    "yAxis": {
+		"format": "%n",
+        "gridlines": "major",
+        "position": "left",
+        "ticks": 5,
+		"title": {
+            "text": "Million"
+        }
+    },
+    "tooltip": { 
+        "valueSuffix": " millions"
+    },
+    "series":
+			[{
+				"data": [769, 755, 664],
+				"name": "NASA"
+			}, 
+			{
+				"data": [275, 168, 454],
+				"name": "EMEA"			
+			}, 
+			{
+				"data": [83, 7, 0],
+				"name": "Japan"
+			}]
+    ,
+    "plotOptions": {
+        "general": { 
+            "innerPadding": 0.1,
+			"outerPadding": 2
+        },
+		"line": {
+			"interpolation": "linear",
+			"showMarkers": "yes"
+		}
+    }
+}

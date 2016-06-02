@@ -1,0 +1,84 @@
+{
+    "canvas": {
+        "height": 300,
+        "width": 900,
+        "padding": 50
+    },
+	"piechart": {
+		"innerRadius": 1
+	},
+    "legend": {
+       	"title": "",
+        "width": 300
+    },
+    "title": {
+        "text": "Population Growth per Region",
+		"align": "left",
+		"height": 50
+    },
+    "subtitle": {
+        "text": "subtitle" 
+    },
+    "xAxis": {
+        "categories": ["1750", "1800", "1850", "1900", "1950", "1999", "2050"],
+        "format": "%s", 
+        "gridlines": "major",
+        "position": "bottom",
+		"labels": {
+			"rotate": "-45"
+		},
+        "title": { 
+            "text": "Status"
+        }
+    },
+    "yAxis": {
+        "format": "%n",
+        "gridlines": "major",
+        "position": "left",
+        "ticks": 5,
+		"title": {
+            "text": "Millions"
+        }
+    },
+    "tooltip": { 
+        "valueSuffix": " millions"
+    },
+    "series": 
+			[{
+                "name": "Asia",
+                "data": [502, 635, 809, 947, 1402, 3634, 5268]
+            }, 
+			{
+                "name": "Africa",
+                "data": [106, 107, 111, 133, 221, 767, 1766]
+            }, 
+			{
+                "name": "Europe",
+                "data": [163, 203, 276, 408, 547, 729, 628]
+            }, 
+			{
+                "name": "America",
+                "data": [18, 31, 54, 156, 339, 818, 1201]
+            }, 
+			{
+                "name": "Oceania",
+                "data": [20, 20, 20, 60, 130, 300, 460]
+            }, 
+			{
+                "name": "Runkelen",
+                "data": [200, 520, 1220, 2560, 5630, 6300, 7460]
+            }]
+    ,
+    "plotOptions": {
+        "general": { 
+            "innerPadding": 0.1,
+			"outerPadding": 0.5
+        },
+		"line": {
+			"fillArea": "yes",
+			"interpolation": "linear",
+			"showMarkers": "yes",
+            "stacking": "percent"
+		}    
+	}
+}

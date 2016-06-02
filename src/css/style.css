@@ -1,0 +1,43 @@
+﻿/* Filter */
+
+.filter {
+    /*border: 1px solid #d3d4d5;*/
+    margin:17px 20px 0px 10px;
+    padding: 10px;
+    border-radius: 3px;
+    height:133px;
+    background-color: #fff;
+    height:100%;
+}
+
+.filter .dropdown-label{ 
+    margin:0 12px 0 12px; 
+    padding:0px 0px 0px 0px;
+}
+.filter .dropdown-label > label {
+    font-family:'Arial';
+    font-size:8pt;
+    font-weight:normal; 
+    text-transform: none;
+    color:#333;
+    padding:0px 0 0px 3px;
+}
+.filter .dropdown-field{ 
+    margin:5px 12px 0px 12px; 
+
+}
+.filter .dropdown-field > select {
+    width:150px;
+}
+.filter .ui-widget, .ui-selectmenu-menu .ui-widget { 
+    font-family:'Arial';
+    font-size:.85em;
+}
+.filter .ui-state-default { 
+    border: 1px solid #9CA3AF; 
+    background: #ffffff none 50% 50% repeat-x; 
+    color: #353535; 
+}
+.filter .ui-state-hover {
+    background: #C7D1D6 none 50% 50% repeat-x;
+}
