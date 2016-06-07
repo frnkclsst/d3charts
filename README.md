@@ -8,26 +8,26 @@ Chart library based on d3
 
 1. Install dependencies
 
-```
-npm install gulp-cli -g
-npm install
-```
+ ```
+ npm install gulp-cli -g
+ npm install
+ ```
 
 2. Build
 
-```
-Gulp
-```
+ ```
+ gulp
+ ```
 
 3. Start server
 
-```
-node server.js
-```
+ ```
+ node server.js
+ ```
 
 4. Open index.html
 
-Goto `http://localhost:8080/index.html
+ Goto `http://localhost:8080/index.html
 
 
 ## Roadmap

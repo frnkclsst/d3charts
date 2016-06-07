@@ -8,8 +8,11 @@
     "express": "*",
 	"fs-extra": "~0.30.0",
     "gulp": "~3.9.1",
+	"gulp-debug": "~2.1.2",
+	"gulp-tslint": "~4.3.5",
     "gulp-typescript": "~2.13.5",
-    "run-sequence": "~1.1.5"
+    "run-sequence": "~1.1.5",
+	"tslint": "~3.10.2",
   },
   "repository": {
     "type": "git",

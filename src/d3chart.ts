@@ -14,8 +14,9 @@ module frnk.UI.Charts {
             var parts = propStr.split(".");
             var cur = this.settings;
             for (var i = 0; i < parts.length; i++) {
-                if (!cur[parts[i]])
+                if (!cur[parts[i]]) {
                     return null;
+                }
                 cur = cur[parts[i]];
             }
             return cur;
@@ -25,8 +26,9 @@ module frnk.UI.Charts {
             var parts = propStr.split(".");
             var cur = this.settings;
             for (var i = 0; i < parts.length; i++) {
-                if (!cur[parts[i]])
+                if (!cur[parts[i]]) {
                     return false;
+                }
                 cur = cur[parts[i]];
             }
             return true;
@@ -177,34 +179,38 @@ module frnk.UI.Charts {
                         
         getMaxValue() {
             var matrix = null;
-            if ((this._chart instanceof frnk.UI.Charts.StackedBarChart || this._chart instanceof frnk.UI.Charts.StackedLineChart) && this._items.length > 1) // can only be stacked if you have more than 1 series defined
+            if ((this._chart instanceof frnk.UI.Charts.StackedBarChart || this._chart instanceof frnk.UI.Charts.StackedLineChart) && this._items.length > 1) { // can only be stacked if you have more than 1 series defined
                 return d3.max(this.matrix, function (array) {
                     return d3.max(array, function (d: any) {
                         return d.y0 + d.y;
                     });
                 });
-            else
+            }
+            else {
                 return d3.max(this.matrix, function (array) {
                     return d3.max(array, function (d: any) {
                         return d.y;
                     });
                 });
+            }
         }
 
         getMinValue() {
             var matrix = null;
-            if ((this._chart instanceof frnk.UI.Charts.StackedBarChart || this._chart instanceof frnk.UI.Charts.StackedLineChart) && this._items.length > 1) // can only be stacked if you have more than 1 series defined
+            if ((this._chart instanceof frnk.UI.Charts.StackedBarChart || this._chart instanceof frnk.UI.Charts.StackedLineChart) && this._items.length > 1) { // can only be stacked if you have more than 1 series defined
                 return d3.min(this.matrix, function (array) {
                     return d3.min(array, function (d: any) {
                         return d.y0 + d.y;
                     });
                 });
-            else
+            }
+            else {
                 return d3.min(this.matrix, function (array) {
                     return d3.min(array, function (d: any) {
                         return d.y;
                     });
                 });
+            }
         }
 
         getSerie(i: number) {
@@ -234,22 +240,25 @@ module frnk.UI.Charts {
         }
 
         getColor(i?: number) {
-            if (this._color != null)
+            if (this._color != null) {
                 return this._color;
+            }
             return ColorPalette.getColor(i);
             //TODO - fallback in case bigger than 20 series
         }
 
         getFillColor(i?: number) {
-            if (this._fillColor != null)
+            if (this._fillColor != null) {
                 return this._fillColor;
+            }
             return ColorPalette.getFillColor(i);
             //TODO - fallback in case bigger than 20 series
         }
 
         getName(i: number) {
-            if (this._name != null)
+            if (this._name != null) {
                 return this._name;
+            }
             return "Serie " + (i + 1);
         }
 
@@ -401,39 +410,48 @@ module frnk.UI.Charts {
         }
 
         isOrdinalScale(): boolean {
-            if (this._scaleType === ScaleType.Ordinal)
+            if (this._scaleType === ScaleType.Ordinal) {
                 return true;
+            }
             return false;
         }
 
         isLinearScale(): boolean {
-            if (this._scaleType === ScaleType.Linear)
+            if (this._scaleType === ScaleType.Linear) {
                 return true;
+            }
             return false;
         }
 
         isTimeScale(): boolean {
-            if (this._scaleType === ScaleType.Time)
+            if (this._scaleType === ScaleType.Time) {
                 return true;
+            }
             return false;
         }
 
         parseCategory(value: string) : any { //TODO: add return type
-            if (this.format == "%s")
-				return value;
-			else if (this.format == "%n")
-				return value;
-			else
-				return d3.time.format(this.format).parse(value);
+            if (this.format == "%s") {
+                return value;
+            }
+            else if (this.format == "%n") {
+                return value;
+            }
+            else {
+                return d3.time.format(this.format).parse(value);
+            }
         }
 
         setGridlineType(type: string) {
-            if (type.toUpperCase() == "MAJOR")
-				this._gridlineType = GridLineType.Major;
-            else if (type.toUpperCase() == "MINOR")
-				this._gridlineType = GridLineType.Minor;
-			else
+            if (type.toUpperCase() == "MAJOR") {
+                this._gridlineType = GridLineType.Major;
+            }
+            else if (type.toUpperCase() == "MINOR") {
+                this._gridlineType = GridLineType.Minor;
+            }
+            else {
                 this._gridlineType = GridLineType.None;
+            }
         }
 
         draw(chart: Chart) {
@@ -465,24 +483,24 @@ module frnk.UI.Charts {
         private _setScale(chart: Chart): any {
             var _this = this;
             if (_this.format == "%s") {
-				_this.setScaleType(ScaleType.Ordinal);
-				return d3.scale.ordinal()
-					.domain(_this.categories)
-					.rangeBands([0, chart.canvas.width], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding);
-			}
-			else if (_this.format == "%n") {
-				_this.setScaleType(ScaleType.Linear);
-				return d3.scale.linear()
-					.domain([chart.series.getMinValue() < 0 ? chart.series.getMinValue() : 0, chart.series.getMaxValue()])
-					.nice() // adds additional ticks to add some whitespace  
-					.range([0, chart.canvas.width]);
-			}
-			else {
-				_this.setScaleType(ScaleType.Time);
-				return d3.time.scale()
-					.domain(d3.extent(_this.categories, function (d) { return d3.time.format(_this.format).parse(d); }))
-					.nice() // adds additional ticks to add some whitespace  
-					.range([0, chart.canvas.width]);
+                _this.setScaleType(ScaleType.Ordinal);
+                return d3.scale.ordinal()
+                    .domain(_this.categories)
+                    .rangeBands([0, chart.canvas.width], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding);
+            }
+            else if (_this.format == "%n") {
+                _this.setScaleType(ScaleType.Linear);
+                return d3.scale.linear()
+                    .domain([chart.series.getMinValue() < 0 ? chart.series.getMinValue() : 0, chart.series.getMaxValue()])
+                    .nice() // adds additional ticks to add some whitespace  
+                    .range([0, chart.canvas.width]);
+            }
+            else {
+                _this.setScaleType(ScaleType.Time);
+                return d3.time.scale()
+                    .domain(d3.extent(_this.categories, function (d) { return d3.time.format(_this.format).parse(d); }))
+                    .nice() // adds additional ticks to add some whitespace  
+                    .range([0, chart.canvas.width]);
             }
         }
 
@@ -565,10 +583,12 @@ module frnk.UI.Charts {
         }
 
         getOffset(chart: Chart) {
-            if (this.position == "bottom")
+            if (this.position == "bottom") {
                 return chart.canvas.height + chart.canvas.padding;
-            else
+            }
+            else {
                 return chart.canvas.padding;
+            } 
         }
     }
 
@@ -589,29 +609,29 @@ module frnk.UI.Charts {
             var _this = this;
 
             if (_this.format == "%s") {
-				_this.setScaleType(ScaleType.Ordinal);
-				return d3.scale.ordinal()
-					.domain(_this.categories)
-					.rangeRoundBands([0, chart.canvas.height - chart.title.height], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding); 
-			}
+                _this.setScaleType(ScaleType.Ordinal);
+                return d3.scale.ordinal()
+                    .domain(_this.categories)
+                    .rangeRoundBands([0, chart.canvas.height - chart.title.height], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding); 
+            }
             else if (_this.format == "%n") {                    
-				_this.setScaleType(ScaleType.Linear);
-				return d3.scale.linear()
-					.domain([chart.series.getMaxValue(), chart.series.getMinValue() < 0 ? chart.series.getMinValue() : 0])
-					.nice() // adds additional ticks to add some whitespace 
-					.range([0, chart.canvas.height - chart.title.height]);
-			}
+                _this.setScaleType(ScaleType.Linear);
+                return d3.scale.linear()
+                    .domain([chart.series.getMaxValue(), chart.series.getMinValue() < 0 ? chart.series.getMinValue() : 0])
+                    .nice() // adds additional ticks to add some whitespace 
+                    .range([0, chart.canvas.height - chart.title.height]);
+            }
             else {
-				_this.setScaleType(ScaleType.Time);
-				return d3.time.scale()
-					.domain(d3.extent(_this.categories, function (d) { return d3.time.format(_this.format).parse(d); }).reverse())
-					.nice() // adds additional ticks to add some whitespace  
-					.range([chart.series.getMinValue(), chart.canvas.height - chart.title.height]);
+                _this.setScaleType(ScaleType.Time);
+                return d3.time.scale()
+                    .domain(d3.extent(_this.categories, function (d) { return d3.time.format(_this.format).parse(d); }).reverse())
+                    .nice() // adds additional ticks to add some whitespace  
+                    .range([chart.series.getMinValue(), chart.canvas.height - chart.title.height]);
             }
         }
 
         draw(chart: Chart) : Canvas {
-		    var _this = this;
+            var _this = this;
 
             super.draw(chart);
 
