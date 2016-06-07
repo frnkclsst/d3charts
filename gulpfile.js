@@ -15,7 +15,7 @@ var buildOptions = {
 
 
 // Gulp Tasks
-gulp.task('compile-typescript', function(){
+gulp.task('compile-typescript', function(cb){
 	return gulp.src('src/**/*.ts')
         .pipe(gulpTypescript({
             //noImplicitAny: true,
@@ -24,7 +24,7 @@ gulp.task('compile-typescript', function(){
         .pipe(gulp.dest( buildOptions.distPath + '/js'));
 });
 
-gulp.task('run-tslint', function(){
+gulp.task('run-tslint', function(cb){
 	// TODO
 });
 
@@ -38,14 +38,14 @@ gulp.task('copy-src', function(cb) {
 		.pipe(gulp.dest(buildOptions.distPath));
 });
 
-gulp.task('clean', function () {
-    return fs.remove(buildOptions.distPath);
+gulp.task('clean', function (cb) {
+    fs.remove(buildOptions.distPath, cb);
 });
 
-gulp.task('build', function() {
-	runSequence('copy-src', 'compile-typescript');
+gulp.task('build', function(cb) {
+	runSequence('copy-src', 'compile-typescript', cb);
 });
 
-gulp.task('default', function () {
-    runSequence('clean', 'build');
+gulp.task('default', function (cb) {
+    runSequence('clean', 'build', cb);
 });
