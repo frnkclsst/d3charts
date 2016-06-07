@@ -1,0 +1,19 @@
+{
+  "name": "d3charts",
+  "version": "1.0.0",
+  "description": "Chart library based on d3",
+  "readme": "ERROR: No README data found!",
+  "author": "frank.closset@gmail.com",
+  "devDependencies": {
+    "express": "*",
+	"fs-extra": "~0.30.0",
+    "gulp": "~3.9.1",
+    "gulp-typescript": "~2.13.5",
+    "run-sequence": "~1.1.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frnkclsst/d3charts.git"
+  },
+  "license": "Apache-2.0"
+}

@@ -2,6 +2,33 @@
 
 ## Description
 
+Chart library based on d3
+
+## Install
+
+1. Install dependencies
+
+```
+npm install gulp-cli -g
+npm install
+```
+
+2. Build
+
+```
+Gulp
+```
+
+3. Start server
+
+```
+node server.js
+```
+
+4. Open index.html
+
+Goto `http://localhost:8080/index.html
+
 
 ## Roadmap
 

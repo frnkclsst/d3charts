@@ -28,8 +28,8 @@ gulp.task('run-tslint', function(){
 	// TODO
 });
 
-gulp.task('copy-src', function() {
-	gulp.src([
+gulp.task('copy-src', function(cb) {
+	return gulp.src([
 		buildOptions.srcPath + '/**',
 		'!' + buildOptions.distPath,
 		'!' + buildOptions.distPath + '/**',
@@ -39,14 +39,11 @@ gulp.task('copy-src', function() {
 });
 
 gulp.task('clean', function () {
-    fs.remove(buildOptions.distPath);
+    return fs.remove(buildOptions.distPath);
 });
 
-gulp.task('build', ['copy-src', 'compile-typescript']);
-
-gulp.task('serve', function(){
-    runSequence('clean', 'build');
-	//TODO 
+gulp.task('build', function() {
+	runSequence('copy-src', 'compile-typescript');
 });
 
 gulp.task('default', function () {
