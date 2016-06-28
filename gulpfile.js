@@ -43,9 +43,8 @@ gulp.task('run-tslint', function(cb){
 			}
 		}
 	}))
-	.pipe(gulpDebug({ title: 'Validated with TSLint' }))
 	.pipe(gulpTSLint.report('verbose', {
-		reportLimit: 100
+		reportLimit: 1000
 	}))
 	.on('error', function (err) {
 		cb(new Error('TSLint returned errors.'));
