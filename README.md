@@ -13,21 +13,13 @@ Chart library based on d3
  npm install
  ```
 
-2. Build
+2. Build and start server
 
  ```
- gulp
+ gulp serve
  ```
 
-3. Start server
-
- ```
- node server.js
- ```
-
-4. Open index.html
-
- Goto `http://localhost:8080/index.html
+The following page will open `http://localhost:9005/index.html
 
 
 ## Roadmap
