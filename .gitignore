@@ -11,6 +11,7 @@ bld/
 
 # Build output
 dist/
+.idea/
 
 # Node modules
 node_modules/**
