@@ -150,7 +150,7 @@ gulp.task('clean', function(cb) {
 });
 
 gulp.task('build', function(cb) {
-	runSequence('copy-src', 'compile-typescript', 'run-tslint', cb);
+	runSequence('copy-src', 'run-tslint', 'compile-typescript', cb);
 });
 
 gulp.task('default', function(cb) {
