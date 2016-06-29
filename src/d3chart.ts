@@ -10,7 +10,7 @@ module frnk.UI.Charts {
             this.settings = settings;
         }
 
-        public getValue(propStr: string): any {
+        public getValue(propStr: string): string {
             var parts = propStr.split(".");
             var cur = this.settings;
             for (var i = 0; i < parts.length; i++) {
@@ -45,9 +45,9 @@ module frnk.UI.Charts {
 
         constructor(chart: Chart) {
             this._chart = chart;
-            this.height = chart.settings.isSet("canvas.height") ? chart.settings.getValue("canvas.height") : 300;
-            this.padding = chart.settings.isSet("canvas.padding") ? chart.settings.getValue("canvas.padding") : 30; // TODO: replace with margins 
-            this.width = chart.settings.isSet("canvas.width") ? chart.settings.getValue("canvas.width") : 300;
+            this.height = chart.settings.isSet("canvas.height") ? Number(chart.settings.getValue("canvas.height")) : 300;
+            this.padding = chart.settings.isSet("canvas.padding") ? Number(chart.settings.getValue("canvas.padding")) : 30; // TODO: replace with margins 
+            this.width = chart.settings.isSet("canvas.width") ? Number(chart.settings.getValue("canvas.width")) : 300;
         }
 
         public draw(): Canvas {
@@ -278,7 +278,7 @@ module frnk.UI.Charts {
             this._chart = chart;
 
             this.align = chart.settings.isSet("title.align") ? chart.settings.getValue("title.align") : "center";
-            this.height = chart.settings.isSet("title.height") ? chart.settings.getValue("title.height") : 50;
+            this.height = chart.settings.isSet("title.height") ? Number(chart.settings.getValue("title.height")) : 50;
             this.subTitle = chart.settings.isSet("title.subTitle") ? chart.settings.getValue("title.subTitle") : "";
             this.text = chart.settings.isSet("title.text") ? chart.settings.getValue("title.text") : "";
         }
@@ -327,9 +327,9 @@ module frnk.UI.Charts {
             this._chart = chart;
 
             this.title = chart.settings.isSet("legend.title") ? chart.settings.getValue("legend.title") : "";
-            this.height = chart.settings.isSet("legend.height") ? chart.settings.getValue("legend.height") : 0;
+            this.height = chart.settings.isSet("legend.height") ? Number(chart.settings.getValue("legend.height")) : 0;
             this.placement = chart.settings.isSet("legend.placement") ? chart.settings.getValue("legend.placement") : "none";
-            this.width = chart.settings.isSet("legend.width") ? chart.settings.getValue("legend.width") : 0;
+            this.width = chart.settings.isSet("legend.width") ? Number(chart.settings.getValue("legend.width")) : 0;
         }
 
         public draw(): void {
@@ -368,8 +368,8 @@ module frnk.UI.Charts {
         constructor(chart: Chart) {
             this._chart = chart;
 
-            this.innerPadding = chart.settings.isSet("plotOptions.general.innerPadding") ? chart.settings.getValue("plotOptions.general.innerPadding") : 0.5;
-            this.outerPadding = chart.settings.isSet("plotOptions.general.outerPadding") ? chart.settings.getValue("plotOptions.general.outerPadding") : 0;
+            this.innerPadding = chart.settings.isSet("plotOptions.general.innerPadding") ? Number(chart.settings.getValue("plotOptions.general.innerPadding")) : 0.5;
+            this.outerPadding = chart.settings.isSet("plotOptions.general.outerPadding") ? Number(chart.settings.getValue("plotOptions.general.outerPadding")) : 0;
         }
     }
 
@@ -1298,7 +1298,7 @@ module frnk.UI.Charts {
 
         constructor(args: any, selector: string) {
             super(args, selector);
-            this.innerRadius = this.settings.isSet("piechart.innerRadius") ? this.settings.getValue("piechart.innerRadius") : 0;
+            this.innerRadius = this.settings.isSet("piechart.innerRadius") ? Number(this.settings.getValue("piechart.innerRadius")) : 0;
         }
 
         public draw(): Canvas {

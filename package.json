@@ -2,17 +2,19 @@
   "name": "d3charts",
   "version": "1.0.0",
   "description": "Chart library based on d3",
-  "readme": "ERROR: No README data found!",
+  "readme": "readme.md",
   "author": "frank.closset@gmail.com",
   "devDependencies": {
     "express": "*",
+    "browser-sync": "~2.11.1",
 	"fs-extra": "~0.30.0",
     "gulp": "~3.9.1",
 	"gulp-debug": "~2.1.2",
 	"gulp-tslint": "~4.3.5",
     "gulp-typescript": "~2.13.5",
+    "lodash": "~4.6.1",
     "run-sequence": "~1.1.5",
-	"tslint": "~3.10.2",
+	"tslint": "~3.10.2"
   },
   "repository": {
     "type": "git",
