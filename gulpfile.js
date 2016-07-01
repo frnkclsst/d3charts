@@ -75,13 +75,12 @@ gulp.task('serve', ['default'], function(cb) {
 	var reload = browserSync.reload;
 
 	var watcher = gulp.watch([
-		buildOptions.srcPath + '**/*.less',
+		buildOptions.srcPath + '**/less/*.less',
+		buildOptions.srcPath + '**/css/*.css',
+		buildOptions.srcPath + '**/data/*.txt',
 		buildOptions.srcPath + '**/*.ts',
-		buildOptions.srcPath + '**/*.xml',
 		buildOptions.srcPath + '**/*.htm',
 		buildOptions.srcPath + '**/*.html',
-		buildOptions.srcPath + '**/*.json',
-		buildOptions.srcPath + '**/*.resjson',
 		buildOptions.testPath + '**/*.ts',
 		buildOptions.testPath + '**/*.xml',
 		'!' + buildOptions.libPath + '**',
