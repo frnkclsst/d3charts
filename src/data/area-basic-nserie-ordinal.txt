@@ -1,19 +1,26 @@
 {
     "canvas": {
         "height": 300,
-        "width": 900,
+        "width": 600,
         "padding": 50
+    },
+    "linechart": {
+        "fillArea": "yes",
+        "interpolation": "linear",
+        "showMarkers": "yes",
+        "stacking": "percent"
     },
 	"piechart": {
 		"innerRadius": 1
 	},
     "legend": {
        	"title": "",
-        "width": 300
+       	"position": "right",
+        "width": 200
     },
     "title": {
         "text": "Population Growth per Region",
-		"align": "left",
+		"align": "center",
 		"height": 50
     },
     "subtitle": {
@@ -21,21 +28,21 @@
     },
     "xAxis": {
         "categories": ["1750", "1800", "1850", "1900", "1950", "1999", "2050"],
-        "format": "%s", 
+        "format": "%s",
         "gridlines": "major",
         "position": "bottom",
 		"labels": {
 			"rotate": "-45"
 		},
         "title": { 
-            "text": "Status"
+            "text": "Year"
         }
     },
     "yAxis": {
         "format": "%n",
         "gridlines": "major",
         "position": "left",
-        "ticks": 5,
+        "ticks": 10,
 		"title": {
             "text": "Millions"
         }
@@ -73,12 +80,6 @@
         "general": { 
             "innerPadding": 0.1,
 			"outerPadding": 0.5
-        },
-		"line": {
-			"fillArea": "yes",
-			"interpolation": "linear",
-			"showMarkers": "yes",
-            "stacking": "percent"
-		}    
+        }
 	}
 }

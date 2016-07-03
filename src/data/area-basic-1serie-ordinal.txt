@@ -4,6 +4,10 @@
         "width": 800,
         "padding": 110
 	},
+    "linechart": {
+        "interpolation": "linear",
+        "showMarkers": "yes"
+    },
     "legend": {
        	"title": "",
         "width": 100
@@ -45,10 +49,6 @@
         "general": { 
             "innerPadding": 0.1,
 			"outerPadding": 2
-        },
-		"line": {
-			"interpolation": "linear",
-			"showMarkers": "yes"
-		}
+        }
     }
 }

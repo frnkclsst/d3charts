@@ -4,6 +4,10 @@
         "width": 600,
         "padding": 100
     },
+    "linechart": {
+        "interpolation": "basis",
+        "showMarkers": "no"
+    },
     "legend": {
        	"title": "",
         "width": 100
@@ -57,10 +61,6 @@
             "innerPadding": 0.2,
 			"outerPadding": 1
         },
-		"line": {
-			"interpolation": "basis",
-			"showMarkers": "no"
-		},
 		"series": {
 			"stackType" : "normal"
 		}

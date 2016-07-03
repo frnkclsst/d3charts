@@ -10,28 +10,21 @@ module frnk.UI.Charts {
             this.settings = settings;
         }
 
-        public getValue(propStr: string): string {
+        public getValue(propStr: string, defaultValue?: string): any {
             var parts = propStr.split(".");
             var cur = this.settings;
             for (var i = 0; i < parts.length; i++) {
                 if (!cur[parts[i]]) {
-                    return null;
+                    console.log(">> WARN: " + propStr + " not set in settings");
+                    if (defaultValue) {
+                        console.log(">> WARN: " + propStr + " defaulted to '" + defaultValue + "'");
+                        return defaultValue;
+                    }
+                    return "";
                 }
                 cur = cur[parts[i]];
             }
             return cur;
-        }
-
-        public isSet(propStr: string): boolean {
-            var parts = propStr.split(".");
-            var cur = this.settings;
-            for (var i = 0; i < parts.length; i++) {
-                if (!cur[parts[i]]) {
-                    return false;
-                }
-                cur = cur[parts[i]];
-            }
-            return true;
         }
     }
 
@@ -45,9 +38,9 @@ module frnk.UI.Charts {
 
         constructor(chart: Chart) {
             this._chart = chart;
-            this.height = chart.settings.isSet("canvas.height") ? Number(chart.settings.getValue("canvas.height")) : 300;
-            this.padding = chart.settings.isSet("canvas.padding") ? Number(chart.settings.getValue("canvas.padding")) : 30; // TODO: replace with margins 
-            this.width = chart.settings.isSet("canvas.width") ? Number(chart.settings.getValue("canvas.width")) : 300;
+            this.height = Number(chart.settings.getValue("canvas.height", "300"));
+            this.padding = Number(chart.settings.getValue("canvas.padding", "30")); // TODO: replace with margins
+            this.width = Number(chart.settings.getValue("canvas.width", "300"));
         }
 
         public draw(): Canvas {
@@ -87,7 +80,7 @@ module frnk.UI.Charts {
 
         constructor(chart: Chart) {
             this._chart = chart;
-            this._items = chart.settings.isSet("series") ? this._setSeries(chart.settings.getValue("series")) : this._setSeries([]);
+            this._items = this._setSeries(chart.settings.getValue("series"));
 
             this.labels = this._setLabels();
             this.length = this._items.length;
@@ -239,19 +232,19 @@ module frnk.UI.Charts {
         }
 
         public getColor(i?: number): string {
+            //TODO - fallback in case bigger than 20 series
             if (this._color != null) {
                 return this._color;
             }
             return ColorPalette.getColor(i);
-            //TODO - fallback in case bigger than 20 series
         }
 
         public getFillColor(i?: number): string {
+            //TODO - fallback in case bigger than 20 series
             if (this._fillColor != null) {
                 return this._fillColor;
             }
             return ColorPalette.getFillColor(i);
-            //TODO - fallback in case bigger than 20 series
         }
 
         public getName(i: number): string {
@@ -277,10 +270,10 @@ module frnk.UI.Charts {
         constructor(chart: Chart) {
             this._chart = chart;
 
-            this.align = chart.settings.isSet("title.align") ? chart.settings.getValue("title.align") : "center";
-            this.height = chart.settings.isSet("title.height") ? Number(chart.settings.getValue("title.height")) : 50;
-            this.subTitle = chart.settings.isSet("title.subTitle") ? chart.settings.getValue("title.subTitle") : "";
-            this.text = chart.settings.isSet("title.text") ? chart.settings.getValue("title.text") : "";
+            this.align = chart.settings.getValue("title.align", "center");
+            this.height = Number(chart.settings.getValue("title.height", "50"));
+            this.subTitle = chart.settings.getValue("title.subTitle", "");
+            this.text = chart.settings.getValue("title.text", "");
         }
 
         public draw(): void {
@@ -310,15 +303,15 @@ module frnk.UI.Charts {
 
             // set title position
             svgTitle
-                .attr("x", function (d: any): number { return x; })
-                .attr("y", function (d: any): number { return y; });
+                .attr("x", function (): number { return x; })
+                .attr("y", function (): number { return y; });
         }
     }
 
     export class Legend {
-        public title: string;
         public height: number;
-        public placement: string;
+        public position: string;
+        public title: string;
         public width: number;
 
         private _chart: Chart;
@@ -326,10 +319,10 @@ module frnk.UI.Charts {
         constructor(chart: Chart) {
             this._chart = chart;
 
-            this.title = chart.settings.isSet("legend.title") ? chart.settings.getValue("legend.title") : "";
-            this.height = chart.settings.isSet("legend.height") ? Number(chart.settings.getValue("legend.height")) : 0;
-            this.placement = chart.settings.isSet("legend.placement") ? chart.settings.getValue("legend.placement") : "none";
-            this.width = chart.settings.isSet("legend.width") ? Number(chart.settings.getValue("legend.width")) : 0;
+            this.height = Number(chart.settings.getValue("legend.height", "0"));
+            this.position = chart.settings.getValue("legend.position", "right");
+            this.title = chart.settings.getValue("legend.title");
+            this.width = Number(chart.settings.getValue("legend.width", "0"));
         }
 
         public draw(): void {
@@ -368,13 +361,13 @@ module frnk.UI.Charts {
         constructor(chart: Chart) {
             this._chart = chart;
 
-            this.innerPadding = chart.settings.isSet("plotOptions.general.innerPadding") ? Number(chart.settings.getValue("plotOptions.general.innerPadding")) : 0.5;
-            this.outerPadding = chart.settings.isSet("plotOptions.general.outerPadding") ? Number(chart.settings.getValue("plotOptions.general.outerPadding")) : 0;
+            this.innerPadding = Number(chart.settings.getValue("plotOptions.general.innerPadding", "0.5"));
+            this.outerPadding = Number(chart.settings.getValue("plotOptions.general.outerPadding", "0"));
         }
     }
 
     export class Axis {
-        public categories: any[];
+        public categories: string[];
         public format: string;
         public position: string;
         public scale: any;
@@ -385,12 +378,12 @@ module frnk.UI.Charts {
         private _scaleType: ScaleType;
 
         constructor(args: any, chart: Chart) {
-            this._gridlineType = GridLineType.None;
             this.categories = null;
             this.position = null;
             this.scale = null;
             this.ticks = null;
             this.title = null;
+            this._gridlineType = GridLineType.None;
         }
 
         public setScaleType(value: ScaleType): void {
@@ -441,7 +434,15 @@ module frnk.UI.Charts {
             }
         }
 
-        public setGridlineType(type: string): void {
+        public draw(chart: Chart): void {
+            // child classes are responsible for implementing this method
+        }
+
+        public drawGridlines(chart: Chart, axis: D3.Svg.Axis, offset: number): void {
+            // child classes are responsible for implementing this method
+        }
+
+        protected _setGridlineType(type: string): void {
             if (type.toUpperCase() == "MAJOR") {
                 this._gridlineType = GridLineType.Major;
             }
@@ -452,14 +453,6 @@ module frnk.UI.Charts {
                 this._gridlineType = GridLineType.None;
             }
         }
-
-        public draw(chart: Chart): void {
-            // child classes are responsible for implementing this method
-        }
-
-        public drawGridlines(chart: Chart, axis: D3.Svg.Axis, offset: number): void {
-            // child classes are responsible for implementing this method
-        }
     }
 
     export class XAxis extends Axis {
@@ -468,14 +461,14 @@ module frnk.UI.Charts {
 
         constructor(args: any, chart: Chart) {
             super(args, chart);
-            this.categories = args.xAxis.categories;
-            this.setGridlineType(args.xAxis.gridlines);
-            this.position = chart.settings.isSet("xAxis.position") ? chart.settings.getValue("xAxis.position") : "bottom";
-            this.format = args.xAxis.format;
+            this.categories = chart.settings.getValue("xAxis.categories");
+            this.position = chart.settings.getValue("xAxis.position", "bottom");
+            this.format = chart.settings.getValue("xAxis.format");
             this.scale = this._setScale(chart);
-            this.ticks = args.xAxis.ticks;
-            this.title = chart.settings.isSet("xAxis.title.text") ? chart.settings.getValue("xAxis.title.text") : "";
-            this._textRotation = chart.settings.isSet("xAxis.labels.rotate") ? chart.settings.getValue("xAxis.labels.rotate") : "0";
+            this.ticks = Number(chart.settings.getValue("xAxis.ticks"));
+            this.title = chart.settings.getValue("xAxis.title.text");
+            this._textRotation = Number(chart.settings.getValue("xAxis.labels.rotate", "0"));
+            this._setGridlineType(chart.settings.getValue("xAxis.gridlines"));
         }
 
         public draw(chart: Chart): Canvas {
@@ -561,7 +554,7 @@ module frnk.UI.Charts {
                 return chart.canvas.height + chart.canvas.padding;
             }
             else {
-                return chart.canvas.padding;
+                return chart.canvas.padding + chart.title.height;
             }
         }
 
@@ -595,12 +588,12 @@ module frnk.UI.Charts {
         constructor(args: any, chart: Chart) {
             super(args, chart);
             this.categories = args.yAxis.categories;
-            this.format = args.yAxis.format;
-            this.setGridlineType(args.yAxis.gridlines);
-            this.position = chart.settings.isSet("yAxis.position") ? chart.settings.getValue("yAxis.position") : "left";
+            this.format = chart.settings.getValue("yAxis.format");
+            this.position = chart.settings.getValue("yAxis.position", "left");
             this.scale = this._setScale(chart);
-            this.ticks = args.yAxis.ticks;
-            this.title = chart.settings.isSet("yAxis.title.text") ? chart.settings.getValue("yAxis.title.text") : "";
+            this.ticks = Number(chart.settings.getValue("yAxis.ticks"));
+            this.title = chart.settings.getValue("yAxis.title.text");
+            this._setGridlineType(chart.settings.getValue("yAxis.gridlines"));
         }
 
         public draw(chart: Chart): Canvas {
@@ -775,9 +768,9 @@ module frnk.UI.Charts {
 
         constructor(args: any, selector: string) {
             super(args, selector);
-            this.showMarkers = this.settings.getValue("plotOptions.line.showMarkers") == "yes" ? true : false;
-            this.interpolation = this.settings.isSet("plotOptions.line.interpolation") ? this.settings.getValue("plotOptions.line.interpolation") : "linear";
-            this.fillArea = this.settings.getValue("plotOptions.line.fillArea") == "yes" ? true : false;
+            this.showMarkers = this.settings.getValue("linechart.showMarkers") == "yes" ? true : false;
+            this.interpolation = this.settings.getValue("linechart.interpolation", "linear");
+            this.fillArea = this.settings.getValue("linechart.fillArea") == "yes" ? true : false;
         }
 
         public draw(): Canvas {
@@ -1189,13 +1182,13 @@ module frnk.UI.Charts {
         public getWidth(serie: number): any {
             var _this = this;
             if (_this.xAxis.isDataAxis()) {
-                return function (d: any, i: number): any {
+                return function (d: any, i: number): number {
                     return Math.abs(_this.xAxis.scale(d.y) - _this.xAxis.scale(0));
                 };
             }
 
             if (_this.yAxis.isDataAxis()) {
-                return function (d: any, i: number): any {
+                return function (d: any, i: number): number {
                     if (_this.xAxis.isOrdinalScale()) {
                         return _this.xAxis.scale.rangeBand() / _this.series.length;
                     }
@@ -1298,7 +1291,7 @@ module frnk.UI.Charts {
 
         constructor(args: any, selector: string) {
             super(args, selector);
-            this.innerRadius = this.settings.isSet("piechart.innerRadius") ? Number(this.settings.getValue("piechart.innerRadius")) : 0;
+            this.innerRadius = this.settings.getValue("piechart.innerRadius", "0");
         }
 
         public draw(): Canvas {
