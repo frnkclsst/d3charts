@@ -24,7 +24,6 @@ The following page will open `http://localhost:9005/index.html
 
 ## Roadmap
 
-* Auto fit chart in parent container and resize 
 * Improve tooltips
 * Line chart
   * adding trend lines
