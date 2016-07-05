@@ -44,7 +44,7 @@ module frnk.UI.Charts {
         }
 
         public draw(): Canvas {
-            //draw chart area
+            // draw chart area
             this.svg = d3.select(this._chart.selector)
                 .append("svg")
                 .attr("width", this.width + this.padding * 2 + this._chart.legend.width)
@@ -108,7 +108,7 @@ module frnk.UI.Charts {
 				// can only be stacked if you have more than 1 series defined
                 return d3.max(this.matrix, function (array: number[]): number {
                     return d3.max(array, function (d: any): number {
-                        return d.y0 + d.y;
+                        return d.y0;
                     });
                 });
             }
@@ -126,6 +126,7 @@ module frnk.UI.Charts {
 			// can only be stacked if you have more than 1 series defined
                 return d3.min(this.matrix, function (array: number[]): number {
                     return d3.min(array, function (d: any): number {
+                        console.log(d.y0 + d.y);
                         return d.y0 + d.y;
                     });
                 });
@@ -467,7 +468,7 @@ module frnk.UI.Charts {
             this.scale = this._setScale(chart);
             this.ticks = Number(chart.settings.getValue("xAxis.ticks"));
             this.title = chart.settings.getValue("xAxis.title.text");
-            this._textRotation = Number(chart.settings.getValue("xAxis.labels.rotate", "0"));
+            this._textRotation = chart.settings.getValue("xAxis.labels.rotate", "0");
             this._setGridlineType(chart.settings.getValue("xAxis.gridlines"));
         }
 
@@ -491,21 +492,8 @@ module frnk.UI.Charts {
                 .attr("transform", "translate(" + chart.canvas.padding + "," + offset + ")")
                 .call(d3Axis);
 
-            // rotate labels
-            if (this._textRotation != "0") {
-                svgAxis.selectAll("text")
-                    .style("text-anchor", "end")
-                    .attr("dx", "-.8em")
-                    .attr("dy", ".15em")
-                    .attr("transform", "rotate(" + this._textRotation + ")");
-            }
-
-            // draw title
-            svgAxis.append("text")
-                .text(this.title)
-                .attr("transform", "translate(" + chart.canvas.width + "," + "20" + ")");
-
-            // draw gridlines
+            _this.drawLabels(chart, svgAxis);
+            _this.drawTitle(chart, svgAxis);
             _this.drawGridlines(chart, d3Axis, offset);
 
             return chart.canvas;
@@ -545,6 +533,31 @@ module frnk.UI.Charts {
                     .attr("y1", 0)
                     .attr("y2", _this.position == "bottom" ? -chart.canvas.height : chart.canvas.height);
             }
+
+            return chart.canvas;
+        }
+
+        public drawLabels(chart: Chart, svg: D3.Selection): Canvas {
+            // rotate labels
+            var textAnchorAttr = this.position == "bottom" ? "end" : "begin";
+            var translateAttr = this.position == "bottom" ? "translate(-8 2)" : "translate(12 -10)";
+
+            if (this._textRotation != "0") {
+                svg.selectAll("text")
+                    .style("text-anchor", textAnchorAttr)
+                    .attr("transform", translateAttr + " rotate(" + this._textRotation + ")");
+            }
+
+            // TODO - position labels correct depending position axis
+
+            return chart.canvas;
+        }
+
+        public drawTitle(chart: Chart, svg: D3.Selection): Canvas {
+            // draw title
+            svg.append("text")
+                .text(this.title)
+                .attr("transform", "translate(" + chart.canvas.width + "," + "20" + ")");
 
             return chart.canvas;
         }
@@ -724,18 +737,16 @@ module frnk.UI.Charts {
         }
 
         public draw(): Canvas {
-            var _this = this;
-
             // draw canvas
-            _this.canvas.draw();
+            this.canvas.draw();
 
             // title
-            _this.title.draw();
+            this.title.draw();
 
             // draw legend
-            _this.legend.draw();
+            this.legend.draw();
 
-            return _this.canvas;
+            return this.canvas;
         }
     }
 
