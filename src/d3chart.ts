@@ -30,8 +30,10 @@ module frnk.UI.Charts {
 
     export class Canvas {
         public height: number;
-        public padding: number;
+        public legend: LegendArea;
+        public plotArea: PlotArea;
         public svg: D3.Selection;
+        public title: TitleArea;
         public width: number;
 
         private _chart: Chart;
@@ -39,32 +41,34 @@ module frnk.UI.Charts {
         constructor(chart: Chart) {
             this._chart = chart;
             this.height = Number(chart.settings.getValue("canvas.height", "200"));
-            this.padding = Number(chart.settings.getValue("canvas.padding", "20")); // TODO: replace with margins
             this.width = Number(chart.settings.getValue("canvas.width", "200"));
+            this.title = new TitleArea(chart);
+            this.legend = new LegendArea(chart);
+            this.plotArea = new PlotArea(chart);
         }
 
         public draw(): Canvas {
             // draw chart area
             this.svg = d3.select(this._chart.selector)
                 .append("svg")
-                .attr("width", this.width + this.padding * 2 + this._chart.legend.width)
-                .attr("height", this.height + this.padding * 2);
+                .attr("width", this.width + this.plotArea.padding * 2 + this._chart.canvas.legend.width)
+                .attr("height", this.height + this.plotArea.padding * 2);
 
             // draw title area
             this.svg.append("line")
                 .attr("class", "sep")
                 .attr("x1", 0)
-                .attr("y1", this._chart.title.height)
-                .attr("x2", this.width + this.padding * 2 + this._chart.legend.width)
-                .attr("y2", this._chart.title.height);
+                .attr("y1", this._chart.canvas.title.height)
+                .attr("x2", this.width + this.plotArea.padding * 2 + this._chart.canvas.legend.width)
+                .attr("y2", this._chart.canvas.title.height);
 
             // draw legend area
             this.svg.append("line")
                 .attr("class", "sep")
-                .attr("x1", this.width + this.padding * 2)
-                .attr("y1", this._chart.title.height)
-                .attr("x2", this.width + this.padding * 2)
-                .attr("y2", this.height + this.padding * 2);
+                .attr("x1", this.width + this.plotArea.padding * 2)
+                .attr("y1", this._chart.canvas.title.height)
+                .attr("x2", this.width + this.plotArea.padding * 2)
+                .attr("y2", this.height + this.plotArea.padding * 2);
 
             return this;
         }
@@ -267,7 +271,7 @@ module frnk.UI.Charts {
         }
     }
 
-    export class Title {
+    export class TitleArea {
         public text: string;
         public subTitle: string;
         public align: string;
@@ -280,8 +284,8 @@ module frnk.UI.Charts {
 
             this.align = chart.settings.getValue("title.align", "center");
             this.height = Number(chart.settings.getValue("title.height", "50"));
-            this.subTitle = chart.settings.getValue("title.subTitle", "");
-            this.text = chart.settings.getValue("title.text", "");
+            this.subTitle = chart.settings.getValue("title.subTitle");
+            this.text = chart.settings.getValue("title.text");
         }
 
         public draw(): void {
@@ -289,6 +293,13 @@ module frnk.UI.Charts {
             var svgTitle = this._chart.canvas.svg.append("text")
                 .text(this.text)
                 .attr("class", "title");
+
+            /*
+            var svgSubTitle = this._chart.canvas.svg.append("text")
+
+                .text(this.subTitle)
+                .attr("class", "subtitle");
+            */
 
             // calculate alignment
             var textLength = svgTitle.node().clientWidth;
@@ -316,7 +327,18 @@ module frnk.UI.Charts {
         }
     }
 
-    export class Legend {
+    export class PlotArea {
+        public height: number;
+        public width: number;
+        public padding: number;
+
+        constructor(chart: Chart) {
+            this.height = 0; //chart.canvas.height - chart.canvas.title.height;
+            this.padding = Number(chart.settings.getValue("canvas.padding", "20"));
+            this.width = 0; //chart.canvas.width - chart.canvas.legend.width;
+        }
+    }
+    export class LegendArea {
         public height: number;
         public position: string;
         public title: string;
@@ -342,16 +364,16 @@ module frnk.UI.Charts {
                 .data(_this._chart.series.matrix)
                 .enter().append("g")
                 .attr("class", "item")
-                .attr("transform", function (d: any, i: any): string { return "translate(" + 30 + "," + (_this._chart.title.height + (i * 20) + 20) + ")"; });
+                .attr("transform", function (d: any, i: any): string { return "translate(" + 30 + "," + (_this._chart.canvas.title.height + (i * 20) + 20) + ")"; });
 
             legend.append("rect")
-                .attr("x", _this._chart.canvas.width + _this._chart.canvas.padding * 2 - 11)
+                .attr("x", _this._chart.canvas.width + _this._chart.canvas.plotArea.padding * 2 - 11)
                 .attr("width", 15)
                 .attr("height", 11)
                 .style("fill", function (d: any, i: any): string { return _this._chart.series.getColor(i); });
 
             legend.append("text")
-                .attr("x", _this._chart.canvas.width + _this._chart.canvas.padding * 2 + 9)
+                .attr("x", _this._chart.canvas.width + _this._chart.canvas.plotArea.padding * 2 + 9)
                 .attr("y", 9)
                 .attr("dy", "0px")
                 .style("text-anchor", "begin")
@@ -498,7 +520,7 @@ module frnk.UI.Charts {
             // draw x-axis
             var svgAxis = chart.canvas.svg.append("g")
                 .attr("class", "axis x-axis")
-                .attr("transform", "translate(" + chart.canvas.padding + "," + offset + ")")
+                .attr("transform", "translate(" + chart.canvas.plotArea.padding + "," + offset + ")")
                 .call(d3Axis);
 
             _this.drawLabels(chart, svgAxis);
@@ -514,13 +536,13 @@ module frnk.UI.Charts {
             // draw grid
             var svgGrid = chart.canvas.svg.append("g")
                 .attr("class", "x-axis grid")
-                .attr("transform", "translate(" + chart.canvas.padding + "," + offset + ")");
+                .attr("transform", "translate(" + chart.canvas.plotArea.padding + "," + offset + ")");
 
             // draw gridlines
             switch (_this.getGridlineType()) {
                 case GridLineType.Major:
                     svgGrid.call(axis
-                        .tickSize(-chart.canvas.height + chart.title.height, 0)
+                        .tickSize(-chart.canvas.height + chart.canvas.title.height, 0)
                         .tickFormat(function (d: any): string { return ""; }) // return no label for the grid lines
                     );
                     break;
@@ -573,10 +595,10 @@ module frnk.UI.Charts {
 
         public getOffset(chart: Chart): number {
             if (this.position == "bottom") {
-                return chart.canvas.height + chart.canvas.padding;
+                return chart.canvas.height + chart.canvas.plotArea.padding;
             }
             else {
-                return chart.canvas.padding + chart.title.height;
+                return chart.canvas.plotArea.padding + chart.canvas.title.height;
             }
         }
 
@@ -637,7 +659,7 @@ module frnk.UI.Charts {
             // draw y-axis
             chart.canvas.svg.append("g")
                 .attr("class", "axis y-axis")
-                .attr("transform", "translate(" + offset + "," + (chart.canvas.padding + chart.title.height) + ")")
+                .attr("transform", "translate(" + offset + "," + (chart.canvas.plotArea.padding + chart.canvas.title.height) + ")")
                 .call(d3Axis)
                 .append("text")
                 .attr("x", 0)
@@ -661,7 +683,7 @@ module frnk.UI.Charts {
             //draw grid
             var svgGrid = chart.canvas.svg.append("g")
                 .attr("class", "y-axis grid")
-                .attr("transform", "translate(" + offset + "," + (chart.canvas.padding + chart.title.height) + ")");
+                .attr("transform", "translate(" + offset + "," + (chart.canvas.plotArea.padding + chart.canvas.title.height) + ")");
 
             // draw gridlines
             switch (_this.getGridlineType()) {
@@ -694,10 +716,10 @@ module frnk.UI.Charts {
 
         public getOffset(chart: Chart): number {
             if (this.position == "left") {
-                return chart.canvas.padding;
+                return chart.canvas.plotArea.padding;
             }
             else {
-                return chart.canvas.width + chart.canvas.padding;
+                return chart.canvas.width + chart.canvas.plotArea.padding;
             }
         }
 
@@ -708,21 +730,21 @@ module frnk.UI.Charts {
                 _this.setScaleType(ScaleType.Ordinal);
                 return d3.scale.ordinal()
                     .domain(_this.categories)
-                    .rangeRoundBands([0, chart.canvas.height - chart.title.height], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding);
+                    .rangeRoundBands([0, chart.canvas.height - chart.canvas.title.height], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding);
             }
             else if (_this.format == "%n") {
                 _this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
                     .domain([chart.series.getMaxValue(), chart.series.getMinValue() < 0 ? chart.series.getMinValue() : 0])
                     .nice() // adds additional ticks to add some whitespace 
-                    .range([0, chart.canvas.height - chart.title.height]);
+                    .range([0, chart.canvas.height - chart.canvas.title.height]);
             }
             else {
                 _this.setScaleType(ScaleType.Time);
                 return d3.time.scale()
                     .domain(d3.extent(_this.categories, function (d: any): Date { return d3.time.format(_this.format).parse(d); }).reverse())
                     .nice() // adds additional ticks to add some whitespace  
-                    .range([chart.series.getMinValue(), chart.canvas.height - chart.title.height]);
+                    .range([chart.series.getMinValue(), chart.canvas.height - chart.canvas.title.height]);
             }
         }
     }
@@ -730,8 +752,6 @@ module frnk.UI.Charts {
     export class Chart {
         public canvas: Canvas;
         public categories: string[];
-        public title: Title;
-        public legend: Legend;
         public plotOptions: PlotOptions;
         public series: Series;
         public settings: Settings;
@@ -752,8 +772,6 @@ module frnk.UI.Charts {
             }
 
             this.settings = new Settings(args);
-            this.title = new Title(this);
-            this.legend = new Legend(this);
             this.canvas = new Canvas(this);
             this.plotOptions = new PlotOptions(this);
             this.series = new Series(this);
@@ -771,10 +789,10 @@ module frnk.UI.Charts {
             this.canvas.draw();
 
             // title
-            this.title.draw();
+            this.canvas.title.draw();
 
             // draw legend
-            this.legend.draw();
+            this.canvas.legend.draw();
 
             return this.canvas;
         }
@@ -865,14 +883,14 @@ module frnk.UI.Charts {
                 d3Area = d3.svg.area()
                     .interpolate(_this.interpolation)
                     .x(_this.getXCoordinate(serie))
-                    .x0(_this.xAxis.scale(0) + _this.canvas.padding)
+                    .x0(_this.xAxis.scale(0) + _this.canvas.plotArea.padding)
                     .y(_this.getYCoordinate(serie));
             }
             else {
                 d3Area = d3.svg.area()
                     .interpolate(_this.interpolation)
                     .x(_this.getXCoordinate(serie))
-                    .y0(_this.yAxis.scale(0) + _this.canvas.padding + _this.title.height )
+                    .y0(_this.yAxis.scale(0) + _this.canvas.plotArea.padding + _this.canvas.title.height )
                     .y1(_this.getYCoordinate(serie));
             }
 
@@ -933,17 +951,17 @@ module frnk.UI.Charts {
             var _this = this;
             if (_this.xAxis.isDataAxis()) {
                 return function (d: any, i: number): number {
-                    return _this.canvas.padding + _this.xAxis.scale(d.y);
+                    return _this.canvas.plotArea.padding + _this.xAxis.scale(d.y);
                 };
             }
 
             if (_this.yAxis.isDataAxis()) {
                 return function (d: any, i: number): number {
                     if (_this.xAxis.isOrdinalScale()) {
-                        return _this.canvas.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i])) + _this.xAxis.scale.rangeBand() / 2;
+                        return _this.canvas.plotArea.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i])) + _this.xAxis.scale.rangeBand() / 2;
                     }
                     else {
-                        return _this.canvas.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i]));
+                        return _this.canvas.plotArea.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i]));
                     }
                 };
             }
@@ -955,17 +973,17 @@ module frnk.UI.Charts {
                 return function (d: any, i: number): number {
                     var axisScale = _this.yAxis.parseCategory(_this.yAxis.categories[i]);
                     if (_this.yAxis.isOrdinalScale()) {
-                        return _this.canvas.padding + _this.title.height + _this.yAxis.scale(axisScale) + _this.yAxis.scale.rangeBand() / 2;
+                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(axisScale) + _this.yAxis.scale.rangeBand() / 2;
                     }
                     else {
-                        return _this.canvas.padding + _this.title.height + _this.yAxis.scale(axisScale);
+                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(axisScale);
                     }
                 };
             }
 
             if (_this.yAxis.isDataAxis()) {
                 return function (d: any, i: number): number {
-                    return _this.canvas.padding + _this.title.height + _this.yAxis.scale(d.y);
+                    return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(d.y);
                 };
             }
         }
@@ -989,11 +1007,11 @@ module frnk.UI.Charts {
                     function (d: any): number {
                         // negative values
                         if (d.y < 0) {
-                            return (_this.xAxis.scale(d.y0) + _this.canvas.padding);
+                            return (_this.xAxis.scale(d.y0) + _this.canvas.plotArea.padding);
                         }
                         // postive values
                         else {
-                            return (_this.xAxis.scale(d.y0 - d.y) + _this.canvas.padding);
+                            return (_this.xAxis.scale(d.y0 - d.y) + _this.canvas.plotArea.padding);
                         }
                     })
                     .y(_this.getYCoordinate(serie));
@@ -1006,11 +1024,11 @@ module frnk.UI.Charts {
                     function (d: any): number {
                         // negative values
                         if (d.y < 0) {
-                            return (_this.yAxis.scale(d.y0) + _this.title.height + _this.canvas.padding);
+                            return (_this.yAxis.scale(d.y0) + _this.canvas.title.height + _this.canvas.plotArea.padding);
                         }
                         // postive values
                         else {
-                            return (_this.yAxis.scale(d.y0 - d.y) + _this.title.height + _this.canvas.padding);
+                            return (_this.yAxis.scale(d.y0 - d.y) + _this.canvas.title.height + _this.canvas.plotArea.padding);
                         }
                     })
                     .y1(_this.getYCoordinate(serie));
@@ -1043,11 +1061,11 @@ module frnk.UI.Charts {
                 return function (d: any, i: number): number {
                     // negative numbers                                        
                     if (d.y0 < 1) {
-                        return _this.canvas.padding + _this.xAxis.scale(d.y0 + d.y);
+                        return _this.canvas.plotArea.padding + _this.xAxis.scale(d.y0 + d.y);
                     }
                     // positive numbers
                     else {
-                        return _this.canvas.padding + _this.xAxis.scale(d.y0);
+                        return _this.canvas.plotArea.padding + _this.xAxis.scale(d.y0);
                     }
                 };
             }
@@ -1055,10 +1073,10 @@ module frnk.UI.Charts {
             if (_this.yAxis.isDataAxis()) {
                 return function (d: any, i: number): number {
                     if (_this.xAxis.isOrdinalScale() || _this.xAxis.isLinearScale()) {
-                        return _this.canvas.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i])) + _this.xAxis.scale.rangeBand() / 2;
+                        return _this.canvas.plotArea.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i])) + _this.xAxis.scale.rangeBand() / 2;
                     }
                     else {
-                        return _this.canvas.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i])); // for time scales
+                        return _this.canvas.plotArea.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i])); // for time scales
                     }
                 };
             }
@@ -1071,10 +1089,10 @@ module frnk.UI.Charts {
                 return function (d: any, i: number): number {
                     var axisScale = _this.yAxis.parseCategory(_this.yAxis.categories[i]);
                     if (_this.yAxis.isOrdinalScale() || _this.yAxis.isLinearScale()) {
-                        return _this.canvas.padding + _this.title.height + _this.yAxis.scale(axisScale) + _this.yAxis.scale.rangeBand() / 2;
+                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(axisScale) + _this.yAxis.scale.rangeBand() / 2;
                     }
                     else {
-                        return _this.canvas.padding + _this.title.height + _this.yAxis.scale(axisScale); // for time scales
+                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(axisScale); // for time scales
                     }
                 };
             }
@@ -1083,11 +1101,11 @@ module frnk.UI.Charts {
                 return function (d: any, i: number): number {
                     // negative numbers                                        
                     if (d.y0 < 1) { //TODO -  I think this only works for whole numbers
-                        return _this.canvas.padding + _this.title.height + _this.yAxis.scale(d.y0 + d.y);
+                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(d.y0 + d.y);
                     }
                     // positive numbers
                     else {
-                        return _this.canvas.padding + _this.title.height + _this.yAxis.scale(d.y0);
+                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(d.y0);
                     }
                 };
             }
@@ -1151,10 +1169,10 @@ module frnk.UI.Charts {
             if (_this.xAxis.isDataAxis()) {
                 return function (d: any, i: number): any {
                     if (d.y < 0) {
-                        return _this.canvas.padding + _this.xAxis.scale(0) - Math.abs(_this.xAxis.scale(d.size) - _this.xAxis.scale(0));
+                        return _this.canvas.plotArea.padding + _this.xAxis.scale(0) - Math.abs(_this.xAxis.scale(d.size) - _this.xAxis.scale(0));
                     }
                     else {
-                        return _this.canvas.padding + _this.xAxis.scale(0);
+                        return _this.canvas.plotArea.padding + _this.xAxis.scale(0);
                     }
                 };
             }
@@ -1163,10 +1181,10 @@ module frnk.UI.Charts {
                 return function (d: any, i: number): number {
                     var axisScale = _this.xAxis.parseCategory(_this.xAxis.categories[i]);
                     if (_this.xAxis.isOrdinalScale()) {
-                        return _this.canvas.padding + _this.xAxis.scale(axisScale) + (_this.xAxis.scale.rangeBand() / _this.series.length * serie);
+                        return _this.canvas.plotArea.padding + _this.xAxis.scale(axisScale) + (_this.xAxis.scale.rangeBand() / _this.series.length * serie);
                     }
                     else {
-                        return _this.canvas.padding + _this.xAxis.scale(axisScale) + (_this.canvas.width / _this.series.length / _this.series.matrix[0].length * serie);
+                        return _this.canvas.plotArea.padding + _this.xAxis.scale(axisScale) + (_this.canvas.width / _this.series.length / _this.series.matrix[0].length * serie);
                     }
                 };
             }
@@ -1177,7 +1195,7 @@ module frnk.UI.Charts {
             if (_this.xAxis.isDataAxis()) {
                 return function (d: any, i: number): number {
                     var axisScale = _this.yAxis.parseCategory(_this.yAxis.categories[i]);
-                    var totalHeight = _this.canvas.padding + _this.title.height;
+                    var totalHeight = _this.canvas.plotArea.padding + _this.canvas.title.height;
                     var series = _this.series;
                     if (_this.yAxis.isOrdinalScale()) {
                         return totalHeight + _this.yAxis.scale(axisScale) + (_this.yAxis.scale.rangeBand() / series.length * serie);
@@ -1191,10 +1209,10 @@ module frnk.UI.Charts {
             if (_this.yAxis.isDataAxis()) {
                 return function (d: any, i: number): number {
                     if (d.y < 0) {
-                        return _this.canvas.padding + _this.title.height + _this.yAxis.scale(d.y) - Math.abs(_this.yAxis.scale(d.size) - _this.yAxis.scale(0));
+                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(d.y) - Math.abs(_this.yAxis.scale(d.size) - _this.yAxis.scale(0));
                     }
                     else {
-                        return _this.canvas.padding + _this.title.height + _this.yAxis.scale(d.y);
+                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(d.y);
                     }
                 };
             }
@@ -1259,13 +1277,13 @@ module frnk.UI.Charts {
             var _this = this;
             if (_this.xAxis.isDataAxis()) {
                 return function (d: any, i: number): any {
-                    return _this.canvas.padding + _this.xAxis.scale(0) - (_this.xAxis.scale(d.size) - _this.xAxis.scale(d.y0));
+                    return _this.canvas.plotArea.padding + _this.xAxis.scale(0) - (_this.xAxis.scale(d.size) - _this.xAxis.scale(d.y0));
                 };
             }
 
             if (_this.yAxis.isDataAxis()) {
                 return function (d: any, i: number): any {
-                    return _this.canvas.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i]));
+                    return _this.canvas.plotArea.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i]));
                 };
             }
         }
@@ -1274,13 +1292,13 @@ module frnk.UI.Charts {
             var _this = this;
             if (_this.xAxis.isDataAxis()) {
                 return function (d: any, i: number): any {
-                    return _this.canvas.padding + _this.title.height + _this.yAxis.scale(_this.yAxis.parseCategory(_this.yAxis.categories[i]));
+                    return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(_this.yAxis.parseCategory(_this.yAxis.categories[i]));
                 };
             }
 
             if (_this.yAxis.isDataAxis()) {
                 return function (d: any, i: number): any {
-                    return _this.canvas.padding + _this.title.height + _this.yAxis.scale(d.y0);
+                    return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(d.y0);
                 };
             }
         }
@@ -1343,7 +1361,7 @@ module frnk.UI.Charts {
             var radius = Math.min(_this.canvas.width, _this.canvas.height) / 2;
 
             var g = _this.canvas.svg.append("g")
-                .attr("transform", "translate(" + (_this.canvas.width / 2 + _this.canvas.padding) + "," + (_this.canvas.height / 2 + _this.canvas.padding) + ")");
+                .attr("transform", "translate(" + (_this.canvas.width / 2 + _this.canvas.plotArea.padding) + "," + (_this.canvas.height / 2 + _this.canvas.plotArea.padding) + ")");
 
             //var innerRadius = (_this.canvas.height < _this.canvas.width) ? _this.canvas.height : _this.canvas.width;
             var arc = d3.svg.arc()

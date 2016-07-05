@@ -8,10 +8,7 @@ html {
     width: 50%;
     height: 200px;
 }
-#chart2 {
-    width: 50%;
-    height: 200px;
-}
+
 svg {
 	background-color: #fafafa;
 	border: 1px solid #eeeeee;
