@@ -38,9 +38,9 @@ module frnk.UI.Charts {
 
         constructor(chart: Chart) {
             this._chart = chart;
-            this.height = Number(chart.settings.getValue("canvas.height", "300"));
-            this.padding = Number(chart.settings.getValue("canvas.padding", "30")); // TODO: replace with margins
-            this.width = Number(chart.settings.getValue("canvas.width", "300"));
+            this.height = Number(chart.settings.getValue("canvas.height", "200"));
+            this.padding = Number(chart.settings.getValue("canvas.padding", "20")); // TODO: replace with margins
+            this.width = Number(chart.settings.getValue("canvas.width", "200"));
         }
 
         public draw(): Canvas {
@@ -67,6 +67,14 @@ module frnk.UI.Charts {
                 .attr("y2", this.height + this.padding * 2);
 
             return this;
+        }
+
+        public updateCanvasSize(): void {
+            var container = d3.select(this._chart.selector);
+            var width = Number(container.style("width").substring(0, container.style("width").length - 2));
+            var height = Number(container.style("height").substring(0, container.style("height").length - 2));
+            this.width = width == 0 ? this.width : width;
+            this.height =  height == 0 ? this.height : height;
         }
     }
 
@@ -126,7 +134,6 @@ module frnk.UI.Charts {
 			// can only be stacked if you have more than 1 series defined
                 return d3.min(this.matrix, function (array: number[]): number {
                     return d3.min(array, function (d: any): number {
-                        console.log(d.y0 + d.y);
                         return d.y0 + d.y;
                     });
                 });
@@ -293,10 +300,10 @@ module frnk.UI.Charts {
                     x = 0;
                     break;
                 case "center":
-                    x = (this._chart.canvas.width + this._chart.legend.width - textLength) / 2;
+                    x = (this._chart.canvas.width - textLength) / 2;
                     break;
                 case "right":
-                    x = this._chart.canvas.width + this._chart.legend.width - textLength;
+                    x = this._chart.canvas.width - textLength;
                     break;
             }
 
@@ -465,8 +472,7 @@ module frnk.UI.Charts {
             this.categories = chart.settings.getValue("xAxis.categories");
             this.position = chart.settings.getValue("xAxis.position", "bottom");
             this.format = chart.settings.getValue("xAxis.format");
-            this.scale = this._setScale(chart);
-            this.ticks = Number(chart.settings.getValue("xAxis.ticks"));
+            this.ticks = Number(chart.settings.getValue("xAxis.ticks", String(Math.max(chart.canvas.width / 50, 2))));
             this.title = chart.settings.getValue("xAxis.title.text");
             this._textRotation = chart.settings.getValue("xAxis.labels.rotate", "0");
             this._setGridlineType(chart.settings.getValue("xAxis.gridlines"));
@@ -476,6 +482,9 @@ module frnk.UI.Charts {
             var _this = this;
 
             super.draw(chart);
+
+            // set scale
+            this.scale = this._setScale(chart);
 
             // create d3 axis
             var d3Axis = d3.svg.axis()
@@ -603,8 +612,7 @@ module frnk.UI.Charts {
             this.categories = args.yAxis.categories;
             this.format = chart.settings.getValue("yAxis.format");
             this.position = chart.settings.getValue("yAxis.position", "left");
-            this.scale = this._setScale(chart);
-            this.ticks = Number(chart.settings.getValue("yAxis.ticks"));
+            this.ticks = Number(chart.settings.getValue("yAxis.ticks", String(Math.max(chart.canvas.height / 50, 2))));
             this.title = chart.settings.getValue("yAxis.title.text");
             this._setGridlineType(chart.settings.getValue("yAxis.gridlines"));
         }
@@ -613,6 +621,9 @@ module frnk.UI.Charts {
             var _this = this;
 
             super.draw(chart);
+
+            // set scale
+            this.scale = this._setScale(chart);
 
             // create d3 axis 
             var d3Axis = d3.svg.axis()
@@ -727,16 +738,35 @@ module frnk.UI.Charts {
         public selector: string;
 
         constructor(args: any, selector: string) {
+            var _this = this;
+            this.selector = selector;
+
+            // Selector cannot be found
+            try {
+                if (d3.select(_this.selector).empty()) {
+                    throw Error(">> ERR: Selector '" + _this.selector + "' not available");
+                }
+            }
+            catch (e) {
+                console.log(e.message);
+            }
+
             this.settings = new Settings(args);
             this.title = new Title(this);
             this.legend = new Legend(this);
             this.canvas = new Canvas(this);
             this.plotOptions = new PlotOptions(this);
             this.series = new Series(this);
-            this.selector = selector;
+
+            d3.select(window).on("resize", function (): void {
+                d3.select(_this.selector).selectAll("*").remove();
+                _this.draw();
+            });
         }
 
         public draw(): Canvas {
+            this.canvas.updateCanvasSize();
+
             // draw canvas
             this.canvas.draw();
 
