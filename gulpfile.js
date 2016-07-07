@@ -12,7 +12,6 @@ var runSequence = require('run-sequence');
 var buildOptions = {
     version: '1.0.0',
     distPath: './dist',
-	libPath: './lib',
 	srcPath:  './src',
 	testPath: './test',
 	isDebug: true
@@ -21,12 +20,12 @@ var buildOptions = {
 
 // Gulp Tasks
 gulp.task('compile-typescript', function(cb){
-	return gulp.src('src/**/*.ts')
+	return gulp.src(buildOptions.srcPath + '/typescript/**/*.ts')
         .pipe(gulpTypescript({
             //noImplicitAny: true,
             out: 'd3chart.js'
         }))
-        .pipe(gulp.dest( buildOptions.distPath + '/js'));
+        .pipe(gulp.dest(buildOptions.distPath + '/js'));
 });
 
 gulp.task('compile-less', function (cb) {
@@ -36,9 +35,9 @@ gulp.task('compile-less', function (cb) {
 gulp.task('run-tslint', function(cb){
 	gulp.src(
 		[
-			buildOptions.srcPath + '**/*.ts',
-			buildOptions.testPath + '**/*.ts',
-			'!' + buildOptions.libPath + '**',
+			buildOptions.srcPath + '/typescript/**/*.ts',
+			buildOptions.testPath + '/test/**/*.ts',
+			'!' + buildOptions.srcPath + '/typescript/typings/**',
 			'!' + buildOptions.distPath + '**'
 		])
 	.pipe(gulpTSLint({
@@ -62,8 +61,8 @@ gulp.task('copy-src', function(cb) {
 		buildOptions.srcPath + '/**',
 		'!' + buildOptions.distPath,
 		'!' + buildOptions.distPath + '/**',
-		'!' + buildOptions.srcPath + '/**/*.ts',
-		'!' + buildOptions.srcPath + '/**/*.less'])
+		'!' + buildOptions.srcPath + '/typescript/**/*.ts',
+		'!' + buildOptions.srcPath + '/less/**/*.less'])
 		.pipe(gulp.dest(buildOptions.distPath));
 });
 
@@ -149,9 +148,9 @@ gulp.task('clean', function(cb) {
 });
 
 gulp.task('build', function(cb) {
-	runSequence('copy-src', 'run-tslint', 'compile-typescript', cb);
+	runSequence('clean', 'copy-src', 'run-tslint', 'compile-typescript', cb);
 });
 
 gulp.task('default', function(cb) {
-    runSequence('clean', 'build', cb);
+    runSequence('build', cb);
 });

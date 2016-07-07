@@ -1,4 +1,4 @@
-﻿/// <reference path="lib/typings/d3/d3.d.ts" />
+﻿/// <reference path="./typings/d3/d3.d.ts" />
 "use strict";
 
 module frnk.UI.Charts {
