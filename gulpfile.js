@@ -77,7 +77,7 @@ gulp.task('serve', ['default'], function(cb) {
 		buildOptions.srcPath + '**/less/*.less',
 		buildOptions.srcPath + '**/css/*.css',
 		buildOptions.srcPath + '**/data/*.txt',
-		buildOptions.srcPath + '**/*.ts',
+		buildOptions.srcPath + '**/typescript/**/*.ts',
 		buildOptions.srcPath + '**/*.htm',
 		buildOptions.srcPath + '**/*.html',
 		buildOptions.testPath + '**/*.ts',

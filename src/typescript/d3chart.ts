@@ -51,24 +51,24 @@ module frnk.UI.Charts {
             // draw chart area
             this.svg = d3.select(this._chart.selector)
                 .append("svg")
-                .attr("width", this.width + this.plotArea.padding * 2 + this._chart.canvas.legend.width)
-                .attr("height", this.height + this.plotArea.padding * 2);
+                .attr("width", this.width)
+                .attr("height", this.height);
 
             // draw title area
             this.svg.append("line")
                 .attr("class", "sep")
                 .attr("x1", 0)
                 .attr("y1", this._chart.canvas.title.height)
-                .attr("x2", this.width + this.plotArea.padding * 2 + this._chart.canvas.legend.width)
+                .attr("x2", this.width)
                 .attr("y2", this._chart.canvas.title.height);
 
             // draw legend area
             this.svg.append("line")
                 .attr("class", "sep")
-                .attr("x1", this.width + this.plotArea.padding * 2)
+                .attr("x1", this.width - this.legend.width)
                 .attr("y1", this._chart.canvas.title.height)
-                .attr("x2", this.width + this.plotArea.padding * 2)
-                .attr("y2", this.height + this.plotArea.padding * 2);
+                .attr("x2", this.width - this.legend.width)
+                .attr("y2", this.height);
 
             return this;
         }
@@ -367,13 +367,13 @@ module frnk.UI.Charts {
                 .attr("transform", function (d: any, i: any): string { return "translate(" + 30 + "," + (_this._chart.canvas.title.height + (i * 20) + 20) + ")"; });
 
             legend.append("rect")
-                .attr("x", _this._chart.canvas.width + _this._chart.canvas.plotArea.padding * 2 - 11)
+                .attr("x", _this._chart.canvas.width - _this._chart.canvas.legend.width - 11)
                 .attr("width", 15)
                 .attr("height", 11)
                 .style("fill", function (d: any, i: any): string { return _this._chart.series.getColor(i); });
 
             legend.append("text")
-                .attr("x", _this._chart.canvas.width + _this._chart.canvas.plotArea.padding * 2 + 9)
+                .attr("x", _this._chart.canvas.width - _this._chart.canvas.legend.width + 9)
                 .attr("y", 9)
                 .attr("dy", "0px")
                 .style("text-anchor", "begin")
@@ -542,7 +542,7 @@ module frnk.UI.Charts {
             switch (_this.getGridlineType()) {
                 case GridLineType.Major:
                     svgGrid.call(axis
-                        .tickSize(-chart.canvas.height + chart.canvas.title.height, 0)
+                        .tickSize(-chart.canvas.height + chart.canvas.title.height + chart.canvas.plotArea.padding * 2, 0)
                         .tickFormat(function (d: any): string { return ""; }) // return no label for the grid lines
                     );
                     break;
@@ -579,23 +579,22 @@ module frnk.UI.Charts {
                     .attr("transform", translateAttr + " rotate(" + this._textRotation + ")");
             }
 
-            // TODO - position labels correct depending position axis
-
             return chart.canvas;
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): Canvas {
+            var y = this.position == "bottom" ? 30 : -30; // TODO: title needs to be positioned under labels but depends on size of labels
             // draw title
             svg.append("text")
                 .text(this.title)
-                .attr("transform", "translate(" + chart.canvas.width + "," + "20" + ")");
+                .attr("transform", "translate(" + (chart.canvas.width - chart.canvas.plotArea.padding * 2 - chart.canvas.legend.width) + "," + y + ")");
 
             return chart.canvas;
         }
 
         public getOffset(chart: Chart): number {
             if (this.position == "bottom") {
-                return chart.canvas.height + chart.canvas.plotArea.padding;
+                return chart.canvas.height - chart.canvas.plotArea.padding;
             }
             else {
                 return chart.canvas.plotArea.padding + chart.canvas.title.height;
@@ -604,25 +603,26 @@ module frnk.UI.Charts {
 
         private _setScale(chart: Chart): any {
             var _this = this;
+            var plotAreaWidth = chart.canvas.width - chart.canvas.plotArea.padding * 2 - chart.canvas.legend.width;
             if (_this.format == "%s") {
                 _this.setScaleType(ScaleType.Ordinal);
                 return d3.scale.ordinal()
                     .domain(_this.categories)
-                    .rangeBands([0, chart.canvas.width], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding);
+                    .rangeBands([0, plotAreaWidth], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding);
             }
             else if (_this.format == "%n") {
                 _this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
                     .domain([chart.series.getMinValue() < 0 ? chart.series.getMinValue() : 0, chart.series.getMaxValue()])
                     .nice() // adds additional ticks to add some whitespace  
-                    .range([0, chart.canvas.width]);
+                    .range([0, plotAreaWidth]);
             }
             else {
                 _this.setScaleType(ScaleType.Time);
                 return d3.time.scale()
                     .domain(d3.extent(_this.categories, function (d: any): Date { return d3.time.format(_this.format).parse(d); }))
                     .nice() // adds additional ticks to add some whitespace  
-                    .range([0, chart.canvas.width]);
+                    .range([0, plotAreaWidth]);
             }
         }
     }
@@ -657,19 +657,13 @@ module frnk.UI.Charts {
             var offset = this.getOffset(chart);
 
             // draw y-axis
-            chart.canvas.svg.append("g")
+            var svgAxis = chart.canvas.svg.append("g")
                 .attr("class", "axis y-axis")
                 .attr("transform", "translate(" + offset + "," + (chart.canvas.plotArea.padding + chart.canvas.title.height) + ")")
-                .call(d3Axis)
-                .append("text")
-                .attr("x", 0)
-                .attr("y", -20)
-                .attr("dx", "0em")
-                .style("text-anchor", "middle")
-                .text(_this.title);
+                .call(d3Axis);
 
             // draw title
-            // TODO - draw title as separate action
+            _this.drawTitle(chart, svgAxis);
 
             // draw gridlines
             _this.drawGridlines(chart, d3Axis, offset);
@@ -689,8 +683,8 @@ module frnk.UI.Charts {
             switch (_this.getGridlineType()) {
                 case GridLineType.Major:
                     svgGrid.call(axis
-                        .tickSize(-chart.canvas.width, 0)
-                        .tickFormat(function (d: any): string { return ""; }) // return no label for the grid lines
+                        .tickSize(-chart.canvas.width + chart.canvas.legend.width + chart.canvas.plotArea.padding * 2, 0)
+                        .tickFormat(function (): string { return ""; }) // return no label for the grid lines
                     );
                     break;
                 case GridLineType.Minor:
@@ -702,14 +696,32 @@ module frnk.UI.Charts {
 
             // draw zero line
             if (_this.isDataAxis() && chart.series.getMinValue() < 0) {
+                var x2;
+                if (_this.position == "left") {
+                    x2 = chart.canvas.width - chart.canvas.plotArea.padding * 2 - chart.canvas.legend.width;
+                }
+                else {
+                    x2 = -chart.canvas.width + chart.canvas.plotArea.padding * 2 + chart.canvas.legend.width;
+                }
+
                 svgGrid.append("g")
                     .attr("class", "zero-line")
                     .append("line")
                     .attr("x1", 0)
-                    .attr("x2", _this.position == "left" ? chart.canvas.width : -chart.canvas.width)
+                    .attr("x2", x2)
                     .attr("y1", this.scale(0))
                     .attr("y2", this.scale(0));
             }
+
+            return chart.canvas;
+        }
+
+        public drawTitle(chart: Chart, svg: D3.Selection): Canvas {
+            // draw title
+            svg.append("text")
+                .attr("x", -20)
+                .attr("y", -20)
+                .text(this.title);
 
             return chart.canvas;
         }
@@ -719,32 +731,32 @@ module frnk.UI.Charts {
                 return chart.canvas.plotArea.padding;
             }
             else {
-                return chart.canvas.width + chart.canvas.plotArea.padding;
+                return chart.canvas.width - chart.canvas.legend.width - chart.canvas.plotArea.padding;
             }
         }
 
         private _setScale(chart: Chart): any {
             var _this = this;
-
+            var plotAreaHeight = chart.canvas.height - chart.canvas.title.height - chart.canvas.plotArea.padding * 2;
             if (_this.format == "%s") {
                 _this.setScaleType(ScaleType.Ordinal);
                 return d3.scale.ordinal()
                     .domain(_this.categories)
-                    .rangeRoundBands([0, chart.canvas.height - chart.canvas.title.height], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding);
+                    .rangeRoundBands([0, plotAreaHeight], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding);
             }
             else if (_this.format == "%n") {
                 _this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
                     .domain([chart.series.getMaxValue(), chart.series.getMinValue() < 0 ? chart.series.getMinValue() : 0])
                     .nice() // adds additional ticks to add some whitespace 
-                    .range([0, chart.canvas.height - chart.canvas.title.height]);
+                    .range([0, plotAreaHeight]);
             }
             else {
                 _this.setScaleType(ScaleType.Time);
                 return d3.time.scale()
                     .domain(d3.extent(_this.categories, function (d: any): Date { return d3.time.format(_this.format).parse(d); }).reverse())
                     .nice() // adds additional ticks to add some whitespace  
-                    .range([chart.series.getMinValue(), chart.canvas.height - chart.canvas.title.height]);
+                    .range([chart.series.getMinValue(), plotAreaHeight]);
             }
         }
     }

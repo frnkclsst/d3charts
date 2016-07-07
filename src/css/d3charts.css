@@ -5,8 +5,9 @@ html {
 
 /* Charts */
 #chart {
-    width: 50%;
-    height: 200px;
+    width: 99%;
+    min-width: 600px;
+    height: 400px;
 }
 
 svg {
