@@ -584,9 +584,11 @@ module frnk.UI.Charts {
 
         public drawTitle(chart: Chart, svg: D3.Selection): Canvas {
             var y = this.position == "bottom" ? 30 : -30; // TODO: title needs to be positioned under labels but depends on size of labels
+
             // draw title
             svg.append("text")
                 .text(this.title)
+                .attr("text-anchor", "end")
                 .attr("transform", "translate(" + (chart.canvas.width - chart.canvas.plotArea.padding * 2 - chart.canvas.legend.width) + "," + y + ")");
 
             return chart.canvas;
@@ -717,11 +719,14 @@ module frnk.UI.Charts {
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): Canvas {
-            // draw title
+            var textAnchor = this.position == "left" ? "begin" : "end";
+            var x = this.position == "left" ? -20 : 20;
+
             svg.append("text")
-                .attr("x", -20)
-                .attr("y", -20)
-                .text(this.title);
+                .text(this.title)
+                .attr("text-anchor", textAnchor)
+                .attr("x", x)
+                .attr("y", -30);
 
             return chart.canvas;
         }
