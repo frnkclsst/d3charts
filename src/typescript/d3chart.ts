@@ -366,14 +366,33 @@ module frnk.UI.Charts {
                 .attr("class", "item")
                 .attr("transform", function (d: any, i: any): string { return "translate(" + 30 + "," + (_this._chart.canvas.title.height + (i * 20) + 20) + ")"; });
 
-            legend.append("rect")
-                .attr("x", _this._chart.canvas.width - _this._chart.canvas.legend.width - 11)
-                .attr("width", 15)
-                .attr("height", 11)
-                .style("fill", function (d: any, i: any): string { return _this._chart.series.getColor(i); });
+            if (this._chart instanceof frnk.UI.Charts.LineChart) {
+                legend.append("line")
+                    .attr("x1", _this._chart.canvas.width - _this._chart.canvas.legend.width - 11)
+                    .attr("x2", _this._chart.canvas.width - _this._chart.canvas.legend.width + 13)
+                    .attr("y1", 6)
+                    .attr("y2", 6)
+                    .style("stroke", function (d: any, i: any): string { return _this._chart.series.getColor(i); })
+                    .style("stroke-width", "2");
+
+                legend.append("circle")
+                    .attr("cx", _this._chart.canvas.width - _this._chart.canvas.legend.width + 1)
+                    .attr("cy", 6)
+                    .attr("r", _this._chart.markerRadius)
+                    .style("fill", "#fff")
+                    .style("stroke", function (d: any, i: any): string { return _this._chart.series.getColor(i); })
+                    .style("stroke-width", "2");
+            }
+            else {
+                legend.append("rect")
+                    .attr("x", _this._chart.canvas.width - _this._chart.canvas.legend.width - 11)
+                    .attr("width", 24)
+                    .attr("height", 11)
+                    .style("fill", function (d: any, i: any): string { return _this._chart.series.getColor(i); });
+            }
 
             legend.append("text")
-                .attr("x", _this._chart.canvas.width - _this._chart.canvas.legend.width + 9)
+                .attr("x", _this._chart.canvas.width - _this._chart.canvas.legend.width + 23)
                 .attr("y", 9)
                 .attr("dy", "0px")
                 .style("text-anchor", "begin")
@@ -789,6 +808,7 @@ module frnk.UI.Charts {
             }
 
             this.settings = new Settings(args);
+
             this.canvas = new Canvas(this);
             this.plotOptions = new PlotOptions(this);
             this.series = new Series(this);
@@ -841,6 +861,7 @@ module frnk.UI.Charts {
         public showMarkers: boolean;
         public interpolation: string;
         public fillArea: boolean;
+        public markerRadius: number = 4;
 
         constructor(args: any, selector: string) {
             super(args, selector);
@@ -950,7 +971,7 @@ module frnk.UI.Charts {
                 .attr("fill", _this.series.getColor(serie))
                 .attr("cx", _this.getXCoordinate(serie))
                 .attr("cy", _this.getYCoordinate(serie))
-                .attr("r", function (): number { return 3; });
+                .attr("r", _this.markerRadius);
 
             return svgMarkers;
         }
@@ -1367,51 +1388,48 @@ module frnk.UI.Charts {
 
         constructor(args: any, selector: string) {
             super(args, selector);
-            this.innerRadius = this.settings.getValue("piechart.innerRadius", "0");
+            this.innerRadius = Number(this.settings.getValue("piechart.innerRadius", "0.9"));
         }
 
         public draw(): Canvas {
             var _this = this;
 
             super.draw();
+            var plotAreaWidth = _this.canvas.width - _this.canvas.plotArea.padding * 2 - _this.canvas.legend.width;
+            var plotAreaHeight = _this.canvas.height - _this.canvas.title.height;
 
-            var radius = Math.min(_this.canvas.width, _this.canvas.height) / 2;
+            var radius = Math.min(plotAreaWidth / 2 - _this.canvas.plotArea.padding * 2, plotAreaHeight / 2 - _this.canvas.plotArea.padding);
 
-            var g = _this.canvas.svg.append("g")
-                .attr("transform", "translate(" + (_this.canvas.width / 2 + _this.canvas.plotArea.padding) + "," + (_this.canvas.height / 2 + _this.canvas.plotArea.padding) + ")");
+            var serieRadius =  radius / _this.series.length;
+            for (var s = 0; s < _this.series.length; s++) {
+                var g = _this.canvas.svg.append("g")
+                    .attr("transform", "translate(" + (plotAreaWidth / 2) + "," + (plotAreaHeight / 2 + this.canvas.title.height) + ")");
 
-            //var innerRadius = (_this.canvas.height < _this.canvas.width) ? _this.canvas.height : _this.canvas.width;
-            var arc = d3.svg.arc()
-                .outerRadius(radius)
-                .innerRadius(radius - radius * _this.innerRadius); // inner radius = 0 => pie chart
+                var innerRadius = (serieRadius * (s + 1)) - (serieRadius * _this.innerRadius);
+                console.log(innerRadius);
 
-            var pie = d3.layout.pie();
+                var arc = d3.svg.arc()
+                    .outerRadius(serieRadius * (s + 1))
+                    .innerRadius(innerRadius); // inner radius = 0 => pie chart
 
-            var arcs = g.selectAll("g.slice")
-                .data(pie(_this.series.getSerie(0).getValues()))
-                .enter()
-                .append("g")
-                .attr("class", "slice");
+                var pie = d3.layout.pie();
 
-            arcs.append("path")
-                .attr("fill", function (d: any, i: number): string { return _this.series.getSerie(0).getColor(i); })
-                .attr("d", arc);
+                var arcs = g.selectAll("g.slice")
+                    .data(pie(_this.series.getSerie(s).getValues()))
+                    .enter()
+                    .append("g")
+                    .attr("class", "slice");
 
-            // add text
-            arcs.append("text")
-                .attr("transform", function (d: any): string {
-                    d.innerRadius = 0;
-                    d.outerRadius = radius;
-                    return "translate(" + arc.centroid(d) + ")";
-                })
-                .attr("text-anchor", "middle")
-                .text(function (d: any, i: number): string { return _this.series.getSerie(0).getName(i); });
+                arcs.append("path")
+                    .attr("fill", function (d: any, i: number): string { return _this.series.getSerie(s).getColor(i); })
+                    .attr("d", arc);
 
-            // draw tooltip -- doesn't work
-            arcs.append("title")
-                .text(function (d: any): number {
-                    return d.y;
-                });
+                // draw tooltip
+                arcs.append("title")
+                    .text(function (d: any): number {
+                        return d.value;
+                    });
+            }
             return _this.canvas;
         }
     }
