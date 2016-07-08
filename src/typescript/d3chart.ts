@@ -356,47 +356,48 @@ module frnk.UI.Charts {
         }
 
         public draw(): void {
-            var _this = this;
 
-            var legend = _this._chart.canvas.svg.append("g")
+            var legend = this._chart.canvas.svg.append("g")
                 .attr("class", "legend")
                 .selectAll(".item")
-                .data(_this._chart.series.matrix)
+                .data(this._chart.series.matrix)
                 .enter().append("g")
                 .attr("class", "item")
-                .attr("transform", function (d: any, i: any): string { return "translate(" + 30 + "," + (_this._chart.canvas.title.height + (i * 20) + 20) + ")"; });
+                .attr("transform", (d: any, i: any): string => { return "translate(" + 30 + "," + (this._chart.canvas.title.height + (i * 20) + 20) + ")"; });
 
             if (this._chart instanceof frnk.UI.Charts.LineChart) {
                 legend.append("line")
-                    .attr("x1", _this._chart.canvas.width - _this._chart.canvas.legend.width - 11)
-                    .attr("x2", _this._chart.canvas.width - _this._chart.canvas.legend.width + 13)
+                    .attr("x1", this._chart.canvas.width - this._chart.canvas.legend.width - 11)
+                    .attr("x2", this._chart.canvas.width - this._chart.canvas.legend.width + 13)
                     .attr("y1", 6)
                     .attr("y2", 6)
-                    .style("stroke", function (d: any, i: any): string { return _this._chart.series.getColor(i); })
+                    .style("stroke", (d: any, i: any): string => { return this._chart.series.getColor(i); })
                     .style("stroke-width", "2");
 
                 legend.append("circle")
-                    .attr("cx", _this._chart.canvas.width - _this._chart.canvas.legend.width + 1)
+                    .attr("cx", this._chart.canvas.width - this._chart.canvas.legend.width + 1)
                     .attr("cy", 6)
-                    .attr("r", _this._chart.markerRadius)
+                    .attr("r", 4)
                     .style("fill", "#fff")
-                    .style("stroke", function (d: any, i: any): string { return _this._chart.series.getColor(i); })
+                    .style("stroke", (d: any, i: any): string => { return this._chart.series.getColor(i); })
                     .style("stroke-width", "2");
             }
             else {
                 legend.append("rect")
-                    .attr("x", _this._chart.canvas.width - _this._chart.canvas.legend.width - 11)
+                    .attr("x", this._chart.canvas.width - this._chart.canvas.legend.width - 11)
                     .attr("width", 24)
                     .attr("height", 11)
-                    .style("fill", function (d: any, i: any): string { return _this._chart.series.getColor(i); });
+                    .style("fill", (d: any, i: any): string => { return this._chart.series.getColor(i); });
             }
 
             legend.append("text")
-                .attr("x", _this._chart.canvas.width - _this._chart.canvas.legend.width + 23)
+                .attr("x", this._chart.canvas.width - this._chart.canvas.legend.width + 23)
                 .attr("y", 9)
                 .attr("dy", "0px")
                 .style("text-anchor", "begin")
-                .text(function (d: any, i: any): string { return _this._chart.series.getName(i); });
+                .text((d: any, i: any): string => {
+                    return this._chart.series.getName(i);
+                });
         }
     }
 
@@ -520,8 +521,6 @@ module frnk.UI.Charts {
         }
 
         public draw(chart: Chart): Canvas {
-            var _this = this;
-
             super.draw(chart);
 
             // set scale
@@ -529,9 +528,9 @@ module frnk.UI.Charts {
 
             // create d3 axis
             var d3Axis = d3.svg.axis()
-                .scale(_this.scale)
-                .orient(_this.position)
-                .ticks(_this.ticks);
+                .scale(this.scale)
+                .orient(this.position)
+                .ticks(this.ticks);
 
             // get offset to determine position
             var offset = this.getOffset(chart);
@@ -542,27 +541,25 @@ module frnk.UI.Charts {
                 .attr("transform", "translate(" + chart.canvas.plotArea.padding + "," + offset + ")")
                 .call(d3Axis);
 
-            _this.drawLabels(chart, svgAxis);
-            _this.drawTitle(chart, svgAxis);
-            _this.drawGridlines(chart, d3Axis, offset);
+            this.drawLabels(chart, svgAxis);
+            this.drawTitle(chart, svgAxis);
+            this.drawGridlines(chart, d3Axis, offset);
 
             return chart.canvas;
         }
 
         public drawGridlines(chart: Chart, axis: D3.Svg.Axis, offset: number): Canvas {
-            var _this = this;
-
             // draw grid
             var svgGrid = chart.canvas.svg.append("g")
                 .attr("class", "x-axis grid")
                 .attr("transform", "translate(" + chart.canvas.plotArea.padding + "," + offset + ")");
 
             // draw gridlines
-            switch (_this.getGridlineType()) {
+            switch (this.getGridlineType()) {
                 case GridLineType.Major:
                     svgGrid.call(axis
                         .tickSize(-chart.canvas.height + chart.canvas.title.height + chart.canvas.plotArea.padding * 2, 0)
-                        .tickFormat(function (d: any): string { return ""; }) // return no label for the grid lines
+                        .tickFormat((d: any): string => { return ""; }) // return no label for the grid lines
                     );
                     break;
                 case GridLineType.Minor:
@@ -581,7 +578,7 @@ module frnk.UI.Charts {
                     .attr("x1", this.scale(0))
                     .attr("x2", this.scale(0))
                     .attr("y1", 0)
-                    .attr("y2", _this.position == "bottom" ? -chart.canvas.height : chart.canvas.height);
+                    .attr("y2", this.position == "bottom" ? -chart.canvas.height : chart.canvas.height);
             }
 
             return chart.canvas;
@@ -623,25 +620,24 @@ module frnk.UI.Charts {
         }
 
         private _setScale(chart: Chart): any {
-            var _this = this;
             var plotAreaWidth = chart.canvas.width - chart.canvas.plotArea.padding * 2 - chart.canvas.legend.width;
-            if (_this.format == "%s") {
-                _this.setScaleType(ScaleType.Ordinal);
+            if (this.format == "%s") {
+                this.setScaleType(ScaleType.Ordinal);
                 return d3.scale.ordinal()
-                    .domain(_this.categories)
+                    .domain(this.categories)
                     .rangeBands([0, plotAreaWidth], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding);
             }
-            else if (_this.format == "%n") {
-                _this.setScaleType(ScaleType.Linear);
+            else if (this.format == "%n") {
+                this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
                     .domain([chart.series.getMinValue() < 0 ? chart.series.getMinValue() : 0, chart.series.getMaxValue()])
                     .nice() // adds additional ticks to add some whitespace  
                     .range([0, plotAreaWidth]);
             }
             else {
-                _this.setScaleType(ScaleType.Time);
+                this.setScaleType(ScaleType.Time);
                 return d3.time.scale()
-                    .domain(d3.extent(_this.categories, function (d: any): Date { return d3.time.format(_this.format).parse(d); }))
+                    .domain(d3.extent(this.categories, (d: any): Date => { return d3.time.format(this.format).parse(d); }))
                     .nice() // adds additional ticks to add some whitespace  
                     .range([0, plotAreaWidth]);
             }
@@ -661,8 +657,6 @@ module frnk.UI.Charts {
         }
 
         public draw(chart: Chart): Canvas {
-            var _this = this;
-
             super.draw(chart);
 
             // set scale
@@ -670,9 +664,9 @@ module frnk.UI.Charts {
 
             // create d3 axis 
             var d3Axis = d3.svg.axis()
-                .scale(_this.scale)
-                .orient(_this.position)
-                .ticks(_this.ticks);
+                .scale(this.scale)
+                .orient(this.position)
+                .ticks(this.ticks);
 
             // get offset to determine position
             var offset = this.getOffset(chart);
@@ -684,28 +678,26 @@ module frnk.UI.Charts {
                 .call(d3Axis);
 
             // draw title
-            _this.drawTitle(chart, svgAxis);
+            this.drawTitle(chart, svgAxis);
 
             // draw gridlines
-            _this.drawGridlines(chart, d3Axis, offset);
+            this.drawGridlines(chart, d3Axis, offset);
 
             return chart.canvas;
         }
 
         public drawGridlines(chart: Chart, axis: D3.Svg.Axis, offset: number): Canvas {
-            var _this = this;
-
             //draw grid
             var svgGrid = chart.canvas.svg.append("g")
                 .attr("class", "y-axis grid")
                 .attr("transform", "translate(" + offset + "," + (chart.canvas.plotArea.padding + chart.canvas.title.height) + ")");
 
             // draw gridlines
-            switch (_this.getGridlineType()) {
+            switch (this.getGridlineType()) {
                 case GridLineType.Major:
                     svgGrid.call(axis
                         .tickSize(-chart.canvas.width + chart.canvas.legend.width + chart.canvas.plotArea.padding * 2, 0)
-                        .tickFormat(function (): string { return ""; }) // return no label for the grid lines
+                        .tickFormat((): string => { return ""; }) // return no label for the grid lines
                     );
                     break;
                 case GridLineType.Minor:
@@ -716,9 +708,9 @@ module frnk.UI.Charts {
             }
 
             // draw zero line
-            if (_this.isDataAxis() && chart.series.getMinValue() < 0) {
+            if (this.isDataAxis() && chart.series.getMinValue() < 0) {
                 var x2;
-                if (_this.position == "left") {
+                if (this.position == "left") {
                     x2 = chart.canvas.width - chart.canvas.plotArea.padding * 2 - chart.canvas.legend.width;
                 }
                 else {
@@ -760,25 +752,24 @@ module frnk.UI.Charts {
         }
 
         private _setScale(chart: Chart): any {
-            var _this = this;
             var plotAreaHeight = chart.canvas.height - chart.canvas.title.height - chart.canvas.plotArea.padding * 2;
-            if (_this.format == "%s") {
-                _this.setScaleType(ScaleType.Ordinal);
+            if (this.format == "%s") {
+                this.setScaleType(ScaleType.Ordinal);
                 return d3.scale.ordinal()
-                    .domain(_this.categories)
+                    .domain(this.categories)
                     .rangeRoundBands([0, plotAreaHeight], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding);
             }
-            else if (_this.format == "%n") {
-                _this.setScaleType(ScaleType.Linear);
+            else if (this.format == "%n") {
+                this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
                     .domain([chart.series.getMaxValue(), chart.series.getMinValue() < 0 ? chart.series.getMinValue() : 0])
                     .nice() // adds additional ticks to add some whitespace 
                     .range([0, plotAreaHeight]);
             }
             else {
-                _this.setScaleType(ScaleType.Time);
+                this.setScaleType(ScaleType.Time);
                 return d3.time.scale()
-                    .domain(d3.extent(_this.categories, function (d: any): Date { return d3.time.format(_this.format).parse(d); }).reverse())
+                    .domain(d3.extent(this.categories, (d: any): Date => { return d3.time.format(this.format).parse(d); }).reverse())
                     .nice() // adds additional ticks to add some whitespace  
                     .range([chart.series.getMinValue(), plotAreaHeight]);
             }
@@ -794,13 +785,12 @@ module frnk.UI.Charts {
         public selector: string;
 
         constructor(args: any, selector: string) {
-            var _this = this;
             this.selector = selector;
 
             // Selector cannot be found
             try {
-                if (d3.select(_this.selector).empty()) {
-                    throw Error(">> ERR: Selector '" + _this.selector + "' not available");
+                if (d3.select(this.selector).empty()) {
+                    throw Error(">> ERR: Selector '" + this.selector + "' not available");
                 }
             }
             catch (e) {
@@ -813,9 +803,11 @@ module frnk.UI.Charts {
             this.plotOptions = new PlotOptions(this);
             this.series = new Series(this);
 
-            d3.select(window).on("resize", function (): void {
-                d3.select(_this.selector).selectAll("*").remove();
-                _this.draw();
+            // update size and add EventListener
+            this.canvas.updateCanvasSize();
+            d3.select(window).on("resize", (): void => {
+                d3.select(this.selector).selectAll("*").remove();
+                this.draw();
             });
         }
 
@@ -846,14 +838,12 @@ module frnk.UI.Charts {
         }
 
         public draw(): Canvas {
-            var _this = this;
-
             super.draw();
 
-            _this.xAxis.draw(this);
-            _this.yAxis.draw(this);
+            this.xAxis.draw(this);
+            this.yAxis.draw(this);
 
-            return _this.canvas;
+            return this.canvas;
         }
     }
 
@@ -861,7 +851,6 @@ module frnk.UI.Charts {
         public showMarkers: boolean;
         public interpolation: string;
         public fillArea: boolean;
-        public markerRadius: number = 4;
 
         constructor(args: any, selector: string) {
             super(args, selector);
@@ -871,21 +860,19 @@ module frnk.UI.Charts {
         }
 
         public draw(): Canvas {
-            var _this = this;
-
             super.draw();
 
             // draw chart
-            var svgAreas = _this.canvas.svg.append("g")
+            var svgAreas = this.canvas.svg.append("g")
                 .attr("class", "areas");
 
-            var svgSeries = _this.canvas.svg.append("g")
+            var svgSeries = this.canvas.svg.append("g")
                 .attr("class", "series");
 
             // draw areas
             // areas need to be drawn first, because the line and markers need to be drawn on top of it
-            if (_this.fillArea) {
-                for (var i = 0; i < _this.series.length; i++) {
+            if (this.fillArea) {
+                for (var i = 0; i < this.series.length; i++) {
                     var svgArea = svgAreas.append("g")
                         .attr("id", "area-" + i);
 
@@ -894,7 +881,7 @@ module frnk.UI.Charts {
             }
 
             // draw lines
-            for (var j = 0; j < _this.series.length; j++) {
+            for (var j = 0; j < this.series.length; j++) {
                 var svgSerie = svgSeries.append("g")
                     .attr("id", "serie-" + j);
 
@@ -902,7 +889,7 @@ module frnk.UI.Charts {
                 this.drawLine(svgSerie, j);
 
                 // draw markers
-                if (_this.showMarkers) {
+                if (this.showMarkers) {
                     var svgMarkers = this.drawMarkers(svgSerie, j);
 
                     // draw tooltip
@@ -910,49 +897,46 @@ module frnk.UI.Charts {
                 }
             }
 
-            return _this.canvas;
+            return this.canvas;
         }
 
         public drawArea(svg: D3.Selection, serie: number): D3.Selection {
-            var _this = this;
             var d3Area: D3.Svg.Area;
 
-            if (_this.xAxis.isDataAxis()) {
+            if (this.xAxis.isDataAxis()) {
                 d3Area = d3.svg.area()
-                    .interpolate(_this.interpolation)
-                    .x(_this.getXCoordinate(serie))
-                    .x0(_this.xAxis.scale(0) + _this.canvas.plotArea.padding)
-                    .y(_this.getYCoordinate(serie));
+                    .interpolate(this.interpolation)
+                    .x(this.getXCoordinate(serie))
+                    .x0(this.xAxis.scale(0) + this.canvas.plotArea.padding)
+                    .y(this.getYCoordinate(serie));
             }
             else {
                 d3Area = d3.svg.area()
-                    .interpolate(_this.interpolation)
-                    .x(_this.getXCoordinate(serie))
-                    .y0(_this.yAxis.scale(0) + _this.canvas.plotArea.padding + _this.canvas.title.height )
-                    .y1(_this.getYCoordinate(serie));
+                    .interpolate(this.interpolation)
+                    .x(this.getXCoordinate(serie))
+                    .y0(this.yAxis.scale(0) + this.canvas.plotArea.padding + this.canvas.title.height )
+                    .y1(this.getYCoordinate(serie));
             }
 
             var svgArea = svg.append("path")
                 .attr("class", "area")
-                .attr("d", d3Area(_this.series.matrix[serie]))
-                .style("fill", _this.series.getColor(serie))
+                .attr("d", d3Area(this.series.matrix[serie]))
+                .style("fill", this.series.getColor(serie))
                 .style("opacity", "0.2");
 
             return svgArea;
         }
 
         public drawLine(svg: D3.Selection, serie: number): D3.Selection {
-            var _this = this;
-
             var d3Line = d3.svg.line()
-                .interpolate(_this.interpolation)
-                .x(_this.getXCoordinate(serie))
-                .y(_this.getYCoordinate(serie));
+                .interpolate(this.interpolation)
+                .x(this.getXCoordinate(serie))
+                .y(this.getYCoordinate(serie));
 
             var svgLine = svg.append("path")
                 .attr("class", "line")
-                .attr("d", d3Line(_this.series.matrix[serie]))
-                .attr("stroke", _this.series.getColor(serie))
+                .attr("d", d3Line(this.series.matrix[serie]))
+                .attr("stroke", this.series.getColor(serie))
                 .attr("stroke-width", 1)
                 .attr("fill", "none");
 
@@ -960,68 +944,75 @@ module frnk.UI.Charts {
         }
 
         public drawMarkers(svg: D3.Selection, serie: number): D3.Selection {
-            var _this = this;
-
             var svgMarkers = svg.selectAll(".marker")
-                .data(_this.series.matrix[serie])
+                .data(this.series.matrix[serie])
                 .enter().append("circle")
                 .attr("class", "marker")
-                .attr("stroke", _this.series.getColor(serie))
+                .attr("stroke", this.series.getColor(serie))
                 .attr("stroke-width", "0")
-                .attr("fill", _this.series.getColor(serie))
-                .attr("cx", _this.getXCoordinate(serie))
-                .attr("cy", _this.getYCoordinate(serie))
-                .attr("r", _this.markerRadius);
+                .attr("fill", this.series.getColor(serie))
+                .attr("cx", this.getXCoordinate(serie))
+                .attr("cy", this.getYCoordinate(serie))
+                .attr("r", 4);
 
             return svgMarkers;
         }
 
-        public drawTooltip(svg: D3.Selection, serie: number): D3.Selection {
-            var svgTooltip = svg.append("title")
-                .text(function (d: any): number {
-                return d.y;
-                });
+        public drawTooltip(svg: D3.Selection, serie: number): void {
+            var div = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
 
-            return svgTooltip;
+            svg.on("mouseover", function (d: any): void {
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                div.html("Value " + "<br/>"  + d.y)
+                    .style("left", (d3.mouse(this)[0]) + "px")
+                    .style("top", (d3.mouse(this)[1] + 75) + "px");
+                })
+                .on("mouseout", function(d: any): void {
+                    div.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                });
         }
 
         public getXCoordinate(serie: number): any {
-            var _this = this;
-            if (_this.xAxis.isDataAxis()) {
-                return function (d: any, i: number): number {
-                    return _this.canvas.plotArea.padding + _this.xAxis.scale(d.y);
+            if (this.xAxis.isDataAxis()) {
+                return (d: any, i: number): number => {
+                    return this.canvas.plotArea.padding + this.xAxis.scale(d.y);
                 };
             }
 
-            if (_this.yAxis.isDataAxis()) {
-                return function (d: any, i: number): number {
-                    if (_this.xAxis.isOrdinalScale()) {
-                        return _this.canvas.plotArea.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i])) + _this.xAxis.scale.rangeBand() / 2;
+            if (this.yAxis.isDataAxis()) {
+                return (d: any, i: number): number => {
+                    if (this.xAxis.isOrdinalScale()) {
+                        return this.canvas.plotArea.padding + this.xAxis.scale(this.xAxis.parseCategory(this.xAxis.categories[i])) + this.xAxis.scale.rangeBand() / 2;
                     }
                     else {
-                        return _this.canvas.plotArea.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i]));
+                        return this.canvas.plotArea.padding + this.xAxis.scale(this.xAxis.parseCategory(this.xAxis.categories[i]));
                     }
                 };
             }
         }
 
         public getYCoordinate(serie: number): any {
-            var _this = this;
-            if (_this.xAxis.isDataAxis()) {
-                return function (d: any, i: number): number {
-                    var axisScale = _this.yAxis.parseCategory(_this.yAxis.categories[i]);
-                    if (_this.yAxis.isOrdinalScale()) {
-                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(axisScale) + _this.yAxis.scale.rangeBand() / 2;
+            if (this.xAxis.isDataAxis()) {
+                return (d: any, i: number): number => {
+                    var axisScale = this.yAxis.parseCategory(this.yAxis.categories[i]);
+                    if (this.yAxis.isOrdinalScale()) {
+                        return this.canvas.plotArea.padding + this.canvas.title.height + this.yAxis.scale(axisScale) + this.yAxis.scale.rangeBand() / 2;
                     }
                     else {
-                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(axisScale);
+                        return this.canvas.plotArea.padding + this.canvas.title.height + this.yAxis.scale(axisScale);
                     }
                 };
             }
 
-            if (_this.yAxis.isDataAxis()) {
-                return function (d: any, i: number): number {
-                    return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(d.y);
+            if (this.yAxis.isDataAxis()) {
+                return (d: any, i: number): number => {
+                    return this.canvas.plotArea.padding + this.canvas.title.height + this.yAxis.scale(d.y);
                 };
             }
         }
@@ -1034,48 +1025,47 @@ module frnk.UI.Charts {
         }
 
         public drawArea(svg: D3.Selection, serie: number): D3.Selection {
-            var _this = this;
             var d3Area: D3.Svg.Area;
 
-            if (_this.xAxis.isDataAxis()) {
+            if (this.xAxis.isDataAxis()) {
                 d3Area = d3.svg.area()
-                    .interpolate(_this.interpolation)
-                    .x(_this.getXCoordinate(serie))
+                    .interpolate(this.interpolation)
+                    .x(this.getXCoordinate(serie))
                     .x0(
-                    function (d: any): number {
+                    (d: any): number => {
                         // negative values
                         if (d.y < 0) {
-                            return (_this.xAxis.scale(d.y0) + _this.canvas.plotArea.padding);
+                            return (this.xAxis.scale(d.y0) + this.canvas.plotArea.padding);
                         }
-                        // postive values
+                        // positive values
                         else {
-                            return (_this.xAxis.scale(d.y0 - d.y) + _this.canvas.plotArea.padding);
+                            return (this.xAxis.scale(d.y0 - d.y) + this.canvas.plotArea.padding);
                         }
                     })
-                    .y(_this.getYCoordinate(serie));
+                    .y(this.getYCoordinate(serie));
             }
             else {
                 d3Area = d3.svg.area()
-                    .interpolate(_this.interpolation)
-                    .x(_this.getXCoordinate(serie))
+                    .interpolate(this.interpolation)
+                    .x(this.getXCoordinate(serie))
                     .y0(
-                    function (d: any): number {
+                    (d: any): number => {
                         // negative values
                         if (d.y < 0) {
-                            return (_this.yAxis.scale(d.y0) + _this.canvas.title.height + _this.canvas.plotArea.padding);
+                            return (this.yAxis.scale(d.y0) + this.canvas.title.height + this.canvas.plotArea.padding);
                         }
                         // postive values
                         else {
-                            return (_this.yAxis.scale(d.y0 - d.y) + _this.canvas.title.height + _this.canvas.plotArea.padding);
+                            return (this.yAxis.scale(d.y0 - d.y) + this.canvas.title.height + this.canvas.plotArea.padding);
                         }
                     })
-                    .y1(_this.getYCoordinate(serie));
+                    .y1(this.getYCoordinate(serie));
             }
 
             var svgArea = svg.append("path")
                 .attr("class", "area")
-                .attr("d", d3Area(_this.series.matrix[serie]))
-                .style("fill", _this.series.getColor(serie))
+                .attr("d", d3Area(this.series.matrix[serie]))
+                .style("fill", this.series.getColor(serie))
                 .style("opacity", "0.2");
 
             return svgArea;
@@ -1094,56 +1084,53 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(serie: number): any {
-            var _this = this;
-            if (_this.xAxis.isDataAxis()) {
-                return function (d: any, i: number): number {
+            if (this.xAxis.isDataAxis()) {
+                return (d: any, i: number): number => {
                     // negative numbers                                        
                     if (d.y0 < 1) {
-                        return _this.canvas.plotArea.padding + _this.xAxis.scale(d.y0 + d.y);
+                        return this.canvas.plotArea.padding + this.xAxis.scale(d.y0 + d.y);
                     }
                     // positive numbers
                     else {
-                        return _this.canvas.plotArea.padding + _this.xAxis.scale(d.y0);
+                        return this.canvas.plotArea.padding + this.xAxis.scale(d.y0);
                     }
                 };
             }
 
-            if (_this.yAxis.isDataAxis()) {
-                return function (d: any, i: number): number {
-                    if (_this.xAxis.isOrdinalScale() || _this.xAxis.isLinearScale()) {
-                        return _this.canvas.plotArea.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i])) + _this.xAxis.scale.rangeBand() / 2;
+            if (this.yAxis.isDataAxis()) {
+                return (d: any, i: number): number => {
+                    if (this.xAxis.isOrdinalScale() || this.xAxis.isLinearScale()) {
+                        return this.canvas.plotArea.padding + this.xAxis.scale(this.xAxis.parseCategory(this.xAxis.categories[i])) + this.xAxis.scale.rangeBand() / 2;
                     }
                     else {
-                        return _this.canvas.plotArea.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i])); // for time scales
+                        return this.canvas.plotArea.padding + this.xAxis.scale(this.xAxis.parseCategory(this.xAxis.categories[i])); // for time scales
                     }
                 };
             }
         }
 
         public getYCoordinate(serie: number): any {
-            var _this = this;
-
-            if (_this.xAxis.isDataAxis()) {
-                return function (d: any, i: number): number {
-                    var axisScale = _this.yAxis.parseCategory(_this.yAxis.categories[i]);
-                    if (_this.yAxis.isOrdinalScale() || _this.yAxis.isLinearScale()) {
-                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(axisScale) + _this.yAxis.scale.rangeBand() / 2;
+            if (this.xAxis.isDataAxis()) {
+                return (d: any, i: number): number => {
+                    var axisScale = this.yAxis.parseCategory(this.yAxis.categories[i]);
+                    if (this.yAxis.isOrdinalScale() || this.yAxis.isLinearScale()) {
+                        return this.canvas.plotArea.padding + this.canvas.title.height + this.yAxis.scale(axisScale) + this.yAxis.scale.rangeBand() / 2;
                     }
                     else {
-                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(axisScale); // for time scales
+                        return this.canvas.plotArea.padding + this.canvas.title.height + this.yAxis.scale(axisScale); // for time scales
                     }
                 };
             }
 
-            if (_this.yAxis.isDataAxis()) {
-                return function (d: any, i: number): number {
+            if (this.yAxis.isDataAxis()) {
+                return (d: any, i: number): number => {
                     // negative numbers                                        
                     if (d.y0 < 1) { //TODO -  I think this only works for whole numbers
-                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(d.y0 + d.y);
+                        return this.canvas.plotArea.padding + this.canvas.title.height + this.yAxis.scale(d.y0 + d.y);
                     }
                     // positive numbers
                     else {
-                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(d.y0);
+                        return this.canvas.plotArea.padding + this.canvas.title.height + this.yAxis.scale(d.y0);
                     }
                 };
             }
@@ -1157,140 +1144,134 @@ module frnk.UI.Charts {
         }
 
         public draw(): Canvas {
-            var _this = this;
-
             super.draw();
 
             // draw chart
-            var svgSeries = _this.canvas.svg.append("g")
+            var svgSeries = this.canvas.svg.append("g")
                 .attr("class", "series");
 
             // draw bars
-            for (var j = 0; j < _this.series.length; j++) {
+            for (var j = 0; j < this.series.length; j++) {
                 var svgSerie = svgSeries.append("g")
                     .attr("id", "serie-" + j)
                     .selectAll("rect")
-                    .data(_this.series.matrix[j])
+                    .data(this.series.matrix[j])
                     .enter();
 
                 // draw bar
                 var svgBar = svgSerie.append("rect")
                     .attr({
-                    "x": _this.getXCoordinate(j),
-                    "y": _this.getYCoordinate(j),
+                    "x": this.getXCoordinate(j),
+                    "y": this.getYCoordinate(j),
                     "class": "bar",
-                    "width": _this.getWidth(j),
-                    "height": _this.getHeight(j),
-                    "fill": _this.series.getColor(j)
+                    "width": this.getWidth(j),
+                    "height": this.getHeight(j),
+                    "fill": this.series.getColor(j)
                 });
 
                 // draw tooltip
                 svgBar.append("title")
-                    .text(function (d: any): number { return d.y; });
+                    .text((d: any): number => { return d.y; });
 
                 // draw labels
                 /*
                 var svgLabels = svgSerie.append("text")
-                    .attr("x", _this.getXCoordinate(j))
-                    .attr("y", _this.getYCoordinate(j))
+                    .attr("x", this.getXCoordinate(j))
+                    .attr("y", this.getYCoordinate(j))
                     .attr("fill", "#878787")
                     .attr("dy", "-.5em")
                     .text(function (d: any) { return parseFloat(d.y).toFixed(2); });
                 */
             }
 
-            return _this.canvas;
+            return this.canvas;
         }
 
         public getXCoordinate(serie: number): any {
-            var _this = this;
-            if (_this.xAxis.isDataAxis()) {
-                return function (d: any, i: number): any {
+            if (this.xAxis.isDataAxis()) {
+                return (d: any, i: number): any => {
                     if (d.y < 0) {
-                        return _this.canvas.plotArea.padding + _this.xAxis.scale(0) - Math.abs(_this.xAxis.scale(d.size) - _this.xAxis.scale(0));
+                        return this.canvas.plotArea.padding + this.xAxis.scale(0) - Math.abs(this.xAxis.scale(d.size) - this.xAxis.scale(0));
                     }
                     else {
-                        return _this.canvas.plotArea.padding + _this.xAxis.scale(0);
+                        return this.canvas.plotArea.padding + this.xAxis.scale(0);
                     }
                 };
             }
 
-            if (_this.yAxis.isDataAxis()) {
-                return function (d: any, i: number): number {
-                    var axisScale = _this.xAxis.parseCategory(_this.xAxis.categories[i]);
-                    if (_this.xAxis.isOrdinalScale()) {
-                        return _this.canvas.plotArea.padding + _this.xAxis.scale(axisScale) + (_this.xAxis.scale.rangeBand() / _this.series.length * serie);
+            if (this.yAxis.isDataAxis()) {
+                return (d: any, i: number): number => {
+                    var axisScale = this.xAxis.parseCategory(this.xAxis.categories[i]);
+                    if (this.xAxis.isOrdinalScale()) {
+                        return this.canvas.plotArea.padding + this.xAxis.scale(axisScale) + (this.xAxis.scale.rangeBand() / this.series.length * serie);
                     }
                     else {
-                        return _this.canvas.plotArea.padding + _this.xAxis.scale(axisScale) + (_this.canvas.width / _this.series.length / _this.series.matrix[0].length * serie);
+                        return this.canvas.plotArea.padding + this.xAxis.scale(axisScale) + (this.canvas.width / this.series.length / this.series.matrix[0].length * serie);
                     }
                 };
             }
         }
 
         public getYCoordinate(serie: number): any {
-            var _this = this;
-            if (_this.xAxis.isDataAxis()) {
-                return function (d: any, i: number): number {
-                    var axisScale = _this.yAxis.parseCategory(_this.yAxis.categories[i]);
-                    var totalHeight = _this.canvas.plotArea.padding + _this.canvas.title.height;
-                    var series = _this.series;
-                    if (_this.yAxis.isOrdinalScale()) {
-                        return totalHeight + _this.yAxis.scale(axisScale) + (_this.yAxis.scale.rangeBand() / series.length * serie);
+            if (this.xAxis.isDataAxis()) {
+                return (d: any, i: number): number => {
+                    var axisScale = this.yAxis.parseCategory(this.yAxis.categories[i]);
+                    var totalHeight = this.canvas.plotArea.padding + this.canvas.title.height;
+                    var series = this.series;
+                    if (this.yAxis.isOrdinalScale()) {
+                        return totalHeight + this.yAxis.scale(axisScale) + (this.yAxis.scale.rangeBand() / series.length * serie);
                     }
                     else {
-                        return totalHeight + _this.yAxis.scale(axisScale) + (_this.canvas.width / series.length / series.matrix[0].length / series.length * serie);
+                        return totalHeight + this.yAxis.scale(axisScale) + (this.canvas.width / series.length / series.matrix[0].length / series.length * serie);
                     }
                 };
             }
 
-            if (_this.yAxis.isDataAxis()) {
-                return function (d: any, i: number): number {
+            if (this.yAxis.isDataAxis()) {
+                return (d: any, i: number): number => {
                     if (d.y < 0) {
-                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(d.y) - Math.abs(_this.yAxis.scale(d.size) - _this.yAxis.scale(0));
+                        return this.canvas.plotArea.padding + this.canvas.title.height + this.yAxis.scale(d.y) - Math.abs(this.yAxis.scale(d.size) - this.yAxis.scale(0));
                     }
                     else {
-                        return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(d.y);
+                        return this.canvas.plotArea.padding + this.canvas.title.height + this.yAxis.scale(d.y);
                     }
                 };
             }
         }
 
         public getHeight(serie: number): any {
-            var _this = this;
-            if (_this.xAxis.isDataAxis()) {
-                return function (d: any, i: number): any {
-                    if (_this.yAxis.isOrdinalScale()) {
-                        return Math.abs(_this.yAxis.scale.rangeBand() / _this.series.length);
+            if (this.xAxis.isDataAxis()) {
+                return (d: any, i: number): any => {
+                    if (this.yAxis.isOrdinalScale()) {
+                        return Math.abs(this.yAxis.scale.rangeBand() / this.series.length);
                     }
                     else {
-                        return Math.abs(_this.canvas.width / _this.series.length / _this.series.matrix[0].length / _this.series.length);
+                        return Math.abs(this.canvas.width / this.series.length / this.series.matrix[0].length / this.series.length);
                     }
                 };
             }
 
-            if (_this.yAxis.isDataAxis()) {
+            if (this.yAxis.isDataAxis()) {
                 return function (d: any, i: number): any {
-                    return Math.abs(_this.yAxis.scale(d.y) - _this.yAxis.scale(0));
+                    return Math.abs(this.yAxis.scale(d.y) - this.yAxis.scale(0));
                 };
             }
         }
 
         public getWidth(serie: number): any {
-            var _this = this;
-            if (_this.xAxis.isDataAxis()) {
-                return function (d: any, i: number): number {
-                    return Math.abs(_this.xAxis.scale(d.y) - _this.xAxis.scale(0));
+            if (this.xAxis.isDataAxis()) {
+                return (d: any, i: number): number => {
+                    return Math.abs(this.xAxis.scale(d.y) - this.xAxis.scale(0));
                 };
             }
 
-            if (_this.yAxis.isDataAxis()) {
-                return function (d: any, i: number): number {
-                    if (_this.xAxis.isOrdinalScale()) {
-                        return _this.xAxis.scale.rangeBand() / _this.series.length;
+            if (this.yAxis.isDataAxis()) {
+                return (d: any, i: number): number => {
+                    if (this.xAxis.isOrdinalScale()) {
+                        return this.xAxis.scale.rangeBand() / this.series.length;
                     }
                     else {
-                        return _this.canvas.width / _this.series.length / _this.series.matrix[0].length;
+                        return this.canvas.width / this.series.length / this.series.matrix[0].length;
                     }
                 };
             }
@@ -1304,79 +1285,72 @@ module frnk.UI.Charts {
         }
 
         public draw(): Canvas {
-            var _this = this;
-
             super.draw();
 
-            return _this.canvas;
+            return this.canvas;
         }
 
         public getXCoordinate(serie: number): any {
-            var _this = this;
-            if (_this.xAxis.isDataAxis()) {
-                return function (d: any, i: number): any {
-                    return _this.canvas.plotArea.padding + _this.xAxis.scale(0) - (_this.xAxis.scale(d.size) - _this.xAxis.scale(d.y0));
+            if (this.xAxis.isDataAxis()) {
+                return (d: any, i: number): any => {
+                    return this.canvas.plotArea.padding + this.xAxis.scale(0) - (this.xAxis.scale(d.size) - this.xAxis.scale(d.y0));
                 };
             }
 
-            if (_this.yAxis.isDataAxis()) {
-                return function (d: any, i: number): any {
-                    return _this.canvas.plotArea.padding + _this.xAxis.scale(_this.xAxis.parseCategory(_this.xAxis.categories[i]));
+            if (this.yAxis.isDataAxis()) {
+                return (d: any, i: number): any => {
+                    return this.canvas.plotArea.padding + this.xAxis.scale(this.xAxis.parseCategory(this.xAxis.categories[i]));
                 };
             }
         }
 
         public getYCoordinate(serie: number): any {
-            var _this = this;
-            if (_this.xAxis.isDataAxis()) {
-                return function (d: any, i: number): any {
-                    return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(_this.yAxis.parseCategory(_this.yAxis.categories[i]));
+            if (this.xAxis.isDataAxis()) {
+                return (d: any, i: number): any => {
+                    return this.canvas.plotArea.padding + this.canvas.title.height + this.yAxis.scale(this.yAxis.parseCategory(this.yAxis.categories[i]));
                 };
             }
 
-            if (_this.yAxis.isDataAxis()) {
-                return function (d: any, i: number): any {
-                    return _this.canvas.plotArea.padding + _this.canvas.title.height + _this.yAxis.scale(d.y0);
+            if (this.yAxis.isDataAxis()) {
+                return (d: any, i: number): any => {
+                    return this.canvas.plotArea.padding + this.canvas.title.height + this.yAxis.scale(d.y0);
                 };
             }
         }
 
         public getHeight(serie: number): any {
-            var _this = this;
-            if (_this.xAxis.isDataAxis()) {
-                return function (d: any, i: number): any {
-                    if (_this.yAxis.isOrdinalScale() || _this.yAxis.isLinearScale()) {
-                        return _this.yAxis.scale.rangeBand();
+            if (this.xAxis.isDataAxis()) {
+                return (d: any, i: number): any => {
+                    if (this.yAxis.isOrdinalScale() || this.yAxis.isLinearScale()) {
+                        return this.yAxis.scale.rangeBand();
                     }
                     else {
-                        return _this.canvas.height / _this.series.length / _this.series.matrix[0].length;
+                        return this.canvas.height / this.series.length / this.series.matrix[0].length;
                     }
                 };
             }
 
-            if (_this.yAxis.isDataAxis()) {
-                return function (d: any, i: number): any {
-                    return Math.abs(_this.yAxis.scale(0) - _this.yAxis.scale(d.size));
+            if (this.yAxis.isDataAxis()) {
+                return (d: any, i: number): any => {
+                    return Math.abs(this.yAxis.scale(0) - this.yAxis.scale(d.size));
                 };
             }
         }
 
         public getWidth(serie: number): any {
-            var _this = this;
-
-            if (_this.xAxis.isDataAxis()) {
-                return function (d: any, i: number): any {
-                    return Math.abs(_this.xAxis.scale(0) - _this.xAxis.scale(d.y));
+            if (this.xAxis.isDataAxis()) {
+                return (d: any, i: number): any => {
+                    return Math.abs(this.xAxis.scale(0) - this.xAxis.scale(d.y));
                 };
             }
 
-            if (_this.yAxis.isDataAxis()) {
-                return function (d: any, i: number): any {
-                    if (_this.xAxis.isOrdinalScale() || _this.xAxis.isLinearScale()) {
-                        return _this.xAxis.scale.rangeBand();
+            if (this.yAxis.isDataAxis()) {
+                return (d: any, i: number): any => {
+                    if (this.xAxis.isOrdinalScale() || this.xAxis.isLinearScale()) {
+                        return this.xAxis.scale.rangeBand();
                     }
                     else {
-                        return _this.canvas.width / _this.series.length / _this.series.matrix[0].length; //did it to support time scales
+                        return this.canvas.width / this.series.length / this.series.matrix[0].length; //did it to support time scales
                     }
                 };
             }
@@ -1392,21 +1366,19 @@ module frnk.UI.Charts {
         }
 
         public draw(): Canvas {
-            var _this = this;
-
             super.draw();
-            var plotAreaWidth = _this.canvas.width - _this.canvas.plotArea.padding * 2 - _this.canvas.legend.width;
-            var plotAreaHeight = _this.canvas.height - _this.canvas.title.height;
 
-            var radius = Math.min(plotAreaWidth / 2 - _this.canvas.plotArea.padding * 2, plotAreaHeight / 2 - _this.canvas.plotArea.padding);
+            var plotAreaWidth = this.canvas.width - this.canvas.plotArea.padding * 2 - this.canvas.legend.width;
+            var plotAreaHeight = this.canvas.height - this.canvas.title.height;
 
-            var serieRadius =  radius / _this.series.length;
-            for (var s = 0; s < _this.series.length; s++) {
-                var g = _this.canvas.svg.append("g")
-                    .attr("transform", "translate(" + (plotAreaWidth / 2) + "," + (plotAreaHeight / 2 + this.canvas.title.height) + ")");
+            var radius = Math.min(plotAreaWidth / 2 - this.canvas.plotArea.padding * 2, plotAreaHeight / 2 - this.canvas.plotArea.padding);
 
-                var innerRadius = (serieRadius * (s + 1)) - (serieRadius * _this.innerRadius);
-                console.log(innerRadius);
+            var serieRadius =  radius / this.series.length;
+            for (var s = 0; s < this.series.length; s++) {
+                var g = this.canvas.svg.append("g")
+                    .attr("transform", "translate(" + (plotAreaWidth / 2 + this.canvas.plotArea.padding) + "," + (plotAreaHeight / 2 + this.canvas.title.height) + ")");
+
+                var innerRadius = (serieRadius * (s + 1)) - (serieRadius * this.innerRadius);
 
                 var arc = d3.svg.arc()
                     .outerRadius(serieRadius * (s + 1))
@@ -1415,13 +1387,13 @@ module frnk.UI.Charts {
                 var pie = d3.layout.pie();
 
                 var arcs = g.selectAll("g.slice")
-                    .data(pie(_this.series.getSerie(s).getValues()))
+                    .data(pie(this.series.getSerie(s).getValues()))
                     .enter()
                     .append("g")
                     .attr("class", "slice");
 
                 arcs.append("path")
-                    .attr("fill", function (d: any, i: number): string { return _this.series.getSerie(s).getColor(i); })
+                    .attr("fill", (d: any, i: number): string => { return this.series.getSerie(s).getColor(i); })
                     .attr("d", arc);
 
                 // draw tooltip
@@ -1430,7 +1402,7 @@ module frnk.UI.Charts {
                         return d.value;
                     });
             }
-            return _this.canvas;
+            return this.canvas;
         }
     }
 
