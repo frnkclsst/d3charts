@@ -14,7 +14,7 @@
 		"innerRadius": 1
 	},
     "legend": {
-       	"title": "",
+       	"title": "Regions",
        	"position": "right",
         "width": 200
     },

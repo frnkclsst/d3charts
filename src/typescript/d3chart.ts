@@ -367,7 +367,7 @@ module frnk.UI.Charts {
 
             this.height = Number(chart.settings.getValue("legend.height", "0"));
             this.position = chart.settings.getValue("legend.position", "right");
-            this.title = chart.settings.getValue("legend.title");
+            this.title = chart.settings.getValue("legend.title", "Categories");
             this.width = Number(chart.settings.getValue("legend.width", "0"));
         }
 
@@ -387,10 +387,17 @@ module frnk.UI.Charts {
             // add line
             this.svg.append("line")
                 .attr("class", "sep")
-                .attr("x1", 12)
+                .attr("x1", 20)
                 .attr("y1", 40)
-                .attr("x2", this.width - 12)
+                .attr("x2", this.width - 20)
                 .attr("y2", 40);
+
+            // add title
+            this.svg.append("text")
+                .attr("class", "legend title")
+                .text(this.title)
+                .attr("x", 22)
+                .attr("y", 26);
 
             // add items
             var items = this.svg
@@ -867,9 +874,9 @@ module frnk.UI.Charts {
 
         constructor(args: any, selector: string) {
             super(args, selector);
-            this.showMarkers = this.settings.getValue("linechart.showMarkers") == "yes" ? true : false;
+            this.showMarkers = this.settings.getValue("linechart.showMarkers").toUpperCase() == "YES" ? true : false;
             this.interpolation = this.settings.getValue("linechart.interpolation", "linear");
-            this.fillArea = this.settings.getValue("linechart.fillArea") == "yes" ? true : false;
+            this.fillArea = this.settings.getValue("linechart.fillArea").toUpperCase() == "YES" ? true : false;
         }
 
         public draw(): void {
