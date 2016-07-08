@@ -5,9 +5,9 @@ html {
 
 /* Charts */
 #chart {
-    width: 50%;
+    width: 99%;
     min-width: 300px;
-    height: 300px;
+    height: 400px;
 }
 
 svg {
@@ -95,6 +95,9 @@ svg {
 }
 
 /* Pie Chart */
+.slice {
+    opacity: 0.8;
+}
 .slice text {
     fill: #fff;
     font-size: 9px;

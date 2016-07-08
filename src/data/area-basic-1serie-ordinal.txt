@@ -2,7 +2,7 @@
     "canvas": {
         "height": 300,
         "width": 800,
-        "padding": 110
+        "padding": 50
 	},
     "linechart": {
         "interpolation": "linear",
@@ -10,7 +10,7 @@
     },
     "legend": {
        	"title": "",
-        "width": 100
+        "width": 200
     },
     "title": {
         "text": "Object Types / Status"

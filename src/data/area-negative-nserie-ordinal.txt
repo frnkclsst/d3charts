@@ -39,7 +39,6 @@
         "format": "%n",
         "gridlines": "major",
         "position": "left",
-        "ticks": 20,
 		"title": {
             "text": "# objects in this publication"
         }

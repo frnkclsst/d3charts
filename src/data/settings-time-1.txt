@@ -2,7 +2,7 @@
     "canvas": {
         "height": 200,
         "width": 600,
-        "padding": 100	
+        "padding": 50
     },
     "linechart": {
         "interpolation": "linear",
@@ -10,7 +10,7 @@
     },
     "legend": {
        	"title": "",
-        "width": 100
+        "width": 200
     },
     "title": {
         "text": "stock prices"

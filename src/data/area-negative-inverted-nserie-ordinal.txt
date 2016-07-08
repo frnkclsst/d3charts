@@ -2,7 +2,7 @@
     "canvas": {
         "height": 300,
         "width": 600,
-        "padding": 110
+        "padding": 90
     },
     "linechart": {
         "interpolation": "linear",
