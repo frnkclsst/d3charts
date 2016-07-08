@@ -54,22 +54,6 @@ module frnk.UI.Charts {
                 .attr("width", this.width)
                 .attr("height", this.height);
 
-            // draw title area
-            this.svg.append("line")
-                .attr("class", "sep")
-                .attr("x1", 0)
-                .attr("y1", this._chart.canvas.title.height)
-                .attr("x2", this.width)
-                .attr("y2", this._chart.canvas.title.height);
-
-            // draw legend area
-            this.svg.append("line")
-                .attr("class", "sep")
-                .attr("x1", this.width - this.legend.width)
-                .attr("y1", this._chart.canvas.title.height)
-                .attr("x2", this.width - this.legend.width)
-                .attr("y2", this.height);
-
             return this;
         }
 
@@ -272,10 +256,12 @@ module frnk.UI.Charts {
     }
 
     export class TitleArea {
-        public text: string;
-        public subTitle: string;
         public align: string;
         public height: number;
+        public subTitle: string;
+        public svg: any;
+        public text: string;
+        public width: number;
 
         private _chart: Chart;
 
@@ -289,47 +275,54 @@ module frnk.UI.Charts {
         }
 
         public draw(): void {
+            this.width = this._chart.canvas.width; //TODO - quick hack
+
             // get text
-            var svgTitle = this._chart.canvas.svg.append("text")
-                .text(this.text)
-                .attr("class", "title");
+            this.svg = this._chart.canvas.svg.append("g")
+                .attr("class", "title")
+                .attr("width", this.width)
+                .attr("height", this.height)
+                .attr("transfrom", "translate(0,0)");
 
-            /*
-            var svgSubTitle = this._chart.canvas.svg.append("text")
-
-                .text(this.subTitle)
-                .attr("class", "subtitle");
-            */
+            var svgTitle = this.svg.append("text")
+                .text(this.text);
 
             // calculate alignment
-            var textLength = svgTitle.node().clientWidth;
-            var textHeight = svgTitle.node().clientHeight;
-
+            var textBox = this.svg.node().getBBox();
             var x;
             switch (this.align) {
                 case "left":
                     x = 0;
                     break;
                 case "center":
-                    x = (this._chart.canvas.width - textLength) / 2;
+                    x = (this.width - textBox.width) / 2;
                     break;
                 case "right":
-                    x = this._chart.canvas.width - textLength;
+                    x = this.width - textBox.width;
                     break;
             }
 
-            var y = (this.height + textHeight) / 2;
+            var y = (this.height + textBox.height) / 2;
 
             // set title position
             svgTitle
                 .attr("x", function (): number { return x; })
                 .attr("y", function (): number { return y; });
+
+            // draw line
+            this.svg.append("line")
+                .attr("class", "sep")
+                .attr("x1", 0)
+                .attr("y1", this.height)
+                .attr("x2", this.width)
+                .attr("y2", this.height);
         }
     }
 
     export class PlotArea {
         public height: number;
         public width: number;
+        public svg: D3.Selection;
         public padding: number;
 
         constructor(chart: Chart) {
@@ -337,11 +330,17 @@ module frnk.UI.Charts {
             this.padding = Number(chart.settings.getValue("canvas.padding", "20"));
             this.width = 0; //chart.canvas.width - chart.canvas.legend.width;
         }
+
+        public draw(): void {
+
+        }
     }
+
     export class LegendArea {
         public height: number;
         public position: string;
         public title: string;
+        public svg: D3.Selection;
         public width: number;
 
         private _chart: Chart;
@@ -356,26 +355,37 @@ module frnk.UI.Charts {
         }
 
         public draw(): void {
-
-            var legend = this._chart.canvas.svg.append("g")
+            this.svg = this._chart.canvas.svg.append("g")
                 .attr("class", "legend")
+                .attr("transform", "translate(" + (this._chart.canvas.width - this.width) + "," + this._chart.canvas.title.height + ")");
+
+            // draw line
+            this.svg.append("line")
+                .attr("class", "sep")
+                .attr("x1", 0)
+                .attr("y1", 0)
+                .attr("x2", 0)
+                .attr("y2", this._chart.canvas.height - this._chart.canvas.title.height);
+
+            // add items
+            var items = this.svg
                 .selectAll(".item")
                 .data(this._chart.series.matrix)
                 .enter().append("g")
                 .attr("class", "item")
-                .attr("transform", (d: any, i: any): string => { return "translate(" + 30 + "," + (this._chart.canvas.title.height + (i * 20) + 20) + ")"; });
+                .attr("transform", (d: any, i: any): string => { return "translate(" + 30 + "," + ((i * 20) + 20) + ")"; });
 
             if (this._chart instanceof frnk.UI.Charts.LineChart) {
-                legend.append("line")
-                    .attr("x1", this._chart.canvas.width - this._chart.canvas.legend.width - 11)
-                    .attr("x2", this._chart.canvas.width - this._chart.canvas.legend.width + 13)
+                items.append("line")
+                    .attr("x1", 0)
+                    .attr("x2", 24)
                     .attr("y1", 6)
                     .attr("y2", 6)
                     .style("stroke", (d: any, i: any): string => { return this._chart.series.getColor(i); })
                     .style("stroke-width", "2");
 
-                legend.append("circle")
-                    .attr("cx", this._chart.canvas.width - this._chart.canvas.legend.width + 1)
+                items.append("circle")
+                    .attr("cx", 12)
                     .attr("cy", 6)
                     .attr("r", 4)
                     .style("fill", "#fff")
@@ -383,15 +393,15 @@ module frnk.UI.Charts {
                     .style("stroke-width", "2");
             }
             else {
-                legend.append("rect")
-                    .attr("x", this._chart.canvas.width - this._chart.canvas.legend.width - 11)
+                items.append("rect")
+                    .attr("x", 0)
                     .attr("width", 24)
                     .attr("height", 11)
                     .style("fill", (d: any, i: any): string => { return this._chart.series.getColor(i); });
             }
 
-            legend.append("text")
-                .attr("x", this._chart.canvas.width - this._chart.canvas.legend.width + 23)
+            items.append("text")
+                .attr("x", 30)
                 .attr("y", 9)
                 .attr("dy", "0px")
                 .style("text-anchor", "begin")
