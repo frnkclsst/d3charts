@@ -24,8 +24,9 @@
                 <select id="type">
                     <option value="line" onchange="draw();">Line Chart</option>
                     <option value="stackedline" onchange="draw();">Stacked Line Chart</option>
+                    <option value="column" onchange="draw();">Column Chart</option>
+                    <option value="stackedcolumn" onchange="draw();">Stacked Column Chart</option>
                     <option value="bar" onchange="draw();">Bar Chart</option>
-                    <option value="stackedbar" onchange="draw();">Stacked Bar Chart</option>
                     <option value="pie" onchange="draw();">Pie Chart</option>
                 </select>
             </div>
@@ -58,12 +59,16 @@
                 document.getElementById('chart').innerHTML = "";
                 var val = this.options[this.selectedIndex].value;
                 switch (val) {
-                    case "bar":
-                        var chart = new frnk.UI.Charts.BarChart(settings, "#chart");
+                    case "column":
+                        var chart = new frnk.UI.Charts.ColumnChart(settings, "#chart");
                         chart.draw();
                         break;
-                    case "stackedbar":
-                        var chart = new frnk.UI.Charts.StackedBarChart(settings, "#chart");
+                    case "stackedcolumn":
+                        var chart = new frnk.UI.Charts.StackedColumnChart(settings, "#chart");
+                        chart.draw();
+                        break;
+                    case "bar":
+                        var chart = new frnk.UI.Charts.BarChart(settings, "#chart");
                         chart.draw();
                         break;
                     case "line":

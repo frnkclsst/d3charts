@@ -14,7 +14,7 @@
 		"innerRadius": 1
 	},
     "legend": {
-       	"title": "Regions",
+       	"title": "Population / Regions",
        	"position": "right",
         "width": 200
     },
@@ -32,8 +32,9 @@
         "gridlines": "major",
         "position": "bottom",
 		"labels": {
-			"rotate": "-45"
+			"rotate": "0"
 		},
+		"tickmark": "no",
         "title": { 
             "text": "Year"
         }
@@ -42,7 +43,9 @@
         "format": "%n",
         "gridlines": "major",
         "position": "left",
+		"tickmark": "yes",
         "ticks": 10,
+        "tickmark": "yes",
 		"title": {
             "text": "Millions"
         }
@@ -50,7 +53,7 @@
     "tooltip": { 
         "valueSuffix": " millions"
     },
-    "series": 
+    "series":
 			[{
                 "name": "Asia",
                 "data": [502, 635, 809, 947, 1402, 3634, 5268]
@@ -73,7 +76,7 @@
             }, 
 			{
                 "name": "Runkelen",
-                "data": [200, 520, 1220, 2560, 5630, 6300, 7460]
+                "data": [0, 520, 1220, 2560, 5630, 6300, 7460]
             }]
     ,
     "plotOptions": {

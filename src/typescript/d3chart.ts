@@ -62,10 +62,10 @@ module frnk.UI.Charts {
                 .attr("width", this.width)
                 .attr("height", this.height);
 
-            // title
+            // draw title area
             this.title.draw();
 
-            // draw legend
+            // draw legend area
             this.legend.draw();
 
             // draw plot area
@@ -78,6 +78,20 @@ module frnk.UI.Charts {
             var height = Number(container.style("height").substring(0, container.style("height").length - 2));
             this.width = width == 0 ? this.width : width;
             this.height =  height == 0 ? this.height : height;
+        }
+    }
+
+    //TODO - Refactor
+    export class Categories {
+        private _items: string[];
+
+        constructor(chart: Chart) {
+            this._items = this._setCategories(chart.settings.getValue("categories"));
+        }
+
+        private _setCategories(categories: any): string[] {
+            var array = categories;
+            return array;
         }
     }
 
@@ -107,7 +121,7 @@ module frnk.UI.Charts {
         }
 
         public getMaxValue(): number {
-            if ((this._chart instanceof frnk.UI.Charts.StackedBarChart || this._chart instanceof frnk.UI.Charts.StackedLineChart) && this._items.length > 1) {
+            if ((this._chart instanceof frnk.UI.Charts.StackedColumnChart || this._chart instanceof frnk.UI.Charts.StackedLineChart) && this._items.length > 1) {
 				// can only be stacked if you have more than 1 series defined
                 return d3.max(this.matrix, function (array: number[]): number {
                     return d3.max(array, function (d: any): number {
@@ -125,7 +139,7 @@ module frnk.UI.Charts {
         }
 
         public getMinValue(): number {
-            if ((this._chart instanceof frnk.UI.Charts.StackedBarChart || this._chart instanceof frnk.UI.Charts.StackedLineChart) && this._items.length > 1) {
+            if ((this._chart instanceof frnk.UI.Charts.StackedColumnChart || this._chart instanceof frnk.UI.Charts.StackedLineChart) && this._items.length > 1) {
 			// can only be stacked if you have more than 1 series defined
                 return d3.min(this.matrix, function (array: number[]): number {
                     return d3.min(array, function (d: any): number {
@@ -372,81 +386,91 @@ module frnk.UI.Charts {
         }
 
         public draw(): void {
-            this.svg = this._canvas.svg.append("g")
-                .attr("class", "legend")
-                .attr("transform", "translate(" + (this._canvas.width - this.width) + "," + this._canvas.title.height + ")");
+            if (this.width != 0) {
+                this.svg = this._canvas.svg.append("g")
+                    .attr("class", "legend")
+                    .attr("transform", "translate(" + (this._canvas.width - this.width) + "," + this._canvas.title.height + ")");
 
-            // draw line
-            this.svg.append("line")
-                .attr("class", "sep")
-                .attr("x1", 0)
-                .attr("y1", 0)
-                .attr("x2", 0)
-                .attr("y2", this._canvas.height - this._canvas.title.height);
+                // draw vertical line
+                this.svg.append("line")
+                    .attr("class", "sep")
+                    .attr("x1", 0)
+                    .attr("y1", 0)
+                    .attr("x2", 0)
+                    .attr("y2", this._canvas.height - this._canvas.title.height);
 
-            // add line
-            this.svg.append("line")
-                .attr("class", "sep")
-                .attr("x1", 20)
-                .attr("y1", 40)
-                .attr("x2", this.width - 20)
-                .attr("y2", 40);
+                // draw horizontal line
+                this.svg.append("line")
+                    .attr("class", "sep")
+                    .attr("x1", 20)
+                    .attr("y1", 40)
+                    .attr("x2", this.width - 20)
+                    .attr("y2", 40);
 
-            // add title
-            this.svg.append("text")
-                .attr("class", "legend title")
-                .text(this.title)
-                .attr("x", 22)
-                .attr("y", 26);
+                // add legend title
+                this.svg.append("text")
+                    .attr("class", "legend title")
+                    .text(this.title)
+                    .attr("x", 22)
+                    .attr("y", 26);
 
-            // add items
-            var items = this.svg
-                .selectAll(".item")
-                .data(this._chart.series.matrix)
-                .enter().append("g")
-                .attr("class", "item")
-                .attr("transform", (d: any, i: any): string => { return "translate(" + 22 + "," + ((i * 20) + 60) + ")"; });
+                // add legend items
+                var items = this.svg
+                    .selectAll(".item")
+                    .data(this._chart.series.matrix)
+                    .enter().append("g")
+                    .attr("class", "item")
+                    .attr("transform", (d: any, i: any): string => {
+                        return "translate(" + 22 + "," + ((i * 20) + 60) + ")";
+                    });
 
-            // add checkboxes
-            items.append("image")
-                .attr("height", "15px")
-                .attr("width", "15px")
-                .attr("href", "../images/checkbox-selected.png");
+                // add checkboxes
+                items.append("image")
+                    .attr("height", "15px")
+                    .attr("width", "15px")
+                    .attr("href", "../images/checkbox-selected.png");
 
-            // add legend
-            if (this._chart instanceof frnk.UI.Charts.LineChart) {
-                items.append("line")
-                    .attr("x1", 27)
-                    .attr("x2", 51)
-                    .attr("y1", 6)
-                    .attr("y2", 6)
-                    .style("stroke", (d: any, i: any): string => { return this._chart.series.getColor(i); })
-                    .style("stroke-width", "2");
+                // add legend
+                if (this._chart instanceof frnk.UI.Charts.LineChart) {
+                    items.append("line")
+                        .attr("x1", 27)
+                        .attr("x2", 51)
+                        .attr("y1", 6)
+                        .attr("y2", 6)
+                        .style("stroke", (d: any, i: any): string => {
+                            return this._chart.series.getColor(i);
+                        })
+                        .style("stroke-width", "2");
 
-                items.append("circle")
-                    .attr("cx", 39)
-                    .attr("cy", 6)
-                    .attr("r", 4)
-                    .style("fill", "#fff")
-                    .style("stroke", (d: any, i: any): string => { return this._chart.series.getColor(i); })
-                    .style("stroke-width", "2");
+                    items.append("circle")
+                        .attr("cx", 39)
+                        .attr("cy", 6)
+                        .attr("r", 4)
+                        .style("fill", "#fff")
+                        .style("stroke", (d: any, i: any): string => {
+                            return this._chart.series.getColor(i);
+                        })
+                        .style("stroke-width", "2");
+                }
+                else {
+                    items.append("rect")
+                        .attr("x", 27)
+                        .attr("width", 24)
+                        .attr("height", 11)
+                        .style("fill", (d: any, i: any): string => {
+                            return this._chart.series.getColor(i);
+                        });
+                }
+
+                items.append("text")
+                    .attr("x", 56)
+                    .attr("y", 9)
+                    .attr("dy", "0px")
+                    .style("text-anchor", "begin")
+                    .text((d: any, i: any): string => {
+                        return this._chart.series.getName(i);
+                    });
             }
-            else {
-                items.append("rect")
-                    .attr("x", 27)
-                    .attr("width", 24)
-                    .attr("height", 11)
-                    .style("fill", (d: any, i: any): string => { return this._chart.series.getColor(i); });
-            }
-
-            items.append("text")
-                .attr("x", 56)
-                .attr("y", 9)
-                .attr("dy", "0px")
-                .style("text-anchor", "begin")
-                .text((d: any, i: any): string => {
-                    return this._chart.series.getName(i);
-                });
         }
     }
 
@@ -471,6 +495,7 @@ module frnk.UI.Charts {
         public position: string;
         public scale: any;
         public ticks: number;
+        public tickmark: boolean;
         public title: string;
 
         private _gridlineType: GridLineType;
@@ -481,6 +506,7 @@ module frnk.UI.Charts {
             this.position = null;
             this.scale = null;
             this.ticks = null;
+            this.tickmark = true;
             this.title = null;
             this._gridlineType = GridLineType.None;
         }
@@ -564,6 +590,7 @@ module frnk.UI.Charts {
             this.position = chart.settings.getValue("xAxis.position", "bottom");
             this.format = chart.settings.getValue("xAxis.format");
             this.ticks = Number(chart.settings.getValue("xAxis.ticks", String(Math.max(chart.canvas.width / 50, 2))));
+            this.tickmark = chart.settings.getValue("xAxis.tickmark").toUpperCase() == "YES" ? true : false;
             this.title = chart.settings.getValue("xAxis.title.text");
             this._textRotation = chart.settings.getValue("xAxis.labels.rotate", "0");
             this._setGridlineType(chart.settings.getValue("xAxis.gridlines"));
@@ -581,6 +608,12 @@ module frnk.UI.Charts {
                 .orient(this.position)
                 .ticks(this.ticks);
 
+            // draw tick marks
+            if (!this.tickmark) {
+                d3Axis.tickSize(0);
+                d3Axis.tickPadding(12);
+            }
+
             // get offset to determine position
             var offset = this.getOffset(chart);
 
@@ -590,9 +623,9 @@ module frnk.UI.Charts {
                 .attr("transform", "translate(" + 0 + "," + offset + ")")
                 .call(d3Axis);
 
+            this.drawGridlines(chart, d3Axis, offset);
             this.drawLabels(chart, svgAxis);
             this.drawTitle(chart, svgAxis);
-            this.drawGridlines(chart, d3Axis, offset);
         }
 
         public drawGridlines(chart: Chart, axis: D3.Svg.Axis, offset: number): void {
@@ -692,6 +725,7 @@ module frnk.UI.Charts {
             this.format = chart.settings.getValue("yAxis.format");
             this.position = chart.settings.getValue("yAxis.position", "left");
             this.ticks = Number(chart.settings.getValue("yAxis.ticks", String(Math.max(chart.canvas.height / 50, 2))));
+            this.tickmark = chart.settings.getValue("yAxis.tickmark").toUpperCase() == "YES" ? true : false;
             this.title = chart.settings.getValue("yAxis.title.text");
             this._setGridlineType(chart.settings.getValue("yAxis.gridlines"));
         }
@@ -708,6 +742,11 @@ module frnk.UI.Charts {
                 .orient(this.position)
                 .ticks(this.ticks);
 
+            // draw tick marks
+            if (!this.tickmark) {
+                d3Axis.tickSize(0);
+                d3Axis.tickPadding(12);
+            }
             // get offset to determine position
             var offset = this.getOffset(chart);
 
@@ -717,10 +756,8 @@ module frnk.UI.Charts {
                 .attr("transform", "translate(" + offset + "," + 0 + ")")
                 .call(d3Axis);
 
-            // draw title
+            this.drawLabels(chart, svgAxis);
             this.drawTitle(chart, svgAxis);
-
-            // draw gridlines
             this.drawGridlines(chart, d3Axis, offset);
         }
 
@@ -765,7 +802,12 @@ module frnk.UI.Charts {
             }
         }
 
+        public drawLabels(chart: Chart, svg: D3.Selection): void {
+
+        }
+
         public drawTitle(chart: Chart, svg: D3.Selection): void {
+            //TODO - Make position of title optional
             var textAnchor = this.position == "left" ? "begin" : "end";
             var x = this.position == "left" ? -20 : 20;
 
@@ -832,8 +874,10 @@ module frnk.UI.Charts {
             }
 
             this.settings = new Settings(args);
+
             this.canvas = new Canvas(this);
             this.plotOptions = new PlotOptions(this);
+            this.categories = this.settings.getValue("categories");
             this.series = new Series(this);
 
             // update size and add EventListener
@@ -861,7 +905,6 @@ module frnk.UI.Charts {
 
         public draw(): void {
             super.draw();
-
             this.xAxis.draw(this);
             this.yAxis.draw(this);
         }
@@ -1155,7 +1198,7 @@ module frnk.UI.Charts {
         }
     }
 
-    export class BarChart extends XYChart {
+    export class ColumnChart extends XYChart {
 
         constructor(args: any, selector: string) {
             super(args, selector);
@@ -1191,15 +1234,21 @@ module frnk.UI.Charts {
                 svgBar.append("title")
                     .text((d: any): number => { return d.y; });
 
-                // draw labels
-                /*
-                var svgLabels = svgSerie.append("text")
+                // no value indication
+                svgSerie.append("text")
+                    .attr("class", "data-label")
                     .attr("x", this.getXCoordinate(j))
                     .attr("y", this.getYCoordinate(j))
                     .attr("fill", "#878787")
-                    .attr("dy", "-.5em")
-                    .text(function (d: any) { return parseFloat(d.y).toFixed(2); });
-                */
+                    //.attr("dx", 0) // TODO - align text with middle of the bar
+                    .attr("dy", -3) // TODO - align text in bar or on top of bar
+                    .text(function (d: any): string {
+                        if (d.y == 0) {
+                            return parseFloat(d.y).toFixed(0);
+                        }
+                    });
+
+                //TODO - drawing data labels should be an option, not only to indicate a zero value
             }
         }
 
@@ -1293,7 +1342,7 @@ module frnk.UI.Charts {
         }
     }
 
-    export class StackedBarChart extends BarChart {
+    export class StackedColumnChart extends ColumnChart {
 
         constructor(args: any, selector: string) {
             super(args, selector);
@@ -1367,6 +1416,16 @@ module frnk.UI.Charts {
                     }
                 };
             }
+        }
+    }
+
+    export class BarChart extends XYChart {
+        constructor(args: any, selector: string) {
+            super(args, selector);
+        }
+
+        public draw(): void {
+            super.draw();
         }
     }
 
