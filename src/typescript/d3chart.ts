@@ -736,7 +736,7 @@ module frnk.UI.Charts {
             // set scale
             this.scale = this._setScale(chart);
 
-            // create d3 axis 
+            // create d3 axis
             var d3Axis = d3.svg.axis()
                 .scale(this.scale)
                 .orient(this.position)
@@ -747,6 +747,7 @@ module frnk.UI.Charts {
                 d3Axis.tickSize(0);
                 d3Axis.tickPadding(12);
             }
+
             // get offset to determine position
             var offset = this.getOffset(chart);
 
