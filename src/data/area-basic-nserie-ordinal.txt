@@ -11,7 +11,7 @@
         "stacking": "percent"
     },
 	"piechart": {
-		"innerRadius": 1
+		"innerRadius": 0.7
 	},
     "legend": {
        	"title": "Population / Regions",
@@ -27,7 +27,7 @@
         "text": "subtitle" 
     },
     "xAxis": {
-        "gridlines": "none",
+        "gridlines": "major",
         "position": "bottom",
 		"labels": {
 			"rotate": "0"
@@ -48,7 +48,8 @@
         }
     },
     "tooltip": { 
-        "valueSuffix": " millions"
+        "title": "Population",
+        "valueSuffix": " million"
     },
     "categories": {
         "format": "%s",
