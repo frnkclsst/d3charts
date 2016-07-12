@@ -27,6 +27,7 @@
                     <option value="column" onchange="draw();">Column Chart</option>
                     <option value="stackedcolumn" onchange="draw();">Stacked Column Chart</option>
                     <option value="bar" onchange="draw();">Bar Chart</option>
+                    <option value="stackedbar" onchange="draw();">Stacked Bar Chart</option>
                     <option value="pie" onchange="draw();">Pie Chart</option>
                 </select>
             </div>
@@ -69,6 +70,10 @@
                         break;
                     case "bar":
                         var chart = new frnk.UI.Charts.BarChart(settings, "#chart");
+                        chart.draw();
+                        break;
+                    case "stackedbar":
+                        var chart = new frnk.UI.Charts.StackedBarChart(settings, "#chart");
                         chart.draw();
                         break;
                     case "line":

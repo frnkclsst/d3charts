@@ -24,19 +24,17 @@
         "text": "subtitle" 
     },
     "xAxis": {
-        "categories": ["A", "B", "C", "D", "E", "F", "G"],
-        "format": "%s",
         "gridlines": "major",
-        "position": "bottom",
+        "position": "top",
 		"labels": {
 			"rotate": "-45"
 		},
+		"tickmark": "yes",
         "title": { 
             "text": "Status"
         }
     },
     "yAxis": {
-        "format": "%n",
         "gridlines": "major",
         "position": "left",
 		"title": {
@@ -45,6 +43,10 @@
     },
     "tooltip": { 
         "valueSuffix": " millions"
+    },
+    "categories": {
+            "format": "%s",
+            "labels": ["A", "B", "C", "D", "E", "F", "G"]
     },
     "series":
 			[{

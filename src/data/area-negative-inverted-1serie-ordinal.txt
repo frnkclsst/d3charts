@@ -23,10 +23,8 @@
         "text": "subtitle" 
     },
     "xAxis": {
-        "categories": ["Draft", "Expired", "In Translation", "Out of date", "Released", "System", "System Read-only", "To be Reviewed", "To be Translated", "Translated"],
-        "format": "%s", 
         "gridlines": "major",
-        "position": "bottom",
+        "position": "top",
 		"labels": {
 			"rotate": "-45"
 		},
@@ -35,7 +33,6 @@
         }
     },
     "yAxis": {
-        "format": "%n",
         "gridlines": "major",
         "position": "left",
         "ticks": 5,
@@ -45,6 +42,10 @@
     },
     "tooltip": { 
         "valueSuffix": " millions"
+    },
+    "categories": {
+        "format": "%s",
+        "labels": ["Draft", "Expired", "In Translation", "Out of date", "Released", "System", "System Read-only", "To be Reviewed", "To be Translated", "Translated"]
     },
     "series": 
 			[{

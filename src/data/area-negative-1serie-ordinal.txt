@@ -23,8 +23,6 @@
         "text": "subtitle" 
     },
     "xAxis": {
-        "categories": ["Draft", "Expired", "In Translation", "Out of date", "Released", "System", "System Read-only", "To be Reviewed", "To be Translated", "Translated"],
-        "format": "%s", 
         "gridlines": "major",
         "position": "bottom",
 		"labels": {
@@ -35,7 +33,6 @@
         }
     },
     "yAxis": {
-        "format": "%n",
         "gridlines": "major",
         "position": "left",
         "ticks": 5,
@@ -46,11 +43,15 @@
     "tooltip": { 
         "valueSuffix": " millions"
     },
-    "series": 
-			[{
-            "data": [-50, -10, 0, 10, 20, 30, 40, 80, 90, 100],
-            "name": "Topics"
-			}]
+    "categories": {
+        "format": "%s",
+        "labels": ["Draft", "Expired", "In Translation", "Out of date", "Released", "System", "System Read-only", "To be Reviewed", "To be Translated", "Translated"]
+    },
+    "series":
+        [{
+        "data": [-50, -10, 0, 10, 20, 30, 40, 80, 90, 100],
+        "name": "Topics"
+        }]
     ,
     "plotOptions": {
         "general": { 

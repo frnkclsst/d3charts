@@ -27,9 +27,7 @@
         "text": "subtitle" 
     },
     "xAxis": {
-        "categories": ["1750", "1800", "1850", "1900", "1950", "1999", "2050"],
-        "format": "%s",
-        "gridlines": "major",
+        "gridlines": "none",
         "position": "bottom",
 		"labels": {
 			"rotate": "0"
@@ -40,18 +38,21 @@
         }
     },
     "yAxis": {
-        "format": "%n",
         "gridlines": "major",
         "position": "left",
 		"tickmark": "yes",
         "ticks": 10,
-        "tickmark": "yes",
+        "tickmark": "no",
 		"title": {
             "text": "Millions"
         }
     },
     "tooltip": { 
         "valueSuffix": " millions"
+    },
+    "categories": {
+        "format": "%s",
+        "labels": ["1750", "1800", "1850", "1900", "1950", "1999", "2050"]
     },
     "series":
 			[{

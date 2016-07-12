@@ -19,8 +19,6 @@
         "text": "subtitle" 
     },
     "xAxis": {
-        "categories": ["01-2000", "02-2000", "03-2000"],
-        "format": "%m-%Y", 
         "gridlines": "major",
         "position": "bottom",
 		"ticks": 3,
@@ -29,7 +27,6 @@
         }
     },
     "yAxis": {
-        "format": "%n",
         "gridlines": "major",
         "position": "left",
         "ticks": 5,
@@ -39,6 +36,10 @@
     },
     "tooltip": { 
         "valueSuffix": " millions"
+    },
+    "categories": {
+        "format": "%m-%Y",
+        "labels": ["01-2000", "02-2000", "03-2000"]
     },
     "series": 
 			[{

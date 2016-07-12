@@ -19,8 +19,6 @@
         "text": "subtitle" 
     },
     "xAxis": {
-        "categories": ["A", "B", "C", "D", "E", "F", "G", "H"],
-        "format": "%s", 
         "gridlines": "major",
         "position": "bottom",
         "title": { 
@@ -28,7 +26,6 @@
         }
     },
     "yAxis": {
-		"format": "%n",
         "gridlines": "none",
         "position": "right",
         "ticks": 5,
@@ -38,6 +35,10 @@
     },
     "tooltip": { 
         "valueSuffix": " millions"
+    },
+    "categories": {
+        "format": "%s",
+        "labels": ["A", "B", "C", "D", "E", "F", "G", "H"]
     },
     "series":
 			[{
