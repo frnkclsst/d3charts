@@ -20,14 +20,14 @@
     },
     "xAxis": {
         "gridlines": "major",
-        "position": "bottom",
+        "orient": "bottom",
         "title": { 
             "text": "# objects"
         }
     },
     "yAxis": {
         "gridlines": "none",
-        "position": "right",
+        "orient": "right",
         "ticks": 5,
 		"title": {
             "text": "Status"

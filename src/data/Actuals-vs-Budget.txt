@@ -20,14 +20,14 @@
     },
     "xAxis": {
         "gridlines": "none",
-        "position": "bottom",
+        "orient": "bottom",
         "title": { 
             "text": "Type"
         }
     },
     "yAxis": {
         "gridlines": "major",
-        "position": "left",
+        "orient": "left",
         "ticks": 5,
 		"title": {
             "text": "Million"

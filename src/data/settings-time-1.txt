@@ -20,14 +20,14 @@
     },
     "xAxis": {
         "gridlines": "none",
-        "position": "bottom",
+        "orient": "bottom",
 		"title": { 
             "text": "Date"
         }
     },
     "yAxis": {
         "gridlines": "major",
-        "position": "left",
+        "orient": "left",
 		"title": {
             "text": "Dollars"
         }

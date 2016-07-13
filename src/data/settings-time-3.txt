@@ -20,7 +20,7 @@
     },
     "xAxis": {
         "gridlines": "major",
-        "position": "bottom",
+        "orient": "bottom",
 		"ticks": 3,
 		"title": { 
             "text": "Date"
@@ -28,7 +28,7 @@
     },
     "yAxis": {
         "gridlines": "major",
-        "position": "left",
+        "orient": "left",
         "ticks": 5,
 		"title": {
             "text": "Dollars"

@@ -24,7 +24,7 @@
     },
     "xAxis": {
         "gridlines": "major",
-        "position": "bottom",
+        "orient": "bottom",
 		"labels": {
 			"rotate": "-45"
 		},
@@ -34,7 +34,7 @@
     },
     "yAxis": {
         "gridlines": "major",
-        "position": "left",
+        "orient": "left",
         "ticks": 5,
 		"title": {
             "text": "# objects in this publication"

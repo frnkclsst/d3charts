@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Area - Basic</title>
+    <!-- general styles -->
+    <link rel="stylesheet" href="../../../dist/css/style.css" />
+    <link rel="stylesheet" href="../../../dist/css/d3charts.css" />
+    <script src="../../../dist/js/d3.min.js" charset="utf-8"></script>
+    <script src="../../../dist/js/d3chart.js"></script>
+</head>
+<body>
+    <div id="chart" />
+    <script>
+		var settings = {
+			"canvas": {
+				"height": 300,
+				"width": 600,
+				"padding": 50
+			},
+			"linechart": {
+				"fillArea": "yes",
+				"interpolation": "linear",
+				"showMarkers": "yes",
+				"stacking": "percent"
+			},
+			"piechart": {
+				"innerRadius": 0.7
+			},
+			"legend": {
+				"title": "Country",
+				"position": "right",
+				"width": 200
+			},
+			"title": {
+				"text": "Area chart with negative values",
+				"align": "center",
+				"height": 50
+			},
+			"subtitle": {
+				"text": "subtitle" 
+			},
+			"xAxis": {
+				"gridlines": "none",
+				"position": "top",
+				"labels": {
+					"rotate": "0"
+				},
+				"tickmark": "no",
+				"title": { 
+					"text": "Year"
+				}
+			},
+			"yAxis": {
+				"gridlines": "major",
+				"position": "left",
+				"tickmark": "yes",
+				"tickmark": "no",
+				"title": {
+					"text": "Nuclear weapong status"
+				}
+			},
+			"tooltip": { 
+				"title": "Warheads",
+				"valueSuffix": " warheads"
+			},
+			"categories": {
+				"format": "%s",
+				"labels": ["Apples", "Oranges", "Pears", "Grapes", "Bananas"]
+			},
+			"series": 
+				[{
+					"name": "John",
+					"data": [5, 3, 4, 7, 2]
+				}, {
+					"name": "Jane",
+					"data": [2, -2, -3, 2, 1]
+				}, {
+					"name": "Joe",
+					"data": [3, 4, 4, -2, 5]
+				}]
+			,
+			"plotOptions": {
+				"general": { 
+					"innerPadding": 0.1,
+					"outerPadding": 0.5
+				}
+			}
+		};
+
+		var chart = new frnk.UI.Charts.LineChart(settings, "#chart");
+		chart.draw();
+    </script>
+</body>
+</html>
