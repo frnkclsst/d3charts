@@ -215,11 +215,12 @@ module frnk.UI.Charts {
                 var posBase = 0, negBase = 0, sum = 0;
 
                 m.forEach(function (k: any): any {
-                    sum = sum + k.y;
+                    sum = sum + Math.abs(k.y);
                 });
 
                 m.forEach(function (k: any): any {
                     k.perc = k.y / sum; // calculate percentage of this value across the different series
+                    k.max = sum;
                     k.size = Math.abs(k.y);
                     if (k.y < 0) {
                         k.y0 = negBase;
@@ -386,6 +387,8 @@ module frnk.UI.Charts {
             this._canvas = canvas;
 
             this.padding = this._chart.settings.getValue("canvas.padding", "20");
+            this.height = this._canvas.height - this._canvas.title.height - this.padding * 2;
+            this.width = this._canvas.width - this.padding * 2 - this._canvas.legend.width;
         }
 
         public draw(): void {
@@ -548,8 +551,8 @@ module frnk.UI.Charts {
         constructor(args: any, chart: Chart) {
             this.axis = null;
             this.hasTickmarks = true;
-            this.innerTicksize = null;
-            this.outerTicksize = null;
+            this.innerTicksize = this.getInnerTicksize(chart);
+            this.outerTicksize = this.getOuterTicksize(chart);
             this.orient = null;
             this.scale = null;
             this.svgAxis = null;
@@ -754,7 +757,16 @@ module frnk.UI.Charts {
         }
 
         public getScale(chart: Chart): any {
-            if (this._chart instanceof frnk.UI.Charts.LineChart || this._chart instanceof frnk.UI.Charts.ColumnChart) {
+            if (this._chart instanceof frnk.UI.Charts.StackedPercentBarChart) {
+                this.setScaleType(ScaleType.Linear);
+                var lowerScale = chart.series.getMinValue() < 0 ? -1 : 0;
+
+                // return scale
+                return d3.scale.linear()
+                    .domain([lowerScale, 1])
+                    .range([0, chart.canvas.plotArea.width]);
+            }
+            else if (this._chart instanceof frnk.UI.Charts.LineChart || this._chart instanceof frnk.UI.Charts.ColumnChart) {
                 if (chart.categories.format == "%s") {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
@@ -789,12 +801,7 @@ module frnk.UI.Charts {
         }
 
         public getYCoordinate(chart: Chart): number {
-            if (this.orient == "bottom") {
-                return chart.canvas.plotArea.height;
-            }
-            else {
-                return 0;
-            }
+            return this.orient == "bottom" ? chart.canvas.plotArea.height : 0;
         }
 
         public isDataAxis(): boolean {
@@ -857,7 +864,15 @@ module frnk.UI.Charts {
         }
 
         public getScale(chart: Chart): any {
-            if (this._chart instanceof frnk.UI.Charts.BarChart) {
+            if (this._chart instanceof frnk.UI.Charts.StackedPercentColumnChart ||
+                this._chart instanceof frnk.UI.Charts.StackedPercentLineChart) {
+                this.setScaleType(ScaleType.Linear);
+                var lowerScale = chart.series.getMinValue() < 0 ? -1 : 0;
+                return d3.scale.linear()
+                    .domain([1, lowerScale])
+                    .range([0, chart.canvas.plotArea.height]);
+            }
+            else if (this._chart instanceof frnk.UI.Charts.BarChart) {
                 if (chart.categories.format == "%s") {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
@@ -889,12 +904,7 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(chart: Chart): number {
-            if (this.orient == "left") {
-                return 0;
-            }
-            else {
-                return chart.canvas.plotArea.width;
-            }
+            return this.orient == "left" ? 0 : chart.canvas.plotArea.width;
         }
 
         public getYCoordinate(chart: Chart): number {
@@ -1102,7 +1112,7 @@ module frnk.UI.Charts {
         }
 
         public getYCoordinate(serie: number): any {
-            return (d: any, i: number): number => {
+            return (d: any): number => {
                 return this.yAxis.scale(d.y);
             };
         }
@@ -1121,16 +1131,17 @@ module frnk.UI.Charts {
                 .interpolate(this.interpolation)
                 .x(this.getXCoordinate(serie))
                 .y0(
-                (d: any): number => {
-                    // negative values
-                    if (d.y < 0) {
-                        return (this.yAxis.scale(d.y0));
-                    }
-                    // postive values
-                    else {
-                        return (this.yAxis.scale(d.y0 - d.y));
-                    }
-                })
+                    (d: any): number => {
+
+                        // negative values
+                        if (d.y < 0) {
+                            return (this.yAxis.scale(d.y0 * this.normalizer(d)));
+                        }
+                        // positive values
+                        else {
+                            return (this.yAxis.scale((d.y0 - d.y) * this.normalizer(d)));
+                        }
+                    })
                 .y1(this.getYCoordinate(serie));
 
             var svgArea = svg.append("path")
@@ -1166,16 +1177,31 @@ module frnk.UI.Charts {
         }
 
         public getYCoordinate(serie: number): any {
-            return (d: any, i: number): number => {
+            return (d: any): number => {
                 // negative numbers
-                if (d.y0 < 1) { //TODO -  I think this only works for whole numbers
-                    return this.yAxis.scale(d.y0 + d.y);
+                if (d.y0 < 1) {
+                    return this.yAxis.scale((d.y0 + d.y) * this.normalizer(d));
                 }
                 // positive numbers
                 else {
-                    return this.yAxis.scale(d.y0);
+                    return this.yAxis.scale(d.y0 * this.normalizer(d));
                 }
             };
+        }
+
+        protected normalizer(d: any): number {
+            return 1;
+        }
+    }
+
+    export class StackedPercentLineChart extends StackedLineChart {
+
+        constructor(args: any, selector: string) {
+            super(args, selector);
+        }
+
+        protected normalizer(d: any): number {
+            return this.yAxis.scale.domain()[0] / d.max;
         }
     }
 
@@ -1246,7 +1272,7 @@ module frnk.UI.Charts {
         }
 
         public getYCoordinate(serie: number): any {
-            return (d: any, i: number): number => {
+            return (d: any): number => {
                 if (d.y < 0) {
                     return this.yAxis.scale(d.y) - Math.abs(this.yAxis.scale(d.size) - this.yAxis.scale(0));
                 }
@@ -1257,13 +1283,13 @@ module frnk.UI.Charts {
         }
 
         public getHeight(serie: number): any {
-            return (d: any, i: number): any => {
+            return (d: any): any => {
                 return Math.abs(this.yAxis.scale(d.y) - this.yAxis.scale(0));
             };
         }
 
         public getWidth(serie: number): any {
-            return (d: any, i: number): number => {
+            return (d: any): number => {
                 if (this.xAxis.isOrdinalScale()) {
                     return this.xAxis.scale.rangeBand() / this.series.length;
                 }
@@ -1287,19 +1313,19 @@ module frnk.UI.Charts {
         }
 
         public getYCoordinate(serie: number): any {
-            return (d: any, i: number): any => {
-                return this.yAxis.scale(d.y0);
+            return (d: any): any => {
+                return this.yAxis.scale(d.y0 * this.normalizer(d));
             };
         }
 
         public getHeight(serie: number): any {
-            return (d: any, i: number): any => {
-                return Math.abs(this.yAxis.scale(0) - this.yAxis.scale(d.size));
+            return (d: any): any => {
+                return  Math.abs(this.yAxis.scale(0) - this.yAxis.scale(d.size));
             };
         }
 
         public getWidth(serie: number): any {
-            return (d: any, i: number): any => {
+            return (d: any): any => {
                 if (this.xAxis.isOrdinalScale() || this.xAxis.isLinearScale()) {
                     return this.xAxis.scale.rangeBand();
                 }
@@ -1307,6 +1333,27 @@ module frnk.UI.Charts {
                     return this.canvas.width / this.series.length / this.series.matrix[0].length; //did it to support time scales
                 }
             };
+        }
+
+        public normalizer(d: any): number {
+            return 1;
+        }
+    }
+
+    export class StackedPercentColumnChart extends StackedColumnChart {
+
+        constructor(args: any, selector: string) {
+            super(args, selector);
+        }
+
+        public getHeight(serie: number): any {
+            return (d: any): any => {
+                return Math.abs(this.yAxis.scale(this.yAxis.scale.domain()[0] - d.perc));
+            };
+        }
+
+        public normalizer(d: any): number {
+            return this.yAxis.scale.domain()[0] / d.max;
         }
     }
 
@@ -1365,7 +1412,7 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(serie: number): any {
-            return (d: any, i: number): any => {
+            return (d: any): any => {
                 if (d.y < 0) {
                     return this.xAxis.scale(0) - Math.abs(this.xAxis.scale(d.size) - this.xAxis.scale(0));
                 }
@@ -1389,7 +1436,7 @@ module frnk.UI.Charts {
         }
 
         public getHeight(serie: number): any {
-            return (d: any, i: number): any => {
+            return (d: any): any => {
                 if (this.yAxis.isOrdinalScale()) {
                     return Math.abs(this.yAxis.scale.rangeBand() / this.series.length);
                 }
@@ -1400,7 +1447,7 @@ module frnk.UI.Charts {
         }
 
         public getWidth(serie: number): any {
-            return (d: any, i: number): number => {
+            return (d: any): number => {
                 return Math.abs(this.xAxis.scale(d.y) - this.xAxis.scale(0));
             };
         }
@@ -1413,8 +1460,13 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(serie: number): any {
-            return (d: any, i: number): any => {
-                return this.xAxis.scale(0) - (this.xAxis.scale(d.size) - this.xAxis.scale(d.y0));
+            return (d: any): any => {
+                if (d.perc < 0) {
+                    return this.xAxis.scale((d.y0 + d.y) * this.normalizer(d));
+                }
+                else {
+                    return this.xAxis.scale((d.y0 - d.y) * this.normalizer(d));
+                }
             };
         }
 
@@ -1425,7 +1477,7 @@ module frnk.UI.Charts {
         }
 
         public getHeight(serie: number): any {
-            return (d: any, i: number): any => {
+            return (d: any): any => {
                 if (this.yAxis.isOrdinalScale() || this.yAxis.isLinearScale()) {
                     return this.yAxis.scale.rangeBand();
                 }
@@ -1436,9 +1488,41 @@ module frnk.UI.Charts {
         }
 
         public getWidth(serie: number): any {
-            return (d: any, i: number): any => {
+            return (d: any): any => {
                 return Math.abs(this.xAxis.scale(0) - this.xAxis.scale(d.y));
             };
+        }
+
+        public normalizer(d: any): number {
+            return 1; // no normalization needed as this not 100% stacked
+        }
+    }
+
+    export class StackedPercentBarChart extends StackedBarChart {
+
+        constructor(args: any, selector: string) {
+            super(args, selector);
+        }
+
+        public getXCoordinate(serie: number): any {
+            return (d: any): any => {
+                if (d.perc < 0) {
+                    return this.xAxis.scale((d.y0 + d.y) * this.normalizer(d));
+                }
+                else {
+                    return this.xAxis.scale((d.y0 - d.y) * this.normalizer(d));
+                }
+            };
+        }
+
+        public getWidth(serie: number): any {
+            return (d: any): any => {
+                return Math.abs((this.xAxis.scale(1) - this.xAxis.scale(0)) * d.perc);
+            };
+        }
+
+        public normalizer(d: any): number {
+            return this.xAxis.scale.domain()[1] / d.max;
         }
     }
 
@@ -1485,10 +1569,6 @@ module frnk.UI.Charts {
                     });
             }
         }
-    }
-
-    export class BubbleChart extends Chart {
-        //TODO
     }
 
     export enum GridLineType {

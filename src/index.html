@@ -24,10 +24,13 @@
                 <select id="type">
                     <option value="line" onchange="draw();">Line Chart</option>
                     <option value="stackedline" onchange="draw();">Stacked Line Chart</option>
+                    <option value="stackedpercentline" onchange="draw();">Stacked 100% Line Chart</option>
                     <option value="column" onchange="draw();">Column Chart</option>
                     <option value="stackedcolumn" onchange="draw();">Stacked Column Chart</option>
+                    <option value="stackedpercentcolumn" onchange="draw();">Stacked 100% Column Chart</option>
                     <option value="bar" onchange="draw();">Bar Chart</option>
                     <option value="stackedbar" onchange="draw();">Stacked Bar Chart</option>
+                    <option value="stackedpercentbar" onchange="draw();">Stacked 100% Bar Chart</option>
                     <option value="pie" onchange="draw();">Pie Chart</option>
                 </select>
             </div>
@@ -41,10 +44,11 @@
         //var url = "data/area-basic-1serie-ordinal.txt";
         //var url = "data/area-basic-nserie-ordinal.txt";
         //var url = "data/area-negative-1serie-ordinal.txt";
-        var url = "data/area-negative-nserie-ordinal.txt";
+        //var url = "data/area-negative-nserie-ordinal.txt";
         //var url = "data/area-negative-inverted-1serie-ordinal.txt";
         //var url = "data/area-negative-inverted-nserie-ordinal.txt";
-        //var url = "data/settings-time-1.txt";
+        //var url = "data/column-range.txt";
+        var url = "data/settings-time-1.txt";
         //var url = "data/settings-time-2.txt";
         //var url = "data/settings-time-3.txt";
 
@@ -68,6 +72,10 @@
                         var chart = new frnk.UI.Charts.StackedColumnChart(settings, "#chart");
                         chart.draw();
                         break;
+                    case "stackedpercentcolumn":
+                        var chart = new frnk.UI.Charts.StackedPercentColumnChart(settings, "#chart");
+                        chart.draw();
+                        break;
                     case "bar":
                         var chart = new frnk.UI.Charts.BarChart(settings, "#chart");
                         chart.draw();
@@ -76,12 +84,20 @@
                         var chart = new frnk.UI.Charts.StackedBarChart(settings, "#chart");
                         chart.draw();
                         break;
+                    case "stackedpercentbar":
+                        var chart = new frnk.UI.Charts.StackedPercentBarChart(settings, "#chart");
+                        chart.draw();
+                        break;
                     case "line":
                         var chart = new frnk.UI.Charts.LineChart(settings, "#chart");
                         chart.draw();
                         break;
                     case "stackedline":
                         var chart = new frnk.UI.Charts.StackedLineChart(settings, "#chart");
+                        chart.draw();
+                        break;
+                    case "stackedpercentline":
+                        var chart = new frnk.UI.Charts.StackedPercentLineChart(settings, "#chart");
                         chart.draw();
                         break;
                     case "pie":
