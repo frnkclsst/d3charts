@@ -59,7 +59,7 @@
     ,
     "plotOptions": {
         "general": { 
-            "innerPadding": 0.2,
+            "innerPadding": 0,
 			"outerPadding": 1
         }
     }

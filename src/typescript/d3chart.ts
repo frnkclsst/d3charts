@@ -2,6 +2,11 @@
 "use strict";
 
 module frnk.UI.Charts {
+    export interface IArea {
+        height: number;
+        width: number;
+        svg: D3.Selection;
+    }
 
     export class Settings {
         public settings: string;
@@ -28,7 +33,21 @@ module frnk.UI.Charts {
         }
     }
 
-    export class Canvas {
+    export class PlotOptions {
+        public innerPadding: number;
+        public outerPadding: number;
+
+        private _chart: Chart;
+
+        constructor(chart: Chart) {
+            this._chart = chart;
+
+            this.innerPadding = Number(chart.settings.getValue("plotOptions.general.innerPadding", "0.5"));
+            this.outerPadding = Number(chart.settings.getValue("plotOptions.general.outerPadding", "0"));
+        }
+    }
+
+    export class Canvas implements IArea {
         public height: number;
         public legend: LegendArea;
         public plotArea: PlotArea;
@@ -81,6 +100,239 @@ module frnk.UI.Charts {
         }
     }
 
+    export class TitleArea implements IArea {
+        public align: string;
+        public height: number;
+        public subTitle: string;
+        public svg: D3.Selection;
+        public text: string;
+        public width: number;
+
+        private _chart: Chart;
+
+        constructor(chart: Chart, canvas: Canvas) {
+            this._chart = chart;
+
+            this.align = chart.settings.getValue("title.align", "center");
+            this.height = Number(chart.settings.getValue("title.height", "50"));
+            this.subTitle = chart.settings.getValue("title.subTitle");
+            this.text = chart.settings.getValue("title.text");
+        }
+
+        public draw(): void {
+            // initialize
+            this.width = this._chart.canvas.width;
+
+            // get text
+            this.svg = this._chart.canvas.svg.append("g")
+                .attr("class", "title")
+                .attr("width", this.width)
+                .attr("height", this.height)
+                .attr("transform", "translate(0,0)");
+
+            var svgTitle = this.svg.append("text")
+                .text(this.text);
+
+            // calculate alignment
+            var svgText: any = this.svg.node();
+            var textBox = svgText.getBBox();
+            var x;
+            switch (this.align) {
+                case "left":
+                    x = 0;
+                    break;
+                case "center":
+                    x = (this.width - textBox.width) / 2;
+                    break;
+                case "right":
+                    x = this.width - textBox.width;
+                    break;
+            }
+
+            var y = (this.height + textBox.height) / 2;
+
+            // set title position
+            svgTitle
+                .attr("x", function (): number { return x; })
+                .attr("y", function (): number { return y; });
+
+            // draw line
+            this.svg.append("line")
+                .attr("class", "sep")
+                .attr("x1", 0)
+                .attr("y1", this.height)
+                .attr("x2", this.width)
+                .attr("y2", this.height);
+        }
+    }
+
+    export class PlotArea implements IArea {
+        public height: number;
+        public width: number;
+        public svg: D3.Selection;
+        public padding: number;
+
+        private _canvas: Canvas;
+        private _chart: Chart;
+
+        constructor(chart: Chart, canvas: Canvas) {
+            this._chart = chart;
+            this._canvas = canvas;
+
+            this.padding = this._chart.settings.getValue("canvas.padding", "20");
+            this.height = this._canvas.height - this._canvas.title.height - this.padding * 2;
+            this.width = this._canvas.width - this.padding * 2 - this._canvas.legend.width;
+        }
+
+        public draw(): void {
+            // initialize
+            this.height = this._canvas.height - this._canvas.title.height - this.padding * 2;
+            this.width = this._canvas.width - this.padding * 2 - this._canvas.legend.width;
+
+            // draw plot area
+            this.svg = this._chart.canvas.svg.append("g")
+                .attr("class", "plotarea")
+                .attr("transform", "translate(" + this._chart.canvas.plotArea.padding + "," + (this._chart.canvas.title.height + this._chart.canvas.plotArea.padding) + ")");
+        }
+    }
+
+    export class LegendArea implements IArea {
+        public height: number;
+        public position: string;
+        public title: string;
+        public svg: D3.Selection;
+        public width: number;
+
+        private _chart: Chart;
+        private _canvas: Canvas;
+
+        constructor(chart: Chart, canvas: Canvas) {
+            this._chart = chart;
+            this._canvas = canvas;
+
+            this.height = Number(chart.settings.getValue("legend.height", "0"));
+            this.position = chart.settings.getValue("legend.position", "right");
+            this.title = chart.settings.getValue("legend.title", "Categories");
+            this.width = Number(chart.settings.getValue("legend.width", "0"));
+        }
+
+        public draw(): void {
+            if (this.width != 0) {
+                this.svg = this._canvas.svg.append("g")
+                    .attr("class", "legend")
+                    .attr("transform", "translate(" + (this._canvas.width - this.width) + "," + this._canvas.title.height + ")");
+
+                this.drawLine(this.svg);
+                this.drawTitle(this.svg);
+
+                // add legend items
+                var items = this.svg
+                    .selectAll(".item")
+                    .data(this._chart.series.getMatrix())
+                    .enter().append("g")
+                    .attr("class", "item")
+                    .attr("transform", (d: any, i: any): string => {
+                        return "translate(" + 22 + "," + ((i * 20) + 60) + ")";
+                    });
+
+                this.drawCheckboxes(items);
+                this.drawSymbol(items);
+                this.drawText(items);
+            }
+        }
+
+        private drawCheckboxes(svg: D3.Selection): void {
+            // add checkboxes
+            svg.append("image")
+                .attr("class", "checkbox")
+                .attr("height", "15px")
+                .attr("width", "15px")
+                .attr("href", "../images/checkbox-selected.png");
+        }
+
+        private drawLine(svg: D3.Selection): void {
+            // draw vertical line
+            svg.append("line")
+                .attr("class", "sep")
+                .attr("x1", 0)
+                .attr("y1", 0)
+                .attr("x2", 0)
+                .attr("y2", this._canvas.height - this._canvas.title.height);
+        }
+
+        private drawSymbol(svg: D3.Selection): void {
+            if (this._chart instanceof frnk.UI.Charts.LineChart) {
+                this.drawSymbolAsLine(svg);
+            }
+            else {
+                this.drawSymbolAsRectangle(svg);
+            }
+        }
+
+        private drawSymbolAsLine(svg: D3.Selection): void {
+            svg.append("line")
+                .attr("x1", 27)
+                .attr("x2", 51)
+                .attr("y1", 6)
+                .attr("y2", 6)
+                .style("stroke", (d: any, i: any): string => {
+                    return this._chart.series.getColor(i);
+                })
+                .style("stroke-width", "2");
+
+            svg.append("circle")
+                .attr("cx", 39)
+                .attr("cy", 6)
+                .attr("r", 4)
+                .style("fill", "#fff")
+                .style("stroke", (d: any, i: any): string => {
+                    return this._chart.series.getColor(i);
+                })
+                .style("stroke-width", "2");
+        }
+
+        private drawSymbolAsRectangle(svg: D3.Selection): void {
+            svg.append("rect")
+                .attr("x", 27)
+                .attr("width", 24)
+                .attr("height", 11)
+                .style("fill", (d: any, i: any): string => {
+                    return this._chart.series.getColor(i);
+                });
+        }
+
+        private drawText(svg: D3.Selection): void {
+            svg.append("text")
+                .attr("x", 56)
+                .attr("y", 9)
+                .attr("dy", "0px")
+                .style("text-anchor", "begin")
+                .text((d: any, i: any): string => {
+                    return this._chart.series.getLabel(i);
+                });
+        }
+
+        private drawTitle(svg: D3.Selection): void {
+            // draw horizontal line
+            var svgTitle = svg.append("g")
+                .attr("class", "title");
+
+            svgTitle.append("line")
+                .attr("class", "sep")
+                .attr("x1", 20)
+                .attr("y1", 40)
+                .attr("x2", this.width - 20)
+                .attr("y2", 40);
+
+            // add legend title
+            svgTitle.append("text")
+                .attr("class", "title")
+                .text(this.title)
+                .attr("x", 22)
+                .attr("y", 26);
+        }
+    }
+
     export class Categories {
         public format: string;
         public title: string;
@@ -98,6 +350,10 @@ module frnk.UI.Charts {
 
         public getItems(): string[] {
             return this._items;
+        }
+
+        public getLabel(i: number): string {
+            return this._items[i];
         }
 
         public parseFormat(value: string): any {
@@ -124,29 +380,37 @@ module frnk.UI.Charts {
     export class Series {
         public labels: string[];
         public length: number;
-        public matrix: any[];
 
+        private _matrix: any[];
         private _chart: Chart;
         private _items: Serie[];
 
         constructor(chart: Chart) {
             this._chart = chart;
             this._items = this._setSeries(chart.settings.getValue("series"));
+            this._matrix = this._setStackedMatrix();
 
             this.labels = this._setLabels();
             this.length = this._items.length;
-            this.matrix = this._setStackedMatrix();
         }
 
         public getColor(i: number): string {
             return this._items[i].getColor(i);
         }
 
-        public getItem(i: number): Serie {
+        public getSerie(i: number): Serie {
             return this._items[i];
         }
 
-        public getName(i: number): string {
+        public getMatrixItem(i: number): any {
+            return this._matrix[i];
+        }
+
+        public getMatrix(): any {
+            return this._matrix;
+        }
+
+        public getLabel(i: number): string {
             return this._items[i].getName(i);
         }
 
@@ -155,14 +419,14 @@ module frnk.UI.Charts {
                 || this._chart instanceof frnk.UI.Charts.StackedLineChart
                 || this._chart instanceof frnk.UI.Charts.StackedBarChart)
                 && this._items.length > 1) { // can only be stacked if you have more than 1 series defined
-                return d3.max(this.matrix, function (array: number[]): number {
+                return d3.max(this._matrix, function (array: number[]): number {
                     return d3.max(array, function (d: any): number {
                         return d.y0;
                     });
                 });
             }
             else {
-                return d3.max(this.matrix, function (array: number[]): number {
+                return d3.max(this._matrix, function (array: number[]): number {
                     return d3.max(array, function (d: any): number {
                         return d.y;
                     });
@@ -175,14 +439,14 @@ module frnk.UI.Charts {
                 || this._chart instanceof frnk.UI.Charts.StackedLineChart
                 || this._chart instanceof frnk.UI.Charts.StackedBarChart)
                 && this._items.length > 1) { // can only be stacked if you have more than 1 series defined
-                return d3.min(this.matrix, function (array: number[]): number {
+                return d3.min(this._matrix, function (array: number[]): number {
                     return d3.min(array, function (d: any): number {
                         return d.y0 + d.y;
                     });
                 });
             }
             else {
-                return d3.min(this.matrix, function (array: number[]): number {
+                return d3.min(this._matrix, function (array: number[]): number {
                     return d3.min(array, function (d: any): number {
                         return d.y;
                     });
@@ -253,8 +517,9 @@ module frnk.UI.Charts {
 
         private _transposeMatrix(a: any): any {
             return Object.keys(a[0]).map(
-                function (c: any): any { return a.map(function (r: any): any { return r[c]; }); }
-                );
+                function (c: any): any {
+                    return a.map(function (r: any): any { return r[c]; });
+                });
         }
     }
 
@@ -304,226 +569,6 @@ module frnk.UI.Charts {
 
         public getValues(): number[] {
             return this._data;
-        }
-    }
-
-    export class TitleArea {
-        public align: string;
-        public height: number;
-        public subTitle: string;
-        public svg: D3.Selection;
-        public text: string;
-        public width: number;
-
-        private _chart: Chart;
-
-        constructor(chart: Chart, canvas: Canvas) {
-            this._chart = chart;
-
-            this.align = chart.settings.getValue("title.align", "center");
-            this.height = Number(chart.settings.getValue("title.height", "50"));
-            this.subTitle = chart.settings.getValue("title.subTitle");
-            this.text = chart.settings.getValue("title.text");
-        }
-
-        public draw(): void {
-            // initialize
-            this.width = this._chart.canvas.width;
-
-            // get text
-            this.svg = this._chart.canvas.svg.append("g")
-                .attr("class", "title")
-                .attr("width", this.width)
-                .attr("height", this.height)
-                .attr("transform", "translate(0,0)");
-
-            var svgTitle = this.svg.append("text")
-                .text(this.text);
-
-            // calculate alignment
-            var svgText: any = this.svg.node();
-            var textBox = svgText.getBBox();
-            var x;
-            switch (this.align) {
-                case "left":
-                    x = 0;
-                    break;
-                case "center":
-                    x = (this.width - textBox.width) / 2;
-                    break;
-                case "right":
-                    x = this.width - textBox.width;
-                    break;
-            }
-
-            var y = (this.height + textBox.height) / 2;
-
-            // set title position
-            svgTitle
-                .attr("x", function (): number { return x; })
-                .attr("y", function (): number { return y; });
-
-            // draw line
-            this.svg.append("line")
-                .attr("class", "sep")
-                .attr("x1", 0)
-                .attr("y1", this.height)
-                .attr("x2", this.width)
-                .attr("y2", this.height);
-        }
-    }
-
-    export class PlotArea {
-        public height: number;
-        public width: number;
-        public svg: D3.Selection;
-        public padding: number;
-
-        private _canvas: Canvas;
-        private _chart: Chart;
-
-        constructor(chart: Chart, canvas: Canvas) {
-            this._chart = chart;
-            this._canvas = canvas;
-
-            this.padding = this._chart.settings.getValue("canvas.padding", "20");
-            this.height = this._canvas.height - this._canvas.title.height - this.padding * 2;
-            this.width = this._canvas.width - this.padding * 2 - this._canvas.legend.width;
-        }
-
-        public draw(): void {
-            // initialize
-            this.height = this._canvas.height - this._canvas.title.height - this.padding * 2;
-            this.width = this._canvas.width - this.padding * 2 - this._canvas.legend.width;
-
-            // draw plot area
-            this.svg = this._chart.canvas.svg.append("g")
-                .attr("class", "plotarea")
-                .attr("transform", "translate(" + this._chart.canvas.plotArea.padding + "," + (this._chart.canvas.title.height + this._chart.canvas.plotArea.padding) + ")");
-        }
-    }
-
-    export class LegendArea {
-        public height: number;
-        public position: string;
-        public title: string;
-        public svg: D3.Selection;
-        public width: number;
-
-        private _chart: Chart;
-        private _canvas: Canvas;
-
-        constructor(chart: Chart, canvas: Canvas) {
-            this._chart = chart;
-            this._canvas = canvas;
-
-            this.height = Number(chart.settings.getValue("legend.height", "0"));
-            this.position = chart.settings.getValue("legend.position", "right");
-            this.title = chart.settings.getValue("legend.title", "Categories");
-            this.width = Number(chart.settings.getValue("legend.width", "0"));
-        }
-
-        public draw(): void {
-            if (this.width != 0) {
-                this.svg = this._canvas.svg.append("g")
-                    .attr("class", "legend")
-                    .attr("transform", "translate(" + (this._canvas.width - this.width) + "," + this._canvas.title.height + ")");
-
-                // draw vertical line
-                this.svg.append("line")
-                    .attr("class", "sep")
-                    .attr("x1", 0)
-                    .attr("y1", 0)
-                    .attr("x2", 0)
-                    .attr("y2", this._canvas.height - this._canvas.title.height);
-
-                // draw horizontal line
-                this.svg.append("line")
-                    .attr("class", "sep")
-                    .attr("x1", 20)
-                    .attr("y1", 40)
-                    .attr("x2", this.width - 20)
-                    .attr("y2", 40);
-
-                // add legend title
-                this.svg.append("text")
-                    .attr("class", "legend title")
-                    .text(this.title)
-                    .attr("x", 22)
-                    .attr("y", 26);
-
-                // add legend items
-                var items = this.svg
-                    .selectAll(".item")
-                    .data(this._chart.series.matrix)
-                    .enter().append("g")
-                    .attr("class", "item")
-                    .attr("transform", (d: any, i: any): string => {
-                        return "translate(" + 22 + "," + ((i * 20) + 60) + ")";
-                    });
-
-                // add checkboxes
-                items.append("image")
-                    .attr("height", "15px")
-                    .attr("width", "15px")
-                    .attr("href", "../images/checkbox-selected.png");
-
-                // add legend
-                if (this._chart instanceof frnk.UI.Charts.LineChart) {
-                    items.append("line")
-                        .attr("x1", 27)
-                        .attr("x2", 51)
-                        .attr("y1", 6)
-                        .attr("y2", 6)
-                        .style("stroke", (d: any, i: any): string => {
-                            return this._chart.series.getColor(i);
-                        })
-                        .style("stroke-width", "2");
-
-                    items.append("circle")
-                        .attr("cx", 39)
-                        .attr("cy", 6)
-                        .attr("r", 4)
-                        .style("fill", "#fff")
-                        .style("stroke", (d: any, i: any): string => {
-                            return this._chart.series.getColor(i);
-                        })
-                        .style("stroke-width", "2");
-                }
-                else {
-                    items.append("rect")
-                        .attr("x", 27)
-                        .attr("width", 24)
-                        .attr("height", 11)
-                        .style("fill", (d: any, i: any): string => {
-                            return this._chart.series.getColor(i);
-                        });
-                }
-
-                items.append("text")
-                    .attr("x", 56)
-                    .attr("y", 9)
-                    .attr("dy", "0px")
-                    .style("text-anchor", "begin")
-                    .text((d: any, i: any): string => {
-                        return this._chart.series.getName(i);
-                    });
-            }
-        }
-    }
-
-    // TODO - Refactor
-    export class PlotOptions {
-        public innerPadding: number;
-        public outerPadding: number;
-
-        private _chart: Chart;
-
-        constructor(chart: Chart) {
-            this._chart = chart;
-
-            this.innerPadding = Number(chart.settings.getValue("plotOptions.general.innerPadding", "0.5"));
-            this.outerPadding = Number(chart.settings.getValue("plotOptions.general.outerPadding", "0"));
         }
     }
 
@@ -1041,7 +1086,7 @@ module frnk.UI.Charts {
 
             var svgArea = svg.append("path")
                 .attr("class", "area")
-                .attr("d", d3Area(this.series.matrix[serie]))
+                .attr("d", d3Area(this.series.getMatrixItem(serie)))
                 .style("fill", this.series.getColor(serie))
                 .style("opacity", "0.2");
 
@@ -1056,7 +1101,7 @@ module frnk.UI.Charts {
 
             var svgLine = svg.append("path")
                 .attr("class", "line")
-                .attr("d", d3Line(this.series.matrix[serie]))
+                .attr("d", d3Line(this.series.getMatrixItem(serie)))
                 .attr("stroke", this.series.getColor(serie))
                 .attr("stroke-width", 1)
                 .attr("fill", "none");
@@ -1066,7 +1111,7 @@ module frnk.UI.Charts {
 
         public drawMarkers(svg: D3.Selection, serie: number): D3.Selection {
             var svgMarkers = svg.selectAll(".marker")
-                .data(this.series.matrix[serie])
+                .data(this.series.getMatrixItem(serie))
                 .enter().append("circle")
                 .attr("class", "marker")
                 .attr("stroke", this.series.getColor(serie))
@@ -1091,7 +1136,7 @@ module frnk.UI.Charts {
                     .style("opacity", .9);
                 div.html(_this.settings.getValue("tooltip.title") + "<br/>"  + d.y + _this.settings.getValue("tooltip.valueSuffix"))
                     .style("left", (d3.mouse(this)[0]) + "px")
-                    .style("top", (d3.mouse(this)[1]) + 175 + "px");  // TODO - harccoded value only works in some occasions
+                    .style("top", (d3.mouse(this)[1]) + 175 + "px");  // TODO - hardcoded value only works in some occasions
                 })
                 .on("mouseout", function(d: any): void {
                     div.transition()
@@ -1146,7 +1191,7 @@ module frnk.UI.Charts {
 
             var svgArea = svg.append("path")
                 .attr("class", "area")
-                .attr("d", d3Area(this.series.matrix[serie]))
+                .attr("d", d3Area(this.series.getMatrixItem(serie)))
                 .style("fill", this.series.getColor(serie))
                 .style("opacity", "0.2");
 
@@ -1190,7 +1235,7 @@ module frnk.UI.Charts {
         }
 
         protected normalizer(d: any): number {
-            return 1;
+            return StackType.Normal;
         }
     }
 
@@ -1223,7 +1268,7 @@ module frnk.UI.Charts {
                 var svgSerie = svgSeries.append("g")
                     .attr("id", "serie-" + j)
                     .selectAll("rect")
-                    .data(this.series.matrix[j])
+                    .data(this.series.getMatrixItem(j))
                     .enter();
 
                 // draw bar
@@ -1266,7 +1311,7 @@ module frnk.UI.Charts {
                     return this.xAxis.scale(axisScale) + (this.xAxis.scale.rangeBand() / this.series.length * serie);
                 }
                 else {
-                    return this.xAxis.scale(axisScale) + (this.canvas.width / this.series.length / this.series.matrix[0].length * serie);
+                    return this.xAxis.scale(axisScale) + (this.canvas.width / this.series.length / this.series.getMatrixItem(0).length * serie);
                 }
             };
         }
@@ -1294,7 +1339,7 @@ module frnk.UI.Charts {
                     return this.xAxis.scale.rangeBand() / this.series.length;
                 }
                 else {
-                    return this.canvas.width / this.series.length / this.series.matrix[0].length;
+                    return this.canvas.width / this.series.length / this.series.getMatrixItem(0).length;
                 }
             };
         }
@@ -1330,13 +1375,13 @@ module frnk.UI.Charts {
                     return this.xAxis.scale.rangeBand();
                 }
                 else {
-                    return this.canvas.width / this.series.length / this.series.matrix[0].length; //did it to support time scales
+                    return this.canvas.width / this.series.length / this.series.getMatrixItem(0).length; //did it to support time scales
                 }
             };
         }
 
         public normalizer(d: any): number {
-            return 1;
+            return StackType.Normal;
         }
     }
 
@@ -1375,7 +1420,7 @@ module frnk.UI.Charts {
                 var svgSerie = svgSeries.append("g")
                     .attr("id", "serie-" + j)
                     .selectAll("rect")
-                    .data(this.series.matrix[j])
+                    .data(this.series.getMatrixItem(j))
                     .enter();
 
                 // draw bar
@@ -1430,7 +1475,7 @@ module frnk.UI.Charts {
                     return this.yAxis.scale(axisScale) + (this.yAxis.scale.rangeBand() / series.length * serie);
                 }
                 else {
-                    return this.yAxis.scale(axisScale) + (this.canvas.width / series.length / series.matrix[0].length / series.length * serie);
+                    return this.yAxis.scale(axisScale) + (this.canvas.width / series.length / series.getMatrixItem(0).length / series.length * serie);
                 }
             };
         }
@@ -1441,7 +1486,7 @@ module frnk.UI.Charts {
                     return Math.abs(this.yAxis.scale.rangeBand() / this.series.length);
                 }
                 else {
-                    return Math.abs(this.canvas.width / this.series.length / this.series.matrix[0].length / this.series.length);
+                    return Math.abs(this.canvas.width / this.series.length / this.series.getMatrixItem(0).length / this.series.length);
                 }
             };
         }
@@ -1482,7 +1527,7 @@ module frnk.UI.Charts {
                     return this.yAxis.scale.rangeBand();
                 }
                 else {
-                    return this.canvas.height / this.series.length / this.series.matrix[0].length;
+                    return this.canvas.height / this.series.length / this.series.getMatrixItem(0).length;
                 }
             };
         }
@@ -1553,13 +1598,13 @@ module frnk.UI.Charts {
                 var pie = d3.layout.pie();
 
                 var arcs = g.selectAll("g.slice")
-                    .data(pie(this.series.getItem(s).getValues()))
+                    .data(pie(this.series.getSerie(s).getValues()))
                     .enter()
                     .append("g")
                     .attr("class", "slice");
 
                 arcs.append("path")
-                    .attr("fill", (d: any, i: number): string => { return this.series.getItem(s).getColor(i); })
+                    .attr("fill", (d: any, i: number): string => { return this.series.getSerie(s).getColor(i); })
                     .attr("d", arc);
 
                 // draw tooltip
