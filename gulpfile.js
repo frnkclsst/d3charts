@@ -23,7 +23,7 @@ gulp.task('compile-typescript', function(cb){
 	return gulp.src(buildOptions.srcPath + '/typescript/**/*.ts')
         .pipe(gulpTypescript({
             //noImplicitAny: true,
-            out: 'd3chart.js'
+            out: 'd3.charts.js'
         }))
         .pipe(gulp.dest(buildOptions.distPath + '/js'));
 });
@@ -74,9 +74,10 @@ gulp.task('serve', ['default'], function(cb) {
 	var reload = browserSync.reload;
 
 	var watcher = gulp.watch([
-		buildOptions.srcPath + '**/less/*.less',
 		buildOptions.srcPath + '**/css/*.css',
 		buildOptions.srcPath + '**/data/*.txt',
+		buildOptions.srcPath + '**/examples/*.html',
+		buildOptions.srcPath + '**/less/*.less',
 		buildOptions.srcPath + '**/typescript/**/*.ts',
 		buildOptions.srcPath + '**/*.htm',
 		buildOptions.srcPath + '**/*.html',

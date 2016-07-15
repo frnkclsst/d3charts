@@ -82,8 +82,8 @@
     ,
     "plotOptions": {
         "general": { 
-            "innerPadding": 0.1,
-			"outerPadding": 0.5
+            "innerPadding": 0.05,
+			"outerPadding": 0
         }
 	}
 }
