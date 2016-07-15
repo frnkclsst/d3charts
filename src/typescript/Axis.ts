@@ -8,7 +8,6 @@ module frnk.UI.Charts {
         public hasTickmarks: boolean;
         public innerTicksize: number;
         public outerTicksize: number;
-        public orient: string;
         public scale: any;
         public svgAxis: D3.Selection;
         public svgGrid: D3.Selection;
@@ -20,6 +19,8 @@ module frnk.UI.Charts {
         public y: number;
 
         protected _chart: Chart;
+        protected _formatter: Function;
+        protected _orient: OrientationType;
 
         private _gridlineType: GridLineType;
         private _scaleType: ScaleType;
@@ -29,7 +30,6 @@ module frnk.UI.Charts {
             this.hasTickmarks = true;
             this.innerTicksize = this.getInnerTicksize(chart);
             this.outerTicksize = this.getOuterTicksize(chart);
-            this.orient = null;
             this.scale = null;
             this.svgAxis = null;
             this.svgGrid = null;
@@ -42,10 +42,7 @@ module frnk.UI.Charts {
 
             this._chart = chart;
             this._gridlineType = GridLineType.None;
-        }
-
-        public setScaleType(value: ScaleType): void {
-            this._scaleType = value;
+            this._orient = null;
         }
 
         public getGridlineType(): GridLineType {
@@ -85,8 +82,11 @@ module frnk.UI.Charts {
             // create d3 axis
             this.axis = d3.svg.axis()
                 .scale(this.scale)
-                .orient(this.orient)
+                .orient(this._orient)
                 .ticks(this.ticks);
+
+            //TODO - Provide option to provide custom formatters
+            //this.axis.tickFormat(this._formatter());
 
             // draw tick marks
             if (!this.hasTickmarks) {
@@ -122,7 +122,7 @@ module frnk.UI.Charts {
                     );
                     break;
                 case GridLineType.Minor:
-                    // TODO
+                    // TODO - Minor gridlines
                     break;
                 default:
                     // Do nothing
@@ -175,7 +175,11 @@ module frnk.UI.Charts {
             // child classes are responsible for implementing this method
         }
 
-        protected _setGridlineType(type: string): void {
+        public setScaleType(value: ScaleType): void {
+            this._scaleType = value;
+        }
+
+        protected setGridlineType(type: string): void {
             switch (type.toUpperCase()) {
                 case "MAJOR":
                     this._gridlineType = GridLineType.Major;
@@ -196,19 +200,20 @@ module frnk.UI.Charts {
 
         constructor(args: any, chart: Chart) {
             super(args, chart);
-            this.orient = chart.settings.getValue("xAxis.orient", "bottom");
-            this.hasTickmarks = chart.settings.getValue("xAxis.hasTickmarks").toUpperCase() == "YES" ? true : false;
+
+            this.hasTickmarks = chart.settings.getValue("xAxis.tickmarks").toUpperCase() == "YES" ? true : false;
             this.title = chart.settings.getValue("xAxis.title.text");
+            this.setOrient(chart.settings.getValue("xAxis.orient", "bottom"));
+            this.setGridlineType(chart.settings.getValue("xAxis.gridlines"));
             this._textRotation = chart.settings.getValue("xAxis.labels.rotate", "0");
-            this._setGridlineType(chart.settings.getValue("xAxis.gridlines"));
+            this._formatter = new Function(chart.settings.getValue("xAxis._formatter"));
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): void {
             super.drawTitle(chart, svg);
-
             var anchor = "end";
             var x = chart.canvas.plotArea.width;
-            var y = this.orient == "bottom" ? 30 : -30; // TODO: title needs to be positioned under labels but depends on size of labels
+            var y = this._orient == "bottom" ? 30 : -30; // TODO: title needs to be positioned under labels but depends on size of labels
 
             this.svgTitle
                 .attr("text-anchor", anchor)
@@ -221,7 +226,7 @@ module frnk.UI.Charts {
                 .attr("x1", this.scale(0))
                 .attr("x2", this.scale(0))
                 .attr("y1", 0)
-                .attr("y2", this.orient == "bottom" ? -chart.canvas.plotArea.height : chart.canvas.plotArea.height);
+                .attr("y2", this._orient == "bottom" ? -chart.canvas.plotArea.height : chart.canvas.plotArea.height);
         }
 
         public getInnerTicksize(chart: Chart): number {
@@ -277,7 +282,7 @@ module frnk.UI.Charts {
         }
 
         public getYCoordinate(chart: Chart): number {
-            return this.orient == "bottom" ? chart.canvas.plotArea.height : 0;
+            return this._orient == "bottom" ? chart.canvas.plotArea.height : 0;
         }
 
         public isDataAxis(): boolean {
@@ -289,8 +294,8 @@ module frnk.UI.Charts {
 
         public rotateLabels(chart: Chart, svg: D3.Selection): void {
             // rotate labels
-            var textAnchorAttr = this.orient == "bottom" ? "end" : "begin";
-            var translateAttr = this.orient == "bottom" ? "translate(-8 4)" : "translate(8 -4)";
+            var textAnchorAttr = this._orient == "bottom" ? "end" : "begin";
+            var translateAttr = this._orient == "bottom" ? "translate(-8 4)" : "translate(8 -4)";
 
             if (this._textRotation != "0") {
                 svg.selectAll("text")
@@ -299,21 +304,34 @@ module frnk.UI.Charts {
             }
         }
 
+        public setOrient(value: OrientationType): void {
+            switch (value.toUpperCase()) {
+                case "BOTTOM":
+                    this._orient = "bottom";
+                    break;
+                case "TOP":
+                    this._orient = "top";
+                    break;
+                default:
+                    this._orient = "bottom";
+                    break;
+            }
+        }
     }
 
     export class YAxis extends Axis {
         constructor(args: any, chart: Chart) {
             super(args, chart);
-            this.orient = chart.settings.getValue("yAxis.orient", "left");
-            this.hasTickmarks = chart.settings.getValue("yAxis.hasTickmarks").toUpperCase() == "YES" ? true : false;
+            this.setOrient(chart.settings.getValue("yAxis.orient", "left"));
+            this.hasTickmarks = chart.settings.getValue("yAxis.tickmarks").toUpperCase() == "YES" ? true : false;
             this.title = chart.settings.getValue("yAxis.title.text");
-            this._setGridlineType(chart.settings.getValue("yAxis.gridlines"));
+            this.setGridlineType(chart.settings.getValue("yAxis.gridlines"));
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): void {
             super.drawTitle(chart, svg);
 
-            var anchor = this.orient == "left" ? "begin" : "end";
+            var anchor = this._orient == "left" ? "begin" : "end";
             var x = 0;
             var y = -30;
 
@@ -326,7 +344,7 @@ module frnk.UI.Charts {
             super.drawZeroLine(chart, svg);
             this.svgZeroLine
                 .attr("x1", 0)
-                .attr("x2", this.orient == "left" ? chart.canvas.plotArea.width : -chart.canvas.plotArea.width)
+                .attr("x2", this._orient == "left" ? chart.canvas.plotArea.width : -chart.canvas.plotArea.width)
                 .attr("y1", this.scale(0))
                 .attr("y2", this.scale(0));
         }
@@ -380,7 +398,7 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(chart: Chart): number {
-            return this.orient == "left" ? 0 : chart.canvas.plotArea.width;
+            return this._orient == "left" ? 0 : chart.canvas.plotArea.width;
         }
 
         public getYCoordinate(chart: Chart): number {
@@ -396,6 +414,20 @@ module frnk.UI.Charts {
 
         public rotateLabels(chart: Chart, svg: D3.Selection): void {
 
+        }
+
+        public setOrient(value: OrientationType): void {
+            switch (value.toUpperCase()) {
+                case "LEFT":
+                    this._orient = "left";
+                    break;
+                case "RIGHT":
+                    this._orient = "right";
+                    break;
+                default:
+                    this._orient = "left";
+                    break;
+            }
         }
     }
 }
