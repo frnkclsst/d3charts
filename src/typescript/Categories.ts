@@ -6,12 +6,14 @@ module frnk.UI.Charts {
     export class Categories {
         public format: string;
         public title: string;
+        public length: number;
 
         private _items: string[];
 
         constructor(chart: Chart) {
             this.format = chart.settings.getValue("categories.format");
             this._items = this._setCategories(chart.settings.getValue("categories.labels"));
+            this.length = this._items.length;
         }
 
         public getItem(i: number): string {

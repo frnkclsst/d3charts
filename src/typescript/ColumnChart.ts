@@ -64,7 +64,7 @@ module frnk.UI.Charts {
                     return this.xAxis.scale(axisScale) + (this.xAxis.scale.rangeBand() / this.series.length * serie);
                 }
                 else {
-                    return this.xAxis.scale(axisScale) + (this.canvas.width / this.series.length / this.series.getMatrixItem(0).length * serie);
+                    return this.xAxis.scale(axisScale) + (this.canvas.width / this.series.length / this.categories.length * serie);
                 }
             };
         }
@@ -92,7 +92,7 @@ module frnk.UI.Charts {
                     return this.xAxis.scale.rangeBand() / this.series.length;
                 }
                 else {
-                    return this.canvas.width / this.series.length / this.series.getMatrixItem(0).length;
+                    return this.canvas.width / this.series.length / this.categories.length;
                 }
             };
         }

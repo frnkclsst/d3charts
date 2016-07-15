@@ -33,7 +33,7 @@ module frnk.UI.Charts {
                     return this.xAxis.scale.rangeBand();
                 }
                 else {
-                    return this.canvas.width / this.series.length / this.series.getMatrixItem(0).length; //did it to support time scales
+                    return this.canvas.width / this.series.length / this.categories.length; //did it to support time scales
                 }
             };
         }

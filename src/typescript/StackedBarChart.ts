@@ -32,7 +32,7 @@ module frnk.UI.Charts {
                     return this.yAxis.scale.rangeBand();
                 }
                 else {
-                    return this.canvas.height / this.series.length / this.series.getMatrixItem(0).length;
+                    return this.canvas.height / this.series.length / this.categories.length;
                 }
             };
         }

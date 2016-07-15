@@ -60,7 +60,7 @@ module frnk.UI.Charts {
         public getXCoordinate(serie: number): any {
             return (d: any): any => {
                 if (d.y < 0) {
-                    return this.xAxis.scale(0) - Math.abs(this.xAxis.scale(d.size) - this.xAxis.scale(0));
+                    return Math.abs(this.xAxis.scale(d.y));
                 }
                 else {
                     return this.xAxis.scale(0);
@@ -76,7 +76,7 @@ module frnk.UI.Charts {
                     return this.yAxis.scale(axisScale) + (this.yAxis.scale.rangeBand() / series.length * serie);
                 }
                 else {
-                    return this.yAxis.scale(axisScale) + (this.canvas.width / series.length / series.getMatrixItem(0).length / series.length * serie);
+                    return this.yAxis.scale(axisScale) + (this.canvas.width / series.length / this.categories.length / series.length * serie);
                 }
             };
         }
@@ -87,7 +87,7 @@ module frnk.UI.Charts {
                     return Math.abs(this.yAxis.scale.rangeBand() / this.series.length);
                 }
                 else {
-                    return Math.abs(this.canvas.width / this.series.length / this.series.getMatrixItem(0).length / this.series.length);
+                    return Math.abs(this.canvas.width / this.series.length / this.categories.length / this.series.length);
                 }
             };
         }
