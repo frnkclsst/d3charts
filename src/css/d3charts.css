@@ -18,6 +18,12 @@ svg {
 	border-radius:3px;
     margin-left: 12px;
 }
+
+.sep {
+    stroke: #EEEEEE;
+    stroke-width: 1;
+}
+
 .title {
 	fill: #000000;
 	font-size: 14px;
@@ -26,13 +32,14 @@ svg {
 }
 
 /* Legend */
-.sep {
-	stroke: #EEEEEE;
-	stroke-width: 1;
-}
-.legend {
+
+.legend .item {
 	font-family: Arial, sans-serif;
 	font-size: 9px;
+}
+
+.legend .title {
+    font-size: 9px;
 }
 
 /* Axis */

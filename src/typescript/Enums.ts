@@ -3,6 +3,12 @@
 "use strict";
 
 module frnk.UI.Charts {
+    export type OrientationType =
+        "bottom" |
+        "left" |
+        "right" |
+        "top";
+
     export enum GridLineType {
         None,
         Major,
