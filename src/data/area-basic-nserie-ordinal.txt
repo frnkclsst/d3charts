@@ -32,7 +32,7 @@
 		"labels": {
 			"rotate": "0"
 		},
-		"tickmark": "no",
+		"tickmarks": "no",
         "title": { 
             "text": "Year"
         }
@@ -40,8 +40,7 @@
     "yAxis": {
         "gridlines": "none",
         "position": "left",
-		"tickmark": "yes",
-        "tickmark": "no",
+		"tickmarks": "yes",
 		"title": {
             "text": "Millions"
         }
