@@ -1,5 +1,5 @@
 html {
-    font-family: 'Lucida Sans', Arial;
+    font-family: Arial, sans-serif;
     font-size: 11px;
 }
 
@@ -121,7 +121,7 @@ svg {
     position: absolute;
     text-align: left;
     width: 200px;
-    height: 75px;
+    height: 55px;
     padding: 20px;
     font: 9px Arial;
     background: #fafafa;
@@ -154,4 +154,8 @@ svg {
     font-weight: normal;
     color: #878787;
     text-transform: none;
+}
+
+.tooltip .text {
+
 }

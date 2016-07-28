@@ -67,8 +67,8 @@ module frnk.UI.Charts {
                 })
                 .on("mousemove", function(d: any): void {
                     div
-                        .style("left", (d3.mouse(this)[0]) + "px")
-                        .style("top", (d3.mouse(this)[1]) + 110 + "px");  // TODO - hardcoded value only works in some occasions
+                        .style("left", (d3.mouse(this)[0]) + (_self.canvas.plotArea.padding - 50) + "px")
+                        .style("top", (d3.mouse(this)[1]) + (60 + _self.canvas.plotArea.padding) + "px");  // TODO - hardcoded value only works in some occasions
                 });
         }
     }
