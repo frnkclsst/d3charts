@@ -50,10 +50,10 @@ module frnk.UI.Charts {
                 .attr("class", "tooltip")
                 .style("opacity", 0.95);
 
-            svg.on("mouseover", function (d: any): void {
+            svg.on("mouseover", function (d: any, i: number): void {
                 div.html("<div class='title'>" + _self.settings.getValue("tooltip.title") + "</div>" +
-                    "<div class='subtitle'>" + _self.series.getLabel(serie) + "</div></br>" +
-                    "<div class='text'>" + d.y + _self.settings.getValue("tooltip.valueSuffix") + "</div>");
+                    "<div class='subtitle'>" + _self.categories.getLabel(i) + "</div></br>" +
+                    "<div class='text'>" + _self.series.getLabel(serie) + ": " + d.y + _self.settings.getValue("tooltip.valueSuffix") + "</div>");
 
                 div.transition()
                         .delay(300)
