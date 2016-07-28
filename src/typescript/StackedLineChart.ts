@@ -38,18 +38,6 @@ module frnk.UI.Charts {
             return svgArea;
         }
 
-        public drawTooltip(svg: D3.Selection): D3.Selection {
-            return svg.append("title")
-                .text(function (d: any): number {
-                    if (d.y < 0) {
-                        return d.y + d.y0;
-                    }
-                    else {
-                        return d.y0;
-                    }
-                });
-        }
-
         public getXCoordinate(serie: number): any {
             return (d: any, i: number): number => {
                 if (this.xAxis.isOrdinalScale() || this.xAxis.isLinearScale()) {

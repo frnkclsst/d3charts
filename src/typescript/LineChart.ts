@@ -101,27 +101,6 @@ module frnk.UI.Charts {
             return svgMarkers;
         }
 
-        public drawTooltip(svg: D3.Selection, serie: number): void {
-            var _this = this;
-            var div = d3.select("body").append("div")
-                .attr("class", "tooltip")
-                .style("opacity", 0);
-
-            svg.on("mouseover", function (d: any): void {
-                    div.transition()
-                        .duration(200)
-                        .style("opacity", .9);
-                    div.html(_this.settings.getValue("tooltip.title") + "<br/>"  + d.y + _this.settings.getValue("tooltip.valueSuffix"))
-                        .style("left", (d3.mouse(this)[0]) + "px")
-                        .style("top", (d3.mouse(this)[1]) + 175 + "px");  // TODO - hardcoded value only works in some occasions
-                })
-                .on("mouseout", function(d: any): void {
-                    div.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-                });
-        }
-
         public getXCoordinate(serie: number): any {
             return (d: any, i: number): number => {
                 if (this.xAxis.isOrdinalScale()) {

@@ -40,10 +40,7 @@ module frnk.UI.Charts {
                     .attr("d", arc);
 
                 // draw tooltip
-                arcs.append("title")
-                    .text(function (d: any): number {
-                        return d.value;
-                    });
+                this.drawTooltip(arcs, s);
             }
         }
     }

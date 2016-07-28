@@ -42,5 +42,34 @@ module frnk.UI.Charts {
         public draw(): void {
             this.canvas.draw();
         }
+
+        public drawTooltip(svg: D3.Selection, serie: number): void {
+            var _self = this;
+
+            var div = d3.select(_self.selector).append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0.95);
+
+            svg.on("mouseover", function (d: any): void {
+                div.html("<div class='title'>" + _self.settings.getValue("tooltip.title") + "</div>" +
+                    "<div class='subtitle'>" + _self.series.getLabel(serie) + "</div></br>" +
+                    "<div class='text'>" + d.y + _self.settings.getValue("tooltip.valueSuffix") + "</div>");
+
+                div.transition()
+                        .delay(300)
+                        .duration(100)
+                        .style("opacity", 1);
+                })
+                .on("mouseout", function(d: any): void {
+                    div.transition()
+                        .duration(100)
+                        .style("opacity", 0);
+                })
+                .on("mousemove", function(d: any): void {
+                    div
+                        .style("left", (d3.mouse(this)[0]) + "px")
+                        .style("top", (d3.mouse(this)[1]) + 110 + "px");  // TODO - hardcoded value only works in some occasions
+                });
+        }
     }
 }

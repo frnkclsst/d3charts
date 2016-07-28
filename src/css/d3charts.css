@@ -117,18 +117,41 @@ svg {
 }
 
 /* Tooltip */
-div.tooltip {
+.tooltip {
     position: absolute;
     text-align: left;
-    width: 60px;
-    height: 28px;
-    padding: 2px;
-    font: 9px sans-serif;
+    width: 200px;
+    height: 75px;
+    padding: 20px;
+    font: 9px Arial;
     background: #fafafa;
     border: 1px solid #eeeeee;
     border-radius: 3px;
     pointer-events: none;
     margin-left: 12px;
-
 }
 
+.tooltip::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 20%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #eeeeee transparent;
+}
+
+.tooltip .title {
+    font-size: 15px;
+    font-weight: bold;
+    color: #262c39;
+    text-transform: none;
+}
+
+.tooltip .subtitle {
+    font-size: 9px;
+    font-weight: normal;
+    color: #878787;
+    text-transform: none;
+}
