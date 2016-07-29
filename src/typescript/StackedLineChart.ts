@@ -17,7 +17,6 @@ module frnk.UI.Charts {
                 .x(this.getXCoordinate(serie))
                 .y0(
                     (d: any): number => {
-
                         // negative values
                         if (d.y < 0) {
                             return (this.yAxis.scale(d.y0 * this.normalizer(d)));
