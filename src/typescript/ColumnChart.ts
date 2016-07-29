@@ -59,7 +59,7 @@ module frnk.UI.Charts {
         public getXCoordinate(serie: number): any {
             return (d: any, i: number): number => {
                 var axisScale = this.categories.parseFormat(this.categories.getItem(i));
-                if (this.xAxis.isOrdinalScale()) {
+                if (this.xAxis.getScaleType() == ScaleType.Ordinal) {
                     return this.xAxis.scale(axisScale) + (this.xAxis.scale.rangeBand() / this.series.length * serie);
                 }
                 else {
@@ -87,7 +87,7 @@ module frnk.UI.Charts {
 
         public getWidth(serie: number): any {
             return (d: any): number => {
-                if (this.xAxis.isOrdinalScale()) {
+                if (this.xAxis.getScaleType() == ScaleType.Ordinal) {
                     return this.xAxis.scale.rangeBand() / this.series.length;
                 }
                 else {

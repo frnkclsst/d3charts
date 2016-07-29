@@ -30,7 +30,7 @@ module frnk.UI.Charts {
 
         public getWidth(serie: number): any {
             return (d: any): any => {
-                if (this.xAxis.isOrdinalScale() || this.xAxis.isLinearScale()) {
+                if (this.xAxis.getScaleType() == ScaleType.Ordinal || this.xAxis.getScaleType() == ScaleType.Linear) {
                     return this.xAxis.scale.rangeBand();
                 }
                 else {

@@ -71,7 +71,7 @@ module frnk.UI.Charts {
             return (d: any, i: number): number => {
                 var axisScale = this.categories.parseFormat(this.categories.getItem(i));
                 var series = this.series;
-                if (this.yAxis.isOrdinalScale()) {
+                if (this.yAxis.getScaleType() == ScaleType.Ordinal) {
                     return this.yAxis.scale(axisScale) + (this.yAxis.scale.rangeBand() / series.length * serie);
                 }
                 else {
@@ -82,7 +82,7 @@ module frnk.UI.Charts {
 
         public getHeight(serie: number): any {
             return (d: any): any => {
-                if (this.yAxis.isOrdinalScale()) {
+                if (this.yAxis.getScaleType() == ScaleType.Ordinal) {
                     return Math.abs(this.yAxis.scale.rangeBand() / this.series.length);
                 }
                 else {

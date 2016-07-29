@@ -29,7 +29,7 @@ module frnk.UI.Charts {
 
         public getHeight(serie: number): any {
             return (d: any): any => {
-                if (this.yAxis.isOrdinalScale() || this.yAxis.isLinearScale()) {
+                if (this.yAxis.getScaleType() == ScaleType.Ordinal || this.yAxis.getScaleType() == ScaleType.Linear) {
                     return this.yAxis.scale.rangeBand();
                 }
                 else {

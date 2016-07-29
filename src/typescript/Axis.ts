@@ -49,25 +49,8 @@ module frnk.UI.Charts {
             return this._gridlineType;
         }
 
-        public isOrdinalScale(): boolean {
-            if (this._scaleType === ScaleType.Ordinal) {
-                return true;
-            }
-            return false;
-        }
-
-        public isLinearScale(): boolean {
-            if (this._scaleType === ScaleType.Linear) {
-                return true;
-            }
-            return false;
-        }
-
-        public isTimeScale(): boolean {
-            if (this._scaleType === ScaleType.Time) {
-                return true;
-            }
-            return false;
+        public getScaleType(): ScaleType {
+            return this._scaleType;
         }
 
         public draw(chart: Chart): void {

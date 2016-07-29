@@ -40,7 +40,7 @@ module frnk.UI.Charts {
 
         public getXCoordinate(serie: number): any {
             return (d: any, i: number): number => {
-                if (this.xAxis.isOrdinalScale() || this.xAxis.isLinearScale()) {
+                if (this.xAxis.getScaleType() == ScaleType.Ordinal || this.xAxis.getScaleType() == ScaleType.Linear) {
                     return this.xAxis.scale(this.categories.parseFormat(this.categories.getItem(i))) + this.xAxis.scale.rangeBand() / 2;
                 }
                 else {
