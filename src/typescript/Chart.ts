@@ -10,9 +10,11 @@ module frnk.UI.Charts {
         public series: Series;
         public settings: Settings;
         public selector: string;
+        public stackType: StackType;
 
         constructor(args: any, selector: string) {
             this.selector = selector;
+            this.stackType = StackType.None;
 
             // Selector cannot be found
             try {

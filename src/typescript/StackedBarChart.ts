@@ -7,6 +7,7 @@ module frnk.UI.Charts {
 
         constructor(args: any, selector: string) {
             super(args, selector);
+            this.stackType = StackType.Normal;
         }
 
         public getXCoordinate(serie: number): any {

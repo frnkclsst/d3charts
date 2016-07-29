@@ -71,7 +71,7 @@ module frnk.UI.Charts {
         public getYCoordinate(serie: number): any {
             return (d: any): number => {
                 if (d.y < 0) {
-                    return this.yAxis.scale(d.y) - Math.abs(this.yAxis.scale(d.size) - this.yAxis.scale(0));
+                    return this.yAxis.scale(d.y) - Math.abs(this.yAxis.scale(d.y) - this.yAxis.scale(0));
                 }
                 else {
                     return this.yAxis.scale(d.y);

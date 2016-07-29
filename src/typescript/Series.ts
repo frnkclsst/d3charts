@@ -41,10 +41,7 @@ module frnk.UI.Charts {
         }
 
         public getMaxValue(): number {
-            if ((this._chart instanceof frnk.UI.Charts.StackedColumnChart
-                || this._chart instanceof frnk.UI.Charts.StackedLineChart
-                || this._chart instanceof frnk.UI.Charts.StackedBarChart)
-                && this._items.length > 1) { // can only be stacked if you have more than 1 series defined
+            if (this._chart.stackType != StackType.None && this._items.length > 1) { // can only be stacked if you have more than 1 series defined
                 return d3.max(this._matrix, function (array: number[]): number {
                     return d3.max(array, function (d: any): number {
                         return d.y0;
@@ -61,10 +58,7 @@ module frnk.UI.Charts {
         }
 
         public getMinValue(): number {
-            if ((this._chart instanceof frnk.UI.Charts.StackedColumnChart
-                || this._chart instanceof frnk.UI.Charts.StackedLineChart
-                || this._chart instanceof frnk.UI.Charts.StackedBarChart)
-                && this._items.length > 1) { // can only be stacked if you have more than 1 series defined
+            if (this._chart.stackType != StackType.None && this._items.length > 1) { // can only be stacked if you have more than 1 series defined
                 return d3.min(this._matrix, function (array: number[]): number {
                     return d3.min(array, function (d: any): number {
                         return d.y0 + d.y;
@@ -89,7 +83,7 @@ module frnk.UI.Charts {
             var mappedMatrix = matrix.map(function (data: any, i: number): any[] {
                 var t = matrix[i];
                 return t.map(function (d: any, j: number): any {
-                    return { y: d, y0: 0, size: 0, perc: 0 };
+                    return { y: d, y0: 0, perc: 0 };
                 });
             });
 
@@ -111,13 +105,12 @@ module frnk.UI.Charts {
                 m.forEach(function (k: any): any {
                     k.perc = k.y / sum; // calculate percentage of this value across the different series
                     k.max = sum;
-                    k.size = Math.abs(k.y);
                     if (k.y < 0) {
                         k.y0 = negBase;
-                        negBase -= k.size;
+                        negBase -= Math.abs(k.y);
                     }
                     else {
-                        k.y0 = posBase = posBase + k.size;
+                        k.y0 = posBase = posBase + Math.abs(k.y);
                     }
                 });
             });

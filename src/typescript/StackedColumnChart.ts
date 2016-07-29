@@ -7,6 +7,7 @@ module frnk.UI.Charts {
 
         constructor(args: any, selector: string) {
             super(args, selector);
+            this.stackType = StackType.Normal;
         }
 
         public getXCoordinate(serie: number): any {
@@ -23,7 +24,7 @@ module frnk.UI.Charts {
 
         public getHeight(serie: number): any {
             return (d: any): any => {
-                return  Math.abs(this.yAxis.scale(0) - this.yAxis.scale(d.size));
+                return  Math.abs(this.yAxis.scale(0) - this.yAxis.scale(d.y));
             };
         }
 
