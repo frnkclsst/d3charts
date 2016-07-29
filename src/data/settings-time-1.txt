@@ -33,7 +33,8 @@
             "text": "Dollars"
         }
     },
-    "tooltip": { 
+    "tooltip": {
+        "title": "Stock Price",
         "valueSuffix": " millions"
     },
     "categories": {
