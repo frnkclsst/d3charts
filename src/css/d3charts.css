@@ -167,6 +167,15 @@ svg {
     text-transform: none;
 }
 
-.tooltip .text {
+.tooltip .color {
+    float: left;
+}
 
+.tooltip .serie {
+    float: left;
+    margin-left: 5px;
+}
+
+.tooltip .value {
+    float: right;
 }
