@@ -131,15 +131,26 @@ svg {
     margin-left: 12px;
 }
 
-.tooltip::after {
+.tooltip::before {
     content: " ";
     position: absolute;
-    bottom: 100%;  /* At the top of the tooltip */
+    top: -10px;  /* At the top of the tooltip */
     left: 20%;
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: transparent transparent #eeeeee transparent;
+    border-color: transparent transparent #EEEEEE transparent;
+}
+
+.tooltip::after {
+    content: " ";
+    position: absolute;
+    top: -9px;  /* At the top of the tooltip */
+    left: 20%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #fafafa transparent;
 }
 
 .tooltip .title {
