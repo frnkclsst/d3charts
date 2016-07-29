@@ -203,7 +203,7 @@ module frnk.UI.Charts {
 
             this.hasTickmarks = chart.settings.getValue("xAxis.tickmarks").toUpperCase() == "YES" ? true : false;
             this.title = chart.settings.getValue("xAxis.title.text");
-            this.setOrient(chart.settings.getValue("xAxis.orient", "bottom"));
+            this.setOrientation(chart.settings.getValue("xAxis.orient", "bottom"));
             this.setGridlineType(chart.settings.getValue("xAxis.gridlines"));
             this._textRotation = chart.settings.getValue("xAxis.labels.rotate", "0");
             this._formatter = new Function(chart.settings.getValue("xAxis._formatter"));
@@ -304,7 +304,7 @@ module frnk.UI.Charts {
             }
         }
 
-        public setOrient(value: OrientationType): void {
+        public setOrientation(value: OrientationType): void {
             switch (value.toUpperCase()) {
                 case "BOTTOM":
                     this._orient = "bottom";
@@ -322,7 +322,7 @@ module frnk.UI.Charts {
     export class YAxis extends Axis {
         constructor(args: any, chart: Chart) {
             super(args, chart);
-            this.setOrient(chart.settings.getValue("yAxis.orient", "left"));
+            this.setOrientation(chart.settings.getValue("yAxis.orient", "left"));
             this.hasTickmarks = chart.settings.getValue("yAxis.tickmarks").toUpperCase() == "YES" ? true : false;
             this.title = chart.settings.getValue("yAxis.title.text");
             this.setGridlineType(chart.settings.getValue("yAxis.gridlines"));
@@ -361,9 +361,8 @@ module frnk.UI.Charts {
             if (this._chart instanceof frnk.UI.Charts.StackedPercentColumnChart ||
                 this._chart instanceof frnk.UI.Charts.StackedPercentLineChart) {
                 this.setScaleType(ScaleType.Linear);
-                var lowerScale = chart.series.getMinValue() < 0 ? -1 : 0;
                 return d3.scale.linear()
-                    .domain([1, lowerScale])
+                    .domain([1, chart.series.getMinValue() < 0 ? -1 : 0])
                     .range([0, chart.canvas.plotArea.height]);
             }
             else if (this._chart instanceof frnk.UI.Charts.BarChart) {
@@ -416,7 +415,7 @@ module frnk.UI.Charts {
 
         }
 
-        public setOrient(value: OrientationType): void {
+        public setOrientation(value: OrientationType): void {
             switch (value.toUpperCase()) {
                 case "LEFT":
                     this._orient = "left";

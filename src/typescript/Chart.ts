@@ -25,10 +25,9 @@ module frnk.UI.Charts {
             }
 
             this.settings = new Settings(args);
-
             this.canvas = new Canvas(this);
             this.plotOptions = new PlotOptions(this);
-            this.categories = new Categories(this); // this.settings.getValue("categories");
+            this.categories = new Categories(this);
             this.series = new Series(this);
 
             // update size and add EventListener
