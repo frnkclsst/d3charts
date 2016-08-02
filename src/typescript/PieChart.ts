@@ -17,11 +17,13 @@ module frnk.UI.Charts {
             var radius = Math.min(this.canvas.plotArea.width / 2, this.canvas.plotArea.height / 2);
 
             var serieRadius =  radius / this.series.length;
+
             for (var s = 0; s < this.series.length; s++) {
-                var g = this.canvas.plotArea.svg.append("g")
-                    .attr("transform", "translate(" + (this.canvas.plotArea.width / 2) + "," + (this.canvas.plotArea.height / 2) + ")");
 
                 var innerRadius = (serieRadius * (s + 1)) - (serieRadius * this.innerRadius);
+
+                var g = this.canvas.plotArea.svg.append("g")
+                    .attr("transform", "translate(" + (this.canvas.plotArea.width / 2) + "," + (this.canvas.plotArea.height / 2) + ")");
 
                 var arc = d3.svg.arc()
                     .outerRadius(serieRadius * (s + 1))
@@ -35,12 +37,12 @@ module frnk.UI.Charts {
                     .append("g")
                     .attr("class", "slice");
 
-                arcs.append("path")
+                var path = arcs.append("path")
                     .attr("fill", (d: any, i: number): string => { return this.series.getSerie(s).getColor(i); })
                     .attr("d", arc);
 
                 // draw tooltip
-                this.tooltip.draw(arcs, s);
+                this.tooltip.draw(path, s);
             }
         }
     }
