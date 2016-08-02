@@ -191,19 +191,9 @@ module frnk.UI.Charts {
                         return "translate(" + 22 + "," + ((i * 20) + 60) + ")";
                     });
 
-                this.drawCheckboxes(items);
                 this.drawSymbol(items);
                 this.drawText(items);
             }
-        }
-
-        private drawCheckboxes(svg: D3.Selection): void {
-            // add checkboxes
-            svg.append("image")
-                .attr("class", "checkbox")
-                .attr("height", "15px")
-                .attr("width", "15px")
-                .attr("href", "../images/checkbox-selected.png");
         }
 
         private drawLine(svg: D3.Selection): void {
@@ -227,8 +217,8 @@ module frnk.UI.Charts {
 
         private drawSymbolAsLine(svg: D3.Selection): void {
             svg.append("line")
-                .attr("x1", 27)
-                .attr("x2", 51)
+                .attr("x1", 0)
+                .attr("x2", 24)
                 .attr("y1", 6)
                 .attr("y2", 6)
                 .style("stroke", (d: any, i: any): string => {
@@ -237,7 +227,7 @@ module frnk.UI.Charts {
                 .style("stroke-width", "2");
 
             svg.append("circle")
-                .attr("cx", 39)
+                .attr("cx", 12)
                 .attr("cy", 6)
                 .attr("r", 4)
                 .style("fill", "#fff")
@@ -249,7 +239,7 @@ module frnk.UI.Charts {
 
         private drawSymbolAsRectangle(svg: D3.Selection): void {
             svg.append("rect")
-                .attr("x", 27)
+                .attr("x", 0)
                 .attr("width", 24)
                 .attr("height", 11)
                 .style("fill", (d: any, i: any): string => {
@@ -259,7 +249,7 @@ module frnk.UI.Charts {
 
         private drawText(svg: D3.Selection): void {
             svg.append("text")
-                .attr("x", 56)
+                .attr("x", 30)
                 .attr("y", 9)
                 .attr("dy", "0px")
                 .style("text-anchor", "begin")
