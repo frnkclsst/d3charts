@@ -40,7 +40,6 @@ module frnk.UI.Charts {
                         .style("opacity", 0);
                 })
                 .on("mousemove", function(d: any): void {
-                    console.log(d3.mouse(this));
                     div
                         .style("left", (d3.mouse(this.ownerSVGElement)[0]) - 50 + "px")
                         .style("top", (d3.mouse(this.ownerSVGElement)[1]) + 10 + "px");
