@@ -2,7 +2,7 @@
     "canvas": {
         "height": 300,
         "width": 600,
-        "padding": 50
+        "padding": 40
     },
     "linechart": {
         "fillArea": "yes",
@@ -11,7 +11,7 @@
         "stacking": "percent"
     },
 	"piechart": {
-		"innerRadius": 0.7
+		"innerRadius": "0.8"
 	},
     "legend": {
        	"title": "Population / Regions",
