@@ -5,8 +5,11 @@
 module frnk.UI.Charts {
     export class ColumnChart extends XYChart {
 
+        public showDataLabels: boolean;
+
         constructor(args: any, selector: string) {
             super(args, selector);
+            this.showDataLabels = this.settings.getValue("columnchart.dataLabels").toUpperCase() == "YES" ? true : false;
         }
 
         public draw(): void {
@@ -38,21 +41,19 @@ module frnk.UI.Charts {
                 // draw tooltip
                 this.tooltip.draw(svgColumn, j);
 
-                // no value indication
-                svgSerie.append("text")
-                    .attr("class", "data-label")
-                    .attr("x", this.getXCoordinate(j))
-                    .attr("y", this.getYCoordinate(j))
-                    .attr("fill", "#878787")
-                    //.attr("dx", 0) // TODO - align text with middle of the bar
-                    .attr("dy", -3) // TODO - align text in bar or on top of bar
-                    .text(function (d: any): string {
-                        if (d.y == 0) {
+                // draw data labels
+                if (this.showDataLabels) {
+                    svgSerie.append("text")
+                        .attr("class", "data-label")
+                        .text(function (d: any): string {
                             return parseFloat(d.y).toFixed(0);
-                        }
-                    });
-
-                //TODO - drawing data labels should be an option, not only to indicate a zero value
+                        })
+                        .attr("x", this.getXCoordinate(j))
+                        .attr("y", this.getYCoordinate(j))
+                        .attr("fill", "#878787")
+                        //.attr("dx", dx) // TODO - align text with middle of the bar
+                        .attr("dy", -3); // TODO - align text in bar or on top of bar
+                }
             }
         }
 
