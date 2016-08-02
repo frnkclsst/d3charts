@@ -47,7 +47,7 @@ module frnk.UI.Charts {
                     var svgMarkers = this.drawMarkers(svgSerie, j);
 
                     // draw tooltip
-                    this.drawTooltip(svgMarkers, j);
+                    this.tooltip.draw(svgMarkers, j);
                 }
             }
         }

@@ -25,7 +25,7 @@ module frnk.UI.Charts {
                     .enter();
 
                 // draw bar
-                var svgBar = svgSerie.append("rect")
+                var svgColumn = svgSerie.append("rect")
                     .attr({
                         "x": this.getXCoordinate(j),
                         "y": this.getYCoordinate(j),
@@ -36,7 +36,7 @@ module frnk.UI.Charts {
                     });
 
                 // draw tooltip
-                this.drawTooltip(svgBar, j);
+                this.tooltip.draw(svgColumn, j);
 
                 // no value indication
                 svgSerie.append("text")

@@ -267,7 +267,7 @@ module frnk.UI.Charts {
         }
 
         public isDataAxis(): boolean {
-            if (this.chart instanceof frnk.UI.Charts.LineChart || this.chart instanceof frnk.UI.Charts.ColumnChart) {
+            if (this.chart instanceof LineChart || this.chart instanceof ColumnChart) {
                 return false;
             }
             return true;
@@ -340,14 +340,14 @@ module frnk.UI.Charts {
         }
 
         public getScale(chart: Chart): any {
-            if (this.chart instanceof frnk.UI.Charts.StackedPercentColumnChart ||
-                this.chart instanceof frnk.UI.Charts.StackedPercentLineChart) {
+            if (this.chart instanceof StackedPercentColumnChart ||
+                this.chart instanceof StackedPercentLineChart) {
                 this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
                     .domain([1, chart.series.getMinValue() < 0 ? -1 : 0])
                     .range([0, chart.canvas.plotArea.height]);
             }
-            else if (this.chart instanceof frnk.UI.Charts.BarChart) {
+            else if (this.chart instanceof BarChart) {
                 if (chart.categories.format == "%s") {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
@@ -386,7 +386,7 @@ module frnk.UI.Charts {
         }
 
         public isDataAxis(): boolean {
-            if (this.chart instanceof frnk.UI.Charts.ColumnChart || this.chart instanceof frnk.UI.Charts.LineChart) {
+            if (this.chart instanceof ColumnChart || this.chart instanceof LineChart) {
                 return true;
             }
             return false;

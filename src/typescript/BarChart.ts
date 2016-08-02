@@ -36,7 +36,7 @@ module frnk.UI.Charts {
                     });
 
                 // draw tooltip
-                this.drawTooltip(svgBar, j);
+                this.tooltip.draw(svgBar, j);
 
                 // no value indication
                 svgSerie.append("text")

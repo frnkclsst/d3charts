@@ -40,7 +40,7 @@ module frnk.UI.Charts {
                     .attr("d", arc);
 
                 // draw tooltip
-                this.drawTooltip(arcs, s);
+                this.tooltip.draw(arcs, s);
             }
         }
     }

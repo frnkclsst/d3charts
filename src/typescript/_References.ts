@@ -16,6 +16,9 @@
 // canvas
 /// <reference path="Canvas.ts" />
 
+// tooltip
+///  <reference path="Tooltip.ts" />
+
 // axis
 /// <reference path="Axis.ts" />
 

@@ -217,7 +217,7 @@ module frnk.UI.Charts {
         }
 
         private drawSymbol(svg: D3.Selection): void {
-            if (this._chart instanceof frnk.UI.Charts.LineChart) {
+            if (this._chart instanceof LineChart) {
                 this.drawSymbolAsLine(svg);
             }
             else {
