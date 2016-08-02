@@ -15,10 +15,8 @@ module frnk.UI.Charts {
             super.draw();
 
             var radius = Math.min(this.canvas.plotArea.width / 2, this.canvas.plotArea.height / 2);
-
-            var iRadius = radius - radius * this.innerRadius;
-
-            var serieRadius =  (radius - iRadius) / this.series.length;
+            var innerRadius = radius - radius * this.innerRadius;
+            var serieRadius =  (radius - innerRadius) / this.series.length;
 
             for (var s = 0; s < this.series.length; s++) {
 
@@ -26,8 +24,8 @@ module frnk.UI.Charts {
                     .attr("transform", "translate(" + (this.canvas.plotArea.width / 2) + "," + (this.canvas.plotArea.height / 2) + ")");
 
                 var arc = d3.svg.arc()
-                    .outerRadius(serieRadius * (s + 1) + iRadius)
-                    .innerRadius(iRadius + (serieRadius * s)); // inner radius = 0 => pie chart
+                    .outerRadius(serieRadius * (s + 1) + innerRadius)
+                    .innerRadius(innerRadius + (serieRadius * s)); // inner radius = 1 => pie chart
 
                 var pie = d3.layout.pie();
 
