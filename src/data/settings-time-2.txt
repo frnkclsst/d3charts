@@ -15,9 +15,6 @@
     "title": {
         "text": "stock prices"
     },
-    "subtitle": {
-        "text": "subtitle" 
-    },
     "xAxis": {
         "gridlines": "none",
         "orient": "bottom",

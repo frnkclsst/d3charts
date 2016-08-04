@@ -23,9 +23,6 @@
 		"align": "center",
 		"height": 50
     },
-    "subtitle": {
-        "text": "subtitle" 
-    },
     "xAxis": {
         "gridlines": "none",
         "position": "top",

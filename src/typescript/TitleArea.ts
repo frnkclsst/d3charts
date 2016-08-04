@@ -6,6 +6,7 @@ module frnk.UI.Charts {
     export class TitleArea implements IArea {
         public align: string;
         public height: number;
+        public margin: number;
         public subTitle: string;
         public svg: D3.Selection;
         public text: string;
@@ -17,8 +18,9 @@ module frnk.UI.Charts {
             this._chart = chart;
 
             this.align = chart.settings.getValue("title.align", "center");
-            this.height = Number(chart.settings.getValue("title.height", "50"));
-            this.subTitle = chart.settings.getValue("title.subTitle");
+            this.margin = chart.settings.getValue("title.margin");
+            this.height = Number(chart.settings.getValue("title.height", "0"));
+            this.subTitle = chart.settings.getValue("title.subtitle");
             this.text = chart.settings.getValue("title.text");
         }
 
@@ -36,19 +38,22 @@ module frnk.UI.Charts {
             var svgTitle = this.svg.append("text")
                 .text(this.text);
 
+            //var svgSubTitle = this.svg.append("text")
+            //    .text(this.subTitle);
+
             // calculate alignment
             var svgText: any = this.svg.node();
             var textBox = svgText.getBBox();
             var x;
             switch (this.align) {
                 case "left":
-                    x = 0;
+                    x = 0 + this.margin;
                     break;
                 case "center":
                     x = (this.width - textBox.width) / 2;
                     break;
                 case "right":
-                    x = this.width - textBox.width;
+                    x = this.width - textBox.width - this.margin;
                     break;
             }
 

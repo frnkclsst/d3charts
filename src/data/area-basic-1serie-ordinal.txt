@@ -18,9 +18,6 @@
     "title": {
         "text": "Object Types / Status"
     },
-    "subtitle": {
-        "text": "subtitle" 
-    },
     "xAxis": {
         "gridlines": "major",
         "orient": "bottom",

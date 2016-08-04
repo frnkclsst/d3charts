@@ -24,10 +24,9 @@
     "title": {
         "text": "Population Growth per Region",
 		"align": "center",
-		"height": 50
-    },
-    "subtitle": {
-        "text": "subtitle" 
+		"height": 50,
+		"margin": 15,
+		"subtitle": "some subtitle"
     },
     "xAxis": {
         "gridlines": "none",
@@ -36,7 +35,7 @@
 			"rotate": "0"
 		},
 		"tickmarks": "no",
-        "title": { 
+        "title": {
             "text": "Year"
         }
     },
@@ -48,7 +47,7 @@
             "text": "Millions"
         }
     },
-    "tooltip": { 
+    "tooltip": {
         "title": "Population",
         "valueSuffix": " million"
     },

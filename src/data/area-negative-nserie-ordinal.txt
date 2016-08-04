@@ -20,9 +20,6 @@
         "text": "Object Types / Status", 
 		"align": "left"
     },
-    "subtitle": {
-        "text": "subtitle" 
-    },
     "xAxis": {
         "gridlines": "none",
         "orient": "top",
