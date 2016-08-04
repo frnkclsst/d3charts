@@ -15,6 +15,9 @@
 
 // canvas
 /// <reference path="Canvas.ts" />
+/// <reference path="PlotArea.ts" />
+/// <reference path="Legend.ts" />
+/// <reference path="TitleArea.ts" />
 
 // tooltip
 ///  <reference path="Tooltip.ts" />
