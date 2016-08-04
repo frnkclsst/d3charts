@@ -21,14 +21,24 @@ module frnk.UI.Charts {
                 .style("opacity", 0);
 
             svg.on("mouseover", function (d: any, i: number): void {
-                    div.html("<div class='title'>" + _self.chart.settings.getValue("tooltip.title") + "</div>" +
-                        "<div class='subtitle'>" + _self.chart.categories.getLabel(i) + "</div><br/>" +
-                        "<div class='color' style='width:24px; height: 11px; background-color:" + _self.chart.series.getColor(serie) + "'></div>" +
-                        "<div class='serie'>" + _self.chart.series.getLabel(serie) + "</div>" +
-                        "<div class='percent'>" + Math.round(d.perc * 100) + "%</div>" +
-                        "<div class='value'>" + d.y + _self.chart.settings.getValue("tooltip.valueSuffix") + "</div>"
-                    );
-
+                    //TODO - Refactor
+                    if (_self.chart instanceof PieChart) {
+                        div.html("<div class='title'>" + _self.chart.settings.getValue("tooltip.title") + "</div>" +
+                            "<div class='subtitle'>" + _self.chart.series.getLabel(serie) + "</div><br/>" +
+                            "<div class='color' style='width:24px; height: 11px; background-color:" + ColorPalette.getColor(i) + "'></div>" +
+                            "<div class='serie'>" + _self.chart.categories.getLabel(i) + "</div>" +
+                            "<div class='value'>" + d.value + _self.chart.settings.getValue("tooltip.valueSuffix") + "</div>"
+                        );
+                    }
+                    else {
+                        div.html("<div class='title'>" + _self.chart.settings.getValue("tooltip.title") + "</div>" +
+                            "<div class='subtitle'>" + _self.chart.categories.getLabel(i) + "</div><br/>" +
+                            "<div class='color' style='width:24px; height: 11px; background-color:" + ColorPalette.getColor(serie) + "'></div>" +
+                            "<div class='serie'>" + _self.chart.series.getLabel(serie) + "</div>" +
+                            "<div class='percent'>" + Math.round(d.perc * 100) + "%</div>" +
+                            "<div class='value'>" + d.y + _self.chart.settings.getValue("tooltip.valueSuffix") + "</div>"
+                        );
+                    }
                     div.transition()
                         .delay(300)
                         .duration(100)

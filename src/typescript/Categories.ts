@@ -20,7 +20,7 @@ module frnk.UI.Charts {
             return this._items[i];
         }
 
-        public getItems(): string[] {
+        public getLabels(): string[] {
             return this._items;
         }
 

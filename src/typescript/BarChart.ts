@@ -32,7 +32,7 @@ module frnk.UI.Charts {
                         "class": "bar",
                         "width": this.getWidth(j),
                         "height": this.getHeight(j),
-                        "fill": this.series.getColor(j)
+                        "fill": ColorPalette.getColor(j)
                     });
 
                 // draw tooltip

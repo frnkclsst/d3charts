@@ -20,10 +20,6 @@ module frnk.UI.Charts {
             this.length = this._items.length;
         }
 
-        public getColor(i: number): string {
-            return this._items[i].getColor(i);
-        }
-
         public getSerie(i: number): Serie {
             return this._items[i];
         }
@@ -38,6 +34,14 @@ module frnk.UI.Charts {
 
         public getLabel(i: number): string {
             return this._items[i].getName(i);
+        }
+
+        public getLabels(): string[] {
+            var array: string[] = [];
+            for (var i = 0; i < this._items.length; i++) {
+                array.push(this._items[i].getName(i));
+            }
+            return array;
         }
 
         public getMaxValue(): number {

@@ -15,6 +15,7 @@ module frnk.UI.Charts {
 
         private _chart: Chart;
         private _canvas: Canvas;
+        private _items: string[];
 
         constructor(chart: Chart, canvas: Canvas) {
             this._chart = chart;
@@ -24,6 +25,13 @@ module frnk.UI.Charts {
             this.position = chart.settings.getValue("legend.position", "right");
             this.title = chart.settings.getValue("legend.title", "Categories");
             this.width = Number(chart.settings.getValue("legend.width", "0"));
+
+            if (chart instanceof PieChart) {
+                this._items = chart.categories.getLabels();
+            }
+            else {
+                this._items = chart.series.getLabels();
+            }
         }
 
         public draw(): void {
@@ -38,7 +46,7 @@ module frnk.UI.Charts {
                 // add legend items
                 var items = this.svg
                     .selectAll(".item")
-                    .data(this._chart.series.getMatrix())
+                    .data(this._items)
                     .enter().append("g")
                     .attr("class", "item")
                     .attr("transform", (d: any, i: any): string => {
@@ -76,7 +84,7 @@ module frnk.UI.Charts {
                 .attr("y1", 6)
                 .attr("y2", 6)
                 .style("stroke", (d: any, i: any): string => {
-                    return this._chart.series.getColor(i);
+                    return ColorPalette.getColor(i);
                 })
                 .style("stroke-width", "2");
 
@@ -86,7 +94,7 @@ module frnk.UI.Charts {
                 .attr("r", 4)
                 .style("fill", "#fff")
                 .style("stroke", (d: any, i: any): string => {
-                    return this._chart.series.getColor(i);
+                    return ColorPalette.getColor(i);
                 })
                 .style("stroke-width", "2");
         }
@@ -97,7 +105,7 @@ module frnk.UI.Charts {
                 .attr("width", this.symbolWidth)
                 .attr("height", 11)
                 .style("fill", (d: any, i: any): string => {
-                    return this._chart.series.getColor(i);
+                    return ColorPalette.getColor(i);
                 });
         }
 
@@ -108,7 +116,7 @@ module frnk.UI.Charts {
                 .attr("dy", "0px")
                 .style("text-anchor", "begin")
                 .text((d: any, i: any): string => {
-                    return this._chart.series.getLabel(i);
+                    return this._items[i];
                 });
         }
 

@@ -64,7 +64,7 @@ module frnk.UI.Charts {
             var svgArea = svg.append("path")
                 .attr("class", "area")
                 .attr("d", d3Area(this.series.getMatrixItem(serie)))
-                .style("fill", this.series.getColor(serie))
+                .style("fill", ColorPalette.getColor(serie))
                 .style("opacity", "0.2");
 
             return svgArea;
@@ -79,7 +79,7 @@ module frnk.UI.Charts {
             var svgLine = svg.append("path")
                 .attr("class", "line")
                 .attr("d", d3Line(this.series.getMatrixItem(serie)))
-                .attr("stroke", this.series.getColor(serie))
+                .attr("stroke", ColorPalette.getColor(serie))
                 .attr("stroke-width", 1)
                 .attr("fill", "none");
 
@@ -91,9 +91,9 @@ module frnk.UI.Charts {
                 .data(this.series.getMatrixItem(serie))
                 .enter().append("circle")
                 .attr("class", "marker")
-                .attr("stroke", this.series.getColor(serie))
+                .attr("stroke", ColorPalette.getColor(serie))
                 .attr("stroke-width", "0")
-                .attr("fill", this.series.getColor(serie))
+                .attr("fill", ColorPalette.getColor(serie))
                 .attr("cx", this.getXCoordinate(serie))
                 .attr("cy", this.getYCoordinate(serie))
                 .attr("r", 4);

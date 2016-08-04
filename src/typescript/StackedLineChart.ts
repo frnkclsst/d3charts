@@ -32,7 +32,7 @@ module frnk.UI.Charts {
             var svgArea = svg.append("path")
                 .attr("class", "area")
                 .attr("d", d3Area(this.series.getMatrixItem(serie)))
-                .style("fill", this.series.getColor(serie))
+                .style("fill", ColorPalette.getColor(serie))
                 .style("opacity", "0.2");
 
             return svgArea;

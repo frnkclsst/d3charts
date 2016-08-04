@@ -239,13 +239,13 @@ module frnk.UI.Charts {
                 if (chart.categories.format == "%s") {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
-                        .domain(chart.categories.getItems())
+                        .domain(chart.categories.getLabels())
                         .rangeBands([0, chart.canvas.plotArea.width], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding);
                 }
                 else {
                     this.setScaleType(ScaleType.Time);
                     return d3.time.scale()
-                        .domain(d3.extent(chart.categories.getItems(), (d: any): Date => {
+                        .domain(d3.extent(chart.categories.getLabels(), (d: any): Date => {
                             return d3.time.format(chart.categories.format).parse(d);
                         }))
                         .nice() // adds additional ticks to add some whitespace
@@ -351,13 +351,13 @@ module frnk.UI.Charts {
                 if (chart.categories.format == "%s") {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
-                        .domain(chart.categories.getItems())
+                        .domain(chart.categories.getLabels())
                         .rangeRoundBands([0, chart.canvas.plotArea.height], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding);
                 }
                 else {
                     this.setScaleType(ScaleType.Time);
                     return d3.time.scale()
-                        .domain(d3.extent(chart.categories.getItems(), (d: any): Date => {
+                        .domain(d3.extent(chart.categories.getLabels(), (d: any): Date => {
                             return d3.time.format(chart.categories.format).parse(d);
                         }).reverse())
                         .nice() // adds additional ticks to add some whitespace
