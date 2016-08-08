@@ -12,7 +12,7 @@ module frnk.UI.Charts {
 
         constructor(chart: Chart) {
             this.format = chart.settings.getValue("categories.format");
-            this._items = this._setCategories(chart.settings.getValue("categories.labels"));
+            this._items = this._setCategories(chart.settings.getValue("categories.data"));
             this.length = this._items.length;
         }
 

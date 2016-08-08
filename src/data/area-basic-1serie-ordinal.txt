@@ -39,7 +39,7 @@
     },
     "categories": {
         "format": "%s",
-        "labels": ["A", "B", "C", "D", "E", "F", "G", "H"]
+        "data": ["A", "B", "C", "D", "E", "F", "G", "H"]
     },
     "series":
 			[{

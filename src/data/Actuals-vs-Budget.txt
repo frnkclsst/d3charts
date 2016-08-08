@@ -35,7 +35,7 @@
     },
     "categories": {
         "format": "%s",
-        "labels": ["Budget", "Actuals", "Prior Year"]
+        "data": ["Budget", "Actuals", "Prior Year"]
     },
     "series":
 			[{

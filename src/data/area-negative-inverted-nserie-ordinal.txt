@@ -38,7 +38,7 @@
     },
     "categories": {
             "format": "%s",
-            "labels": ["Draft", "Expired", "In Translation", "Out of date", "Released", "System", "System Read-only", "To be Reviewed", "To be Translated", "Translated"]
+            "data": ["Draft", "Expired", "In Translation", "Out of date", "Released", "System", "System Read-only", "To be Reviewed", "To be Translated", "Translated"]
     },
     "series":
 			[{
