@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Pie Chart - Multiple Series</title>
+    <!-- general styles -->
+    <link rel="stylesheet" href="../../dist/css/style.css" />
+    <link rel="stylesheet" href="../../dist/css/d3charts.css" />
+    <script src="../../dist/js/d3.min.js" charset="utf-8"></script>
+    <script src="../../dist/js/d3.charts.js"></script>
+</head>
+<body>
+    <div id="chart" />
+    <script>
+		var settings = {
+			"canvas": {
+				"height": 300,
+				"width": 600,
+				"padding": 50
+			},
+			"linechart": {
+				"fillArea": "yes",
+				"interpolation": "linear",
+				"showMarkers": "no"
+			},
+			"piechart": {
+				"innerRadius": 1
+			},
+			"legend": {
+				"title": "Year",
+				"position": "right",
+				"width": 200
+			},
+			"title": {
+				"text": "Pie Chart - Multiple Series",
+				"align": "center",
+				"height": 50
+			},
+			"subtitle": {
+				"text": "subtitle" 
+			},
+			"xAxis": {
+				"gridlines": "none",
+				"position": "top",
+				"labels": {
+					"rotate": "0"
+				},
+				"tickmark": "no",
+				"title": { 
+					"text": "Year"
+				}
+			},
+			"yAxis": {
+				"gridlines": "none",
+				"position": "left",
+				"tickmark": "yes",
+				"tickmark": "no",
+				"title": {
+					"text": "Nuclear weapong status"
+				}
+			},
+			"tooltip": { 
+				"title": "Population in Region",
+				"valueSuffix": " millions"
+			},
+			"categories": {
+				"format": "%s",
+				"labels": ["1750", "1800", "1850", "1900", "1950", "1999", "2050"]
+			},
+			"series":
+				[{
+					"name": "Asia",
+					"data": [52, 635, 809, 947, 1402, 3634, 5268]
+					},
+					{
+						"name": "Africa",
+						"data": [20, 107, 111, 133, 221, 767, 1766]
+					},
+					{
+						"name": "Europe",
+						"data": [30, 203, 276, 408, 547, 729, 628]
+					},
+					{
+						"name": "America",
+						"data": [40, 31, 54, 156, 339, 818, 1201]
+					},
+					{
+						"name": "Oceania",
+						"data": [50, 20, 20, 60, 130, 300, 460]
+				}]
+			,
+			"plotOptions": {
+				"general": { 
+					"innerPadding": 0.1,
+					"outerPadding": 0.5
+				}
+			}
+		};
+
+		var chart = new frnk.UI.Charts.PieChart(settings, "#chart");
+		chart.draw();
+    </script>
+</body>
+</html>
