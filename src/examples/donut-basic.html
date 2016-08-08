@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Area Chart - Stacked</title>
+    <title>Donut Chart - Basic</title>
     <!-- general styles -->
     <link rel="stylesheet" href="../../dist/css/style.css" />
     <link rel="stylesheet" href="../../dist/css/d3charts.css" />
@@ -20,19 +20,19 @@
 			},
 			"linechart": {
 				"fillArea": "yes",
-				"interpolation": "cardinal",
-				"showMarkers": "yes"
+				"interpolation": "linear",
+				"showMarkers": "no"
 			},
 			"piechart": {
 				"innerRadius": 0.7
 			},
 			"legend": {
-				"title": "Continent",
+				"title": "Browsers",
 				"position": "right",
 				"width": 200
 			},
 			"title": {
-				"text": "Area Chart - Stacked",
+				"text": "Donut Chart - Basic",
 				"align": "center",
 				"height": 50
 			},
@@ -56,48 +56,31 @@
 				"tickmark": "yes",
 				"tickmark": "no",
 				"title": {
-					"text": "Billions"
+					"text": "Nuclear weapong status"
 				}
 			},
 			"tooltip": { 
-				"title": "Fruit Units",
-				"valueSuffix": " fruits"
+				"title": "Browser usage",
+				"valueSuffix": " %"
 			},
 			"categories": {
 				"format": "%s",
-				"labels": ["1750", "1800", "1850", "1900", "1950", "1999", "2050"]
+				"labels": ["Firefox", "IE", "Safari", "Opera", "Others"]
 			},
-			"series":
-				[{
-					"name": "Asia",
-					"data": [502, 635, 809, 947, 1402, 3634, 5268]
-				},
-				{
-					"name": "Africa",
-					"data": [106, 107, 111, 133, 221, 767, 1766]
-				},
-				{
-					"name": "Europe",
-					"data": [163, 203, 276, 408, 547, 729, 628]
-				},
-				{
-					"name": "America",
-					"data": [18, 31, 54, 156, 339, 818, 1201]
-				},
-				{
-					"name": "Oceania",
-					"data": [2, 2, 2, 6, 13, 30, 46]
+			"series": [{
+                "name": "Browsers",
+                "data": [45, 26.8, 8.5, 6.2, 0.7]
 				}]
 			,
 			"plotOptions": {
 				"general": { 
-					"innerPadding": 1,
-					"outerPadding": 0
+					"innerPadding": 0.1,
+					"outerPadding": 0.5
 				}
 			}
 		};
 
-		var chart = new frnk.UI.Charts.StackedLineChart(settings, "#chart");
+		var chart = new frnk.UI.Charts.PieChart(settings, "#chart");
 		chart.draw();
     </script>
 </body>
