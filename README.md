@@ -24,10 +24,7 @@ The following page will open `http://localhost:9005/index.html
 
 ## Roadmap
 
-* Improve tooltips
 * Line chart
   * adding trend lines
   * two scales / Y axes
-* Stacked line chart 
-  * stacked with negative values not correct
 * Bubble charts
