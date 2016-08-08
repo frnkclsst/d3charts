@@ -44,12 +44,12 @@
         "format": "%s",
         "data": ["Draft", "Expired", "In Translation", "Out of date", "Released", "System", "System Read-only", "To be Reviewed", "To be Translated", "Translated"]
     },
-    "series": 
-			[{
+    "series": {
+		"data":	[{
             "data": [-50, -10, 0, 10, 20, 30, 40, 80, 90, 100],
             "name": "Topics"
 			}]
-    ,
+    },
     "plotOptions": {
         "general": { 
             "innerPadding": 0.1,

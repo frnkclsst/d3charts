@@ -37,8 +37,8 @@
         "format": "%s",
         "data": ["Budget", "Actuals", "Prior Year"]
     },
-    "series":
-			[{
+    "series": {
+		"data": [{
 				"data": [769, 755, 664],
 				"name": "NASA"
 			}, 
@@ -50,7 +50,7 @@
 				"data": [83, 7, 0],
 				"name": "Japan"
 			}]
-    ,
+    },
     "plotOptions": {
         "general": { 
             "innerPadding": 0.1,

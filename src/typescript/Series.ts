@@ -13,7 +13,7 @@ module frnk.UI.Charts {
 
         constructor(chart: Chart) {
             this._chart = chart;
-            this._items = this._setSeries(chart.settings.getValue("series"));
+            this._items = this._setSeries(chart.settings.getValue("series.data"));
             this._matrix = this._setStackedMatrix();
 
             this.labels = this._setLabels();

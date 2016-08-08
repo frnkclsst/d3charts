@@ -38,8 +38,8 @@
         "format": "%m-%Y",
         "data": ["01-2000", "02-2000", "03-2000"]
     },
-    "series": 
-			[{
+    "series": {
+		"data": [{
           	"color": "#0170E3",
             "data": [539.81, 96.35, 143.22],
             "name": "Microsoft"
@@ -54,7 +54,7 @@
             "data": [25.94, 128.66, 233.95],
             "name": "Apple"
           }]
-    ,
+    },
     "plotOptions": {
         "general": { 
             "innerPadding": 0.5,
