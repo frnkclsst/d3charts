@@ -6,9 +6,12 @@
 // interfaces
 /// <reference path="IArea.ts" />
 
+// helpers
+/// <reference path="Html.ts" />
+
 // settings
 /// <reference path="Categories.ts" />
-/// <reference path="Colors.ts" />
+/// <reference path="ColorPalette.ts" />
 /// <reference path="Serie.ts" />
 /// <reference path="Series.ts" />
 /// <reference path="Settings.ts" />

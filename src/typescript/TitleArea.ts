@@ -30,43 +30,44 @@ module frnk.UI.Charts {
 
             // get text
             this.svg = this._chart.canvas.svg.append("g")
-                .attr("class", "title")
+                .attr("class", "titlearea")
                 .attr("width", this.width)
                 .attr("height", this.height)
                 .attr("transform", "translate(0,0)");
 
-            var svgTitle = this.svg.append("text")
+            var svgTitle = this.svg.append("g")
+                .attr("class", "title");
+
+            var svgTitleMain = svgTitle.append("text")
+                .attr("class", "title")
                 .text(this.text);
 
-            //var svgSubTitle = this.svg.append("text")
-            //    .text(this.subTitle);
+            var svgSubTitle = svgTitle.append("text")
+                .attr("class", "subtitle")
+                .text(this.subTitle);
 
-            // calculate alignment
-            var svgText: any = this.svg.node();
-            var textBox = svgText.getBBox();
+            // align text
             var x;
+            var xSubtitle;
             switch (this.align) {
                 case "left":
                     x = 0 + this.margin;
+                    xSubtitle = 0 + this.margin;
                     break;
                 case "center":
-                    x = (this.width - textBox.width) / 2;
+                    x = (this.width - Html.getWidth(svgTitleMain)) / 2;
+                    xSubtitle = (this.width - Html.getWidth(svgSubTitle)) / 2;
                     break;
                 case "right":
-                    x = this.width - textBox.width - this.margin;
+                    x = this.width - Html.getWidth(svgTitleMain) - this.margin;
+                    xSubtitle = this.width - Html.getWidth(svgSubTitle) - this.margin;
                     break;
             }
 
-            var y = (this.height + textBox.height) / 2;
+            var y = ((this.height + Html.getHeight(svgTitleMain)) - Html.getHeight(svgSubTitle)) / 2;
 
-            // set title position
-            svgTitle
-                .attr("x", function (): number {
-                    return x;
-                })
-                .attr("y", function (): number {
-                    return y;
-                });
+            svgTitleMain.attr("transform", "translate(" + x + "," + y + ")");
+            svgSubTitle.attr("transform", "translate(" + xSubtitle + ", " + (y + Html.getHeight(svgSubTitle)) + ")");
 
             // draw line
             this.svg.append("line")

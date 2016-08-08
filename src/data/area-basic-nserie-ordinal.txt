@@ -26,7 +26,7 @@
 		"align": "center",
 		"height": 50,
 		"margin": 15,
-		"subtitle": "some subtitle"
+		"subtitle": "Source: wikipedia.org"
     },
     "xAxis": {
         "gridlines": "none",

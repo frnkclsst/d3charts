@@ -24,11 +24,17 @@ svg {
     stroke-width: 1;
 }
 
-.title {
-	fill: #000000;
+.titlearea .title {
 	font-size: 14px;
 	font-weight: bold;
     text-transform: uppercase;
+}
+
+.titlearea .subtitle {
+    fill: #dddddd;
+    font-size: 9px;
+    font-weight: normal;
+    text-transform: none;
 }
 
 /* Legend */
