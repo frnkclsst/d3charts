@@ -9,15 +9,15 @@ module frnk.UI.Charts {
         public sum: number;
 
         private _color: string;
-        private _fillColor: string;
         private _data: number[];
         private _name: string;
+        private _type: string;
 
         constructor(serie: any) {
             this._color = serie.color;
-            this._fillColor = serie.fillColor;
             this._data = serie.data;
             this._name = serie.name;
+            this._type = serie.type;
 
             this.max = d3.max(this._data);
             this.min = d3.min(this._data);
@@ -30,14 +30,6 @@ module frnk.UI.Charts {
                 return this._color;
             }
             return ColorPalette.getColor(i);
-        }
-
-        public getFillColor(i?: number): string {
-            //TODO - fallback in case bigger than 20 series
-            if (this._fillColor != null) {
-                return this._fillColor;
-            }
-            return ColorPalette.getFillColor(i);
         }
 
         public getName(i: number): string {
