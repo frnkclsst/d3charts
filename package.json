@@ -1,6 +1,6 @@
 {
   "name": "d3charts",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Chart library based on d3",
   "readme": "readme.md",
   "author": "frank.closset@gmail.com",
