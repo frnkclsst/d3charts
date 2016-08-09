@@ -7,9 +7,9 @@ Chart library based on d3
 ## For users
 
 - [Getting Started](Getting Started)
-- [Concepts](Concepts)
+- [Concepts](https://github.com/frnkclsst/d3charts/wiki/Concepts)
 - [Chart Types](Chart Types)
-- [Configuration](Configuration)
+- [Configuration](https://github.com/frnkclsst/d3charts/wiki/Configuration)
 
 ## For Developer's
 
