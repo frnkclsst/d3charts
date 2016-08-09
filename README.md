@@ -11,9 +11,7 @@ Chart library based on d3
 - [Chart Types](Chart Types)
 - [Configuration](Configuration)
 
-# For Developer's
-
-## Install
+## For Developer's
 
 1. Install dependencies
 
