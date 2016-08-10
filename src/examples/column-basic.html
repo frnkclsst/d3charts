@@ -18,14 +18,6 @@
 				"width": 600,
 				"padding": 50
 			},
-			"linechart": {
-				"fillArea": "yes",
-				"interpolation": "linear",
-				"showMarkers": "yes"
-			},
-			"piechart": {
-				"innerRadius": 0.7
-			},
 			"legend": {
 				"title": "Who?",
 				"position": "right",
@@ -37,7 +29,7 @@
 				"height": 50,
 				"subtitle": "Source: WorldClimate.com"
 			},
-			"xAxis": {
+			"xAxis": [{
 				"gridlines": "none",
 				"position": "top",
 				"labels": {
@@ -47,8 +39,8 @@
 				"title": { 
 					"text": "Month"
 				}
-			},
-			"yAxis": {
+			}],
+			"yAxis": [{
 				"gridlines": "major",
 				"position": "left",
 				"tickmark": "yes",
@@ -56,7 +48,7 @@
 				"title": {
 					"text": "Rainfall (mm)"
 				}
-			},
+			}],
 			"tooltip": { 
 				"title": "Rainfall",
 				"valueSuffix": " mm"
