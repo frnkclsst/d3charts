@@ -4,47 +4,60 @@
 
 module frnk.UI.Charts {
     export class Axis {
-        public axis: D3.Svg.Axis;
-        public hasTickmarks: boolean;
-        public innerTicksize: number;
-        public outerTicksize: number;
         public scale: any;
-        public svgAxis: D3.Selection;
-        public svgGrid: D3.Selection;
-        public svgTitle: D3.Selection;
-        public svgZeroLine: D3.Selection;
-        public ticks: number;
-        public title: string;
-        public x: number;
-        public y: number;
 
         protected chart: Chart;
         protected formatter: string;
         protected orient: OrientationType;
+        protected settings: IAxisSettings;
+        protected svgGrid: D3.Selection;
+        protected svgTitle: D3.Selection;
+        protected svgZeroLine: D3.Selection;
         protected textRotation: string;
 
+        private _axis: D3.Svg.Axis;
         private _gridlineType: GridLineType;
+        private _hasTickmarks: boolean;
+        private _innerTicksize: number;
+        private _outerTicksize: number;
         private _scaleType: ScaleType;
+        private _svgAxis: D3.Selection;
+        private _ticks: number;
+        private _title: string;
+        private _x: number;
+        private _y: number;
 
-        constructor(args: any, chart: Chart) {
-            this.axis = null;
-            this.formatter = null;
-            this.hasTickmarks = true;
-            this.innerTicksize = this.getInnerTicksize(chart);
-            this.outerTicksize = this.getOuterTicksize(chart);
+        constructor(args: IAxisSettings, chart: Chart) {
             this.scale = null;
-            this.svgAxis = null;
+
+            this.chart = chart;
+            this.formatter = null;
+            this.orient = null;
+            this.settings = args;
             this.svgGrid = null;
             this.svgTitle = null;
             this.svgZeroLine = null;
-            this.ticks = null;
-            this.title = null;
-            this.x = null;
-            this.y = null;
+            this.textRotation = chart.settings.get(args, "labels.rotate", "0");
 
-            this.chart = chart;
-            this.orient = null;
-            this._gridlineType = GridLineType.None;
+            this._axis = null;
+            this.setGridlineType(chart.settings.get(args, "gridlines", "none"));
+            this._hasTickmarks = chart.settings.get(args, "tickmarks", "no").toUpperCase() == "YES" ? true : false;
+            this._innerTicksize = this.getInnerTicksize(chart);
+            this._outerTicksize = this.getOuterTicksize(chart);
+            this._svgAxis = null;
+            this._ticks = null;
+            this._title = chart.settings.get(args, "title.text");
+            this._x = null;
+            this._y = null;
+        }
+
+        public initialize(): void {
+            this._innerTicksize = this.getInnerTicksize(this.chart);
+            this._outerTicksize = this.getOuterTicksize(this.chart);
+            this.scale = this.getScale(this.chart);
+            this._ticks = this.getTicks(this.chart);
+            this._x = this.getXCoordinate(this.chart);
+            this._y = this.getYCoordinate(this.chart);
         }
 
         public getGridlineType(): GridLineType {
@@ -56,55 +69,49 @@ module frnk.UI.Charts {
         }
 
         public draw(chart: Chart): void {
-            // initialize
-            this.innerTicksize = this.getInnerTicksize(chart);
-            this.outerTicksize = this.getOuterTicksize(chart);
-            this.scale = this.getScale(chart);
-            this.ticks = this.getTicks(chart);
-            this.x = this.getXCoordinate(chart);
-            this.y = this.getYCoordinate(chart);
+            this.initialize();
 
             // create d3 axis
-            this.axis = d3.svg.axis()
+            this._axis = d3.svg.axis()
                 .scale(this.scale)
                 .orient(this.orient)
-                .ticks(this.ticks);
+                .ticks(this._ticks);
 
             // apply custom formatter
             if (this.formatter != null) {
-                this.axis.tickFormat(d3.format(this.formatter));
+                this._axis.tickFormat(d3.format(this.formatter));
             }
 
             // draw tick marks
-            if (!this.hasTickmarks) {
-                this.axis.tickSize(0);
-                this.axis.tickPadding(12);
+            if (!this._hasTickmarks) {
+                this._axis.tickSize(0);
+                this._axis.tickPadding(12);
             }
 
             // draw axis
-            this.svgAxis = chart.canvas.plotArea.svg.append("g")
+            this._svgAxis = chart.canvas.plotArea.svg.append("g")
                 .attr("class", "axis")
-                .attr("transform", "translate(" + this.x + "," + this.y + ")")
+                .attr("transform", "translate(" + this._x + "," + this._y + ")")
                 .append("g")
                 .attr("class", "ticks")
-                .call(this.axis);
+                .call(this._axis);
 
-            this.drawGridlines(chart, this.axis);
+            this.drawGridlines(chart, this._axis);
             if (this.isDataAxis() && chart.series.getMinValue() < 0) {
-                this.drawZeroLine(chart, this.svgAxis);
+                this.drawZeroLine(chart, this._svgAxis);
             }
-            this.rotateLabels(chart, this.svgAxis);
-            this.drawTitle(chart, this.svgAxis);
+            this.rotateLabels(chart, this._svgAxis);
+            this.drawTitle(chart, this._svgAxis);
         }
 
         public drawGridlines(chart: Chart, axis: D3.Svg.Axis): void {
-            this.svgGrid = this.svgAxis.append("g")
+            this.svgGrid = this._svgAxis.append("g")
                 .attr("class", "grid");
 
             switch (this.getGridlineType()) {
                 case GridLineType.Major:
                     this.svgGrid.call(axis
-                        .tickSize(this.innerTicksize, this.outerTicksize)
+                        .tickSize(this._innerTicksize, this._outerTicksize)
                         .tickFormat((d: any): string => { return ""; }) // return no label for the grid lines
                     );
                     break;
@@ -120,7 +127,7 @@ module frnk.UI.Charts {
         public drawTitle(chart: Chart, svg: D3.Selection): void {
             //TODO - Make position of title optional
             this.svgTitle = svg.append("text")
-                .text(this.title)
+                .text(this._title)
                 .attr("class", "title");
         }
 
@@ -183,14 +190,10 @@ module frnk.UI.Charts {
 
     export class XAxis extends Axis {
 
-        constructor(args: any, chart: Chart) {
+        constructor(args: IAxisSettings, chart: Chart) {
             super(args, chart);
 
-            this.hasTickmarks = chart.settings.getValue("xAxis.tickmarks").toUpperCase() == "YES" ? true : false;
-            this.title = chart.settings.getValue("xAxis.title.text");
-            this.setOrientation(chart.settings.getValue("xAxis.orient", "bottom"));
-            this.setGridlineType(chart.settings.getValue("xAxis.gridlines"));
-            this.textRotation = chart.settings.getValue("xAxis.labels.rotate", "0");
+            this.setOrientation(chart.settings.get(args, "orient", "bottom"));
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): void {
@@ -255,7 +258,7 @@ module frnk.UI.Charts {
         }
 
         public getTicks(chart: Chart): number {
-            return Number(chart.settings.getValue("xAxis.ticks", String(Math.max(chart.canvas.plotArea.width / 50, 2))));
+            return Number(chart.settings.get(this.settings, "ticks", String(Math.max(chart.canvas.plotArea.width / 50, 2))));
         }
 
         public getXCoordinate(chart: Chart): number {
@@ -301,13 +304,10 @@ module frnk.UI.Charts {
     }
 
     export class YAxis extends Axis {
-        constructor(args: any, chart: Chart) {
+        constructor(args: IAxisSettings, chart: Chart) {
             super(args, chart);
-            this.hasTickmarks = chart.settings.getValue("yAxis.tickmarks").toUpperCase() == "YES" ? true : false;
-            this.title = chart.settings.getValue("yAxis.title.text");
-            this.setGridlineType(chart.settings.getValue("yAxis.gridlines"));
-            this.setOrientation(chart.settings.getValue("yAxis.orient", "left"));
-            this.textRotation = chart.settings.getValue("yAxis.labels.rotate", "0");
+
+            this.setOrientation(chart.settings.get(args, "orient", "left"));
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): void {
@@ -374,7 +374,7 @@ module frnk.UI.Charts {
         }
 
         public getTicks(chart: Chart): number {
-            return Number(chart.settings.getValue("yAxis.ticks", String(Math.max(chart.canvas.plotArea.height / 50, 2))));
+            return Number(chart.settings.get(this.settings, "ticks", String(Math.max(chart.canvas.plotArea.height / 50, 2))));
         }
 
         public getXCoordinate(chart: Chart): number {

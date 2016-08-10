@@ -5,6 +5,7 @@
 
 // interfaces
 /// <reference path="IArea.ts" />
+/// <reference path="ISettings.ts" />
 
 // helpers
 /// <reference path="Html.ts" />
@@ -22,6 +23,10 @@
 /// <reference path="Legend.ts" />
 /// <reference path="TitleArea.ts" />
 
+// shapes
+/// <reference path="Shape.Line.ts" />
+/// <reference path="Shape.Area.ts" />
+
 // tooltip
 ///  <reference path="Tooltip.ts" />
 
@@ -31,6 +36,7 @@
 // axis
 /// <reference path="Chart.ts" />
 /// <reference path="XYChart.ts" />
+/// <reference path="ComboChart.ts" />
 /// <reference path="LineChart.ts" />
 /// <reference path="StackedLineChart.ts" />
 /// <reference path="StackedPercentLineChart.ts" />

@@ -36,7 +36,7 @@ module frnk.UI.Charts {
                     .attr("class", "slice");
 
                 var path = arcs.append("path")
-                    .attr("fill", (d: any, i: number): string => { return this.series.getSerie(s).getColor(i); })
+                    .attr("fill", (d: any, i: number): string => { return ColorPalette.getColor(i); })
                     .attr("d", arc);
 
                 // draw tooltip

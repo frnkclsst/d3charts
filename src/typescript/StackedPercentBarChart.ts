@@ -12,12 +12,12 @@ module frnk.UI.Charts {
 
         public getWidth(serie: number): any {
             return (d: any): any => {
-                return Math.abs((this.xAxis.scale(1) - this.xAxis.scale(0)) * d.perc);
+                return Math.abs((this.xAxes[0].scale(1) - this.xAxes[0].scale(0)) * d.perc);
             };
         }
 
         public normalizer(d: any): number {
-            return this.xAxis.scale.domain()[1] / d.max;
+            return this.xAxes[0].scale.domain()[1] / d.max;
         }
     }
 }

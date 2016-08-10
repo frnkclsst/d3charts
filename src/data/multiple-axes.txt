@@ -22,31 +22,34 @@
         "width": 200
     },
     "title": {
-        "text": "Population Growth per Region",
+        "text": "Rainfall vs Temperature",
 		"align": "center",
 		"height": 50,
 		"margin": 15,
 		"subtitle": "Source: wikipedia.org"
     },
-    "xAxis": {
+    "xAxis": [{
         "gridlines": "none",
-        "position": "top",
-		"labels": {
-			"rotate": "0"
-		},
-		"tickmarks": "no",
+        "orient": "bottom",
+        "labels": {
+            "rotate": "0"
+        },
+        "tickmarks": "yes",
         "title": {
             "text": "Year"
         }
-    },
-    "yAxis": {
-        "gridlines": "none",
-        "position": "left",
-		"tickmarks": "yes",
-		"title": {
-            "text": "Millions"
-        }
-    },it
+    }],
+    "yAxis": [{
+            "name": "Rainfall",
+            "gridlines": "none",
+            "orient": "left",
+		    "tickmarks": "yes"
+        },{
+            "name": "Temperature",
+            "gridlines": "none",
+            "orient": "right",
+		    "tickmarks": "yes"
+    }],
     "tooltip": {
         "title": "Population",
         "valueSuffix": " million"

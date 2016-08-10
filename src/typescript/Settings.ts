@@ -11,6 +11,23 @@ module frnk.UI.Charts {
             this.settings = settings;
         }
 
+        public get(args: any, key: string, defaultValue?: string): any {
+            var parts = key.split(".");
+            var cur = args;
+            for (var i = 0; i < parts.length; i++) {
+                if (!cur[parts[i]]) {
+                    console.log(">> WARN: " + key + " not set in settings");
+                    if (defaultValue) {
+                        console.log(">> WARN: " + key + " defaulted to '" + defaultValue + "'");
+                        return defaultValue;
+                    }
+                    return "";
+                }
+                cur = cur[parts[i]];
+            }
+            return cur;
+        }
+
         public getValue(propStr: string, defaultValue?: string): any {
             var parts = propStr.split(".");
             var cur = this.settings;

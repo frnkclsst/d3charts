@@ -59,10 +59,10 @@ module frnk.UI.Charts {
         public getXCoordinate(serie: number): any {
             return (d: any): any => {
                 if (d.y < 0) {
-                    return Math.abs(this.xAxis.scale(d.y));
+                    return Math.abs(this.xAxes[0].scale(d.y));
                 }
                 else {
-                    return this.xAxis.scale(0);
+                    return this.xAxes[0].scale(0);
                 }
             };
         }
@@ -71,19 +71,19 @@ module frnk.UI.Charts {
             return (d: any, i: number): number => {
                 var axisScale = this.categories.parseFormat(this.categories.getItem(i));
                 var series = this.series;
-                if (this.yAxis.getScaleType() == ScaleType.Ordinal) {
-                    return this.yAxis.scale(axisScale) + (this.yAxis.scale.rangeBand() / series.length * serie);
+                if (this.yAxes[0].getScaleType() == ScaleType.Ordinal) {
+                    return this.yAxes[0].scale(axisScale) + (this.yAxes[0].scale.rangeBand() / series.length * serie);
                 }
                 else {
-                    return this.yAxis.scale(axisScale) + (this.canvas.width / series.length / this.categories.length / series.length * serie);
+                    return this.yAxes[0].scale(axisScale) + (this.canvas.width / series.length / this.categories.length / series.length * serie);
                 }
             };
         }
 
         public getHeight(serie: number): any {
             return (d: any): any => {
-                if (this.yAxis.getScaleType() == ScaleType.Ordinal) {
-                    return Math.abs(this.yAxis.scale.rangeBand() / this.series.length);
+                if (this.yAxes[0].getScaleType() == ScaleType.Ordinal) {
+                    return Math.abs(this.yAxes[0].scale.rangeBand() / this.series.length);
                 }
                 else {
                     return Math.abs(this.canvas.width / this.series.length / this.categories.length / this.series.length);
@@ -93,7 +93,7 @@ module frnk.UI.Charts {
 
         public getWidth(serie: number): any {
             return (d: any): number => {
-                return Math.abs(this.xAxis.scale(d.y) - this.xAxis.scale(0));
+                return Math.abs(this.xAxes[0].scale(d.y) - this.xAxes[0].scale(0));
             };
         }
     }

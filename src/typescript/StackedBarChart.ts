@@ -10,27 +10,10 @@ module frnk.UI.Charts {
             this.stackType = StackType.Normal;
         }
 
-        public getXCoordinate(serie: number): any {
-            return (d: any): any => {
-                if (d.perc < 0) {
-                    return this.xAxis.scale((d.y0 + d.y) * this.normalizer(d));
-                }
-                else {
-                    return this.xAxis.scale((d.y0 - d.y) * this.normalizer(d));
-                }
-            };
-        }
-
-        public getYCoordinate(serie: number): any {
-            return (d: any, i: number): any => {
-                return this.yAxis.scale(this.categories.parseFormat(this.categories.getItem(i)));
-            };
-        }
-
         public getHeight(serie: number): any {
             return (d: any): any => {
-                if (this.yAxis.getScaleType() == ScaleType.Ordinal || this.yAxis.getScaleType() == ScaleType.Linear) {
-                    return this.yAxis.scale.rangeBand();
+                if (this.yAxes[0].getScaleType() == ScaleType.Ordinal || this.yAxes[0].getScaleType() == ScaleType.Linear) {
+                    return this.yAxes[0].scale.rangeBand();
                 }
                 else {
                     return this.canvas.height / this.series.length / this.categories.length;
@@ -40,7 +23,24 @@ module frnk.UI.Charts {
 
         public getWidth(serie: number): any {
             return (d: any): any => {
-                return Math.abs(this.xAxis.scale(0) - this.xAxis.scale(d.y));
+                return Math.abs(this.xAxes[0].scale(0) - this.xAxes[0].scale(d.y));
+            };
+        }
+
+        public getXCoordinate(serie: number): any {
+            return (d: any): any => {
+                if (d.perc < 0) {
+                    return this.xAxes[0].scale((d.y0 + d.y) * this.normalizer(d));
+                }
+                else {
+                    return this.xAxes[0].scale((d.y0 - d.y) * this.normalizer(d));
+                }
+            };
+        }
+
+        public getYCoordinate(serie: number): any {
+            return (d: any, i: number): any => {
+                return this.yAxes[0].scale(this.categories.parseFormat(this.categories.getItem(i)));
             };
         }
 

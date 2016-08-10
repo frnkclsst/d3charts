@@ -5,7 +5,7 @@ html {
 
 /* Charts */
 #chart {
-    height: 50%;
+    height: 25%;
     min-width: 300px;
     min-height: 300px;
     position: fixed;

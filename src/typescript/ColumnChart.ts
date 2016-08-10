@@ -60,11 +60,11 @@ module frnk.UI.Charts {
         public getXCoordinate(serie: number): any {
             return (d: any, i: number): number => {
                 var axisScale = this.categories.parseFormat(this.categories.getItem(i));
-                if (this.xAxis.getScaleType() == ScaleType.Ordinal) {
-                    return this.xAxis.scale(axisScale) + (this.xAxis.scale.rangeBand() / this.series.length * serie);
+                if (this.xAxes[0].getScaleType() == ScaleType.Ordinal) {
+                    return this.xAxes[0].scale(axisScale) + (this.xAxes[0].scale.rangeBand() / this.series.length * serie);
                 }
                 else {
-                    return this.xAxis.scale(axisScale) + (this.canvas.width / this.series.length / this.categories.length * serie);
+                    return this.xAxes[0].scale(axisScale) + (this.canvas.width / this.series.length / this.categories.length * serie);
                 }
             };
         }
@@ -72,24 +72,24 @@ module frnk.UI.Charts {
         public getYCoordinate(serie: number): any {
             return (d: any): number => {
                 if (d.y < 0) {
-                    return this.yAxis.scale(d.y) - Math.abs(this.yAxis.scale(d.y) - this.yAxis.scale(0));
+                    return this.yAxes[0].scale(d.y) - Math.abs(this.yAxes[0].scale(d.y) - this.yAxes[0].scale(0));
                 }
                 else {
-                    return this.yAxis.scale(d.y);
+                    return this.yAxes[0].scale(d.y);
                 }
             };
         }
 
         public getHeight(serie: number): any {
             return (d: any): any => {
-                return Math.abs(this.yAxis.scale(d.y) - this.yAxis.scale(0));
+                return Math.abs(this.yAxes[0].scale(d.y) - this.yAxes[0].scale(0));
             };
         }
 
         public getWidth(serie: number): any {
             return (d: any): number => {
-                if (this.xAxis.getScaleType() == ScaleType.Ordinal) {
-                    return this.xAxis.scale.rangeBand() / this.series.length;
+                if (this.xAxes[0].getScaleType() == ScaleType.Ordinal) {
+                    return this.xAxes[0].scale.rangeBand() / this.series.length;
                 }
                 else {
                     return this.canvas.width / this.series.length / this.categories.length;

@@ -12,12 +12,12 @@ module frnk.UI.Charts {
 
         public getHeight(serie: number): any {
             return (d: any): any => {
-                return Math.abs(this.yAxis.scale(this.yAxis.scale.domain()[0] - d.perc));
+                return Math.abs(this.yAxes[0].scale(this.yAxes[0].scale.domain()[0] - d.perc));
             };
         }
 
         public normalizer(d: any): number {
-            return this.yAxis.scale.domain()[0] / d.max;
+            return this.yAxes[0].scale.domain()[0] / d.max;
         }
     }
 }

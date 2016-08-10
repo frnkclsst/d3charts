@@ -10,32 +10,32 @@ module frnk.UI.Charts {
             this.stackType = StackType.Normal;
         }
 
-        public getXCoordinate(serie: number): any {
-            return (d: any, i: number): any => {
-                return this.xAxis.scale(this.categories.parseFormat(this.categories.getItem(i)));
-            };
-        }
-
-        public getYCoordinate(serie: number): any {
-            return (d: any): any => {
-                return this.yAxis.scale(d.y0 * this.normalizer(d));
-            };
-        }
-
         public getHeight(serie: number): any {
             return (d: any): any => {
-                return  Math.abs(this.yAxis.scale(0) - this.yAxis.scale(d.y));
+                return  Math.abs(this.yAxes[0].scale(0) - this.yAxes[0].scale(d.y));
             };
         }
 
         public getWidth(serie: number): any {
             return (d: any): any => {
-                if (this.xAxis.getScaleType() == ScaleType.Ordinal || this.xAxis.getScaleType() == ScaleType.Linear) {
-                    return this.xAxis.scale.rangeBand();
+                if (this.xAxes[0].getScaleType() == ScaleType.Ordinal || this.xAxes[0].getScaleType() == ScaleType.Linear) {
+                    return this.xAxes[0].scale.rangeBand();
                 }
                 else {
                     return this.canvas.width / this.series.length / this.categories.length; //did it to support time scales
                 }
+            };
+        }
+
+        public getXCoordinate(serie: number): any {
+            return (d: any, i: number): any => {
+                return this.xAxes[0].scale(this.categories.parseFormat(this.categories.getItem(i)));
+            };
+        }
+
+        public getYCoordinate(serie: number): any {
+            return (d: any): any => {
+                return this.yAxes[0].scale(d.y0 * this.normalizer(d));
             };
         }
 

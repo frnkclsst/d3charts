@@ -11,7 +11,7 @@ module frnk.UI.Charts {
         }
 
         protected normalizer(d: any): number {
-            return this.yAxis.scale.domain()[0] / d.max;
+            return this.yAxes[0].scale.domain()[0] / d.max;
         }
     }
 }
