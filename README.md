@@ -1,8 +1,8 @@
 # d3charts
 
-## Description
+## Introduction
 
-Chart library based on d3
+d3Charts is a reusable chart library based on d3 and written in Typescript.
 
 ## Resources
 
