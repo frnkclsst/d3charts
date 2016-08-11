@@ -4,6 +4,7 @@
 
 module frnk.UI.Charts {
     export class Axis {
+        public name: string;
         public scale: any;
 
         protected chart: Chart;
@@ -29,9 +30,9 @@ module frnk.UI.Charts {
 
         constructor(args: IAxisSettings, chart: Chart) {
             this.scale = null;
-
             this.chart = chart;
             this.formatter = null;
+            this.name = chart.settings.get(args, "name");
             this.orient = null;
             this.settings = args;
             this.svgGrid = null;
@@ -225,16 +226,19 @@ module frnk.UI.Charts {
         }
 
         public getScale(chart: Chart): any {
+            var min = chart.series.getMinValue(this.name);
+            var max = chart.series.getMaxValue(this.name);
+
             if (chart instanceof StackedPercentBarChart) {
                 this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
-                    .domain([chart.series.getMinValue() < 0 ? -1 : 0, 1])
+                    .domain([min < 0 ? -1 : 0, 1])
                     .range([0, chart.canvas.plotArea.width]);
             }
             else if (chart instanceof BarChart) {
                 this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
-                    .domain([chart.series.getMinValue() < 0 ? chart.series.getMinValue() : 0, chart.series.getMaxValue()])
+                    .domain([min < 0 ? min : 0, max])
                     .nice() // adds additional ticks to add some whitespace
                     .range([0, chart.canvas.plotArea.width]);
             }
@@ -340,11 +344,14 @@ module frnk.UI.Charts {
         }
 
         public getScale(chart: Chart): any {
+            var min = chart.series.getMinValue(this.name);
+            var max = chart.series.getMaxValue(this.name);
+
             if (this.chart instanceof StackedPercentColumnChart ||
                 this.chart instanceof StackedPercentLineChart) {
                 this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
-                    .domain([1, chart.series.getMinValue() < 0 ? -1 : 0])
+                    .domain([1, min < 0 ? -1 : 0])
                     .range([0, chart.canvas.plotArea.height]);
             }
             else if (this.chart instanceof BarChart) {
@@ -361,13 +368,13 @@ module frnk.UI.Charts {
                             return d3.time.format(chart.categories.format).parse(d);
                         }).reverse())
                         .nice() // adds additional ticks to add some whitespace
-                        .range([chart.series.getMinValue(), chart.canvas.plotArea.height]);
+                        .range([min, chart.canvas.plotArea.height]);
                 }
             }
             else {
                 this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
-                    .domain([chart.series.getMaxValue(), chart.series.getMinValue() < 0 ? chart.series.getMinValue() : 0])
+                    .domain([max, min < 0 ? min : 0])
                     .nice() // adds additional ticks to add some whitespace
                     .range([0, chart.canvas.plotArea.height]);
             }

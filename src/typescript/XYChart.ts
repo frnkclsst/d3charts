@@ -16,6 +16,7 @@ module frnk.UI.Charts {
 
         public draw(): void {
             super.draw();
+            // TODO - Refactor
             for (var i = 0; i < this.xAxes.length; i++) {
                 this.xAxes[i].draw(this);
             }
@@ -31,18 +32,50 @@ module frnk.UI.Charts {
 
         }
 
+        protected getXAxisByName(name: string): number {
+            if (name != "") {
+                for (var i = 0; i <  this.xAxes.length; i++) {
+                    if (this.xAxes[i].name == name) {
+                        return i;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        protected getYAxisByName(name: string): number {
+            if (name != "") {
+                for (var i = 0; i <  this.yAxes.length; i++) {
+                    if (this.yAxes[i].name == name) {
+                        return i;
+                    }
+                }
+            }
+            return 0;
+        }
+
         private _setXAxes(axes: any): YAxis[] {
             var array: XAxis[] = [];
-            for (var i = 0; i < axes.length; i++) {
-                array.push(new XAxis(axes[i], this));
+            if (axes.length != undefined) {
+                for (var i = 0; i < axes.length; i++) {
+                    array.push(new XAxis(axes[i], this));
+                }
+            }
+            else {
+                array.push(new XAxis(axes, this));
             }
             return array;
         }
 
         private _setYAxes(axes: any): YAxis[] {
             var array: YAxis[] = [];
-            for (var i = 0; i < axes.length; i++) {
-                array.push(new YAxis(axes[i], this));
+            if (axes.length != undefined) {
+                for (var i = 0; i < axes.length; i++) {
+                    array.push(new YAxis(axes[i], this));
+                }
+            }
+            else {
+                array.push(new YAxis(axes, this));
             }
             return array;
         }
