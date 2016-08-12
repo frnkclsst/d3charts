@@ -21,7 +21,7 @@ module frnk.UI.Charts {
             // draw areas
             // areas need to be drawn first, because the line and markers need to be drawn on top of it
             if (this.fillArea) {
-                var svgAreas = this.canvas.plotArea.svg.append("g")
+                var svgAreas = this.settings.plotArea.svg.append("g")
                     .attr("class", "areas");
 
                 for (var i = 0; i < this.series.length; i++) {
@@ -31,7 +31,7 @@ module frnk.UI.Charts {
             }
 
             // draw lines
-            var svgSeries = this.canvas.plotArea.svg.append("g")
+            var svgSeries = this.settings.plotArea.svg.append("g")
                 .attr("class", "series");
 
             for (var j = 0; j < this.series.length; j++) {

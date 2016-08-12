@@ -31,6 +31,9 @@
     "xAxis": {
         "name": "Rainfall",
         "gridlines": "none",
+        "labels": {
+            "rotate": "0"
+        },
         "orient": "bottom",
         "tickmarks": "yes",
         "title": {
@@ -40,6 +43,9 @@
     "yAxis": [{
             "name": "Rainfall",
             "gridlines": "none",
+            "labels": {
+                "rotate": "0"
+            },
             "orient": "left",
 		    "tickmarks": "yes",
 		    "title": {
@@ -48,6 +54,9 @@
         },{
             "name": "Temperature",
             "gridlines": "none",
+            "labels": {
+                "rotate": "0"
+            },
             "orient": "right",
 		    "tickmarks": "yes",
 		    "title": {

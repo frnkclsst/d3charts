@@ -16,7 +16,7 @@ module frnk.UI.Charts {
             super.draw();
 
             // draw chart
-            var svgSeries = this.canvas.plotArea.svg.append("g")
+            var svgSeries = this.settings.plotArea.svg.append("g")
                 .attr("class", "series");
 
             // draw columns
@@ -66,7 +66,7 @@ module frnk.UI.Charts {
                     return this.xAxes[index].scale(axisScale) + (this.xAxes[index].scale.rangeBand() / this.series.length * serie);
                 }
                 else {
-                    return this.xAxes[index].scale(axisScale) + (this.canvas.width / this.series.length / this.categories.length * serie);
+                    return this.xAxes[index].scale(axisScale) + (this.settings.canvas.width / this.series.length / this.categories.length * serie);
                 }
             };
         }
@@ -100,7 +100,7 @@ module frnk.UI.Charts {
                     return this.xAxes[index].scale.rangeBand() / this.series.length;
                 }
                 else {
-                    return this.canvas.width / this.series.length / this.categories.length;
+                    return this.settings.canvas.width / this.series.length / this.categories.length;
                 }
             };
         }

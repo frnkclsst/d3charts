@@ -7,11 +7,11 @@ module frnk.UI.Charts {
         public xAxes: XAxis[] = [];
         public yAxes: YAxis[] = [];
 
-        constructor(args: any, selector: string) {
-            super(args, selector);
+        constructor(settings: ISettings, selector: string) {
+            super(settings, selector);
 
-            this.xAxes =  this._setXAxes(this.settings.getValue("xAxis"));
-            this.yAxes = this._setYAxes(this.settings.getValue("yAxis"));
+            this.xAxes =  this.settings.xAxes;
+            this.yAxes = this.settings.yAxes;
         }
 
         public draw(): void {
@@ -26,10 +26,11 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(serie: number): any {
+            // child classes are responsible for implementing this method
         }
 
         public getYCoordinate(serie: number): any {
-
+            // child classes are responsible for implementing this method
         }
 
         protected getXAxisByName(name: string): number {
@@ -52,32 +53,6 @@ module frnk.UI.Charts {
                 }
             }
             return 0;
-        }
-
-        private _setXAxes(axes: any): YAxis[] {
-            var array: XAxis[] = [];
-            if (axes.length != undefined && axes != "") {
-                for (var i = 0; i < axes.length; i++) {
-                    array.push(new XAxis(axes[i], this));
-                }
-            }
-            else {
-                array.push(new XAxis(axes, this));
-            }
-            return array;
-        }
-
-        private _setYAxes(axes: any): YAxis[] {
-            var array: YAxis[] = [];
-            if (axes.length != undefined && axes != "") {
-                for (var i = 0; i < axes.length; i++) {
-                    array.push(new YAxis(axes[i], this));
-                }
-            }
-            else {
-                array.push(new YAxis(axes, this));
-            }
-            return array;
         }
     }
 }

@@ -14,14 +14,14 @@ module frnk.UI.Charts {
         public draw(): void {
             super.draw();
 
-            var radius = Math.min(this.canvas.plotArea.width / 2, this.canvas.plotArea.height / 2);
+            var radius = Math.min(this.settings.plotArea.width / 2, this.settings.plotArea.height / 2);
             var innerRadius = radius - radius * this.innerRadius;
             var serieRadius =  (radius - innerRadius) / this.series.length;
 
             for (var s = 0; s < this.series.length; s++) {
 
-                var g = this.canvas.plotArea.svg.append("g")
-                    .attr("transform", "translate(" + (this.canvas.plotArea.width / 2) + "," + (this.canvas.plotArea.height / 2) + ")");
+                var g = this.settings.plotArea.svg.append("g")
+                    .attr("transform", "translate(" + (this.settings.plotArea.width / 2) + "," + (this.settings.plotArea.height / 2) + ")");
 
                 var arc = d3.svg.arc()
                     .outerRadius(serieRadius * (s + 1) + innerRadius)

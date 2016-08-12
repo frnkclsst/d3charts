@@ -13,7 +13,7 @@ module frnk.UI.Charts {
             super.draw();
 
             // draw chart
-            var svgSeries = this.canvas.plotArea.svg.append("g")
+            var svgSeries = this.settings.plotArea.svg.append("g")
                 .attr("class", "series");
 
             // draw bars
@@ -79,7 +79,7 @@ module frnk.UI.Charts {
                     return this.yAxes[index].scale(axisScale) + (this.yAxes[index].scale.rangeBand() / series.length * serie);
                 }
                 else {
-                    return this.yAxes[index].scale(axisScale) + (this.canvas.width / series.length / this.categories.length / series.length * serie);
+                    return this.yAxes[index].scale(axisScale) + (this.settings.canvas.width / series.length / this.categories.length / series.length * serie);
                 }
             };
         }
@@ -92,7 +92,7 @@ module frnk.UI.Charts {
                     return Math.abs(this.yAxes[index].scale.rangeBand() / this.series.length);
                 }
                 else {
-                    return Math.abs(this.canvas.width / this.series.length / this.categories.length / this.series.length);
+                    return Math.abs(this.settings.canvas.width / this.series.length / this.categories.length / this.series.length);
                 }
             };
         }

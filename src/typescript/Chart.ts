@@ -4,7 +4,6 @@
 
 module frnk.UI.Charts {
     export class Chart {
-        public canvas: Canvas;
         public categories: Categories;
         public plotOptions: PlotOptions;
         public series: Series;
@@ -13,7 +12,7 @@ module frnk.UI.Charts {
         public stackType: StackType;
         public tooltip: Tooltip;
 
-        constructor(args: any, selector: string) {
+        constructor(settings: ISettings, selector: string) {
             this.selector = selector;
             this.stackType = StackType.None;
 
@@ -27,16 +26,14 @@ module frnk.UI.Charts {
                 console.log(e.message);
             }
 
-            this.settings = new Settings(args);
+            this.settings = new Settings(settings, this);
             this.plotOptions = new PlotOptions(this);
             this.categories = new Categories(this);
             this.series = new Series(this);
             this.tooltip = new Tooltip(this, this.selector);
 
-            this.canvas = new Canvas(this);
-
             // update size and add EventListener
-            this.canvas.updateCanvasSize();
+            this.settings.canvas.updateCanvasSize();
             d3.select(window).on("resize", (): void => {
                 d3.select(this.selector).selectAll("*").remove();
                 this.draw();
@@ -44,7 +41,7 @@ module frnk.UI.Charts {
         }
 
         public draw(): void {
-            this.canvas.draw();
+            this.settings.canvas.draw();
         }
     }
 }

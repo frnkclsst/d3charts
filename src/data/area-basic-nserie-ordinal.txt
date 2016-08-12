@@ -30,7 +30,7 @@
     },
     "xAxis": {
         "gridlines": "none",
-        "position": "top",
+        "orient": "bottom",
 		"labels": {
 			"rotate": "0"
 		},
@@ -41,7 +41,10 @@
     },
     "yAxis": {
         "gridlines": "none",
-        "position": "left",
+        "orient": "left",
+        "labels": {
+            "rotate": "0"
+        },
 		"tickmarks": "yes",
 		"title": {
             "text": "Millions"

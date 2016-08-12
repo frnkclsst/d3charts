@@ -16,7 +16,7 @@ module frnk.UI.Charts {
                     return this.yAxes[0].scale.rangeBand();
                 }
                 else {
-                    return this.canvas.height / this.series.length / this.categories.length;
+                    return this.settings.canvas.height / this.series.length / this.categories.length;
                 }
             };
         }
