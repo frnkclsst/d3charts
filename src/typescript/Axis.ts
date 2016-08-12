@@ -319,7 +319,7 @@ module frnk.UI.Charts {
 
             var anchor = this.orient == "left" ? "begin" : "end";
             var x = 0;
-            var y = -30;
+            var y = -15;
 
             this.svgTitle
                 .attr("text-anchor", anchor)

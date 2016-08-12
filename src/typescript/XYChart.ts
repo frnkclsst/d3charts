@@ -56,7 +56,7 @@ module frnk.UI.Charts {
 
         private _setXAxes(axes: any): YAxis[] {
             var array: XAxis[] = [];
-            if (axes.length != undefined) {
+            if (axes.length != undefined && axes != "") {
                 for (var i = 0; i < axes.length; i++) {
                     array.push(new XAxis(axes[i], this));
                 }
@@ -69,7 +69,7 @@ module frnk.UI.Charts {
 
         private _setYAxes(axes: any): YAxis[] {
             var array: YAxis[] = [];
-            if (axes.length != undefined) {
+            if (axes.length != undefined && axes != "") {
                 for (var i = 0; i < axes.length; i++) {
                     array.push(new YAxis(axes[i], this));
                 }

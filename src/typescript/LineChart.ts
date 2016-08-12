@@ -10,7 +10,7 @@ module frnk.UI.Charts {
 
         constructor(args: any, selector: string) {
             super(args, selector);
-            this.showMarkers = this.settings.getValue("linechart.showMarkers").toUpperCase() == "YES" ? true : false;
+            this.showMarkers = this.settings.getValue("linechart.showMarkers", "yes").toUpperCase() == "YES" ? true : false;
             this.interpolation = this.settings.getValue("linechart.interpolation", "linear");
             this.fillArea = this.settings.getValue("linechart.fillArea").toUpperCase() == "YES" ? true : false;
         }

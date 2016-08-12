@@ -16,7 +16,7 @@ module frnk.UI.Charts {
             this._chart = chart;
             this._canvas = canvas;
 
-            this.padding = this._chart.settings.getValue("canvas.padding", "20");
+            this.padding = this._chart.settings.getValue("canvas.padding", "50");
             this.height = this._canvas.height - this._canvas.title.height - this.padding * 2;
             this.width = this._canvas.width - this.padding * 2 - this._canvas.legend.width;
         }
