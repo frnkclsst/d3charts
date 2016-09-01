@@ -1,36 +1,13 @@
 # d3charts
 
-## Description
+## Introduction
 
-Chart library based on d3
+d3Charts is a reusable chart library based on d3 and written in Typescript.
 
-## For users
+## Resources
 
-- [Getting Started](Getting Started)
-- [Concepts](https://github.com/frnkclsst/d3charts/wiki/Concepts)
-- [Chart Types](Chart Types)
-- [Configuration](https://github.com/frnkclsst/d3charts/wiki/Configuration)
-
-## For Developer's
-
-1. Install dependencies
-
- ```
- npm install gulp-cli -g
- npm install
- ```
-
-2. Build and start server
-
- ```
- gulp serve
- ```
-
-The following page will open `http://localhost:9005/index.html
-
-## Roadmap
-
-* Line chart
-  * adding trend lines
-  * two scales / Y axes
-* Bubble charts
+- [Getting Started](https://github.com/frnkclsst/d3charts/wiki/Getting-Started)
+- [Chart Types](https://github.com/frnkclsst/d3charts/wiki/Chart%20Types)
+- [Chart Settings](https://github.com/frnkclsst/d3charts/wiki/Chart%20Settings)
+- [Contribute](https://github.com/frnkclsst/d3charts/wiki/Contribute)
+- [Roadmap](https://github.com/frnkclsst/d3charts/wiki/Roadmap)
