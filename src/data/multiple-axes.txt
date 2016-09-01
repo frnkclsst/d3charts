@@ -32,12 +32,12 @@
         "name": "Rainfall",
         "gridlines": "none",
         "labels": {
-            "rotate": "0"
+            "rotate": 0
         },
         "orient": "bottom",
         "tickmarks": "yes",
         "title": {
-            "text": "mm"
+            "text": "Month"
         }
     },
     "yAxis": [{

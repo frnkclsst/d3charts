@@ -16,7 +16,7 @@ module frnk.UI.Charts {
             super.draw();
 
             // draw chart
-            var svgSeries = this.settings.plotArea.svg.append("g")
+            var svgSeries = this.canvas.plotArea.svg.append("g")
                 .attr("class", "series");
 
             // draw columns
@@ -58,7 +58,7 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(serie: number): any {
-            var index = this.getXAxisByName(this.series.items[serie].name);
+            var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
 
             return (d: any, i: number): number => {
                 var axisScale = this.categories.parseFormat(this.categories.getItem(i));
@@ -66,13 +66,13 @@ module frnk.UI.Charts {
                     return this.xAxes[index].scale(axisScale) + (this.xAxes[index].scale.rangeBand() / this.series.length * serie);
                 }
                 else {
-                    return this.xAxes[index].scale(axisScale) + (this.settings.canvas.width / this.series.length / this.categories.length * serie);
+                    return this.xAxes[index].scale(axisScale) + (this.canvas.width / this.series.length / this.categories.length * serie);
                 }
             };
         }
 
         public getYCoordinate(serie: number): any {
-            var index = this.getYAxisByName(this.series.items[serie].name);
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
 
             return (d: any): number => {
                 if (d.y < 0) {
@@ -85,7 +85,7 @@ module frnk.UI.Charts {
         }
 
         public getHeight(serie: number): any {
-            var index = this.getYAxisByName(this.series.items[serie].name);
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
 
             return (d: any): any => {
                 return Math.abs(this.yAxes[index].scale(d.y) - this.yAxes[index].scale(0));
@@ -93,14 +93,14 @@ module frnk.UI.Charts {
         }
 
         public getWidth(serie: number): any {
-            var index = this.getXAxisByName(this.series.items[serie].name);
+            var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
 
             return (d: any): number => {
                 if (this.xAxes[index].getScaleType() == ScaleType.Ordinal) {
                     return this.xAxes[index].scale.rangeBand() / this.series.length;
                 }
                 else {
-                    return this.settings.canvas.width / this.series.length / this.categories.length;
+                    return this.canvas.width / this.series.length / this.categories.length;
                 }
             };
         }

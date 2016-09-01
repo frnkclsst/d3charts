@@ -21,7 +21,7 @@ module frnk.UI.Charts {
             // draw areas
             // areas need to be drawn first, because the line and markers need to be drawn on top of it
             if (this.fillArea) {
-                var svgAreas = this.settings.plotArea.svg.append("g")
+                var svgAreas = this.canvas.plotArea.svg.append("g")
                     .attr("class", "areas");
 
                 for (var i = 0; i < this.series.length; i++) {
@@ -31,7 +31,7 @@ module frnk.UI.Charts {
             }
 
             // draw lines
-            var svgSeries = this.settings.plotArea.svg.append("g")
+            var svgSeries = this.canvas.plotArea.svg.append("g")
                 .attr("class", "series");
 
             for (var j = 0; j < this.series.length; j++) {
@@ -41,7 +41,7 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(serie: number): any {
-            var index = this.getXAxisByName(this.series.items[serie].name);
+            var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
 
             return (d: any, i: number): number => {
                 if (this.xAxes[index].getScaleType() == ScaleType.Ordinal) {
@@ -54,7 +54,7 @@ module frnk.UI.Charts {
         }
 
         public getYCoordinate(serie: number): any {
-            var index = this.getYAxisByName(this.series.items[serie].name);
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
 
             return (d: any): number => {
                 return this.yAxes[index].scale(d.y);
@@ -62,7 +62,7 @@ module frnk.UI.Charts {
         }
 
         public getY0Coordinate(serie: number): any {
-            var index = this.getYAxisByName(this.series.items[serie].name);
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
 
             return this.yAxes[index].scale(0);
         }

@@ -3,18 +3,22 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export interface ISettings {
         canvas: ICanvasSettings;
+        legend: ILegendAreaSettings;
+        plotOptions: PlotOptions;
+        title: ITitleAreaSettings;
         xAxes: IAxisSettings;
         yAxes: IAxisSettings;
-        title: ITitleSettings;
-        legend: ILegendSettings;
+
+        getValue(propStr: string, defaultValue?: string): any;
     }
 
     export interface IAxisSettings {
         gridlines: string;
         labels: {
-            rotate: string;
+            rotate: number;
         };
         name: string;
         orient: OrientationType;
@@ -27,22 +31,27 @@ module frnk.UI.Charts {
     export interface ICanvasSettings {
         height: number;
         padding: number;
-        svg: D3.Selection;
         width: number;
     }
 
-    export interface ITitleSettings {
+    export interface ILegendAreaSettings {
+        height: number;
+        position: string;
+        title: string;
+        width: number;
+    }
+
+    export interface IPlotAreaSettings {
+        height: number;
+        width: number;
+        padding: number;
+    }
+
+    export interface ITitleAreaSettings {
         align: string;
         height: number;
         margin: number;
         subtitle: string;
         text: string;
-    }
-
-    export interface ILegendSettings {
-        height: number;
-        position: string;
-        title: string;
-        width: number;
     }
 }

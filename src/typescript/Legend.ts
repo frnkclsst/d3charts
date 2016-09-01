@@ -16,13 +16,13 @@ module frnk.UI.Charts {
         private _chart: Chart;
         private _items: string[];
 
-        constructor(legendSettings: ILegendSettings, chart: Chart, settings: Settings) {
+        constructor(settings: ILegendAreaSettings, chart: Chart) {
             this._chart = chart;
 
-            this.height = legendSettings.height;
-            this.position = legendSettings.position;
-            this.title = legendSettings.title;
-            this.width = legendSettings.width;
+            this.height = settings.height;
+            this.position = settings.position;
+            this.title = settings.title;
+            this.width = settings.width;
         }
 
         public draw(): void {
@@ -34,9 +34,9 @@ module frnk.UI.Charts {
              }
 
             if (this.width != 0) {
-                this.svg = this._chart.settings.canvas.svg.append("g")
+                this.svg = this._chart.canvas.svg.append("g")
                     .attr("class", "legend")
-                    .attr("transform", "translate(" + (this._chart.settings.canvas.width - this.width) + "," + this._chart.settings.title.height + ")");
+                    .attr("transform", "translate(" + (this._chart.canvas.width - this.width) + "," + this._chart.settings.title.height + ")");
 
                 this.drawLine(this.svg);
                 this.drawTitle(this.svg);
@@ -63,7 +63,7 @@ module frnk.UI.Charts {
                 .attr("x1", 0)
                 .attr("y1", 0)
                 .attr("x2", 0)
-                .attr("y2", this._chart.settings.canvas.height - this._chart.settings.title.height);
+                .attr("y2", this._chart.canvas.height - this._chart.settings.title.height);
         }
 
         private drawSymbol(svg: D3.Selection): void {

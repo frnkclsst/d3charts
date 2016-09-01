@@ -9,10 +9,10 @@ module frnk.UI.Charts {
         public svg: D3.Selection;
         public padding: number;
 
-        private _settings: ISettings;
+        private _chart: Chart;
 
-        constructor(settings: any) {
-            this._settings = settings;
+        constructor(settings: Settings, chart: Chart) {
+            this._chart = chart;
 
             this.padding = settings.canvas.padding;
             this.height = settings.canvas.height - settings.title.height - this.padding * 2;
@@ -21,14 +21,14 @@ module frnk.UI.Charts {
 
         public draw(): void {
             // initialize
-            this.height = this._settings.canvas.height - this._settings.title.height - this.padding * 2;
-            this.width = this._settings.canvas.width - this.padding * 2 - this._settings.legend.width;
+            this.height = this._chart.canvas.height - this._chart.settings.title.height - this.padding * 2;
+            this.width = this._chart.canvas.width - this.padding * 2 - this._chart.settings.legend.width;
 
             // draw plot area
-            this.svg = this._settings.canvas.svg.append("g")
+            this.svg = this._chart.canvas.svg.append("g")
                 .attr("class", "plotarea")
                 .attr("transform", "translate(" + this.padding + ","
-                    + (this._settings.title.height
+                    + (this._chart.settings.title.height
                     + this.padding) + ")");
         }
     }

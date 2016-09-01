@@ -9,17 +9,16 @@ module frnk.UI.Charts {
 
         protected chart: Chart;
         protected formatter: string;
+        protected gridlineType: GridLineType;
         protected hasTickmarks: boolean;
         protected orient: OrientationType;
         protected svgGrid: D3.Selection;
         protected svgTitle: D3.Selection;
         protected svgZeroLine: D3.Selection;
-        protected settings: IAxisSettings;
-        protected textRotation: string;
+        protected textRotation: number;
         protected title: string;
 
         private _axis: D3.Svg.Axis;
-        private _gridlineType: GridLineType;
         private _innerTicksize: number;
         private _outerTicksize: number;
         private _scaleType: ScaleType;
@@ -29,11 +28,10 @@ module frnk.UI.Charts {
         private _y: number;
 
         constructor(settings: IAxisSettings, chart: Chart) {
-            this.scale = null;
             this.chart = chart;
             this.formatter = null;
             this.orient = null;
-            this.settings = settings;
+            this.scale = null;
             this.svgGrid = null;
             this.svgTitle = null;
             this.svgZeroLine = null;
@@ -55,7 +53,7 @@ module frnk.UI.Charts {
         }
 
         public getGridlineType(): GridLineType {
-            return this._gridlineType;
+            return this.gridlineType;
         }
 
         public getScaleType(): ScaleType {
@@ -83,7 +81,7 @@ module frnk.UI.Charts {
             }
 
             // draw axis
-            this._svgAxis = chart.settings.plotArea.svg.append("g")
+            this._svgAxis = chart.canvas.plotArea.svg.append("g")
                 .attr("class", "axis")
                 .attr("transform", "translate(" + this._x + "," + this._y + ")")
                 .append("g")
@@ -170,13 +168,13 @@ module frnk.UI.Charts {
         protected setGridlineType(type: string): void {
             switch (type.toUpperCase()) {
                 case "MAJOR":
-                    this._gridlineType = GridLineType.Major;
+                    this.gridlineType = GridLineType.Major;
                     break;
                 case "MINOR":
-                    this._gridlineType = GridLineType.Minor;
+                    this.gridlineType = GridLineType.Minor;
                     break;
                 default:
-                    this._gridlineType = GridLineType.None;
+                    this.gridlineType = GridLineType.None;
                     break;
             }
         }
@@ -187,7 +185,7 @@ module frnk.UI.Charts {
         constructor(settings: IAxisSettings, chart: Chart) {
             super(settings, chart);
 
-            this.hasTickmarks = settings.tickmarks == "yes" ? true : false;
+            this.hasTickmarks = settings.tickmarks.toUpperCase() == "YES" ? true : false;
             this.name = settings.name;
             this.setOrientation(settings.orient);
             this.setGridlineType(settings.gridlines);
@@ -198,7 +196,7 @@ module frnk.UI.Charts {
         public drawTitle(chart: Chart, svg: D3.Selection): void {
             super.drawTitle(chart, svg);
             var anchor = "end";
-            var x = chart.settings.plotArea.width;
+            var x = chart.canvas.plotArea.width;
             var y = this.orient == "bottom" ? 30 : -30; // TODO: title needs to be positioned under labels but depends on size of labels
 
             this.svgTitle
@@ -212,15 +210,15 @@ module frnk.UI.Charts {
                 .attr("x1", this.scale(0))
                 .attr("x2", this.scale(0))
                 .attr("y1", 0)
-                .attr("y2", this.orient == "bottom" ? -chart.settings.plotArea.height : chart.settings.plotArea.height);
+                .attr("y2", this.orient == "bottom" ? -chart.canvas.plotArea.height : chart.canvas.plotArea.height);
         }
 
         public getInnerTicksize(chart: Chart): number {
-            return -chart.settings.plotArea.height;
+            return -chart.canvas.plotArea.height;
         }
 
         public getOuterTicksize(chart: Chart): number {
-            return -chart.settings.plotArea.height;
+            return -chart.canvas.plotArea.height;
         }
 
         public getScale(chart: Chart): any {
@@ -231,21 +229,21 @@ module frnk.UI.Charts {
                 this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
                     .domain([min < 0 ? -1 : 0, 1])
-                    .range([0, chart.settings.plotArea.width]);
+                    .range([0, chart.canvas.plotArea.width]);
             }
             else if (chart instanceof BarChart) {
                 this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
                     .domain([min < 0 ? min : 0, max])
                     .nice() // adds additional ticks to add some whitespace
-                    .range([0, chart.settings.plotArea.width]);
+                    .range([0, chart.canvas.plotArea.width]);
             }
             else {
                 if (chart.categories.format == "%s") {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
                         .domain(chart.categories.getLabels())
-                        .rangeBands([0, chart.settings.plotArea.width], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding);
+                        .rangeBands([0, chart.canvas.plotArea.width], chart.settings.plotOptions.innerPadding, chart.settings.plotOptions.outerPadding);
                 }
                 else {
                     this.setScaleType(ScaleType.Time);
@@ -254,13 +252,13 @@ module frnk.UI.Charts {
                             return d3.time.format(chart.categories.format).parse(d);
                         }))
                         .nice() // adds additional ticks to add some whitespace
-                        .range([0, chart.settings.plotArea.width]);
+                        .range([0, chart.canvas.plotArea.width]);
                 }
             }
         }
 
         public getTicks(chart: Chart): number {
-            return Number(chart.settings.get(this.settings, "ticks", String(Math.max(chart.settings.plotArea.width / 50, 2))));
+            return Math.max(chart.canvas.plotArea.width / 50, 2);
         }
 
         public getXCoordinate(chart: Chart): number {
@@ -268,7 +266,7 @@ module frnk.UI.Charts {
         }
 
         public getYCoordinate(chart: Chart): number {
-            return this.orient == "bottom" ? chart.settings.plotArea.height : 0;
+            return this.orient == "bottom" ? chart.canvas.plotArea.height : 0;
         }
 
         public isDataAxis(): boolean {
@@ -279,11 +277,10 @@ module frnk.UI.Charts {
         }
 
         public rotateLabels(chart: Chart, svg: D3.Selection): void {
-            // rotate labels
             var textAnchorAttr = this.orient == "bottom" ? "end" : "begin";
             var translateAttr = this.orient == "bottom" ? "translate(-8 4)" : "translate(8 -4)";
 
-            if (this.textRotation != "0") {
+            if (this.textRotation != 0) {
                 svg.selectAll("text")
                     .style("text-anchor", textAnchorAttr)
                     .attr("transform", translateAttr + " rotate(" + this.textRotation + ")");
@@ -309,7 +306,7 @@ module frnk.UI.Charts {
         constructor(settings: IAxisSettings, chart: Chart) {
             super(settings, chart);
 
-            this.hasTickmarks = settings.tickmarks == "yes" ? true : false;
+            this.hasTickmarks = settings.tickmarks.toUpperCase() == "YES" ? true : false;
             this.name = settings.name;
             this.setOrientation(settings.orient);
             this.setGridlineType(settings.gridlines);
@@ -333,17 +330,17 @@ module frnk.UI.Charts {
             super.drawZeroLine(chart, svg);
             this.svgZeroLine
                 .attr("x1", 0)
-                .attr("x2", this.orient == "left" ? chart.settings.plotArea.width : -chart.settings.plotArea.width)
+                .attr("x2", this.orient == "left" ? chart.canvas.plotArea.width : -chart.canvas.plotArea.width)
                 .attr("y1", this.scale(0))
                 .attr("y2", this.scale(0));
         }
 
         public getInnerTicksize(chart: Chart): number {
-            return -chart.settings.plotArea.width;
+            return -chart.canvas.plotArea.width;
         }
 
         public getOuterTicksize(chart: Chart): number {
-            return -chart.settings.plotArea.width;
+            return -chart.canvas.plotArea.width;
         }
 
         public getScale(chart: Chart): any {
@@ -355,14 +352,14 @@ module frnk.UI.Charts {
                 this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
                     .domain([1, min < 0 ? -1 : 0])
-                    .range([0, chart.settings.plotArea.height]);
+                    .range([0, chart.canvas.plotArea.height]);
             }
             else if (this.chart instanceof BarChart) {
                 if (chart.categories.format == "%s") {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
                         .domain(chart.categories.getLabels())
-                        .rangeRoundBands([0, chart.settings.plotArea.height], chart.plotOptions.innerPadding, chart.plotOptions.outerPadding);
+                        .rangeRoundBands([0, chart.canvas.plotArea.height], chart.settings.plotOptions.innerPadding, chart.settings.plotOptions.outerPadding);
                 }
                 else {
                     this.setScaleType(ScaleType.Time);
@@ -371,7 +368,7 @@ module frnk.UI.Charts {
                             return d3.time.format(chart.categories.format).parse(d);
                         }).reverse())
                         .nice() // adds additional ticks to add some whitespace
-                        .range([min, chart.settings.plotArea.height]);
+                        .range([min, chart.canvas.plotArea.height]);
                 }
             }
             else {
@@ -379,16 +376,16 @@ module frnk.UI.Charts {
                 return d3.scale.linear()
                     .domain([max, min < 0 ? min : 0])
                     .nice() // adds additional ticks to add some whitespace
-                    .range([0, chart.settings.plotArea.height]);
+                    .range([0, chart.canvas.plotArea.height]);
             }
         }
 
         public getTicks(chart: Chart): number {
-            return Number(chart.settings.get(this.settings, "ticks", String(Math.max(chart.settings.plotArea.height / 50, 2))));
+            return Math.max(chart.canvas.plotArea.height / 50, 2);
         }
 
         public getXCoordinate(chart: Chart): number {
-            return this.orient == "left" ? 0 : chart.settings.plotArea.width;
+            return this.orient == "left" ? 0 : chart.canvas.plotArea.width;
         }
 
         public getYCoordinate(chart: Chart): number {

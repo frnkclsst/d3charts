@@ -10,16 +10,22 @@ module frnk.UI.Charts {
         constructor(settings: ISettings, selector: string) {
             super(settings, selector);
 
-            this.xAxes =  this.settings.xAxes;
-            this.yAxes = this.settings.yAxes;
+            for (var i = 0; i < this.settings.xAxes.length; i++) {
+                this.xAxes.push(new XAxis(this.settings.xAxes[i], this));
+            }
+
+            for (var j = 0; j < this.settings.yAxes.length; j++) {
+                this.yAxes.push(new YAxis(this.settings.yAxes[j], this));
+            }
         }
 
         public draw(): void {
             super.draw();
-            // TODO - Refactor
+
             for (var i = 0; i < this.xAxes.length; i++) {
                 this.xAxes[i].draw(this);
             }
+
             for (var j = 0; j < this.yAxes.length; j++) {
                 this.yAxes[j].draw(this);
             }
@@ -33,25 +39,24 @@ module frnk.UI.Charts {
             // child classes are responsible for implementing this method
         }
 
-        protected getXAxisByName(name: string): number {
-            if (name != "") {
-                for (var i = 0; i <  this.xAxes.length; i++) {
-                    if (this.xAxes[i].name == name) {
-                        return i;
-                    }
-                }
-            }
-            return 0;
-        }
+        protected getAxisByName(axis: AxisType, name: string): number {
+            var axes: any;
 
-        protected getYAxisByName(name: string): number {
+            if (axis == AxisType.X) {
+                axes = this.xAxes;
+            }
+            else {
+                axes = this.yAxes;
+            }
+
             if (name != "") {
-                for (var i = 0; i <  this.yAxes.length; i++) {
-                    if (this.yAxes[i].name == name) {
+                for (var i = 0; i <  axes.length; i++) {
+                    if (axes[i].name == name) {
                         return i;
                     }
                 }
             }
+
             return 0;
         }
     }

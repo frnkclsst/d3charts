@@ -14,7 +14,7 @@ module frnk.UI.Charts {
 
         private _chart: Chart;
 
-        constructor(settings: ITitleSettings, chart: Chart) {
+        constructor(settings: ITitleAreaSettings, chart: Chart) {
             this._chart = chart;
 
             this.align = settings.align;
@@ -26,10 +26,14 @@ module frnk.UI.Charts {
 
         public draw(): void {
             // initialize
-            this.width = this._chart.settings.canvas.width;
+            this.width = this._chart.canvas.width;
+
+            if (this.height == 0) {
+                return;
+            }
 
             // get text
-            this.svg = this._chart.settings.canvas.svg.append("g")
+            this.svg = this._chart.canvas.svg.append("g")
                 .attr("class", "titlearea")
                 .attr("width", this.width)
                 .attr("height", this.height)

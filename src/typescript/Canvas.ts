@@ -5,20 +5,25 @@
 module frnk.UI.Charts {
     export class Canvas implements IArea {
         public height: number;
+        public legendArea: LegendArea;
         public padding: number;
+        public plotArea: PlotArea;
         public svg: D3.Selection;
+        public titleArea: TitleArea;
         public width: number;
 
         private _chart: Chart;
-        private _settings: Settings;
 
-        constructor(canvasSettings: ICanvasSettings, chart: Chart, settings: Settings) {
+        constructor(settings: ICanvasSettings, chart: Chart) {
             this._chart = chart;
-            this._settings = settings;
 
-            this.height = canvasSettings.height;
-            this.padding = canvasSettings.padding;
-            this.width = canvasSettings.width;
+            this.titleArea = new TitleArea(chart.settings.title, chart);
+            this.legendArea = new LegendArea(chart.settings.legend, chart);
+            this.plotArea = new PlotArea(chart.settings, chart);
+
+            this.height = settings.height;
+            this.padding = settings.padding;
+            this.width = settings.width;
 
             // update canvas size
             this.updateCanvasSize();
@@ -35,13 +40,13 @@ module frnk.UI.Charts {
                 .attr("height", this.height);
 
             // draw title area
-            this._settings.title.draw();
+            this.titleArea.draw();
 
             // draw legend area
-            this._settings.legend.draw();
+            this.legendArea.draw();
 
             // draw plot area
-            this._settings.plotArea.draw();
+            this.plotArea.draw();
         }
 
         public updateCanvasSize(): void {

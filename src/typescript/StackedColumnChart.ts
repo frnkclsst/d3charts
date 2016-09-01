@@ -22,7 +22,7 @@ module frnk.UI.Charts {
                     return this.xAxes[0].scale.rangeBand();
                 }
                 else {
-                    return this.settings.canvas.width / this.series.length / this.categories.length; //did it to support time scales
+                    return this.canvas.width / this.series.length / this.categories.length; //did it to support time scales
                 }
             };
         }
