@@ -10,7 +10,7 @@ module frnk.UI.Charts {
 
         constructor(args: any, selector: string) {
             super(args, selector);
-            this.showMarkers = this.settings.getValue("linechart.showMarkers").toUpperCase() == "YES" ? true : false;
+            this.showMarkers = this.settings.getValue("linechart.showMarkers", "yes").toUpperCase() == "YES" ? true : false;
             this.interpolation = this.settings.getValue("linechart.interpolation", "linear");
             this.fillArea = this.settings.getValue("linechart.fillArea").toUpperCase() == "YES" ? true : false;
         }
@@ -41,24 +41,30 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(serie: number): any {
+            var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+
             return (d: any, i: number): number => {
-                if (this.xAxes[0].getScaleType() == ScaleType.Ordinal) {
-                    return this.xAxes[0].scale(this.categories.parseFormat(this.categories.getItem(i))) + this.xAxes[0].scale.rangeBand() / 2;
+                if (this.xAxes[index].getScaleType() == ScaleType.Ordinal) {
+                    return this.xAxes[index].scale(this.categories.parseFormat(this.categories.getItem(i))) + this.xAxes[0].scale.rangeBand() / 2;
                 }
                 else {
-                    return this.xAxes[0].scale(this.categories.parseFormat(this.categories.getItem(i)));
+                    return this.xAxes[index].scale(this.categories.parseFormat(this.categories.getItem(i)));
                 }
             };
         }
 
         public getYCoordinate(serie: number): any {
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+
             return (d: any): number => {
-                return this.yAxes[0].scale(d.y);
+                return this.yAxes[index].scale(d.y);
             };
         }
 
         public getY0Coordinate(serie: number): any {
-            return this.yAxes[0].scale(0);
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+
+            return this.yAxes[index].scale(0);
         }
     }
 }

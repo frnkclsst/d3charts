@@ -28,7 +28,6 @@
     "yAxis": {
         "gridlines": "none",
         "orient": "right",
-        "ticks": 5,
         "tickmarks": "yes",
 		"title": {
             "text": "Status"

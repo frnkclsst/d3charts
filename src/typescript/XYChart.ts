@@ -7,44 +7,57 @@ module frnk.UI.Charts {
         public xAxes: XAxis[] = [];
         public yAxes: YAxis[] = [];
 
-        constructor(args: any, selector: string) {
-            super(args, selector);
+        constructor(settings: ISettings, selector: string) {
+            super(settings, selector);
 
-            this.xAxes =  this._setXAxes(this.settings.getValue("xAxis"));
-            this.yAxes = this._setYAxes(this.settings.getValue("yAxis"));
+            for (var i = 0; i < this.settings.xAxes.length; i++) {
+                this.xAxes.push(new XAxis(this.settings.xAxes[i], this));
+            }
+
+            for (var j = 0; j < this.settings.yAxes.length; j++) {
+                this.yAxes.push(new YAxis(this.settings.yAxes[j], this));
+            }
         }
 
         public draw(): void {
             super.draw();
+
             for (var i = 0; i < this.xAxes.length; i++) {
                 this.xAxes[i].draw(this);
             }
+
             for (var j = 0; j < this.yAxes.length; j++) {
                 this.yAxes[j].draw(this);
             }
         }
 
         public getXCoordinate(serie: number): any {
+            // child classes are responsible for implementing this method
         }
 
         public getYCoordinate(serie: number): any {
-
+            // child classes are responsible for implementing this method
         }
 
-        private _setXAxes(axes: any): YAxis[] {
-            var array: XAxis[] = [];
-            for (var i = 0; i < axes.length; i++) {
-                array.push(new XAxis(axes[i], this));
-            }
-            return array;
-        }
+        protected getAxisByName(axis: AxisType, name: string): number {
+            var axes: any;
 
-        private _setYAxes(axes: any): YAxis[] {
-            var array: YAxis[] = [];
-            for (var i = 0; i < axes.length; i++) {
-                array.push(new YAxis(axes[i], this));
+            if (axis == AxisType.X) {
+                axes = this.xAxes;
             }
-            return array;
+            else {
+                axes = this.yAxes;
+            }
+
+            if (name != "") {
+                for (var i = 0; i <  axes.length; i++) {
+                    if (axes[i].name == name) {
+                        return i;
+                    }
+                }
+            }
+
+            return 0;
         }
     }
 }

@@ -7,10 +7,12 @@ module frnk.UI.Charts {
 
         public selector: string;
         public chart: Chart;
+        public showPercentage: boolean;
 
         constructor(chart: Chart, selector: string) {
             this.chart = chart;
             this.selector = selector;
+            this.showPercentage = this.chart.settings.getValue("tooltip.showPercentage").toUpperCase() == "YES" ? true : false;
         }
 
         public draw(svg: D3.Selection, serie: number): void {
@@ -21,13 +23,12 @@ module frnk.UI.Charts {
                 .style("opacity", 0);
 
             svg.on("mouseover", function (d: any, i: number): void {
-                    //TODO - Refactor
                     if (_self.chart instanceof PieChart) {
                         div.html("<div class='title'>" + _self.chart.settings.getValue("tooltip.title") + "</div>" +
                             "<div class='subtitle'>" + _self.chart.series.getLabel(serie) + "</div><br/>" +
                             "<div class='color' style='width:24px; height: 11px; background-color:" + ColorPalette.getColor(i) + "'></div>" +
                             "<div class='serie'>" + _self.chart.categories.getLabel(i) + "</div>" +
-                            "<div class='value'>" + d.value + _self.chart.settings.getValue("tooltip.valueSuffix") + "</div>"
+                            "<div class='value'>" + d.value + _self.getSuffix(serie) + "</div>"
                         );
                     }
                     else {
@@ -36,7 +37,7 @@ module frnk.UI.Charts {
                             "<div class='color' style='width:24px; height: 11px; background-color:" + ColorPalette.getColor(serie) + "'></div>" +
                             "<div class='serie'>" + _self.chart.series.getLabel(serie) + "</div>" +
                             "<div class='percent'>" + Math.round(d.perc * 100) + "%</div>" +
-                            "<div class='value'>" + d.y + _self.chart.settings.getValue("tooltip.valueSuffix") + "</div>"
+                            "<div class='value'>" + d.y + _self.getSuffix(serie) + "</div>"
                         );
                     }
                     div.transition()
@@ -54,6 +55,13 @@ module frnk.UI.Charts {
                         .style("left", (d3.mouse(this.ownerSVGElement)[0]) - 50 + "px")
                         .style("top", (d3.mouse(this.ownerSVGElement)[1]) + 10 + "px");
                 });
+        }
+
+        public getSuffix(serie: number): string {
+            if (this.chart.settings.getValue("tooltip.valueSuffix") != "") {
+                return this.chart.settings.getValue("tooltip.valueSuffix");
+            }
+            return this.chart.series.items[serie].tooltipSuffix;
         }
     }
 }

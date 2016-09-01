@@ -32,7 +32,6 @@
     "yAxis": {
         "gridlines": "major",
         "orient": "left",
-        "ticks": 5,
 		"title": {
             "text": "# objects in this publication"
         }

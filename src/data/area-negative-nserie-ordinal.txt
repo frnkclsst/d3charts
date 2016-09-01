@@ -18,7 +18,9 @@
     },
     "title": {
         "text": "Object Types / Status", 
-		"align": "left"
+		"align": "left",
+		"height": "50",
+		"margin": "10"
     },
     "xAxis": {
         "gridlines": "none",

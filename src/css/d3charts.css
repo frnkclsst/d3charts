@@ -5,7 +5,7 @@ html {
 
 /* Charts */
 #chart {
-    height: 25%;
+    height: 50%;
     min-width: 300px;
     min-height: 300px;
     position: fixed;
@@ -14,7 +14,8 @@ html {
 
 svg {
 	background-color: #fafafa;
-	border: 1px solid #eeeeee;
+    box-shadow: 1px 1px 2px #ddd;
+    border: 1px solid #eeeeee;
 	border-radius:3px;
     margin-left: 12px;
 }

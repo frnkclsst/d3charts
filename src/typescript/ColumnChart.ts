@@ -58,38 +58,46 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(serie: number): any {
+            var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+
             return (d: any, i: number): number => {
                 var axisScale = this.categories.parseFormat(this.categories.getItem(i));
-                if (this.xAxes[0].getScaleType() == ScaleType.Ordinal) {
-                    return this.xAxes[0].scale(axisScale) + (this.xAxes[0].scale.rangeBand() / this.series.length * serie);
+                if (this.xAxes[index].getScaleType() == ScaleType.Ordinal) {
+                    return this.xAxes[index].scale(axisScale) + (this.xAxes[index].scale.rangeBand() / this.series.length * serie);
                 }
                 else {
-                    return this.xAxes[0].scale(axisScale) + (this.canvas.width / this.series.length / this.categories.length * serie);
+                    return this.xAxes[index].scale(axisScale) + (this.canvas.width / this.series.length / this.categories.length * serie);
                 }
             };
         }
 
         public getYCoordinate(serie: number): any {
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+
             return (d: any): number => {
                 if (d.y < 0) {
-                    return this.yAxes[0].scale(d.y) - Math.abs(this.yAxes[0].scale(d.y) - this.yAxes[0].scale(0));
+                    return this.yAxes[index].scale(d.y) - Math.abs(this.yAxes[index].scale(d.y) - this.yAxes[index].scale(0));
                 }
                 else {
-                    return this.yAxes[0].scale(d.y);
+                    return this.yAxes[index].scale(d.y);
                 }
             };
         }
 
         public getHeight(serie: number): any {
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+
             return (d: any): any => {
-                return Math.abs(this.yAxes[0].scale(d.y) - this.yAxes[0].scale(0));
+                return Math.abs(this.yAxes[index].scale(d.y) - this.yAxes[index].scale(0));
             };
         }
 
         public getWidth(serie: number): any {
+            var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+
             return (d: any): number => {
-                if (this.xAxes[0].getScaleType() == ScaleType.Ordinal) {
-                    return this.xAxes[0].scale.rangeBand() / this.series.length;
+                if (this.xAxes[index].getScaleType() == ScaleType.Ordinal) {
+                    return this.xAxes[index].scale.rangeBand() / this.series.length;
                 }
                 else {
                     return this.canvas.width / this.series.length / this.categories.length;

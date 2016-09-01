@@ -18,7 +18,6 @@
     "xAxis": {
         "gridlines": "major",
         "orient": "bottom",
-		"ticks": 3,
 		"title": { 
             "text": "Date"
         }

@@ -4,48 +4,56 @@
 
 module frnk.UI.Charts {
     export class Series {
+        public items: Serie[];
         public labels: string[];
         public length: number;
 
         private _matrix: any[];
         private _chart: Chart;
-        private _items: Serie[];
 
         constructor(chart: Chart) {
             this._chart = chart;
-            this._items = this._setSeries(chart.settings.getValue("series.data"));
-            this._matrix = this._setStackedMatrix();
 
+            this.items = this._setSeries(chart.settings.getValue("series.data"));
             this.labels = this._setLabels();
-            this.length = this._items.length;
+            this.length = this.items.length;
+
+            this._matrix = this._setStackedMatrix();
         }
 
         public getSerie(i: number): Serie {
-            return this._items[i];
+            return this.items[i];
+        }
+
+        public getSerieByName(name: string): Serie {
+            for (var i = 0; i < this.items.length; i++) {
+                if (this.items[i].name == name) {
+                    return this.items[i];
+                }
+            }
         }
 
         public getMatrixItem(i: number): any {
             return this._matrix[i];
         }
 
-        public getMatrix(): any {
-            return this._matrix;
-        }
-
         public getLabel(i: number): string {
-            return this._items[i].getName(i);
+            return this.items[i].getName(i);
         }
 
         public getLabels(): string[] {
             var array: string[] = [];
-            for (var i = 0; i < this._items.length; i++) {
-                array.push(this._items[i].getName(i));
+            for (var i = 0; i < this.items.length; i++) {
+                array.push(this.items[i].getName(i));
             }
             return array;
         }
 
-        public getMaxValue(): number {
-            if (this._chart.stackType != StackType.None && this._items.length > 1) { // can only be stacked if you have more than 1 series defined
+        public getMaxValue(name?: string): number {
+            if (name != undefined && name != "") {
+                return this.getSerieByName(name).max;
+            }
+            else if (this._chart.stackType != StackType.None && this.items.length > 1) { // can only be stacked if you have more than 1 series defined
                 return d3.max(this._matrix, function (array: number[]): number {
                     return d3.max(array, function (d: any): number {
                         return d.y0;
@@ -61,8 +69,11 @@ module frnk.UI.Charts {
             }
         }
 
-        public getMinValue(): number {
-            if (this._chart.stackType != StackType.None && this._items.length > 1) { // can only be stacked if you have more than 1 series defined
+        public getMinValue(name?: string): number {
+            if (name != undefined && name != "") {
+                return this.getSerieByName(name).min;
+            }
+            else if (this._chart.stackType != StackType.None && this.items.length > 1) { // can only be stacked if you have more than 1 series defined
                 return d3.min(this._matrix, function (array: number[]): number {
                     return d3.min(array, function (d: any): number {
                         return d.y0 + d.y;
@@ -80,8 +91,8 @@ module frnk.UI.Charts {
 
         private _getMappedMatrix(): any[] {
             var matrix = [];
-            for (var serie = 0; serie < this._items.length; serie++) {
-                matrix.push(this._items[serie].getValues());
+            for (var serie = 0; serie < this.items.length; serie++) {
+                matrix.push(this.items[serie].getValues());
             }
 
             var mappedMatrix = matrix.map(function (data: any, i: number): any[] {
@@ -124,8 +135,8 @@ module frnk.UI.Charts {
 
         private _setLabels(): string[] {
             var names: string[] = [];
-            for (var i = 0; i < this._items.length; i++) {
-                names.push(this._items[i].getName(i));
+            for (var i = 0; i < this.items.length; i++) {
+                names.push(this.items[i].getName(i));
             }
             return names;
         }

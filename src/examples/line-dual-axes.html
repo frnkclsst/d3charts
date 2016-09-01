@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Line Chart - Basic</title>
+    <title>Line Chart - Dual Axis</title>
     <!-- general styles -->
     <link rel="stylesheet" href="../../dist/css/style.css" />
     <link rel="stylesheet" href="../../dist/css/d3charts.css" />
@@ -20,64 +20,74 @@
 			},
 			"linechart": {
 				"fillArea": "no",
-				"interpolation": "linear",
+				"interpolation": "cardinal",
 				"showMarkers": "yes"
 			},
 			"legend": {
-				"title": "City",
+				"title": "Rainfall vs Temperature",
 				"position": "right",
 				"width": 200
 			},
 			"title": {
-				"text": "Line Chart - Basic",
+				"text": "Line Chart - Dual Axes",
 				"align": "center",
-				"height": 50
+				"height": 50,
+				"margin": 15
 			},
-			"xAxis": [{
+			"xAxis": {
 				"gridlines": "none",
-				"position": "top",
+				"orient": "bottom",
 				"labels": {
 					"rotate": "0"
 				},
-				"tickmark": "no",
+				"tickmarks": "yes",
 				"title": {
-					"text": "Month"
+					"text": "Year"
 				}
-			}],
+			},
 			"yAxis": [{
-				"gridlines": "none",
-				"position": "left",
-				"tickmark": "yes",
-				"tickmark": "no",
-				"title": {
-					"text": "Temperature"
-				}
+					"name": "Rainfall",
+					"gridlines": "none",
+					"orient": "left",
+					"tickmarks": "yes",
+					"title": {
+						"text": "mm"
+					}
+				},{
+					"name": "Temperature",
+					"gridlines": "none",
+					"orient": "right",
+					"tickmarks": "yes",
+					"title": {
+						"text": "°C"
+					}
 			}],
 			"tooltip": {
-				"title": "Temperature",
-				"valueSuffix": " °C"
+				"title": "Rainfall vs Temperature",
+				"showPercent": "yes"
 			},
 			"categories": {
 				"format": "%s",
 				"data": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 			},
 			"series": {
-				"data": [{
-						"name": "Tokyo",
-						"data": [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-					}, {
-						"name": "New York",
-						"data": [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
-					}, {
-						"name": "Berlin",
-						"data": [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
-					}, {
-						"name": "London",
-						"data": [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+				"name": "Population",
+				"data":	[{
+						"name": "Rainfall",
+						"data": [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+						"type": "column",
+						"tooltipSuffix": " mm"
+					}, 
+					{
+						"name": "Temperature",
+						"data": [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+						"type": "line",
+						"tooltipSuffix": " °C"
 					}]
 			},
+
 			"plotOptions": {
-				"general": {
+				"general": { 
 					"innerPadding": 0.1,
 					"outerPadding": 0.5
 				}

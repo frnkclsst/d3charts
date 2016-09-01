@@ -14,31 +14,29 @@ module frnk.UI.Charts {
         public width: number;
 
         private _chart: Chart;
-        private _canvas: Canvas;
         private _items: string[];
 
-        constructor(chart: Chart, canvas: Canvas) {
+        constructor(settings: ILegendAreaSettings, chart: Chart) {
             this._chart = chart;
-            this._canvas = canvas;
 
-            this.height = Number(chart.settings.getValue("legend.height", "0"));
-            this.position = chart.settings.getValue("legend.position", "right");
-            this.title = chart.settings.getValue("legend.title", "Categories");
-            this.width = Number(chart.settings.getValue("legend.width", "0"));
-
-            if (chart instanceof PieChart) {
-                this._items = chart.categories.getLabels();
-            }
-            else {
-                this._items = chart.series.getLabels();
-            }
+            this.height = settings.height;
+            this.position = settings.position;
+            this.title = settings.title;
+            this.width = settings.width;
         }
 
         public draw(): void {
+             if (this._chart instanceof PieChart) {
+                 this._items = this._chart.categories.getLabels();
+             }
+             else {
+                 this._items = this._chart.series.getLabels();
+             }
+
             if (this.width != 0) {
-                this.svg = this._canvas.svg.append("g")
+                this.svg = this._chart.canvas.svg.append("g")
                     .attr("class", "legend")
-                    .attr("transform", "translate(" + (this._canvas.width - this.width) + "," + this._canvas.title.height + ")");
+                    .attr("transform", "translate(" + (this._chart.canvas.width - this.width) + "," + this._chart.settings.title.height + ")");
 
                 this.drawLine(this.svg);
                 this.drawTitle(this.svg);
@@ -65,7 +63,7 @@ module frnk.UI.Charts {
                 .attr("x1", 0)
                 .attr("y1", 0)
                 .attr("x2", 0)
-                .attr("y2", this._canvas.height - this._canvas.title.height);
+                .attr("y2", this._chart.canvas.height - this._chart.settings.title.height);
         }
 
         private drawSymbol(svg: D3.Selection): void {

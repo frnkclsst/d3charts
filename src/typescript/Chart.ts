@@ -6,14 +6,13 @@ module frnk.UI.Charts {
     export class Chart {
         public canvas: Canvas;
         public categories: Categories;
-        public plotOptions: PlotOptions;
         public series: Series;
         public settings: Settings;
         public selector: string;
         public stackType: StackType;
         public tooltip: Tooltip;
 
-        constructor(args: any, selector: string) {
+        constructor(settings: ISettings, selector: string) {
             this.selector = selector;
             this.stackType = StackType.None;
 
@@ -27,13 +26,12 @@ module frnk.UI.Charts {
                 console.log(e.message);
             }
 
-            this.settings = new Settings(args);
-            this.plotOptions = new PlotOptions(this);
+            this.settings = new Settings(settings, this);
+
+            this.canvas = new Canvas(settings.canvas, this);
             this.categories = new Categories(this);
             this.series = new Series(this);
             this.tooltip = new Tooltip(this, this.selector);
-
-            this.canvas = new Canvas(this);
 
             // update size and add EventListener
             this.canvas.updateCanvasSize();

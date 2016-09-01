@@ -9,12 +9,14 @@ module frnk.UI.Charts {
         public name: string;
         public sum: number;
         public type: string;
+        public tooltipSuffix: string;
 
         private _data: number[];
 
         constructor(serie: any) {
             this._data = serie.data;
             this.name = serie.name;
+            this.tooltipSuffix = serie.tooltipSuffix;
             this.type = serie.type;
 
             this.max = d3.max(this._data);

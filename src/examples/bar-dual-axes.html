@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Bar Chart - Dual Axis</title>
+    <!-- general styles -->
+    <link rel="stylesheet" href="../../dist/css/style.css" />
+    <link rel="stylesheet" href="../../dist/css/d3charts.css" />
+    <script src="../../dist/js/d3.min.js" charset="utf-8"></script>
+    <script src="../../dist/js/d3.charts.js"></script>
+</head>
+<body>
+    <div id="chart" />
+    <script>
+		var settings = {
+			"canvas": {
+				"height": 300,
+				"width": 600,
+				"padding": 50
+			},
+			"linechart": {
+				"fillArea": "no",
+				"interpolation": "cardinal",
+				"showMarkers": "yes"
+			},
+			"legend": {
+				"title": "Rainfall vs Temperature",
+				"position": "right",
+				"width": 200
+			},
+			"title": {
+				"text": "Bar Chart - Dual Axes",
+				"align": "center",
+				"height": 50,
+				"margin": 15
+			},
+			"xAxis": [{
+					"name": "Rainfall",
+					"gridlines": "none",
+					"orient": "top",
+					"tickmarks": "yes",
+					"title": {
+						"text": "mm"
+					}
+				},{
+					"name": "Temperature",
+					"gridlines": "none",
+					"orient": "bottom",
+					"tickmarks": "yes",
+					"title": {
+						"text": "°C"
+					}
+			}],
+			"yAxis": {
+				"gridlines": "none",
+				"orient": "left",
+				"tickmarks": "yes",
+				"title": {
+					"text": "Month"
+				}
+			},
+			"tooltip": {
+				"title": "Rainfall vs Temperature",
+				"showPercent": "yes"
+			},
+			"categories": {
+				"format": "%s",
+				"data": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+			},
+			"series": {
+				"name": "Population",
+				"data":	[{
+						"name": "Rainfall",
+						"data": [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+						"type": "column",
+						"tooltipSuffix": " mm"
+					}, 
+					{
+						"name": "Temperature",
+						"data": [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+						"type": "line",
+						"tooltipSuffix": " °C"
+					}]
+			},
+
+			"plotOptions": {
+				"general": { 
+					"innerPadding": 0.1,
+					"outerPadding": 0.5
+				}
+			}
+		};
+
+		var chart = new frnk.UI.Charts.BarChart(settings, "#chart");
+		chart.draw();
+    </script>
+</body>
+</html>

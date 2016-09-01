@@ -9,27 +9,27 @@ module frnk.UI.Charts {
         public svg: D3.Selection;
         public padding: number;
 
-        private _canvas: Canvas;
         private _chart: Chart;
 
-        constructor(chart: Chart, canvas: Canvas) {
+        constructor(settings: Settings, chart: Chart) {
             this._chart = chart;
-            this._canvas = canvas;
 
-            this.padding = this._chart.settings.getValue("canvas.padding", "20");
-            this.height = this._canvas.height - this._canvas.title.height - this.padding * 2;
-            this.width = this._canvas.width - this.padding * 2 - this._canvas.legend.width;
+            this.padding = settings.canvas.padding;
+            this.height = settings.canvas.height - settings.title.height - this.padding * 2;
+            this.width = settings.canvas.width - this.padding * 2 - settings.legend.width;
         }
 
         public draw(): void {
             // initialize
-            this.height = this._canvas.height - this._canvas.title.height - this.padding * 2;
-            this.width = this._canvas.width - this.padding * 2 - this._canvas.legend.width;
+            this.height = this._chart.canvas.height - this._chart.settings.title.height - this.padding * 2;
+            this.width = this._chart.canvas.width - this.padding * 2 - this._chart.settings.legend.width;
 
             // draw plot area
             this.svg = this._chart.canvas.svg.append("g")
                 .attr("class", "plotarea")
-                .attr("transform", "translate(" + this._chart.canvas.plotArea.padding + "," + (this._chart.canvas.title.height + this._chart.canvas.plotArea.padding) + ")");
+                .attr("transform", "translate(" + this.padding + ","
+                    + (this._chart.settings.title.height
+                    + this.padding) + ")");
         }
     }
 }

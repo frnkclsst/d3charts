@@ -14,19 +14,23 @@ module frnk.UI.Charts {
 
         private _chart: Chart;
 
-        constructor(chart: Chart, canvas: Canvas) {
+        constructor(settings: ITitleAreaSettings, chart: Chart) {
             this._chart = chart;
 
-            this.align = chart.settings.getValue("title.align", "center");
-            this.margin = chart.settings.getValue("title.margin");
-            this.height = Number(chart.settings.getValue("title.height", "0"));
-            this.subTitle = chart.settings.getValue("title.subtitle");
-            this.text = chart.settings.getValue("title.text");
+            this.align = settings.align;
+            this.margin = settings.margin;
+            this.height = settings.height;
+            this.subTitle = settings.subtitle;
+            this.text = settings.text;
         }
 
         public draw(): void {
             // initialize
             this.width = this._chart.canvas.width;
+
+            if (this.height == 0) {
+                return;
+            }
 
             // get text
             this.svg = this._chart.canvas.svg.append("g")
