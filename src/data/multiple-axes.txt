@@ -29,7 +29,6 @@
 		"subtitle": "Source: wikipedia.org"
     },
     "xAxis": {
-        "name": "Rainfall",
         "gridlines": "none",
         "labels": {
             "rotate": 0
@@ -72,18 +71,19 @@
         "data": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     },
     "series": {
-		"name": "Population",
 		"data":	[{
                 "name": "Rainfall",
-                "data": [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+                "data": [49.94, 71.53, 106.40, 129.21, 144.05, 176.07, 135.68, 148.58, 216.49, 194.11, 95.64, 54.43],
                 "type": "column",
-                "tooltipSuffix": " mm"
+                "tooltipSuffix": " mm",
+                "tooltipPointFormat": ".2f"
             }, 
 			{
                 "name": "Temperature",
                 "data": [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
                 "type": "line",
-                "tooltipSuffix": " °C"
+                "tooltipSuffix": " °C",
+                "tooltipPointFormat": ".1f"
             }]
     },
     "plotOptions": {

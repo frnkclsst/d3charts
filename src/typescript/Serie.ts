@@ -8,8 +8,9 @@ module frnk.UI.Charts {
         public min: number;
         public name: string;
         public sum: number;
-        public type: string;
+        public tooltipPointFormat: string;
         public tooltipSuffix: string;
+        public type: string;
 
         private _data: number[];
 
@@ -17,6 +18,7 @@ module frnk.UI.Charts {
             this._data = serie.data;
             this.name = serie.name;
             this.tooltipSuffix = serie.tooltipSuffix;
+            this.tooltipPointFormat = serie.tooltipPointFormat;
             this.type = serie.type;
 
             this.max = d3.max(this._data);
