@@ -26,34 +26,36 @@ module frnk.UI.Charts {
         }
 
         public draw(): void {
-             if (this._chart instanceof PieChart) {
-                 this._items = this._chart.categories.getLabels();
-             }
-             else {
-                 this._items = this._chart.series.getLabels();
-             }
-
-            if (this.width != 0) {
-                this.svg = this._chart.canvas.svg.append("g")
-                    .attr("class", "legend")
-                    .attr("transform", "translate(" + (this._chart.canvas.width - this.width) + "," + this._chart.settings.title.height + ")");
-
-                this.drawLine(this.svg);
-                this.drawTitle(this.svg);
-
-                // add legend items
-                var items = this.svg
-                    .selectAll(".item")
-                    .data(this._items)
-                    .enter().append("g")
-                    .attr("class", "item")
-                    .attr("transform", (d: any, i: any): string => {
-                        return "translate(" + 22 + "," + ((i * 20) + 60) + ")";
-                    });
-
-                this.drawSymbol(items);
-                this.drawText(items);
+            if (this._chart instanceof PieChart) {
+                this._items = this._chart.categories.getLabels();
             }
+            else {
+                this._items = this._chart.series.getLabels();
+            }
+
+            if (this.width == 0) {
+                return;
+            }
+
+            this.svg = this._chart.canvas.svg.append("g")
+                .attr("class", "legend")
+                .attr("transform", "translate(" + (this._chart.canvas.width - this.width) + "," + this._chart.settings.title.height + ")");
+
+            this.drawLine(this.svg);
+            this.drawTitle(this.svg);
+
+            // add legend items
+            var items = this.svg
+                .selectAll(".item")
+                .data(this._items)
+                .enter().append("g")
+                .attr("class", "item")
+                .attr("transform", (d: any, i: any): string => {
+                    return "translate(" + 22 + "," + ((i * 20) + 60) + ")";
+                });
+
+            this.drawSymbol(items);
+            this.drawText(items);
         }
 
         private drawLine(svg: D3.Selection): void {

@@ -25,7 +25,7 @@ module frnk.UI.Charts {
                 .style("position", "absolute")
                 .style("z-index", "19");
             */
-            
+
             svg.on("mouseover", function (d: any, i: number): void {
                     if (_self.chart instanceof PieChart) {
                         divTooltip.html("<div class='title'>" + _self.chart.settings.getValue("tooltip.title") + "</div>" +
@@ -54,9 +54,11 @@ module frnk.UI.Charts {
                         .duration(100)
                         .style("opacity", 0);
 
+                    /*
                     divLine.transition()
                         .duration(100)
                         .style("opacity", 0);
+                    */
                 })
                 .on("mousemove", function(d: any): void {
                     divTooltip
