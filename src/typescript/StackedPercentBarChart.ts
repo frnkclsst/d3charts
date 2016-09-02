@@ -5,8 +5,8 @@
 module frnk.UI.Charts {
     export class StackedPercentBarChart extends StackedBarChart {
 
-        constructor(args: any, selector: string) {
-            super(args, selector);
+        constructor(settings: ISettings, selector: string) {
+            super(settings, selector);
             this.stackType = StackType.Percent;
         }
 

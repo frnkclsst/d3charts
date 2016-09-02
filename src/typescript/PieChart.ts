@@ -6,8 +6,8 @@ module frnk.UI.Charts {
     export class PieChart extends Chart {
         public innerRadius: number;
 
-        constructor(args: any, selector: string) {
-            super(args, selector);
+        constructor(settings: ISettings, selector: string) {
+            super(settings, selector);
             this.innerRadius = Number(this.settings.getValue("piechart.innerRadius", "0.9"));
         }
 

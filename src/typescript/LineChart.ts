@@ -8,8 +8,8 @@ module frnk.UI.Charts {
         public interpolation: string;
         public fillArea: boolean;
 
-        constructor(args: any, selector: string) {
-            super(args, selector);
+        constructor(settings: ISettings, selector: string) {
+            super(settings, selector);
             this.showMarkers = this.settings.getValue("linechart.showMarkers", "yes").toUpperCase() == "YES" ? true : false;
             this.interpolation = this.settings.getValue("linechart.interpolation", "linear");
             this.fillArea = this.settings.getValue("linechart.fillArea").toUpperCase() == "YES" ? true : false;

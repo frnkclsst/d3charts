@@ -5,8 +5,8 @@
 module frnk.UI.Charts {
     export class StackedBarChart extends BarChart {
 
-        constructor(args: any, selector: string) {
-            super(args, selector);
+        constructor(settings: ISettings, selector: string) {
+            super(settings, selector);
             this.stackType = StackType.Normal;
         }
 

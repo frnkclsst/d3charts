@@ -27,7 +27,6 @@ module frnk.UI.Charts {
             }
 
             this.settings = new Settings(settings, this);
-
             this.canvas = new Canvas(settings.canvas, this);
             this.categories = new Categories(this);
             this.series = new Series(this);

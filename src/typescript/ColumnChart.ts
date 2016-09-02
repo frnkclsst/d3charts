@@ -7,8 +7,8 @@ module frnk.UI.Charts {
 
         public showDataLabels: boolean;
 
-        constructor(args: any, selector: string) {
-            super(args, selector);
+        constructor(settings: ISettings, selector: string) {
+            super(settings, selector);
             this.showDataLabels = this.settings.getValue("columnchart.dataLabels").toUpperCase() == "YES" ? true : false;
         }
 

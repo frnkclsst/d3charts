@@ -42,6 +42,7 @@ module frnk.UI.Charts {
             return cur;
         }
 
+        // TODO - Refactor - make more generic
         private _setAxesSettings(settings: any): AxisSettings[] {
             var array: AxisSettings[] = [];
 
