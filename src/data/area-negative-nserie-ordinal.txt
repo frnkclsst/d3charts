@@ -6,8 +6,8 @@
     },
     "linechart": {
         "interpolation": "linear",
-        "showMarkers": "yes",
-        "fillArea": "yes"
+        "showMarkers": true,
+        "fillArea": true
     },
 	"piechart": {
 		"innerRadius": 1
@@ -19,8 +19,8 @@
     "title": {
         "text": "Object Types / Status", 
 		"align": "left",
-		"height": "50",
-		"margin": "10"
+		"height": 50,
+		"margin": 10
     },
     "xAxis": {
         "gridlines": "none",
@@ -28,7 +28,7 @@
 		"labels": {
 			"rotate": "-45"
 		},
-		"tickmark": "yes",
+		"tickmarks": true,
         "title": { 
             "text": "Status"
         }

@@ -14,24 +14,24 @@ module frnk.UI.Charts {
 
         private _chart: Chart;
 
-        constructor(settings: ICanvasSettings, chart: Chart) {
+        constructor(chart: Chart) {
             this._chart = chart;
 
             this.titleArea = new TitleArea(chart.settings.title, chart);
             this.legendArea = new LegendArea(chart.settings.legend, chart);
             this.plotArea = new PlotArea(chart.settings, chart);
 
-            this.height = settings.height;
-            this.padding = settings.padding;
-            this.width = settings.width;
+            this.height = chart.settings.canvas.height;
+            this.padding = chart.settings.canvas.padding;
+            this.width = chart.settings.canvas.width;
 
             // update canvas size
-            this.updateCanvasSize();
+            this.updateSize();
         }
 
         public draw(): void {
             // update canvas size
-            this.updateCanvasSize();
+            this.updateSize();
 
             // draw chart area
             this.svg = d3.select(this._chart.selector)
@@ -49,7 +49,7 @@ module frnk.UI.Charts {
             this.plotArea.draw();
         }
 
-        public updateCanvasSize(): void {
+        public updateSize(): void {
             var container = d3.select(this._chart.selector);
             var width = Number(container.style("width").substring(0, container.style("width").length - 2));
             var height = Number(container.style("height").substring(0, container.style("height").length - 2));

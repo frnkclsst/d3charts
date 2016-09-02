@@ -4,15 +4,15 @@
 
 module frnk.UI.Charts {
     export class LineChart extends XYChart {
-        public showMarkers: boolean;
-        public interpolation: string;
         public fillArea: boolean;
+        public interpolation: string;
+        public showMarkers: boolean;
 
-        constructor(settings: ISettings, selector: string) {
-            super(settings, selector);
-            this.showMarkers = this.settings.getValue("linechart.showMarkers", "yes").toUpperCase() == "YES" ? true : false;
-            this.interpolation = this.settings.getValue("linechart.interpolation", "linear");
-            this.fillArea = this.settings.getValue("linechart.fillArea").toUpperCase() == "YES" ? true : false;
+        constructor(args: ISettings, selector: string) {
+            super(args, selector);
+            this.fillArea = this.settings.linechart.fillArea;
+            this.interpolation = this.settings.linechart.interpolation;
+            this.showMarkers = this.settings.linechart.showMarkers;
         }
 
         public draw(): void {
@@ -20,7 +20,7 @@ module frnk.UI.Charts {
 
             // draw areas
             // areas need to be drawn first, because the line and markers need to be drawn on top of it
-            if (this.fillArea) {
+            if (this.fillArea == true) {
                 var svgAreas = this.canvas.plotArea.svg.append("g")
                     .attr("class", "areas");
 

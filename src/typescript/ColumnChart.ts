@@ -7,9 +7,9 @@ module frnk.UI.Charts {
 
         public showDataLabels: boolean;
 
-        constructor(settings: ISettings, selector: string) {
-            super(settings, selector);
-            this.showDataLabels = this.settings.getValue("columnchart.dataLabels").toUpperCase() == "YES" ? true : false;
+        constructor(args: ISettings, selector: string) {
+            super(args, selector);
+            this.showDataLabels = this.settings.columnchart.dataLabels;
         }
 
         public draw(): void {
@@ -42,7 +42,7 @@ module frnk.UI.Charts {
                 this.tooltip.draw(svgColumn, j);
 
                 // draw data labels
-                if (this.showDataLabels) {
+                if (this.showDataLabels == true) {
                     svgSerie.append("text")
                         .attr("class", "data-label")
                         .text(function (d: any): string {

@@ -7,8 +7,8 @@ module frnk.UI.Charts {
         public xAxes: XAxis[] = [];
         public yAxes: YAxis[] = [];
 
-        constructor(settings: ISettings, selector: string) {
-            super(settings, selector);
+        constructor(args: ISettings, selector: string) {
+            super(args, selector);
 
             for (var i = 0; i < this.settings.xAxes.length; i++) {
                 this.xAxes.push(new XAxis(this.settings.xAxes[i], this));

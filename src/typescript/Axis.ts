@@ -8,7 +8,7 @@ module frnk.UI.Charts {
         public scale: any;
 
         protected chart: Chart;
-        protected formatter: string;
+        protected format: string;
         protected gridlineType: GridLineType;
         protected hasTickmarks: boolean;
         protected orient: OrientationType;
@@ -29,7 +29,7 @@ module frnk.UI.Charts {
 
         constructor(settings: IAxisSettings, chart: Chart) {
             this.chart = chart;
-            this.formatter = null;
+            this.format = settings.format;
             this.orient = null;
             this.scale = null;
             this.svgGrid = null;
@@ -70,12 +70,12 @@ module frnk.UI.Charts {
                 .ticks(this._ticks);
 
             // apply custom formatter
-            if (this.formatter != null) {
-                this._axis.tickFormat(d3.format(this.formatter));
+            if (this.format != "") {
+                this._axis.tickFormat(d3.format(this.format));
             }
 
             // draw tick marks
-            if (!this.hasTickmarks) {
+            if (this.hasTickmarks != true) {
                 this._axis.tickSize(0);
                 this._axis.tickPadding(12);
             }
@@ -185,7 +185,7 @@ module frnk.UI.Charts {
         constructor(settings: IAxisSettings, chart: Chart) {
             super(settings, chart);
 
-            this.hasTickmarks = settings.tickmarks.toUpperCase() == "YES" ? true : false;
+            this.hasTickmarks = settings.tickmarks;
             this.name = settings.name;
             this.setOrientation(settings.orient);
             this.setGridlineType(settings.gridlines);
@@ -306,7 +306,7 @@ module frnk.UI.Charts {
         constructor(settings: IAxisSettings, chart: Chart) {
             super(settings, chart);
 
-            this.hasTickmarks = settings.tickmarks.toUpperCase() == "YES" ? true : false;
+            this.hasTickmarks = settings.tickmarks;
             this.name = settings.name;
             this.setOrientation(settings.orient);
             this.setGridlineType(settings.gridlines);
@@ -319,7 +319,7 @@ module frnk.UI.Charts {
 
             var anchor = this.orient == "left" ? "begin" : "end";
             var x = 0;
-            var y = -15;
+            var y = -30;
 
             this.svgTitle
                 .attr("text-anchor", anchor)

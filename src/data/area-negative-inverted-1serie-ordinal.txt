@@ -6,8 +6,7 @@
     },
     "linechart": {
         "interpolation": "linear",
-        "showMarkers": "yes",
-        "stacking": "normal"
+        "showMarkers": true,
     },
 	"piechart": {
 		"innerRadius": 1
@@ -23,7 +22,7 @@
         "gridlines": "major",
         "orient": "top",
 		"labels": {
-			"rotate": "-45"
+			"rotate": -45
 		},
         "title": { 
             "text": "Status"

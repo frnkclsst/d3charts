@@ -6,7 +6,7 @@
 	},
     "linechart": {
         "interpolation": "linear",
-        "showMarkers": "yes"
+        "showMarkers": true
     },
     "legend": {
        	"title": "",

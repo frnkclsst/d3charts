@@ -5,13 +5,13 @@
         "padding": 50
     },
     "linechart": {
-        "fillArea": "yes",
+        "fillArea": true,
         "interpolation": "linear",
-        "showMarkers": "yes",
+        "showMarkers": true,
         "stacking": "percent"
     },
 	"piechart": {
-		"innerRadius": "0.8"
+		"innerRadius": 0.8
 	},
 	"columnchart": {
 		"dataLabels": "no"
@@ -32,9 +32,9 @@
         "gridlines": "none",
         "orient": "bottom",
 		"labels": {
-			"rotate": "0"
+			"rotate": 0
 		},
-		"tickmarks": "no",
+		"tickmarks": true,
         "title": {
             "text": "Year"
         }
@@ -45,7 +45,7 @@
         "labels": {
             "rotate": "0"
         },
-		"tickmarks": "yes",
+		"tickmarks": true,
 		"title": {
             "text": "Millions"
         }

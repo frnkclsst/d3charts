@@ -5,8 +5,8 @@
 module frnk.UI.Charts {
     export class BarChart extends XYChart {
 
-        constructor(settings: ISettings, selector: string) {
-            super(settings, selector);
+        constructor(args: ISettings, selector: string) {
+            super(args, selector);
         }
 
         public draw(): void {

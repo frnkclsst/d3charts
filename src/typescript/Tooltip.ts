@@ -4,29 +4,28 @@
 
 module frnk.UI.Charts {
     export class Tooltip {
-
-        public selector: string;
         public chart: Chart;
         public showPercentage: boolean;
 
-        constructor(chart: Chart, selector: string) {
+        constructor(chart: Chart) {
             this.chart = chart;
-            this.selector = selector;
-            this.showPercentage = this.chart.settings.getValue("tooltip.showPercentage").toUpperCase() == "YES" ? true : false;
+            this.showPercentage = this.chart.settings.getValue("tooltip.showPercentage"); // TODO - Implement showpercent param
         }
 
         public draw(svg: D3.Selection, serie: number): void {
             var _self = this;
 
-            var divTooltip = d3.select(_self.selector).append("div")
+            var divTooltip = d3.select(_self.chart.selector).append("div")
                 .attr("class", "tooltip")
                 .style("opacity", 0);
 
-            var divLine = d3.select(_self.selector).append("div")
+            /*
+            var divLine = d3.select(_self.chart.selector).append("div")
                 .attr("class", "vertical-line")
                 .style("position", "absolute")
                 .style("z-index", "19");
-
+            */
+            
             svg.on("mouseover", function (d: any, i: number): void {
                     if (_self.chart instanceof PieChart) {
                         divTooltip.html("<div class='title'>" + _self.chart.settings.getValue("tooltip.title") + "</div>" +

@@ -1,20 +1,17 @@
 {
     "canvas": {
-        "height": 300,
-        "width": 600,
         "padding": 50
     },
     "linechart": {
-        "fillArea": "yes",
+        "fillArea": true,
         "interpolation": "linear",
-        "showMarkers": "yes",
-        "stacking": "percent"
+        "showMarkers": true
     },
 	"piechart": {
-		"innerRadius": "0.8"
+		"innerRadius": "0.5"
 	},
 	"columnchart": {
-		"dataLabels": "no"
+		"dataLabels": false
 	},
     "legend": {
        	"title": "Rainfall vs Temperature",
@@ -34,7 +31,7 @@
             "rotate": 0
         },
         "orient": "bottom",
-        "tickmarks": "yes",
+        "tickmarks": true,
         "title": {
             "text": "Month"
         }
@@ -46,7 +43,7 @@
                 "rotate": "0"
             },
             "orient": "left",
-		    "tickmarks": "yes",
+		    "tickmarks": true,
 		    "title": {
 		        "text": "mm"
 		    }
@@ -57,14 +54,14 @@
                 "rotate": "0"
             },
             "orient": "right",
-		    "tickmarks": "yes",
+		    "tickmarks": true,
 		    "title": {
 		        "text": "°C"
 		    }
     }],
     "tooltip": {
         "title": "Rainfall vs Temperature",
-        "showPercent": "yes"
+        "showPercent": false
     },
     "categories": {
         "format": "%s",

@@ -6,23 +6,29 @@ module frnk.UI.Charts {
 
     export class Settings {
         public canvas: CanvasSettings;
+        public columnchart: IColumnChartSettings;
         public xAxes: AxisSettings[] = [];
         public yAxes: AxisSettings[] = [];
         public title: TitleAreaSettings;
         public legend: LegendAreaSettings;
-        public plotOptions: PlotOptions;
+        public linechart: LineChartSettings;
+        public piechart: PieChartSettings;
+        public plotOptions: PlotOptionSettings;
 
         private _settings: ISettings;
 
-        constructor(settings: ISettings, chart: Chart) {
+        constructor(settings: ISettings) {
             this._settings = settings;
 
             this.canvas = new CanvasSettings(this.getValue("canvas"));
+            this.columnchart = new ColumnChartSettings(this.getValue("columnchart"));
             this.title = new TitleAreaSettings(this.getValue("title"));
-            this.legend = new LegendArea(this.getValue("legend"), chart);
+            this.legend = new LegendAreaSettings(this.getValue("legend"));
             this.xAxes = this._setAxesSettings(this.getValue("xAxis"));
             this.yAxes = this._setAxesSettings(this.getValue("yAxis"));
-            this.plotOptions = new PlotOptions(this.getValue("plotOptions.general"), chart);
+            this.linechart = new LineChartSettings(this.getValue("linechart"));
+            this.piechart = new PieChartSettings(this.getValue("piechart"));
+            this.plotOptions = new PlotOptionSettings(this.getValue("plotOptions.general"));
         }
 
         public getValue(propStr: string, defaultValue?: string): any {
@@ -59,57 +65,75 @@ module frnk.UI.Charts {
     }
 
     export class AxisSettings implements IAxisSettings {
-        public tickmarks: string;
+        public format: string;
         public labels: {
             rotate: number;
         };
         public name: string;
         public orient: OrientationType;
         public gridlines: string;
+        public tickmarks: boolean;
         public title: {
             text: string;
         };
 
         constructor(settings: IAxisSettings) {
             // defaults
+            this.format = "";
+            this.gridlines = "none";
             this.labels = {
                 rotate: 0
             };
             this.name = "";
             this.orient = "";
-            this.gridlines = "none";
-            this.tickmarks = "no";
+            this.tickmarks = false;
             this.title = {
                 text: ""
             };
 
             // apply properties from config if available
-            if (settings.tickmarks) {
-                this.tickmarks = settings.tickmarks == "yes" ? "yes" : "no";
+            if (typeof settings.format != "undefined") {
+                this.format = settings.format;
             }
 
-            if (settings.name) {
-                this.name = settings.name;
-            }
-
-            if (settings.orient) {
-                this.orient = settings.orient;
-            }
-
-            if (settings.gridlines) {
+            if (typeof settings.gridlines != "undefined") {
                 this.gridlines = settings.gridlines;
             }
 
-            if (settings.labels) {
-                if (settings.labels.rotate) {
+            if (typeof settings.labels != "undefined") {
+                if (typeof settings.labels.rotate != "undefined") {
                     this.labels.rotate = settings.labels.rotate;
                 }
             }
 
-            if (settings.title) {
-                if (settings.title.text) {
+            if (typeof settings.name != "undefined") {
+                this.name = settings.name;
+            }
+
+            if (typeof settings.orient != "undefined") {
+                this.orient = settings.orient;
+            }
+
+            if (typeof settings.tickmarks != "undefined") {
+                this.tickmarks = settings.tickmarks;
+            }
+
+            if (typeof settings.title != "undefined") {
+                if (typeof settings.title.text != "undefined") {
                     this.title.text = settings.title.text;
                 }
+            }
+        }
+    }
+
+    export class ColumnChartSettings implements IColumnChartSettings {
+        public dataLabels: boolean;
+
+        constructor(settings: IColumnChartSettings) {
+            this.dataLabels = false;
+
+            if (typeof settings.dataLabels) {
+                this.dataLabels = settings.dataLabels;
             }
         }
     }
@@ -126,13 +150,15 @@ module frnk.UI.Charts {
             this.width = 0;
 
             // apply properties from config if available
-            if (settings.height) {
+            if (typeof settings.height != "undefined") {
                 this.height = settings.height;
             }
-            if (settings.padding) {
+
+            if (typeof settings.padding != "undefined") {
                 this.padding = settings.padding;
             }
-            if (settings.width) {
+
+            if (typeof settings.width != "undefined") {
                 this.width = settings.width;
             }
         }
@@ -152,20 +178,58 @@ module frnk.UI.Charts {
             this.width = 0;
 
             // apply properties from config if available
-            if (settings.height) {
+            if (typeof settings.height != "undefined") {
                 this.height = settings.height;
             }
 
-            if (settings.position) {
+            if (typeof settings.position != "undefined") {
                 this.position = settings.position;
             }
 
-            if (settings.title) {
+            if (typeof settings.title != "undefined") {
                 this.title = settings.title;
             }
 
-            if (settings.width) {
+            if (typeof settings.width != "undefined") {
                 this.width = settings.width;
+            }
+        }
+    }
+
+    export class LineChartSettings implements ILineChartSettings {
+        public fillArea: boolean;
+        public interpolation: string;
+        public showMarkers: boolean;
+
+        constructor(settings: ILineChartSettings) {
+            // defaults
+            this.fillArea = false;
+            this.interpolation = "linear";
+            this.showMarkers = true;
+
+            // apply properties from config if available
+            if (typeof settings.fillArea != "undefined") {
+                this.fillArea = settings.fillArea;
+            }
+
+            if (typeof settings.interpolation != "undefined") {
+                this.interpolation = settings.interpolation;
+            }
+
+            if (typeof settings.showMarkers != "undefined") {
+                this.showMarkers = settings.showMarkers;
+            }
+        }
+    }
+
+    export class PieChartSettings implements IPieChartSettings {
+        public innerRadius: number;
+
+        constructor(settings: IPieChartSettings) {
+            this.innerRadius = 1;
+
+            if (typeof settings.innerRadius != "undefined") {
+                this.innerRadius = settings.innerRadius;
             }
         }
     }
@@ -196,41 +260,42 @@ module frnk.UI.Charts {
             this.text = "";
 
             // apply properties from config if available
-            if (settings.align) {
+            if (typeof settings.align != "undefined") {
                 this.align = settings.align;
             }
 
-            if (settings.margin) {
+            if (typeof settings.margin != "undefined") {
                 this.margin = settings.margin;
             }
 
-            if (settings.height) {
+            if (typeof settings.height != "undefined") {
                 this.height = settings.height;
             }
-            if (settings.subtitle) {
+            if (typeof settings.subtitle != "undefined") {
                 this.subtitle = settings.subtitle;
             }
 
-            if (settings.text) {
+            if (typeof settings.text != "undefined") {
                 this.text = settings.text;
             }
         }
     }
 
-    export class PlotOptions {
+    export class PlotOptionSettings implements IPlotOptionSettings {
         public innerPadding: number;
         public outerPadding: number;
 
-        constructor(settings: any, chart: Chart) {
-
+        constructor(settings: any) {
+            // defaults
             this.innerPadding = 0.5;
             this.outerPadding = 0;
 
-            if (settings.innerPadding) {
+            // apply properties from config if available
+            if (typeof settings.innerPadding != "undefined") {
                 this.innerPadding = Number(settings.innerPadding);
             }
 
-            if (settings.outerPadding) {
+            if (typeof settings.outerPadding != "undefined") {
                 this.outerPadding = Number(settings.outerPadding);
             }
         }

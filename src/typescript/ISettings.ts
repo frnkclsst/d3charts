@@ -6,8 +6,11 @@ module frnk.UI.Charts {
 
     export interface ISettings {
         canvas: ICanvasSettings;
+        columnchart: IColumnChartSettings;
         legend: ILegendAreaSettings;
-        plotOptions: PlotOptions;
+        linechart: ILineChartSettings;
+        piechart: IPieChartSettings;
+        plotOptions: PlotOptionSettings;
         title: ITitleAreaSettings;
         xAxes: IAxisSettings;
         yAxes: IAxisSettings;
@@ -17,12 +20,13 @@ module frnk.UI.Charts {
 
     export interface IAxisSettings {
         gridlines: string;
+        format: string;
         labels: {
             rotate: number;
         };
         name: string;
         orient: OrientationType;
-        tickmarks: string;
+        tickmarks: boolean;
         title: {
             text: string;
         };
@@ -34,6 +38,10 @@ module frnk.UI.Charts {
         width: number;
     }
 
+    export interface IColumnChartSettings {
+        dataLabels: boolean;
+    }
+
     export interface ILegendAreaSettings {
         height: number;
         position: string;
@@ -41,10 +49,25 @@ module frnk.UI.Charts {
         width: number;
     }
 
+    export interface ILineChartSettings {
+        fillArea: boolean;
+        interpolation: string;
+        showMarkers: boolean;
+    }
+
     export interface IPlotAreaSettings {
         height: number;
         width: number;
         padding: number;
+    }
+
+    export interface IPlotOptionSettings {
+        innerPadding: number;
+        outerPadding: number;
+    }
+
+    export interface IPieChartSettings {
+        innerRadius: number;
     }
 
     export interface ITitleAreaSettings {

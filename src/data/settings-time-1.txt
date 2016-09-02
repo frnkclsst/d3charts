@@ -5,9 +5,9 @@
         "padding": 50
     },
     "linechart": {
-        "fillArea": "yes",
+        "fillArea": true,
         "interpolation": "linear",
-        "showMarkers": "no"
+        "showMarkers": false
     },
     "legend": {
        	"title": "",
