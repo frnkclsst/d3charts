@@ -203,6 +203,7 @@ module frnk.UI.Charts {
             super.draw(this.chart);
 
             // remove overlapping ticks
+            // TODO - Refactor removing overlapping ticks
             var ticks = this.svgAxis.selectAll("g");
             var tickOverlap = false;
             var prevRight = 0;

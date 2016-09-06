@@ -22,16 +22,16 @@ module frnk.UI.Charts {
                     throw Error(">> ERR: Selector '" + this.selector + "' not available");
                 }
 
-                // load settings
+                // Load settings
                 this.settings = new Settings(args);
 
-                // initialize chart
+                // Initialize chart
                 this.canvas = new Canvas(this);
                 this.categories = new Categories(this);
                 this.series = new Series(this);
                 this.tooltip = new Tooltip(this);
 
-                // add EventListener
+                // Redraw EventListener
                 d3.select(window).on("resize", (): void => {
                     d3.select(this.selector).selectAll("*").remove();
                     this.draw();

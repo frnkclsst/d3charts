@@ -27,8 +27,8 @@ module frnk.UI.Charts {
 
     export type OrientationType =
         "bottom" |
-            "left" |
-            "right" |
-            "top" |
-            "";
+        "left" |
+        "right" |
+        "top" |
+        "";
 }

@@ -4,7 +4,7 @@
 
 module frnk.UI.Charts {
 
-    export class Line {
+    export class SVGLine {
 
         private chart: XYChart;
         private color: string;

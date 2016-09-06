@@ -25,7 +25,7 @@ module frnk.UI.Charts {
                     .attr("class", "areas");
 
                 for (var i = 0; i < this.series.length; i++) {
-                    var area = new Area(svgAreas, this, i);
+                    var area = new SVGArea(svgAreas, this, i);
                     area.draw();
                 }
             }
@@ -35,7 +35,7 @@ module frnk.UI.Charts {
                 .attr("class", "series");
 
             for (var j = 0; j < this.series.length; j++) {
-                var line = new Line(svgSeries, this, j);
+                var line = new SVGLine(svgSeries, this, j);
                 line.draw();
             }
         }

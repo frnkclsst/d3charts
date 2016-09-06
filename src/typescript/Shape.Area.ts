@@ -4,7 +4,7 @@
 
 module frnk.UI.Charts {
 
-    export class Area {
+    export class SVGArea {
 
         private chart: XYChart;
         private color: string;

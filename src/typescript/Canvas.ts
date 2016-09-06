@@ -24,9 +24,6 @@ module frnk.UI.Charts {
             this.height = chart.settings.canvas.height;
             this.padding = chart.settings.canvas.padding;
             this.width = chart.settings.canvas.width;
-
-            // update canvas size
-            this.updateSize();
         }
 
         public draw(): void {

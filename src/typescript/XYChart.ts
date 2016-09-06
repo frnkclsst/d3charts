@@ -62,7 +62,6 @@ module frnk.UI.Charts {
                     }
                 }
             }
-
             return 0;
         }
     }
