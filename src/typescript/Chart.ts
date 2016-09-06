@@ -31,9 +31,6 @@ module frnk.UI.Charts {
                 this.series = new Series(this);
                 this.tooltip = new Tooltip(this);
 
-                // update size
-                this.canvas.updateSize();
-
                 // add EventListener
                 d3.select(window).on("resize", (): void => {
                     d3.select(this.selector).selectAll("*").remove();

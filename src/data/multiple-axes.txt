@@ -46,13 +46,14 @@
             "orient": "left",
 		    "tickmarks": true,
 		    "title": {
-		        "text": "mm"
+		        "text": "mm",
+		        "valign": "top"
 		    }
         },{
             "name": "Temperature",
             "gridlines": "none",
             "labels": {
-                "rotate": "0"
+                "rotate": 0
             },
             "orient": "right",
 		    "tickmarks": true,

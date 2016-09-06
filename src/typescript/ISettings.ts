@@ -30,6 +30,7 @@ module frnk.UI.Charts {
         title: {
             align: string;
             text: string;
+            valign: string;
         };
     }
 

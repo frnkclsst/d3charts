@@ -27,7 +27,19 @@ module frnk.UI.Charts.Html {
         return x;
     }
 
-    export function valign(): void {
-
+    export function valign(svg: any, height: any, alignment: string, margin: number): number {
+        var y: number = 0;
+        switch (alignment) {
+            case "top":
+                y = 0 + margin;
+                break;
+            case "middle":
+                y = (height - Html.getHeight(svg)) / 2;
+                break;
+            case "bottom":
+                y = height - Html.getHeight(svg) - margin;
+                break;
+        }
+        return y;
     }
 }

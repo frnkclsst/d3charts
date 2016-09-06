@@ -6,8 +6,7 @@
     },
     "linechart": {
         "interpolation": "linear",
-        "showMarkers": true,
-        "stacking": "normal"
+        "showMarkers": true
     },
 	"piechart": {
 		"innerRadius": 1

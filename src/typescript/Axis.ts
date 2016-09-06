@@ -13,17 +13,18 @@ module frnk.UI.Charts {
         protected gridlineType: GridLineType;
         protected hasTickmarks: boolean;
         protected orient: OrientationType;
+        protected svgAxis: D3.Selection;
         protected svgGrid: D3.Selection;
         protected svgTitle: D3.Selection;
         protected svgZeroLine: D3.Selection;
         protected textRotation: number;
         protected title: string;
+        protected valign: string;
 
         private _axis: D3.Svg.Axis;
         private _innerTicksize: number;
         private _outerTicksize: number;
         private _scaleType: ScaleType;
-        private _svgAxis: D3.Selection;
         private _ticks: number;
         private _x: number;
         private _y: number;
@@ -33,12 +34,12 @@ module frnk.UI.Charts {
             this.format = settings.format;
             this.orient = null;
             this.scale = null;
+            this.svgAxis = null;
             this.svgGrid = null;
             this.svgTitle = null;
             this.svgZeroLine = null;
 
             this._axis = null;
-            this._svgAxis = null;
             this._ticks = null;
             this._x = null;
             this._y = null;
@@ -82,38 +83,21 @@ module frnk.UI.Charts {
             }
 
             // draw axis
-            this._svgAxis = chart.canvas.plotArea.svg.append("g")
+            this.svgAxis = chart.canvas.plotArea.svg.append("g")
                 .attr("class", "axis")
                 .attr("transform", "translate(" + this._x + "," + this._y + ")")
                 .append("g")
                 .attr("class", "ticks")
                 .call(this._axis);
 
-            // remove overlapping ticks
-            // TODO
-            /*
-            var ticks = this._svgAxis.selectAll("g");
-            var prevRight = 0;
-            for (var i = 0; i < ticks[0].length; i++) {
-                var left = ticks[0][i].getBoundingClientRect().left;
-                var right = ticks[0][i].getBoundingClientRect().right;
-                if (prevRight > left) {
-                    ticks[0][i].setAttribute("style", "opacity: 0");
-                }
-                else {
-                    prevRight = ticks[0][i].getBoundingClientRect().right;
-                }
-            }
-            */
-
             this.drawGridlines(chart, this._axis);
-            this.drawZeroLine(chart, this._svgAxis);
-            this.rotateLabels(chart, this._svgAxis);
-            this.drawTitle(chart, this._svgAxis);
+            this.drawZeroLine(chart, this.svgAxis);
+            this.rotateLabels(chart, this.svgAxis);
+            this.drawTitle(chart, this.svgAxis);
         }
 
         public drawGridlines(chart: Chart, axis: D3.Svg.Axis): void {
-            this.svgGrid = this._svgAxis.append("g")
+            this.svgGrid = this.svgAxis.append("g")
                 .attr("class", "grid");
 
             switch (this.getGridlineType()) {
@@ -133,7 +117,6 @@ module frnk.UI.Charts {
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): void {
-            //TODO - Make position of title optional
             this.svgTitle = svg.append("text")
                 .text(this.title)
                 .attr("class", "title");
@@ -183,6 +166,10 @@ module frnk.UI.Charts {
             this._scaleType = value;
         }
 
+        public setColor(chart: Chart, color: string): void {
+            this.svgAxis.selectAll("path")[0][0].setAttribute("style", "stroke: " + color);
+        }
+
         protected setGridlineType(type: string): void {
             switch (type.toUpperCase()) {
                 case "MAJOR":
@@ -212,14 +199,43 @@ module frnk.UI.Charts {
             this.align = settings.title.align;
         }
 
+        public draw(chart: Chart): void {
+            super.draw(this.chart);
+
+            // remove overlapping ticks
+            var ticks = this.svgAxis.selectAll("g");
+            var tickOverlap = false;
+            var prevRight = 0;
+            for (var i = 0; i < ticks[0].length - 1; i++) {
+                var left = ticks[0][i].getBoundingClientRect().left;
+                var right = ticks[0][i].getBoundingClientRect().right;
+                if (prevRight > left) {
+                    tickOverlap = true;
+                }
+                else {
+                    prevRight = right;
+                }
+            }
+
+            for (var j = 0; j < ticks[0].length; j++) {
+                if (tickOverlap && Math.abs(j % 2) == 1) {
+                    ticks[0][j].setAttribute("style", "opacity: 0");
+                }
+            }
+        }
+
         public drawTitle(chart: Chart, svg: D3.Selection): void {
             super.drawTitle(chart, svg);
-            var anchor = "end";
-            var x = Html.align(this.svgTitle, chart.canvas.plotArea.width + chart.canvas.plotArea.padding, this.align, 0);  // TODO - Do the same for the Y-Axis
-            var y = this.orient == "bottom" ? 30 : -30; // TODO: title needs to be positioned under labels but depends on size of labels
+
+            var x = Html.align(this.svgTitle, Html.getWidth(this.svgAxis), this.align, 0);
+            var y = Html.getHeight(this.svgAxis) + 5;
+
+            if (this.orient == "top") {
+                y = -y;
+            };
 
             this.svgTitle
-                .attr("text-anchor", anchor)
+                .attr("text-anchor", "left")
                 .attr("transform", "translate(" + x + "," + y + ")");
         }
 
@@ -333,17 +349,21 @@ module frnk.UI.Charts {
             this.setGridlineType(settings.gridlines);
             this.textRotation = settings.labels.rotate;
             this.title = settings.title.text;
+            this.valign = settings.title.valign;
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): void {
             super.drawTitle(chart, svg);
 
-            var anchor = this.orient == "left" ? "begin" : "end";
-            var x = 0;
-            var y = -30;
+            var x = Html.getWidth(this.svgAxis);
+            var y = Html.valign(this.svgTitle, Html.getHeight(this.svgAxis), this.valign, 0);
+
+            if (this.orient == "left") {
+                x = -x;
+            }
 
             this.svgTitle
-                .attr("text-anchor", anchor)
+                .attr("text-anchor", "left")
                 .attr("transform", "translate(" + x + "," + y + ")");
         }
 

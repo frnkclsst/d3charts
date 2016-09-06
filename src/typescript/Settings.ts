@@ -76,6 +76,7 @@ module frnk.UI.Charts {
         public title: {
             align: string;
             text: string;
+            valign: string;
         };
 
         constructor(settings: IAxisSettings) {
@@ -90,7 +91,8 @@ module frnk.UI.Charts {
             this.tickmarks = false;
             this.title = {
                 align: "center",
-                text: ""
+                text: "",
+                valign: "top"
             };
 
             // apply properties from config if available
@@ -126,6 +128,9 @@ module frnk.UI.Charts {
                 }
                 if (typeof settings.title.text != "undefined") {
                     this.title.text = settings.title.text;
+                }
+                if (typeof settings.title.valign != "undefined") {
+                    this.title.valign = settings.title.valign;
                 }
             }
         }

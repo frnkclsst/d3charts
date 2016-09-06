@@ -19,7 +19,11 @@
     "xAxis": {
         "gridlines": "none",
         "orient": "bottom",
-		"title": { 
+        "labels": {
+            "rotate": -90
+        },
+		"title": {
+		    "align": "center",
             "text": "Date"
         }
     },
