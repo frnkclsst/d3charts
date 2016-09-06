@@ -74,6 +74,7 @@ module frnk.UI.Charts {
         public gridlines: string;
         public tickmarks: boolean;
         public title: {
+            align: string;
             text: string;
         };
 
@@ -88,6 +89,7 @@ module frnk.UI.Charts {
             this.orient = "";
             this.tickmarks = false;
             this.title = {
+                align: "center",
                 text: ""
             };
 
@@ -119,6 +121,9 @@ module frnk.UI.Charts {
             }
 
             if (typeof settings.title != "undefined") {
+                if (typeof settings.title.align != "undefined") {
+                    this.title.align = settings.title.align;
+                }
                 if (typeof settings.title.text != "undefined") {
                     this.title.text = settings.title.text;
                 }

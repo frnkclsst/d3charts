@@ -7,6 +7,7 @@ module frnk.UI.Charts {
         public name: string;
         public scale: any;
 
+        protected align: string;
         protected chart: Chart;
         protected format: string;
         protected gridlineType: GridLineType;
@@ -88,10 +89,25 @@ module frnk.UI.Charts {
                 .attr("class", "ticks")
                 .call(this._axis);
 
-            this.drawGridlines(chart, this._axis);
-            if (this.isDataAxis() && chart.series.getMinValue() < 0) {
-                this.drawZeroLine(chart, this._svgAxis);
+            // remove overlapping ticks
+            // TODO
+            /*
+            var ticks = this._svgAxis.selectAll("g");
+            var prevRight = 0;
+            for (var i = 0; i < ticks[0].length; i++) {
+                var left = ticks[0][i].getBoundingClientRect().left;
+                var right = ticks[0][i].getBoundingClientRect().right;
+                if (prevRight > left) {
+                    ticks[0][i].setAttribute("style", "opacity: 0");
+                }
+                else {
+                    prevRight = ticks[0][i].getBoundingClientRect().right;
+                }
             }
+            */
+
+            this.drawGridlines(chart, this._axis);
+            this.drawZeroLine(chart, this._svgAxis);
             this.rotateLabels(chart, this._svgAxis);
             this.drawTitle(chart, this._svgAxis);
         }
@@ -124,9 +140,11 @@ module frnk.UI.Charts {
         }
 
         public drawZeroLine(chart: Chart, svg: D3.Selection): void {
-            this.svgZeroLine = this.svgGrid.append("g")
-                .attr("class", "zero-line")
-                .append("line");
+            if (this.isDataAxis() && chart.series.getMinValue() < 0) {
+                this.svgZeroLine = this.svgGrid.append("g")
+                    .attr("class", "zero-line")
+                    .append("line");
+            }
         }
 
         public getInnerTicksize(chart: Chart): any {
@@ -191,12 +209,13 @@ module frnk.UI.Charts {
             this.setGridlineType(settings.gridlines);
             this.textRotation = settings.labels.rotate;
             this.title = settings.title.text;
+            this.align = settings.title.align;
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): void {
             super.drawTitle(chart, svg);
             var anchor = "end";
-            var x = chart.canvas.plotArea.width;
+            var x = Html.align(this.svgTitle, chart.canvas.plotArea.width + chart.canvas.plotArea.padding, this.align, 0);  // TODO - Do the same for the Y-Axis
             var y = this.orient == "bottom" ? 30 : -30; // TODO: title needs to be positioned under labels but depends on size of labels
 
             this.svgTitle
@@ -206,11 +225,13 @@ module frnk.UI.Charts {
 
         public drawZeroLine(chart: Chart, svg: D3.Selection): void {
             super.drawZeroLine(chart, svg);
-            this.svgZeroLine
-                .attr("x1", this.scale(0))
-                .attr("x2", this.scale(0))
-                .attr("y1", 0)
-                .attr("y2", this.orient == "bottom" ? -chart.canvas.plotArea.height : chart.canvas.plotArea.height);
+            if (this.isDataAxis() && chart.series.getMinValue() < 0) {
+                this.svgZeroLine
+                    .attr("x1", this.scale(0))
+                    .attr("x2", this.scale(0))
+                    .attr("y1", 0)
+                    .attr("y2", this.orient == "bottom" ? -chart.canvas.plotArea.height : chart.canvas.plotArea.height);
+            }
         }
 
         public getInnerTicksize(chart: Chart): number {
@@ -328,11 +349,13 @@ module frnk.UI.Charts {
 
         public drawZeroLine(chart: Chart, svg: D3.Selection): void {
             super.drawZeroLine(chart, svg);
-            this.svgZeroLine
-                .attr("x1", 0)
-                .attr("x2", this.orient == "left" ? chart.canvas.plotArea.width : -chart.canvas.plotArea.width)
-                .attr("y1", this.scale(0))
-                .attr("y2", this.scale(0));
+            if (this.isDataAxis() && chart.series.getMinValue() < 0) {
+                this.svgZeroLine
+                    .attr("x1", 0)
+                    .attr("x2", this.orient == "left" ? chart.canvas.plotArea.width : -chart.canvas.plotArea.width)
+                    .attr("y1", this.scale(0))
+                    .attr("y2", this.scale(0));
+            }
         }
 
         public getInnerTicksize(chart: Chart): number {

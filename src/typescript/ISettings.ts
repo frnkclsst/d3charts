@@ -28,6 +28,7 @@ module frnk.UI.Charts {
         orient: OrientationType;
         tickmarks: boolean;
         title: {
+            align: string;
             text: string;
         };
     }

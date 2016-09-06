@@ -51,23 +51,8 @@ module frnk.UI.Charts {
                 .text(this.subTitle);
 
             // align text
-            var x;
-            var xSubtitle;
-            switch (this.align) {
-                case "left":
-                    x = 0 + this.margin;
-                    xSubtitle = 0 + this.margin;
-                    break;
-                case "center":
-                    x = (this.width - Html.getWidth(svgTitleMain)) / 2;
-                    xSubtitle = (this.width - Html.getWidth(svgSubTitle)) / 2;
-                    break;
-                case "right":
-                    x = this.width - Html.getWidth(svgTitleMain) - this.margin;
-                    xSubtitle = this.width - Html.getWidth(svgSubTitle) - this.margin;
-                    break;
-            }
-
+            var x = Html.align(svgTitle, this.width, this.align, this.margin);
+            var xSubtitle = Html.align(svgSubTitle, this.width, this.align, this.margin);
             var y = ((this.height + Html.getHeight(svgTitleMain)) - Html.getHeight(svgSubTitle)) / 2;
 
             svgTitleMain.attr("transform", "translate(" + x + "," + y + ")");

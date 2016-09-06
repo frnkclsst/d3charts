@@ -33,6 +33,7 @@
         "orient": "bottom",
         "tickmarks": true,
         "title": {
+            "align": "center",
             "text": "Month"
         }
     },
