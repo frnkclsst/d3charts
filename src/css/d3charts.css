@@ -98,6 +98,11 @@ svg {
 	fill: steelblue;
 }
 
+.series .label {
+    fill: #000;
+    font-size: 9px;
+}
+
 /* Bar Chart */
 .bar {
     opacity: 0.8;

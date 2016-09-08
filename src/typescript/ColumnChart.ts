@@ -5,13 +5,6 @@
 module frnk.UI.Charts {
     export class ColumnChart extends XYChart {
 
-        public showDataLabels: boolean;
-
-        constructor(args: ISettings, selector: string) {
-            super(args, selector);
-            this.showDataLabels = this.settings.columnchart.dataLabels;
-        }
-
         public draw(): void {
             super.draw();
 
@@ -20,39 +13,50 @@ module frnk.UI.Charts {
                 .attr("class", "series");
 
             // draw columns
-            for (var j = 0; j < this.series.length; j++) {
+            for (var i = 0; i < this.series.length; i++) {
                 var svgSerie = svgSeries.append("g")
-                    .attr("id", "serie-" + j)
+                    .attr("id", "serie-" + i)
                     .selectAll("rect")
-                    .data(this.series.getMatrixItem(j))
+                    .data(this.series.getMatrixItem(i))
                     .enter();
 
                 // draw bar
                 var svgColumn = svgSerie.append("rect")
                     .attr({
-                        "x": this.getXCoordinate(j),
-                        "y": this.getYCoordinate(j),
+                        "x": this.getXCoordinate(i),
+                        "y": this.getYCoordinate(i),
                         "class": "bar",
-                        "width": this.getWidth(j),
-                        "height": this.getHeight(j),
-                        "fill": ColorPalette.getColor(j)
+                        "width": this.getWidth(i),
+                        "height": this.getHeight(i),
+                        "fill": ColorPalette.getColor(i)
                     });
 
                 // draw tooltip
-                this.tooltip.draw(svgColumn, j);
+                this.tooltip.draw(svgColumn, i);
+            }
 
-                // draw data labels
-                if (this.showDataLabels == true) {
-                    svgSerie.append("text")
-                        .attr("class", "data-label")
-                        .text(function (d: any): string {
-                            return parseFloat(d.y).toFixed(0);
-                        })
-                        .attr("x", this.getXCoordinate(j))
-                        .attr("y", this.getYCoordinate(j))
-                        .attr("fill", "#878787")
-                        //.attr("dx", dx) // TODO - align text with middle of the bar
-                        .attr("dy", -3); // TODO - align text in bar or on top of bar
+            this.drawLabels(svgSeries);
+        }
+
+        public drawLabels(svg: D3.Selection): void {
+            // draw data labels
+            if (this.settings.series.showLabels == true) {
+                for (var j = 0; j < this.series.length; j++) {
+                    d3.selectAll("g#serie-" + j).selectAll("rect")
+                        .each(function(d: any): void {
+                            svg.append("text")
+                                .text(d.y) // TODO - should be d3.format(this.series.items[j].tooltipPointFormat)(d.y)
+                                .style("text-anchor", "middle")
+                                .attr({
+                                    "class": "label",
+                                    "alignment-baseline": "central",
+                                    "fill": "#fff",
+                                    "x": this.getAttribute("x"),
+                                    "y": this.getAttribute("y"),
+                                    "dx": Number(this.getAttribute("width")) / 2,
+                                    "dy": Number(this.getAttribute("height")) / 2
+                                });
+                        });
                 }
             }
         }

@@ -10,9 +10,6 @@
 	"piechart": {
 		"innerRadius": "0.5"
 	},
-	"columnchart": {
-		"dataLabels": false
-	},
     "legend": {
        	"title": "Rainfall vs Temperature",
        	"position": "right",
@@ -41,7 +38,7 @@
             "name": "Rainfall",
             "gridlines": "none",
             "labels": {
-                "rotate": "0"
+                "rotate": 0
             },
             "orient": "left",
 		    "tickmarks": true,
@@ -76,14 +73,15 @@
                 "type": "column",
                 "tooltipSuffix": " mm",
                 "tooltipPointFormat": ".2f"
-            }, 
+            },
 			{
                 "name": "Temperature",
                 "data": [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
                 "type": "line",
                 "tooltipSuffix": " °C",
                 "tooltipPointFormat": ".1f"
-            }]
+            }],
+        "showLabels": true
     },
     "plotOptions": {
         "general": { 

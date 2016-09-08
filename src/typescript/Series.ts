@@ -7,6 +7,7 @@ module frnk.UI.Charts {
         public items: Serie[];
         public labels: string[];
         public length: number;
+        public showLabels: boolean;
 
         private _matrix: any[];
         private _chart: Chart;
@@ -14,7 +15,8 @@ module frnk.UI.Charts {
         constructor(chart: Chart) {
             this._chart = chart;
 
-            this.items = this._setSeries(chart.settings.getValue("series.data"));
+            this.items = this._setSeries(chart.settings.series.data);
+            this.showLabels = chart.settings.series.showLabels;
             this.labels = this._setLabels();
             this.length = this.items.length;
 

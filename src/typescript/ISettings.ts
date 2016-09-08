@@ -41,7 +41,7 @@ module frnk.UI.Charts {
     }
 
     export interface IColumnChartSettings {
-        dataLabels: boolean;
+
     }
 
     export interface ILegendAreaSettings {
@@ -70,6 +70,11 @@ module frnk.UI.Charts {
 
     export interface IPieChartSettings {
         innerRadius: number;
+    }
+
+    export interface ISeriesSettings {
+        data: Serie[];
+        showLabels: boolean;
     }
 
     export interface ITitleAreaSettings {

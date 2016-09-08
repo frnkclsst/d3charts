@@ -14,6 +14,7 @@ module frnk.UI.Charts {
         public linechart: LineChartSettings;
         public piechart: PieChartSettings;
         public plotOptions: PlotOptionSettings;
+        public series: SeriesSettings;
 
         private _settings: ISettings;
 
@@ -26,6 +27,7 @@ module frnk.UI.Charts {
             this.legend = new LegendAreaSettings(this.getValue("legend"));
             this.xAxes = this._setAxesSettings(this.getValue("xAxis"));
             this.yAxes = this._setAxesSettings(this.getValue("yAxis"));
+            this.series = new SeriesSettings(this.getValue("series"));
             this.linechart = new LineChartSettings(this.getValue("linechart"));
             this.piechart = new PieChartSettings(this.getValue("piechart"));
             this.plotOptions = new PlotOptionSettings(this.getValue("plotOptions.general"));
@@ -137,14 +139,8 @@ module frnk.UI.Charts {
     }
 
     export class ColumnChartSettings implements IColumnChartSettings {
-        public dataLabels: boolean;
-
         constructor(settings: IColumnChartSettings) {
-            this.dataLabels = false;
 
-            if (typeof settings.dataLabels) {
-                this.dataLabels = settings.dataLabels;
-            }
         }
     }
 
@@ -251,6 +247,26 @@ module frnk.UI.Charts {
 
         constructor(settings: IPlotAreaSettings) {
 
+        }
+    }
+
+    export class SeriesSettings implements ISeriesSettings {
+        public data: Serie[];
+        public showLabels: boolean;
+
+        constructor(settings: ISeriesSettings) {
+            // defaults
+            this.data = [];
+            this.showLabels = false;
+
+            // apply properties from config if available
+            if (typeof settings.data != "undefined") {
+                this.data = settings.data;
+            }
+
+            if (typeof settings.showLabels != "undefined") {
+                this.showLabels = settings.showLabels;
+            }
         }
     }
 
