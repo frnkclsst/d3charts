@@ -38,6 +38,31 @@ module frnk.UI.Charts {
                 var line = new SVGLine(svgSeries, this, j);
                 line.draw();
             }
+
+            this.drawLabels(svgSeries);
+        }
+
+        public drawLabels(svg: D3.Selection): void {
+            // draw data labels
+            if (this.settings.series.showLabels == true) {
+                for (var j = 0; j < this.series.length; j++) {
+                    d3.selectAll("g#serie-" + j).selectAll("circle")
+                        .each(function(d: any): void {
+                            svg.append("text")
+                                .text(d.y) // TODO - should be d3.format(this.series.items[j].tooltipPointFormat)(d.y)
+                                .style("text-anchor", "middle")
+                                .attr({
+                                    "class": "label",
+                                    "alignment-baseline": "central",
+                                    "fill": "#fff",
+                                    "x": this.getAttribute("cx"),
+                                    "y": this.getAttribute("cy"),
+                                    "dx": Number(this.getAttribute("width")) / 2,
+                                    "dy": (Number(this.getAttribute("height")) / 2) - 12
+                                });
+                        });
+                }
+            }
         }
 
         public getXCoordinate(serie: number): any {
