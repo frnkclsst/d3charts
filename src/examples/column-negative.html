@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Column Chart - Negative</title>
+    <!-- general styles -->
+    <link rel="stylesheet" href="../../dist/css/style.css" />
+    <link rel="stylesheet" href="../../dist/css/d3charts.css" />
+    <script src="../../dist/js/d3.min.js" charset="utf-8"></script>
+    <script src="../../dist/js/d3.charts.js"></script>
+</head>
+<body>
+    <div id="chart" />
+    <script>
+		var settings = {
+			"canvas": {
+				"height": 300,
+				"width": 600,
+				"padding": 50
+			},
+			"legend": {
+				"title": "Who?",
+				"position": "right",
+				"width": 200
+			},
+			"title": {
+				"text": "Column Chart - Negative",
+				"align": "center",
+				"height": 50
+			},
+			"xAxis": [{
+				"gridlines": "none",
+				"position": "top",
+				"labels": {
+					"rotate": 0
+				},
+				"tickmarks": false
+			}],
+			"yAxis": [{
+				"gridlines": "major",
+				"position": "left",
+				"tickmarks": true,
+				"ticks": 4,
+				"title": {
+					"text": "Rainfall (mm)"
+				}
+			}],
+			"tooltip": { 
+				"title": "Rainfall",
+				"valueSuffix": " mm"
+			},
+			"categories": {
+				"format": "%s",
+				"data": ["Apples", "Oranges", "Pears", "Grapes", "Bananas"]
+			},
+			"series": {
+				"data": [{
+					name: "John",
+					data: [5, 3, 4, 7, 2]
+				}, {
+					name: "Jane",
+					data: [2, -2, -3, 2, 1]
+				}, {
+					name: "Joe",
+					data: [3, 4, 4, -2, 5]
+				}], 
+				showLabels: false
+			},
+			"plotOptions": {
+				"general": { 
+					"innerPadding": 0.1,
+					"outerPadding": 0.5
+				}
+			}
+		};
+
+		var chart = new frnk.UI.Charts.ColumnChart(settings, "#chart");
+		chart.draw();
+    </script>
+</body>
+</html>

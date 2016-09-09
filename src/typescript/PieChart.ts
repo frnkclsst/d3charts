@@ -18,20 +18,20 @@ module frnk.UI.Charts {
             var innerRadius = radius - radius * this.innerRadius;
             var serieRadius =  (radius - innerRadius) / this.series.length;
 
-            for (var i = 0; i < this.series.length; i++) {
+            for (var s = 0; s < this.series.length; s++) {
 
                 var svgSeries = this.canvas.plotArea.svg.append("g")
-                    .attr("id", "serie-" + i)
+                    .attr("id", "serie-" + s)
                     .attr("transform", "translate(" + (this.canvas.plotArea.width / 2) + "," + (this.canvas.plotArea.height / 2) + ")");
 
                 var arc = d3.svg.arc()
-                    .outerRadius(serieRadius * (i + 1) + innerRadius)
-                    .innerRadius(innerRadius + (serieRadius * i)); // inner radius = 1 => pie chart
+                    .outerRadius(serieRadius * (s + 1) + innerRadius)
+                    .innerRadius(innerRadius + (serieRadius * s)); // inner radius = 1 => pie chart
 
                 var pie = d3.layout.pie();
 
                 var arcs = svgSeries.selectAll("g.slice")
-                    .data(pie(this.series.getSerie(i).getValues()))
+                    .data(pie(this.series.getSerie(s).getValues()))
                     .enter()
                     .append("g")
                     .attr("class", "slice");
@@ -41,10 +41,10 @@ module frnk.UI.Charts {
                     .attr("d", arc);
 
                 // draw tooltip
-                this.tooltip.draw(path, i);
+                this.tooltip.draw(path, s);
             }
 
-            this.drawLabels(svgSeries)
+            this.drawLabels(svgSeries);
         }
 
         // TODO - Labels on pie charts doesn't work
