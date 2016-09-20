@@ -4,7 +4,7 @@
 
 d3Charts is a reusable chart library using d3 and written in Typescript. D3 combines powerful visualization and interaction techniques with a data-driven approach to DOM manipulation, giving you the full capabilities of modern browsers and the freedom to design the right visual interface for your data.
 
-## Resources
+## Documentation
 
 - [Your First Chart](https://github.com/frnkclsst/d3charts/wiki/Your-First-Chart)
 - [Chart Types](https://github.com/frnkclsst/d3charts/wiki/Chart%20Types)
