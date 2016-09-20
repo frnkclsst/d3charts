@@ -13,9 +13,6 @@ module frnk.UI.Charts {
         private serie: number;
         private showMarkers: boolean;
         private svg: D3.Selection;
-        private x: number;
-        private y: number;
-        private y0: number;
 
         constructor(svg: D3.Selection, chart: LineChart, serie: number) {
             this.chart = chart;
@@ -25,9 +22,6 @@ module frnk.UI.Charts {
             this.serie = serie;
             this.showMarkers = chart.showMarkers;
             this.svg = svg;
-            this.x = chart.getXCoordinate(serie);
-            this.y = chart.getYCoordinate(serie);
-            this.y0 = chart.getY0Coordinate(serie);
         }
 
         public draw(): void {
@@ -36,14 +30,21 @@ module frnk.UI.Charts {
 
             var d3Area = d3.svg.area()
                 .interpolate(this.interpolation)
-                .x(this.x)
-                .y0(this.y0)
-                .y1(this.y);
+                .x((d: any, i: number): number => { return this.chart.getXCoordinate(d, i, this.serie); } )
+                .y0((d: any, i: number): number => { return this.chart.getY0Coordinate(d, i, this.serie); })
+                .y1((d: any, i: number): number => { return this.chart.getYCoordinate(d, i, this.serie); });
 
-            svgArea.append("path")
+            var svgA = svgArea.append("path")
                 .attr("class", "area")
                 .attr("d", d3Area(this.data))
                 .style("fill", this.color)
+                .style("opacity", "0");
+
+            // add animation
+            var duration = this.chart.settings.series.animate == true ? 2000 : 0;
+            svgA
+                .transition()
+                .duration(duration)
                 .style("opacity", "0.2");
         }
     }

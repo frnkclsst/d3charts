@@ -4,12 +4,12 @@
 
 module frnk.UI.Charts {
     export class Axis {
+        public format: string;
         public name: string;
         public scale: any;
 
         protected align: string;
         protected chart: Chart;
-        protected format: string;
         protected gridlineType: GridLineType;
         protected hasTickmarks: boolean;
         protected orient: OrientationType;
@@ -356,7 +356,13 @@ module frnk.UI.Charts {
         public drawTitle(chart: Chart, svg: D3.Selection): void {
             super.drawTitle(chart, svg);
 
-            var x = Html.getWidth(this.svgAxis);
+            // TODO - title not positioned right in all cases
+            var rotation = this.orient == "left" ? -90 : 90;
+            this.svgTitle
+                .attr("text-anchor", "middle")
+                .attr("transform", "rotate(" + rotation + ")");
+
+            var x = Html.getWidth(this.svgAxis) + 5;
             var y = Html.valign(this.svgTitle, Html.getHeight(this.svgAxis), this.valign, 0);
 
             if (this.orient == "left") {
@@ -364,8 +370,8 @@ module frnk.UI.Charts {
             }
 
             this.svgTitle
-                .attr("text-anchor", "left")
-                .attr("transform", "translate(" + x + "," + y + ")");
+                .attr("text-anchor", "middle")
+                .attr("transform", "translate(" + x + "," + y + ") rotate(" + rotation + ")");
         }
 
         public drawZeroLine(chart: Chart, svg: D3.Selection): void {

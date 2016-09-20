@@ -73,6 +73,7 @@ module frnk.UI.Charts {
     }
 
     export interface ISeriesSettings {
+        animate: boolean;
         data: Serie[];
         showLabels: boolean;
     }

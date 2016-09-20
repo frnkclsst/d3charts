@@ -24,8 +24,8 @@ module frnk.UI.Charts {
                 var svgAreas = this.canvas.plotArea.svg.append("g")
                     .attr("class", "areas");
 
-                for (var i = 0; i < this.series.length; i++) {
-                    var area = new SVGArea(svgAreas, this, i);
+                for (var serieArea = 0; serieArea < this.series.length; serieArea++) {
+                    var area = new SVGArea(svgAreas, this, serieArea);
                     area.draw();
                 }
             }
@@ -34,8 +34,8 @@ module frnk.UI.Charts {
             var svgSeries = this.canvas.plotArea.svg.append("g")
                 .attr("class", "series");
 
-            for (var j = 0; j < this.series.length; j++) {
-                var line = new SVGLine(svgSeries, this, j);
+            for (var serieLine = 0; serieLine < this.series.length; serieLine++) {
+                var line = new SVGLine(svgSeries, this, serieLine);
                 line.draw();
             }
 
@@ -43,20 +43,20 @@ module frnk.UI.Charts {
         }
 
         public drawLabels(svg: D3.Selection): void {
-            // draw data labels
+            var _self = this;
             if (this.settings.series.showLabels == true) {
-                for (var j = 0; j < this.series.length; j++) {
-                    d3.selectAll("g#serie-" + j).selectAll("circle")
-                        .each(function(d: any): void {
+                for (var serie = 0; serie < this.series.length; serie++) {
+                    d3.selectAll("g#serie-" + serie).selectAll("circle")
+                        .each(function (d: any, i: number): void {
                             svg.append("text")
-                                .text(d.y) // TODO - should be d3.format(this.series.items[j].tooltipPointFormat)(d.y)
+                                .text(d3.format(_self.series.items[serie].tooltipPointFormat)(d.y))
                                 .style("text-anchor", "middle")
                                 .attr({
                                     "class": "label",
                                     "alignment-baseline": "central",
                                     "fill": "#fff",
-                                    "x": this.getAttribute("cx"),
-                                    "y": this.getAttribute("cy"),
+                                    "x": _self.getXCoordinate(d, i, serie),
+                                    "y": _self.getYCoordinate(d, i, serie),
                                     "dx": Number(this.getAttribute("width")) / 2,
                                     "dy": (Number(this.getAttribute("height")) / 2) - 12
                                 });
@@ -65,28 +65,24 @@ module frnk.UI.Charts {
             }
         }
 
-        public getXCoordinate(serie: number): any {
+        public getXCoordinate(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
 
-            return (d: any, i: number): number => {
-                if (this.xAxes[index].getScaleType() == ScaleType.Ordinal) {
-                    return this.xAxes[index].scale(this.categories.parseFormat(this.categories.getItem(i))) + this.xAxes[0].scale.rangeBand() / 2;
-                }
-                else {
-                    return this.xAxes[index].scale(this.categories.parseFormat(this.categories.getItem(i)));
-                }
-            };
+            if (this.xAxes[index].getScaleType() == ScaleType.Ordinal) {
+                return this.xAxes[index].scale(this.categories.parseFormat(this.categories.getItem(i))) + this.xAxes[0].scale.rangeBand() / 2;
+            }
+            else {
+                return this.xAxes[index].scale(this.categories.parseFormat(this.categories.getItem(i)));
+            }
         }
 
-        public getYCoordinate(serie: number): any {
+        public getYCoordinate(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
 
-            return (d: any): number => {
-                return this.yAxes[index].scale(d.y);
-            };
+            return this.yAxes[index].scale(d.y);
         }
 
-        public getY0Coordinate(serie: number): any {
+        public getY0Coordinate(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
 
             return this.yAxes[index].scale(0);

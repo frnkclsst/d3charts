@@ -94,7 +94,7 @@ module frnk.UI.Charts {
             this.title = {
                 align: "center",
                 text: "",
-                valign: "top"
+                valign: "middle"
             };
 
             // apply properties from config if available
@@ -253,13 +253,19 @@ module frnk.UI.Charts {
     export class SeriesSettings implements ISeriesSettings {
         public data: Serie[];
         public showLabels: boolean;
+        public animate: boolean;
 
         constructor(settings: ISeriesSettings) {
             // defaults
+            this.animate = false;
             this.data = [];
             this.showLabels = false;
 
             // apply properties from config if available
+            if (typeof settings.animate != "undefined") {
+                this.animate = settings.animate;
+            }
+
             if (typeof settings.data != "undefined") {
                 this.data = settings.data;
             }

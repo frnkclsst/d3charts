@@ -18,19 +18,22 @@ module frnk.UI.Charts {
             var innerRadius = radius - radius * this.innerRadius;
             var serieRadius =  (radius - innerRadius) / this.series.length;
 
+            var svgSeries = this.canvas.plotArea.svg.append("g")
+                                .attr("class", "series");
+
             for (var s = 0; s < this.series.length; s++) {
 
-                var svgSeries = this.canvas.plotArea.svg.append("g")
+                var svgSerie = svgSeries.append("g")
                     .attr("id", "serie-" + s)
                     .attr("transform", "translate(" + (this.canvas.plotArea.width / 2) + "," + (this.canvas.plotArea.height / 2) + ")");
+
+                var pie = d3.layout.pie();
 
                 var arc = d3.svg.arc()
                     .outerRadius(serieRadius * (s + 1) + innerRadius)
                     .innerRadius(innerRadius + (serieRadius * s)); // inner radius = 1 => pie chart
 
-                var pie = d3.layout.pie();
-
-                var arcs = svgSeries.selectAll("g.slice")
+                var arcs = svgSerie.selectAll("g.slice")
                     .data(pie(this.series.getSerie(s).getValues()))
                     .enter()
                     .append("g")
@@ -40,35 +43,29 @@ module frnk.UI.Charts {
                     .attr("fill", (d: any, i: number): string => { return ColorPalette.getColor(i); })
                     .attr("d", arc);
 
+                if (this.settings.series.showLabels == true) {
+                    arcs.append("text")
+                        .attr("class", "label")
+                        .attr("alignment-baseline", "central")
+                        .attr("transform", (d: any): string => {
+                            d.innerRadius = innerRadius + (serieRadius * s);
+                            d.outerRadius = innerRadius * (s + 1) + innerRadius;
+                            return "translate(" + arc.centroid(d) + ")";
+                        })
+                        .text((d: any): void => {
+                            return d.data;
+                        })
+                        .style("text-anchor", "middle");
+                }
+
                 // draw tooltip
                 this.tooltip.draw(path, s);
             }
-
-            this.drawLabels(svgSeries);
         }
 
         // TODO - Labels on pie charts doesn't work
         public drawLabels(svg: D3.Selection): void {
-            // draw data labels
-            if (this.settings.series.showLabels == true) {
-                for (var j = 0; j < this.series.length; j++) {
-                    d3.selectAll("g#serie-" + j).selectAll(".slice")
-                        .each(function(d: any): void {
-                            svg.append("text")
-                                .text(d.y) // TODO - should be d3.format(this.series.items[j].tooltipPointFormat)(d.y)
-                                .style("text-anchor", "middle")
-                                .attr({
-                                    "class": "label",
-                                    "alignment-baseline": "central",
-                                    "fill": "#fff",
-                                    "x": this.getAttribute("x"),
-                                    "y": this.getAttribute("y"),
-                                    "dx": Number(this.getAttribute("width")) / 2,
-                                    "dy": (Number(this.getAttribute("height")) / 2)
-                                });
-                        });
-                }
-            }
+
         }
     }
 }

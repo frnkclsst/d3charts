@@ -1,6 +1,6 @@
 {
     "canvas": {
-        "padding": 50
+        "padding": 60
     },
     "linechart": {
         "fillArea": true,
@@ -8,7 +8,7 @@
         "showMarkers": true
     },
 	"piechart": {
-		"innerRadius": "0.5"
+		"innerRadius": "1"
 	},
     "legend": {
        	"title": "Rainfall vs Temperature",
@@ -44,7 +44,7 @@
 		    "tickmarks": true,
 		    "title": {
 		        "text": "mm",
-		        "valign": "top"
+		        "valign": "middle"
 		    }
         },{
             "name": "Temperature",
@@ -55,7 +55,8 @@
             "orient": "right",
 		    "tickmarks": true,
 		    "title": {
-		        "text": "°C"
+		        "text": "°C",
+		        "valign": "middle"
 		    }
     }],
     "tooltip": {
@@ -67,6 +68,7 @@
         "data": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     },
     "series": {
+        "animate": true,
 		"data":	[{
                 "name": "Rainfall",
                 "data": [49.94, 71.53, 106.40, 129.21, 144.05, 176.07, 135.68, 148.58, 216.49, 194.11, 95.64, 54.43],

@@ -37,11 +37,15 @@ module frnk.UI.Charts {
             }
         }
 
-        public getXCoordinate(serie: number): any {
+        public getXCoordinate(d: any, i: number, serie: number): any {
             // child classes are responsible for implementing this method
         }
 
-        public getYCoordinate(serie: number): any {
+        public getYCoordinate(d: any, i: number, serie: number): any {
+            // child classes are responsible for implementing this method
+        }
+
+        public getY0Coordinate(d: any, i: number, serie: number): any {
             // child classes are responsible for implementing this method
         }
 

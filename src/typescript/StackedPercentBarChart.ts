@@ -8,12 +8,13 @@ module frnk.UI.Charts {
         constructor(args: ISettings, selector: string) {
             super(args, selector);
             this.stackType = StackType.Percent;
+            for (var i = 0; i < this.xAxes.length; i++) {
+                this.xAxes[i].format = "%";
+            }
         }
 
-        public getWidth(serie: number): any {
-            return (d: any): any => {
-                return Math.abs((this.xAxes[0].scale(1) - this.xAxes[0].scale(0)) * d.perc);
-            };
+        public getWidth(d: any, i: number, serie: number): any {
+            return Math.abs((this.xAxes[0].scale(1) - this.xAxes[0].scale(0)) * d.perc);
         }
 
         public normalizer(d: any): number {

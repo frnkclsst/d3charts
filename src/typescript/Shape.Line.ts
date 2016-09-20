@@ -6,15 +6,14 @@ module frnk.UI.Charts {
 
     export class SVGLine {
 
+        public svg: D3.Selection;
+
         private chart: XYChart;
         private color: string;
         private interpolation: string;
         private data: any;
         private serie: number;
         private showMarkers: boolean;
-        private svg: D3.Selection;
-        private x: number;
-        private y: number;
 
         constructor(svg: D3.Selection, chart: LineChart, serie: number) {
             this.chart = chart;
@@ -24,8 +23,6 @@ module frnk.UI.Charts {
             this.serie = serie;
             this.showMarkers = chart.showMarkers;
             this.svg = svg;
-            this.x = chart.getXCoordinate(serie);
-            this.y = chart.getYCoordinate(serie);
         }
 
         public draw(): void {
@@ -34,15 +31,26 @@ module frnk.UI.Charts {
 
             var d3Line = d3.svg.line()
                 .interpolate(this.interpolation)
-                .x(this.x)
-                .y(this.y);
+                .x((d: any, i: number): number => { return this.chart.getXCoordinate(d, i, this.serie); })
+                .y((d: any, i: number): number => { return this.chart.getYCoordinate(d, i, this.serie); });
 
-            svgSerie.append("path")
+            var svgLine = svgSerie.append("path")
                 .attr("class", "line")
                 .attr("d", d3Line(this.data))
                 .attr("stroke", this.color)
                 .attr("stroke-width", 1)
                 .attr("fill", "none");
+
+            // add animation
+            var duration = this.chart.settings.series.animate == true ? 1000 : 0;
+            var length = svgLine[0][0].getTotalLength();
+
+            svgLine
+                .attr("stroke-dasharray", length + " " + length)
+                .attr("stroke-dashoffset", length)
+                .transition()
+                .duration(duration)
+                .attr("stroke-dashoffset", 0);
 
             // draw markers
             if (this.showMarkers) {
@@ -61,8 +69,8 @@ module frnk.UI.Charts {
                 .attr("stroke", ColorPalette.getColor(serie))
                 .attr("stroke-width", "0")
                 .attr("fill", ColorPalette.getColor(serie))
-                .attr("cx", this.x)
-                .attr("cy", this.y)
+                .attr("cx", (d: any, i: number): number => { return this.chart.getXCoordinate(d, i, this.serie); })
+                .attr("cy", (d: any, i: number): number => { return this.chart.getYCoordinate(d, i, this.serie); })
                 .attr("r", 4);
 
             return svgMarkers;

@@ -4,14 +4,14 @@
 
 module frnk.UI.Charts.Html {
     export function getHeight(svg: any): number {
-        return svg.node().getBBox().height;
+        return svg.node().getBoundingClientRect().height;
     }
 
     export function getWidth(svg: any): number {
-        return svg.node().getBBox().width;
+        return svg.node().getBoundingClientRect().width;
     }
 
-    export function align (svg: any, width: any, alignment: string, margin: number): number {
+    export function align (svg: any, width: number, alignment: string, margin: number): number {
         var x: number = 0;
         switch (alignment) {
             case "left":
@@ -27,7 +27,7 @@ module frnk.UI.Charts.Html {
         return x;
     }
 
-    export function valign(svg: any, height: any, alignment: string, margin: number): number {
+    export function valign(svg: any, height: number, alignment: string, margin: number): number {
         var y: number = 0;
         switch (alignment) {
             case "top":
