@@ -6,8 +6,8 @@ d3Charts is a reusable chart library using d3 and written in Typescript. D3 comb
 
 ## Documentation
 
+- [Introduction](https://github.com/frnkclsst/d3charts/wiki/Introduction)
 - [Your First Chart](https://github.com/frnkclsst/d3charts/wiki/Your-First-Chart)
-- [Supported Chart Types](https://github.com/frnkclsst/d3charts/wiki/Supported-Chart-Types)
 - [Configuring your chart](https://github.com/frnkclsst/d3charts/wiki/Configuring-your-chart)
 - [Contribute](https://github.com/frnkclsst/d3charts/wiki/Contribute)
 - [Roadmap](https://github.com/frnkclsst/d3charts/wiki/Roadmap)
