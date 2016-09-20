@@ -36,18 +36,22 @@ module frnk.UI.Charts {
                     });
 
                 // add animation
-                var duration = this.settings.series.animate == true ? 600 : 0;
+                var duration = this.settings.series.animate === true ? 600 : 0;
+                var count = 0;
                 svgBar
+                    .each((): void => { count++; })
                     .transition()
                     .duration(duration)
-                    .attr("width", (d: any, i: number): void => { return this.getWidth(d, i, serie); });
+                    .attr("width", (d: any, i: number): void => { return this.getWidth(d, i, serie); })
+                    .each("end", (): void => {
+                        count--;
+                        if (this.settings.series.showLabels === true && !count) { // only draw labels after all transitions ended
+                            this.drawLabels(svgSeries);
+                        }
+                    });
 
                 // draw tooltip
                 this.tooltip.draw(svgBar, serie);
-            }
-
-            if (this.settings.series.showLabels == true) {
-                this.drawLabels(svgSeries);
             }
         }
 
@@ -87,7 +91,7 @@ module frnk.UI.Charts {
 
             var axisScale = this.categories.parseFormat(this.categories.getItem(i));
 
-            if (this.yAxes[index].getScaleType() == ScaleType.Ordinal) {
+            if (this.yAxes[index].getScaleType() === ScaleType.Ordinal) {
                 return this.yAxes[index].scale(axisScale) + (this.yAxes[index].scale.rangeBand() / this.series.length * serie);
             }
             else {
@@ -98,7 +102,7 @@ module frnk.UI.Charts {
         public getHeight(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
 
-            if (this.yAxes[0].getScaleType() == ScaleType.Ordinal) {
+            if (this.yAxes[0].getScaleType() === ScaleType.Ordinal) {
                 return Math.abs(this.yAxes[index].scale.rangeBand() / this.series.length);
             }
             else {

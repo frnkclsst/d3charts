@@ -219,7 +219,7 @@ module frnk.UI.Charts {
             }
 
             for (var j = 0; j < ticks[0].length; j++) {
-                if (tickOverlap && Math.abs(j % 2) == 1) {
+                if (tickOverlap && Math.abs(j % 2) === 1) {
                     ticks[0][j].setAttribute("style", "opacity: 0");
                 }
             }
@@ -231,7 +231,7 @@ module frnk.UI.Charts {
             var x = Html.align(this.svgTitle, Html.getWidth(this.svgAxis), this.align, 0);
             var y = Html.getHeight(this.svgAxis) + 5;
 
-            if (this.orient == "top") {
+            if (this.orient === "top") {
                 y = -y;
             };
 
@@ -247,7 +247,7 @@ module frnk.UI.Charts {
                     .attr("x1", this.scale(0))
                     .attr("x2", this.scale(0))
                     .attr("y1", 0)
-                    .attr("y2", this.orient == "bottom" ? -chart.canvas.plotArea.height : chart.canvas.plotArea.height);
+                    .attr("y2", this.orient === "bottom" ? -chart.canvas.plotArea.height : chart.canvas.plotArea.height);
             }
         }
 
@@ -277,7 +277,7 @@ module frnk.UI.Charts {
                     .range([0, chart.canvas.plotArea.width]);
             }
             else {
-                if (chart.categories.format == "%s") {
+                if (chart.categories.format === "%s") {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
                         .domain(chart.categories.getLabels())
@@ -304,7 +304,7 @@ module frnk.UI.Charts {
         }
 
         public getYCoordinate(chart: Chart): number {
-            return this.orient == "bottom" ? chart.canvas.plotArea.height : 0;
+            return this.orient === "bottom" ? chart.canvas.plotArea.height : 0;
         }
 
         public isDataAxis(): boolean {
@@ -315,8 +315,8 @@ module frnk.UI.Charts {
         }
 
         public rotateLabels(chart: Chart, svg: D3.Selection): void {
-            var textAnchorAttr = this.orient == "bottom" ? "end" : "begin";
-            var translateAttr = this.orient == "bottom" ? "translate(-8 4)" : "translate(8 -4)";
+            var textAnchorAttr = this.orient === "bottom" ? "end" : "begin";
+            var translateAttr = this.orient === "bottom" ? "translate(-8 4)" : "translate(8 -4)";
 
             if (this.textRotation != 0) {
                 svg.selectAll("text")
@@ -357,7 +357,7 @@ module frnk.UI.Charts {
             super.drawTitle(chart, svg);
 
             // TODO - title not positioned right in all cases
-            var rotation = this.orient == "left" ? -90 : 90;
+            var rotation = this.orient === "left" ? -90 : 90;
             this.svgTitle
                 .attr("text-anchor", "middle")
                 .attr("transform", "rotate(" + rotation + ")");
@@ -365,7 +365,7 @@ module frnk.UI.Charts {
             var x = Html.getWidth(this.svgAxis) + 5;
             var y = Html.valign(this.svgTitle, Html.getHeight(this.svgAxis), this.valign, 0);
 
-            if (this.orient == "left") {
+            if (this.orient === "left") {
                 x = -x;
             }
 
@@ -379,7 +379,7 @@ module frnk.UI.Charts {
             if (this.isDataAxis() && chart.series.getMinValue() < 0) {
                 this.svgZeroLine
                     .attr("x1", 0)
-                    .attr("x2", this.orient == "left" ? chart.canvas.plotArea.width : -chart.canvas.plotArea.width)
+                    .attr("x2", this.orient === "left" ? chart.canvas.plotArea.width : -chart.canvas.plotArea.width)
                     .attr("y1", this.scale(0))
                     .attr("y2", this.scale(0));
             }
@@ -405,7 +405,7 @@ module frnk.UI.Charts {
                     .range([0, chart.canvas.plotArea.height]);
             }
             else if (this.chart instanceof BarChart) {
-                if (chart.categories.format == "%s") {
+                if (chart.categories.format === "%s") {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
                         .domain(chart.categories.getLabels())
@@ -435,7 +435,7 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(chart: Chart): number {
-            return this.orient == "left" ? 0 : chart.canvas.plotArea.width;
+            return this.orient === "left" ? 0 : chart.canvas.plotArea.width;
         }
 
         public getYCoordinate(chart: Chart): number {

@@ -43,7 +43,7 @@ module frnk.UI.Charts {
                     .attr("fill", (d: any, i: number): string => { return ColorPalette.getColor(i); })
                     .attr("d", arc);
 
-                if (this.settings.series.showLabels == true) {
+                if (this.settings.series.showLabels === true) {
                     arcs.append("text")
                         .attr("class", "label")
                         .attr("alignment-baseline", "central")

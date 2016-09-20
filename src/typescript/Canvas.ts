@@ -50,8 +50,8 @@ module frnk.UI.Charts {
             var container = d3.select(this._chart.selector);
             var width = Number(container.style("width").substring(0, container.style("width").length - 2));
             var height = Number(container.style("height").substring(0, container.style("height").length - 2));
-            this.width = width == 0 ? this.width : width;
-            this.height =  height == 0 ? this.height : height;
+            this.width = width === 0 ? this.width : width;
+            this.height =  height === 0 ? this.height : height;
         }
     }
 }

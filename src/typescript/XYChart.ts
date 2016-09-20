@@ -52,7 +52,7 @@ module frnk.UI.Charts {
         protected getAxisByName(axis: AxisType, name: string): number {
             var axes: any;
 
-            if (axis == AxisType.X) {
+            if (axis === AxisType.X) {
                 axes = this.xAxes;
             }
             else {
@@ -61,7 +61,7 @@ module frnk.UI.Charts {
 
             if (name != "") {
                 for (var i = 0; i <  axes.length; i++) {
-                    if (axes[i].name == name) {
+                    if (axes[i].name === name) {
                         return i;
                     }
                 }

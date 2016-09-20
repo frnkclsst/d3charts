@@ -29,10 +29,10 @@ module frnk.UI.Charts {
         }
 
         public parseFormat(value: string): any {
-            if (this.format == "%s") {
+            if (this.format === "%s") {
                 return value;
             }
-            else if (this.format == "%n") {
+            else if (this.format === "%n") {
                 return value;
             }
             else {

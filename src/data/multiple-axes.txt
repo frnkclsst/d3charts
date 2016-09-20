@@ -23,7 +23,7 @@
 		"subtitle": "Source: wikipedia.org"
     },
     "xAxis": {
-        "gridlines": "none",
+        "gridlines": "major",
         "labels": {
             "rotate": 0
         },
@@ -36,7 +36,7 @@
     },
     "yAxis": [{
             "name": "Rainfall",
-            "gridlines": "none",
+            "gridlines": "major",
             "labels": {
                 "rotate": 0
             },
@@ -48,7 +48,7 @@
 		    }
         },{
             "name": "Temperature",
-            "gridlines": "none",
+            "gridlines": "major",
             "labels": {
                 "rotate": 0
             },

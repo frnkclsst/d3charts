@@ -25,24 +25,24 @@ module frnk.UI.Charts {
         }
 
         public draw(): void {
-            var svgArea = this.svg.append("g")
-                .attr("id", "area-" + this.serie);
-
             var d3Area = d3.svg.area()
                 .interpolate(this.interpolation)
                 .x((d: any, i: number): number => { return this.chart.getXCoordinate(d, i, this.serie); } )
                 .y0((d: any, i: number): number => { return this.chart.getY0Coordinate(d, i, this.serie); })
                 .y1((d: any, i: number): number => { return this.chart.getYCoordinate(d, i, this.serie); });
 
-            var svgA = svgArea.append("path")
+            var svgArea = this.svg.append("g")
+                .attr("id", "area-" + this.serie);
+
+            var svgPath = svgArea.append("path")
                 .attr("class", "area")
                 .attr("d", d3Area(this.data))
                 .style("fill", this.color)
                 .style("opacity", "0");
 
             // add animation
-            var duration = this.chart.settings.series.animate == true ? 2000 : 0;
-            svgA
+            var duration = this.chart.settings.series.animate === true ? 2000 : 0;
+            svgPath
                 .transition()
                 .duration(duration)
                 .style("opacity", "0.2");

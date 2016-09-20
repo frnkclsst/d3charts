@@ -11,7 +11,7 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(d: any, i: number, serie: number): any {
-            if (this.xAxes[0].getScaleType() == ScaleType.Ordinal || this.xAxes[0].getScaleType() == ScaleType.Linear) {
+            if (this.xAxes[0].getScaleType() === ScaleType.Ordinal || this.xAxes[0].getScaleType() === ScaleType.Linear) {
                 return this.xAxes[0].scale(this.categories.parseFormat(this.categories.getItem(i))) + this.xAxes[0].scale.rangeBand() / 2;
             }
             else {

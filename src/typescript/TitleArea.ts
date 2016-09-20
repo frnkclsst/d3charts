@@ -28,7 +28,7 @@ module frnk.UI.Charts {
             // initialize
             this.width = this._chart.canvas.width;
 
-            if (this.height == 0) {
+            if (this.height === 0) {
                 return;
             }
 

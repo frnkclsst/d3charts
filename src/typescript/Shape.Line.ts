@@ -26,15 +26,15 @@ module frnk.UI.Charts {
         }
 
         public draw(): void {
-            var svgSerie = this.svg.append("g")
-                .attr("id", "serie-" + this.serie);
-
             var d3Line = d3.svg.line()
                 .interpolate(this.interpolation)
                 .x((d: any, i: number): number => { return this.chart.getXCoordinate(d, i, this.serie); })
                 .y((d: any, i: number): number => { return this.chart.getYCoordinate(d, i, this.serie); });
 
-            var svgLine = svgSerie.append("path")
+            var svgSerie = this.svg.append("g")
+                .attr("id", "serie-" + this.serie);
+
+            var svgPath = svgSerie.append("path")
                 .attr("class", "line")
                 .attr("d", d3Line(this.data))
                 .attr("stroke", this.color)
@@ -42,22 +42,49 @@ module frnk.UI.Charts {
                 .attr("fill", "none");
 
             // add animation
-            var duration = this.chart.settings.series.animate == true ? 1000 : 0;
-            var length = svgLine[0][0].getTotalLength();
+            var duration = this.chart.settings.series.animate === true ? 1000 : 0;
+            var pathLenght = svgPath[0][0].getTotalLength();
 
-            svgLine
-                .attr("stroke-dasharray", length + " " + length)
-                .attr("stroke-dashoffset", length)
+            svgPath
+                .attr("stroke-dasharray", pathLenght + " " + pathLenght)
+                .attr("stroke-dashoffset", pathLenght)
                 .transition()
                 .duration(duration)
-                .attr("stroke-dashoffset", 0);
+                .attr("stroke-dashoffset", 0)
+                .each("end", (): void => {
+                    // draw markers
+                    if (this.showMarkers) {
+                        var svgMarkers =  this.drawMarkers(svgSerie, this.serie);
 
-            // draw markers
-            if (this.showMarkers) {
-                var svgMarkers =  this.drawMarkers(svgSerie, this.serie);
+                        // draw tooltip
+                        this.chart.tooltip.draw(svgMarkers, this.serie);
+                    }
 
-                // draw tooltip
-                this.chart.tooltip.draw(svgMarkers, this.serie);
+                    // draw labels
+                    if (this.chart.settings.series.showLabels === true && this.serie === this.chart.series.length - 1) {
+                        this.drawLabels(svgSerie);
+                    }
+                });
+        }
+
+        public drawLabels(svg: D3.Selection): void {
+            var _self = this;
+            for (var serie = 0; serie < this.chart.series.length; serie++) {
+                d3.selectAll("g#serie-" + serie).selectAll("circle")
+                    .each(function (d: any, i: number): void {
+                        svg.append("text")
+                            .text(d3.format(_self.chart.series.items[serie].tooltipPointFormat)(d.y))
+                            .style("text-anchor", "middle")
+                            .attr({
+                                "class": "label",
+                                "alignment-baseline": "central",
+                                "fill": "#fff",
+                                "x": _self.chart.getXCoordinate(d, i, serie),
+                                "y": _self.chart.getYCoordinate(d, i, serie),
+                                "dx": Number(this.getAttribute("width")) / 2,
+                                "dy": (Number(this.getAttribute("height")) / 2) - 12
+                            });
+                    });
             }
         }
 

@@ -32,21 +32,25 @@ module frnk.UI.Charts {
                     });
 
                 // add animation
-                var duration = this.settings.series.animate == true ? 600 : 0;
+                var duration = this.settings.series.animate === true ? 600 : 0;
+                var count = 0;
                 svgColumn
+                    .each((): void => { count++; })
                     .transition()
                     .duration(duration)
                     .attr({
                         "height": (d: any, i: number): void => { return this.getHeight(d, i, serie); },
                         "y": (d: any, i: number): void => { return this.getYCoordinate(d, i, serie); }
+                    })
+                    .each("end", (): void => {
+                        count--;
+                        if (this.settings.series.showLabels === true && !count) { // only draw labels after all transitions ended
+                            this.drawLabels(svgSeries);
+                        }
                     });
 
                 // draw tooltip
                 this.tooltip.draw(svgColumn, serie);
-            }
-
-            if (this.settings.series.showLabels == true) {
-                this.drawLabels(svgSeries);
             }
         }
 
@@ -74,7 +78,7 @@ module frnk.UI.Charts {
             var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
             var axisScale = this.categories.parseFormat(this.categories.getItem(i));
 
-            if (this.xAxes[index].getScaleType() == ScaleType.Ordinal) {
+            if (this.xAxes[index].getScaleType() === ScaleType.Ordinal) {
                 return this.xAxes[index].scale(axisScale) + (this.xAxes[index].scale.rangeBand() / this.series.length * serie);
             }
             else {
@@ -102,7 +106,7 @@ module frnk.UI.Charts {
         public getWidth(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
 
-            if (this.xAxes[index].getScaleType() == ScaleType.Ordinal) {
+            if (this.xAxes[index].getScaleType() === ScaleType.Ordinal) {
                 return this.xAxes[index].scale.rangeBand() / this.series.length;
             }
             else {

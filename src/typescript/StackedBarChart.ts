@@ -11,7 +11,7 @@ module frnk.UI.Charts {
         }
 
         public getHeight(d: any, i: number, serie: number): any {
-            if (this.yAxes[0].getScaleType() == ScaleType.Ordinal || this.yAxes[0].getScaleType() == ScaleType.Linear) {
+            if (this.yAxes[0].getScaleType() === ScaleType.Ordinal || this.yAxes[0].getScaleType() === ScaleType.Linear) {
                 return this.yAxes[0].scale.rangeBand();
             }
             else {

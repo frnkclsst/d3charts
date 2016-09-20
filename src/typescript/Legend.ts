@@ -33,7 +33,7 @@ module frnk.UI.Charts {
                 this._items = this._chart.series.getLabels();
             }
 
-            if (this.width == 0) {
+            if (this.width === 0) {
                 return;
             }
 

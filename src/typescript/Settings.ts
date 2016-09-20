@@ -257,7 +257,7 @@ module frnk.UI.Charts {
 
         constructor(settings: ISeriesSettings) {
             // defaults
-            this.animate = false;
+            this.animate = true;
             this.data = [];
             this.showLabels = false;
 

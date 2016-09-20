@@ -29,7 +29,7 @@ module frnk.UI.Charts {
 
         public getSerieByName(name: string): Serie {
             for (var i = 0; i < this.items.length; i++) {
-                if (this.items[i].name == name) {
+                if (this.items[i].name === name) {
                     return this.items[i];
                 }
             }
