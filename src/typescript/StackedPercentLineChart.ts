@@ -8,6 +8,9 @@ module frnk.UI.Charts {
         constructor(args: ISettings, selector: string) {
             super(args, selector);
             this.stackType = StackType.Percent;
+            for (var i = 0; i < this.yAxes.length; i++) {
+                this.yAxes[i].format = "%";
+            }
         }
 
         protected normalizer(d: any): number {
