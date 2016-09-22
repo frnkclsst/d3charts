@@ -20,8 +20,8 @@ module frnk.UI.Charts {
 
     export interface IAxisSettings {
         gridlines: string;
-        format: string;
         labels: {
+            format: string;
             rotate: number;
         };
         name: string;

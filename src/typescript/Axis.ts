@@ -31,7 +31,7 @@ module frnk.UI.Charts {
 
         constructor(settings: IAxisSettings, chart: Chart) {
             this.chart = chart;
-            this.format = settings.format;
+            this.format = settings.labels.format;
             this.orient = null;
             this.scale = null;
             this.svgAxis = null;

@@ -67,8 +67,8 @@ module frnk.UI.Charts {
     }
 
     export class AxisSettings implements IAxisSettings {
-        public format: string;
         public labels: {
+            format: string;
             rotate: number;
         };
         public name: string;
@@ -83,9 +83,9 @@ module frnk.UI.Charts {
 
         constructor(settings: IAxisSettings) {
             // defaults
-            this.format = "";
             this.gridlines = "none";
             this.labels = {
+                format: "",
                 rotate: 0
             };
             this.name = "";
@@ -98,15 +98,14 @@ module frnk.UI.Charts {
             };
 
             // apply properties from config if available
-            if (typeof settings.format != "undefined") {
-                this.format = settings.format;
-            }
-
             if (typeof settings.gridlines != "undefined") {
                 this.gridlines = settings.gridlines;
             }
 
             if (typeof settings.labels != "undefined") {
+                if (typeof settings.labels.format != "undefined") {
+                    this.labels.format = settings.labels.format;
+                }
                 if (typeof settings.labels.rotate != "undefined") {
                     this.labels.rotate = settings.labels.rotate;
                 }
