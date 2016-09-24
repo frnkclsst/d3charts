@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Bar Chart - Negative Stack</title>
+    <title>Column Chart - Negative Stack</title>
     <!-- general styles -->
     <link rel="stylesheet" href="../../dist/css/style.css" />
     <link rel="stylesheet" href="../../dist/css/d3charts.css" />
@@ -24,36 +24,36 @@
 				"width": 200
 			},
 			"title": {
-				"text": "Bar Chart - Negative Stack",
+				"text": "Column Chart - Negative Stack",
 				"align": "center",
 				"height": 50
 			},
 			"xAxis": [{
-				"gridlines": "major",
-				"position": "top",
-				"labels": {
-					"rotate": "0"
-				},
-				"tickmarks": false,
-				"title": { 
-					"text": "Population"
-				}
-			}],
-			"yAxis": [{
 				"gridlines": "none",
-				"orient": "left",
+				"orient": "top",
 				"tickmarks": true,
 				"title": {
 					"text": "Age Men"
 				}
 			},{
 				"gridlines": "none",
-				"orient": "right",
+				"orient": "bottom",
 				"tickmark": true, 
 				"title": {
 					"text": "Age Women"
 				}
 
+			}],
+			"yAxis": [{
+				"gridlines": "major",
+				"position": "left",
+				"labels": {
+					"rotate": 0
+				},
+				"tickmarks": false,
+				"title": { 
+					"text": "Population"
+				}
 			}],
 			"tooltip": { 
 				"title": "",
@@ -81,8 +81,7 @@
 							3360596, 3493473, 3050775, 2759560, 2304444, 2426504, 2568938, 1785638,
 							1447162, 1005011, 330870, 130632, 21208],
 						"tooltipPointFormat": ","
-					}], 
-				"showLabels": false
+					}]
 			},
 			"plotOptions": {
 				"general": { 
@@ -92,7 +91,7 @@
 			}
 		};
 
-		var chart = new frnk.UI.Charts.StackedBarChart(settings, "#chart");
+		var chart = new frnk.UI.Charts.StackedColumnChart(settings, "#chart");
 		chart.draw();
     </script>
 </body>

@@ -28,7 +28,14 @@ module frnk.UI.Charts {
                         "height": 0,
                         "width": (d: any, i: number): void => { return this.getWidth(d, i, serie); },
                         "x": (d: any, i: number): void => { return this.getXCoordinate(d, i, serie); },
-                        "y": (d: any, i: number): void => { return (this.getHeight(d, i, serie) + this.getYCoordinate(d, i, serie)); }
+                        "y": (d: any, i: number): void => {
+                            if (d.y < 0) {
+                                return this.yAxes[0].scale(0);
+                            }
+                            else {
+                                return (this.getHeight(d, i, serie) + this.getYCoordinate(d, i, serie));
+                            }
+                        }
                     });
 
                 // add animation

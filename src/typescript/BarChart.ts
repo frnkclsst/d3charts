@@ -29,9 +29,16 @@ module frnk.UI.Charts {
                     .attr({
                         "class": "bar",
                         "fill": ColorPalette.getColor(serie),
-                        "height": (d: any, i: number): void => { return this.getHeight(d, i, serie); },
+                        "height": (d: any, i: number): number => { return this.getHeight(d, i, serie); },
                         "width": 0,
-                        "x": (d: any, i: number): void => { return this.getXCoordinate(d, i, serie); },
+                        "x": (d: any, i: number): number => {
+                            if (d.y < 0) {
+                                return this.xAxes[0].scale(0);
+                            }
+                            else {
+                                return this.getXCoordinate(d, i, serie);
+                            }
+                        },
                         "y": (d: any, i: number): void => { return this.getYCoordinate(d, i, serie); }
                     });
 
@@ -42,7 +49,12 @@ module frnk.UI.Charts {
                     .each((): void => { count++; })
                     .transition()
                     .duration(duration)
-                    .attr("width", (d: any, i: number): void => { return this.getWidth(d, i, serie); })
+                    .attr("width", (d: any, i: number): number => {
+                        return this.getWidth(d, i, serie);
+                    })
+                    .attr("x", (d: any, i: number): number => {
+                        return this.getXCoordinate(d, i, serie);
+                    })
                     .each("end", (): void => {
                         count--;
                         if (this.settings.series.showLabels === true && !count) { // only draw labels after all transitions ended
