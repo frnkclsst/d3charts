@@ -29,11 +29,13 @@ module frnk.UI.Charts {
                     .attr({
                         "class": "bar",
                         "fill": ColorPalette.getColor(serie),
-                        "height": (d: any, i: number): number => { return this.getHeight(d, i, serie); },
+                        "height": (d: any, i: number): number => {
+                            return this.getHeight(d, i, serie);
+                        },
                         "width": 0,
                         "x": (d: any, i: number): number => {
                             if (d.y < 0) {
-                                return this.xAxes[0].scale(0);
+                                return this.xAxes[0].scale(0); // TODO - take the right axis in case there are multiple
                             }
                             else {
                                 return this.getXCoordinate(d, i, serie);

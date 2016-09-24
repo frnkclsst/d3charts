@@ -8,7 +8,7 @@
         "showMarkers": true
     },
 	"piechart": {
-		"innerRadius": "0.8"
+		"innerRadius": "0.5"
 	},
     "legend": {
        	"title": "Rainfall vs Temperature",

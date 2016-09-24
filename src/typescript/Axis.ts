@@ -90,10 +90,10 @@ module frnk.UI.Charts {
                 .attr("class", "ticks")
                 .call(this._axis);
 
-            this.drawGridlines(chart, this._axis);
-            this.drawZeroLine(chart, this.svgAxis);
             this.rotateLabels(chart, this.svgAxis);
             this.drawTitle(chart, this.svgAxis);
+            this.drawGridlines(chart, this._axis);
+            this.drawZeroLine(chart, this.svgAxis);
         }
 
         public drawGridlines(chart: Chart, axis: D3.Svg.Axis): void {
@@ -202,9 +202,9 @@ module frnk.UI.Charts {
         public draw(chart: Chart): void {
             super.draw(this.chart);
 
-            // remove overlapping ticks
-            // TODO - Refactor removing overlapping ticks
-            var ticks = this.svgAxis.selectAll("g");
+            // TODO - remove overlapping ticks
+            // Below is an implementation that should be refactored
+            /*var ticks = this.svgAxis.selectAll("g");
             var tickOverlap = false;
             var prevRight = 0;
             for (var i = 0; i < ticks[0].length - 1; i++) {
@@ -223,6 +223,7 @@ module frnk.UI.Charts {
                     ticks[0][j].setAttribute("style", "opacity: 0");
                 }
             }
+            */
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): void {
@@ -356,7 +357,6 @@ module frnk.UI.Charts {
         public drawTitle(chart: Chart, svg: D3.Selection): void {
             super.drawTitle(chart, svg);
 
-            // TODO - title not positioned right in all cases
             var rotation = this.orient === "left" ? -90 : 90;
             this.svgTitle
                 .attr("text-anchor", "middle")
