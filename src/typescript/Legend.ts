@@ -84,7 +84,7 @@ module frnk.UI.Charts {
                 .attr("y1", 6)
                 .attr("y2", 6)
                 .style("stroke", (d: any, i: any): string => {
-                    return ColorPalette.getColor(i);
+                    return ColorPalette.color(i);
                 })
                 .style("stroke-width", "2");
 
@@ -94,7 +94,7 @@ module frnk.UI.Charts {
                 .attr("r", 4)
                 .style("fill", "#fff")
                 .style("stroke", (d: any, i: any): string => {
-                    return ColorPalette.getColor(i);
+                    return ColorPalette.color(i);
                 })
                 .style("stroke-width", "2");
         }
@@ -105,7 +105,7 @@ module frnk.UI.Charts {
                 .attr("width", this.symbolWidth)
                 .attr("height", 11)
                 .style("fill", (d: any, i: any): string => {
-                    return ColorPalette.getColor(i);
+                    return ColorPalette.color(i);
                 });
         }
 

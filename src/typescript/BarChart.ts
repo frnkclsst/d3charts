@@ -28,7 +28,7 @@ module frnk.UI.Charts {
                 var svgBar = svgSerie.append("rect")
                     .attr({
                         "class": "bar",
-                        "fill": ColorPalette.getColor(serie),
+                        "fill": ColorPalette.color(serie),
                         "height": (d: any, i: number): number => {
                             return this.getHeight(d, i, serie);
                         },

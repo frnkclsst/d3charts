@@ -16,7 +16,7 @@ module frnk.UI.Charts {
 
         constructor(svg: D3.Selection, chart: LineChart, serie: number) {
             this.chart = chart;
-            this.color = ColorPalette.getColor(serie);
+            this.color = ColorPalette.color(serie);
             this.data = chart.series.getMatrixItem(serie);
             this.interpolation = chart.interpolation;
             this.serie = serie;

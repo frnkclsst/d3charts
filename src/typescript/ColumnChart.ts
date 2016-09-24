@@ -24,7 +24,7 @@ module frnk.UI.Charts {
                 var svgColumn = svgSerie.append("rect")
                     .attr({
                         "class": "bar",
-                        "fill": ColorPalette.getColor(serie),
+                        "fill": ColorPalette.color(serie),
                         "height": 0,
                         "width": (d: any, i: number): void => {
                             return this.getWidth(d, i, serie);

@@ -25,14 +25,14 @@ module frnk.UI.Charts {
             for (var i = 0; i < this.xAxes.length; i++) {
                 this.xAxes[i].draw(this);
                 if (this.xAxes.length > 1) {
-                    this.xAxes[i].setColor(this, ColorPalette.getColor(i));
+                    this.xAxes[i].setColor(this, ColorPalette.color(i));
                 }
             }
 
             for (var j = 0; j < this.yAxes.length; j++) {
                 this.yAxes[j].draw(this);
                 if (this.yAxes.length > 1) {
-                    this.yAxes[j].setColor(this, ColorPalette.getColor(j));
+                    this.yAxes[j].setColor(this, ColorPalette.color(j));
                 }
             }
         }

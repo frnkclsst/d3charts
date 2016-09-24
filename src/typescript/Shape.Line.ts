@@ -17,7 +17,7 @@ module frnk.UI.Charts {
 
         constructor(svg: D3.Selection, chart: LineChart, serie: number) {
             this.chart = chart;
-            this.color = ColorPalette.getColor(serie);
+            this.color = ColorPalette.color(serie);
             this.data = chart.series.getMatrixItem(serie);
             this.interpolation = chart.interpolation;
             this.serie = serie;
@@ -93,9 +93,9 @@ module frnk.UI.Charts {
                 .data(this.data)
                 .enter().append("circle")
                 .attr("class", "marker")
-                .attr("stroke", ColorPalette.getColor(serie))
+                .attr("stroke", ColorPalette.color(serie))
                 .attr("stroke-width", "0")
-                .attr("fill", ColorPalette.getColor(serie))
+                .attr("fill", ColorPalette.color(serie))
                 .attr("cx", (d: any, i: number): number => { return this.chart.getXCoordinate(d, i, this.serie); })
                 .attr("cy", (d: any, i: number): number => { return this.chart.getYCoordinate(d, i, this.serie); })
                 .attr("r", 4);

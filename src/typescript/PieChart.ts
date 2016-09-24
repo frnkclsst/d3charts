@@ -48,7 +48,7 @@ module frnk.UI.Charts {
 
                 // draw arcs
                 var svgPath = svgArcs.append("path")
-                    .attr("fill", (d: any, i: number): string => { return ColorPalette.getColor(i); })
+                    .attr("fill", (d: any, i: number): string => { return ColorPalette.color(i); })
                     .attr("data-serie", serie)
                     .attr("d", function (d: any): any {
                         console.log(this);
