@@ -9,6 +9,7 @@ module frnk.UI.Charts {
         public scale: any;
 
         protected align: string;
+        protected axis: D3.Svg.Axis;
         protected chart: Chart;
         protected gridlineType: GridLineType;
         protected hasTickmarks: boolean;
@@ -21,7 +22,6 @@ module frnk.UI.Charts {
         protected title: string;
         protected valign: string;
 
-        private _axis: D3.Svg.Axis;
         private _innerTicksize: number;
         private _outerTicksize: number;
         private _scaleType: ScaleType;
@@ -39,7 +39,7 @@ module frnk.UI.Charts {
             this.svgTitle = null;
             this.svgZeroLine = null;
 
-            this._axis = null;
+            this.axis = null;
             this._ticks = null;
             this._x = null;
             this._y = null;
@@ -66,33 +66,34 @@ module frnk.UI.Charts {
             this.initialize();
 
             // create d3 axis
-            this._axis = d3.svg.axis()
+            this.axis = d3.svg.axis()
                 .scale(this.scale)
                 .orient(this.orient)
                 .ticks(this._ticks);
 
             // apply custom formatter
             if (this.format != "") {
-                this._axis.tickFormat(d3.format(this.format));
+                this.axis.tickFormat(d3.format(this.format));
             }
 
             // draw tick marks
             if (this.hasTickmarks != true) {
-                this._axis.tickSize(0);
-                this._axis.tickPadding(12);
+                this.axis.tickSize(0);
+                this.axis.tickPadding(12);
             }
 
             // draw axis
             this.svgAxis = chart.canvas.plotArea.svg.append("g")
                 .attr("class", "axis")
-                .attr("transform", "translate(" + this._x + "," + this._y + ")")
-                .append("g")
+                .attr("transform", "translate(" + this._x + "," + this._y + ")");
+
+            this.svgAxis.append("g")
                 .attr("class", "ticks")
-                .call(this._axis);
+                .call(this.axis);
 
             this.rotateLabels(chart, this.svgAxis);
             this.drawTitle(chart, this.svgAxis);
-            this.drawGridlines(chart, this._axis);
+            this.drawGridlines(chart, this.axis);
             this.drawZeroLine(chart, this.svgAxis);
         }
 
@@ -204,7 +205,7 @@ module frnk.UI.Charts {
 
             // TODO - remove overlapping ticks
             // Below is an implementation that should be refactored
-            /*var ticks = this.svgAxis.selectAll("g");
+            var ticks = this.svgAxis.selectAll("g.ticks").selectAll("g.tick");
             var tickOverlap = false;
             var prevRight = 0;
             for (var i = 0; i < ticks[0].length - 1; i++) {
@@ -223,7 +224,6 @@ module frnk.UI.Charts {
                     ticks[0][j].setAttribute("style", "opacity: 0");
                 }
             }
-            */
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): void {

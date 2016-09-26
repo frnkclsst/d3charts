@@ -52,6 +52,25 @@ module frnk.UI.Charts {
                 .attr("class", "item")
                 .attr("transform", (d: any, i: any): string => {
                     return "translate(" + 22 + "," + ((i * 20) + 60) + ")";
+                })
+                .on("click", (d: any, i: number): void => {
+                    // TODO - Refactor
+                    // - add checkbox
+                    // - add interpolation when in stacked / pie charts
+                    // - don't check on opacity as this can be set differently in css
+                    var opacity;
+                    if (this._chart instanceof PieChart) {
+                        var slice = d3.selectAll("#slice-" + i);
+                        opacity = slice.style("opacity") === "1" ? 0 : 1;
+                        d3.selectAll("#slice-" + i).transition().duration(200).style("opacity", opacity);
+                    }
+                    else {
+                        var serie = d3.selectAll("#serie-" + i);
+                        opacity = serie.style("opacity") === "1" ? 0 : 1;
+                        d3.select("#serie-" + i).transition().duration(200).style("opacity", opacity);
+                        d3.select("#labels-" + i).transition().duration(200).style("opacity", opacity);
+                        d3.select("#area-" + i).transition().duration(200).style("opacity", opacity);
+                    }
                 });
 
             this.drawSymbol(items);

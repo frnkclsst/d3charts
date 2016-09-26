@@ -44,6 +44,7 @@ module frnk.UI.Charts {
                     .data(d3Pie(this.series.getSerie(serie).getValues()))
                     .enter()
                     .append("g")
+                    .attr("id", (d: any, i: number): string => { return "slice-" + i; })
                     .attr("class", "slice");
 
                 // draw arcs
@@ -51,7 +52,6 @@ module frnk.UI.Charts {
                     .attr("fill", (d: any, i: number): string => { return ColorPalette.color(i); })
                     .attr("data-serie", serie)
                     .attr("d", function (d: any): any {
-                        console.log(this);
                         return d3Arc(d);
                     });
 

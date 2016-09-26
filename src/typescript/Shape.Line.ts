@@ -62,7 +62,7 @@ module frnk.UI.Charts {
 
                     // draw labels
                     if (this.chart.settings.series.showLabels === true && this.serie === this.chart.series.length - 1) {
-                        this.drawLabels(svgSerie);
+                        this.drawLabels(this.svg);
                     }
                 });
         }
@@ -70,9 +70,10 @@ module frnk.UI.Charts {
         public drawLabels(svg: D3.Selection): void {
             var _self = this;
             for (var serie = 0; serie < this.chart.series.length; serie++) {
+                var svgLabels = svg.append("g").attr("id", "labels-" + serie);
                 d3.selectAll("g#serie-" + serie).selectAll("circle")
                     .each(function (d: any, i: number): void {
-                        svg.append("text")
+                        svgLabels.append("text")
                             .text(d3.format(_self.chart.series.items[serie].tooltipPointFormat)(d.y))
                             .style("text-anchor", "middle")
                             .attr({

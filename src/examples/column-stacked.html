@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Column Chart - 100% Stacked</title>
+    <title>Column Chart - Stacked</title>
     <!-- general styles -->
     <link rel="stylesheet" href="../../dist/css/style.css" />
     <link rel="stylesheet" href="../../dist/css/d3charts.css" />
@@ -16,7 +16,7 @@
 			"canvas": {
 				"height": 300,
 				"width": 600,
-				"padding": 50
+				"padding": 70
 			},
 			"legend": {
 				"title": "Population",
@@ -24,7 +24,7 @@
 				"width": 200
 			},
 			"title": {
-				"text": "Column Chart - 100% Stacked",
+				"text": "Column Chart - Stacked",
 				"align": "center",
 				"height": 50
 			},
@@ -42,7 +42,7 @@
 			"yAxis": {
 				"gridlines": "major",
 				"labels": {
-					"format": "%"
+					"format": ""
 				},
 				"position": "left",
 				"tickmarks": true,
@@ -91,7 +91,7 @@
 			}
 		};
 
-		var chart = new frnk.UI.Charts.StackedPercentColumnChart(settings, "#chart");
+		var chart = new frnk.UI.Charts.StackedColumnChart(settings, "#chart");
 		chart.draw();
     </script>
 </body>
