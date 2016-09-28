@@ -4,6 +4,7 @@
 
 module frnk.UI.Charts {
     export class Serie {
+        public enabled: boolean;
         public max: number;
         public min: number;
         public name: string;
@@ -16,6 +17,8 @@ module frnk.UI.Charts {
 
         constructor(serie: any) {
             this._data = serie.data;
+
+            this.enabled = true;
             this.name = serie.name;
             this.tooltipSuffix = serie.tooltipSuffix;
             this.tooltipPointFormat = serie.tooltipPointFormat;

@@ -18,22 +18,19 @@ module frnk.UI.Charts {
         public draw(): void {
             super.draw();
 
+            var svgSeries = this.canvas.plotArea.svg.append("g")
+                .attr("class", "series");
+
             // draw areas
             // areas need to be drawn first, because the line and markers need to be drawn on top of it
             if (this.fillArea === true) {
-                var svgAreas = this.canvas.plotArea.svg.append("g")
-                    .attr("class", "areas");
-
                 for (var serieArea = 0; serieArea < this.series.length; serieArea++) {
-                    var area = new SVGArea(svgAreas, this, serieArea);
+                    var area = new SVGArea(svgSeries, this, serieArea);
                     area.draw();
                 }
             }
 
             // draw lines
-            var svgSeries = this.canvas.plotArea.svg.append("g")
-                .attr("class", "series");
-
             for (var serieLine = 0; serieLine < this.series.length; serieLine++) {
                 var line = new SVGLine(svgSeries, this, serieLine);
                 line.draw();

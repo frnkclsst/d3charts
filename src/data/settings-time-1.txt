@@ -20,7 +20,8 @@
         "gridlines": "none",
         "orient": "bottom",
         "labels": {
-            "rotate": -90
+            "format": "%Y",
+            "rotate": -45
         },
 		"title": {
 		    "align": "center",

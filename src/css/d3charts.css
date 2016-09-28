@@ -40,7 +40,8 @@ svg {
 
 /* Legend */
 .legend .item {
-	font-family: Arial, sans-serif;
+	cursor: pointer;
+    font-family: Arial, sans-serif;
 	font-size: 9px;
 }
 
@@ -113,7 +114,7 @@ svg {
 }
 
 /* Pie Chart */
-.slice {
+.slice path {
     opacity: 0.8;
     stroke: #fff; /* separates the bars with a white stroke */
     stroke-width:1px;
