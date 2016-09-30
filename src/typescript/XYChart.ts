@@ -23,24 +23,24 @@ module frnk.UI.Charts {
             super.draw();
 
             for (var i = 0; i < this.xAxes.length; i++) {
-                this.xAxes[i].draw(this);
-                if (this.xAxes.length > 1) {
-                    this.xAxes[i].setColor(this, ColorPalette.color(i));
-                }
+                this.xAxes[i].getSize(this);
             }
 
             for (var j = 0; j < this.yAxes.length; j++) {
-                this.yAxes[j].draw(this);
-                if (this.yAxes.length > 1) {
-                    this.yAxes[j].setColor(this, ColorPalette.color(j));
-                }
+                this.yAxes[j].getSize(this);
             }
 
             for (var x = 0; x < this.xAxes.length; x++) {
-                this.xAxes[x].resizeToFit();
+                this.xAxes[x].draw(this);
+                if (this.xAxes.length > 1) {
+                    this.xAxes[x].setColor(this, ColorPalette.color(x));
+                }
             }
             for (var y = 0; y < this.yAxes.length; y++) {
-                this.yAxes[y].resizeToFit();
+                this.yAxes[y].draw(this);
+                if (this.yAxes.length > 1) {
+                    this.yAxes[y].setColor(this, ColorPalette.color(y));
+                }
             }
         }
 

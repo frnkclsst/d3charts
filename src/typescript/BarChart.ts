@@ -24,7 +24,7 @@ module frnk.UI.Charts {
                     .data(this.series.getMatrixItem(serie))
                     .enter();
 
-                // draw bar
+                // draw single bar
                 var svgBar = svgSerie.append("rect")
                     .attr({
                         "class": "bar",
@@ -48,7 +48,9 @@ module frnk.UI.Charts {
                 var duration = this.settings.series.animate === true ? 600 : 0;
                 var count = 0;
                 svgBar
-                    .each((): void => { count++; })
+                    .each((): void => {
+                        count++; // count number of bars
+                    })
                     .transition()
                     .duration(duration)
                     .attr("width", (d: any, i: number): number => {

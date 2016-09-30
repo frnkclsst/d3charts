@@ -2,7 +2,7 @@
     "canvas": {
         "height": 300,
         "width": 600,
-        "padding": 0
+        "padding": 20
     },
     "linechart": {
         "fillArea": true,

@@ -25,19 +25,7 @@
     "xAxis": [{
         "gridlines": "none",
         "labels": {
-            "rotate": 45
-        },
-        "orient": "bottom",
-        "tickmarks": true,
-        "title": {
-            "align": "center",
-            "text": "Month"
-        }
-    },
-    {
-        "gridlines": "none",
-        "labels": {
-            "rotate": 45
+            "rotate": 0
         },
         "orient": "top",
         "tickmarks": true,
@@ -45,7 +33,18 @@
             "align": "center",
             "text": "Month"
         }
-    }],
+    }, {
+       "gridlines": "none",
+       "labels": {
+           "rotate": 0
+       },
+       "orient": "bottom",
+       "tickmarks": true,
+       "title": {
+           "align": "center",
+           "text": "Month"
+       }
+   }],
     "yAxis": [{
             "name": "Rainfall",
             "gridlines": "none",
@@ -77,7 +76,7 @@
     },
     "categories": {
         "format": "%s",
-        "data": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        "data": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     },
     "series": {
         "animate": true,
@@ -95,7 +94,7 @@
                 "tooltipSuffix": " °C",
                 "tooltipPointFormat": ".1f"
             }],
-        "showLabels": true
+        "showLabels": false
     },
     "plotOptions": {
         "general": { 

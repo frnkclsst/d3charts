@@ -47,37 +47,27 @@ module frnk.UI.Charts {
         public draw(chart: Chart): void {
             this.initialize();
 
-            // create d3 axis
-            this.axis = d3.svg.axis()
-                .scale(this.scale)
-                .orient(this.orient)
-                .ticks(this._ticks);
-
-            // apply custom formatter
-            if (this.format != "") {
-                this.axis.tickFormat(d3.format(this.format));
-            }
-
-            // draw tick marks
-            if (this.hasTickmarks != true) {
-                this.axis.tickSize(0);
-                this.axis.tickPadding(12);
-            }
+            // calculate scale
+            this.axis.scale(this.scale);
 
             // draw axis
-            this.svgAxis = chart.canvas.plotArea.svg.append("g")
-                .attr("class", "axis");
+            this.svgAxis
+                .call(this.axis)
+                .attr("transform", "translate(" + this.getXCoordinate(this.chart) + "," + this.getYCoordinate(this.chart) + ")");
 
-            this.svgAxis.append("g")
-                .attr("class", "ticks")
-                .call(this.axis);
+            // align tick labels
+            if (this.textRotation % 360 != 0) {
+                this.svgAxis.selectAll("text")
+                    .style("alignment-baseline", "middle")
+                    .style("text-anchor", "end")
+                    .attr("y", "0")
+                    .attr("dy", "0");
+            }
 
-            this.rotateLabels(chart, this.svgAxis);
-            this.drawTitle(chart, this.svgAxis);
-
-            // store height and width
-            this.height = Html.getHeight(this.svgAxis);
-            this.width = Html.getWidth(this.svgAxis);
+            // TODO - Align axis title
+            this.drawGridlines(this.chart, this.axis);
+            this.drawZeroLine(this.chart, this.svgAxis);
+            this.removeOverlappingTicks();
         }
 
         public drawGridlines(chart: Chart, axis: D3.Svg.Axis): void {
@@ -130,6 +120,42 @@ module frnk.UI.Charts {
             // child classes are responsible for implementing this method
         }
 
+        public getSize(chart: Chart): void {
+            this.initialize();
+
+            // create d3 axis
+            this.axis = d3.svg.axis()
+                .scale(this.scale)
+                .orient(this.orient)
+                .ticks(this._ticks);
+
+            // apply custom formatter
+            if (this.format != "") {
+                this.axis.tickFormat(d3.format(this.format));
+            }
+
+            // draw tick marks
+            if (this.hasTickmarks != true) {
+                this.axis.tickSize(0);
+                this.axis.tickPadding(12);
+            }
+
+            // draw axis
+            this.svgAxis = chart.canvas.plotArea.svg.append("g")
+                .attr("class", "axis");
+
+            this.svgAxis.append("g")
+                .attr("class", "ticks")
+                .call(this.axis);
+
+            this.rotateLabels(chart, this.svgAxis);
+            this.drawTitle(chart, this.svgAxis);
+
+            // store height and width
+            this.height = Html.getHeight(this.svgAxis);
+            this.width = Html.getWidth(this.svgAxis);
+        }
+
         public getScaleType(): ScaleType {
             return this._scaleType;
         }
@@ -155,33 +181,6 @@ module frnk.UI.Charts {
 
         public isDataAxis(): any {
             // child classes are responsible for implementing this method
-        }
-
-        public resizeToFit(): void {
-            this.initialize();
-
-            // recalculate scale
-            this.axis.scale(this.scale);
-
-            // redraw axis
-            this.svgAxis
-                .call(this.axis)
-                .attr("transform", "translate(" + this.getXCoordinate(this.chart) + "," + this.getYCoordinate(this.chart) + ")");
-
-            // realign tick labels
-            if (this.textRotation % 360 != 0) {
-                this.svgAxis.selectAll("text")
-                    .style("alignment-baseline", "middle")
-                    .style("text-anchor", "end")
-                    .attr("y", "0")
-                    .attr("dy", "0");
-            }
-
-            // TODO - Realign axis title
-            // TODO - Refactor - not a logical place for these two functions to be
-            this.drawGridlines(this.chart, this.axis);
-            this.drawZeroLine(this.chart, this.svgAxis);
-            this.removeOverlappingTicks();
         }
 
         public removeOverlappingTicks(): void {
@@ -227,19 +226,6 @@ module frnk.UI.Charts {
             this.textRotation = settings.labels.rotate;
             this.title = settings.title.text;
             this.align = settings.title.align;
-        }
-
-        public draw(chart: Chart): void {
-            super.draw(this.chart);
-
-            if (this.orient === "bottom") {
-                this.chart.canvas.plotArea.axisSize.bottom += this.height;
-            }
-            else {
-                this.chart.canvas.plotArea.axisSize.top += this.height;
-            }
-
-            this.chart.canvas.plotArea.height -= this.height;
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): void {
@@ -312,6 +298,19 @@ module frnk.UI.Charts {
                         .range([start, end]);
                 }
             }
+        }
+
+        public getSize(chart: Chart): void {
+            super.getSize(this.chart);
+
+            if (this.orient === "bottom") {
+                this.chart.canvas.plotArea.axisSize.bottom += this.height;
+            }
+            else {
+                this.chart.canvas.plotArea.axisSize.top += this.height;
+            }
+
+            this.chart.canvas.plotArea.height -= this.height;
         }
 
         public getTicks(chart: Chart): number {
@@ -419,18 +418,6 @@ module frnk.UI.Charts {
             this.valign = settings.title.valign;
         }
 
-        public draw(chart: Chart): void {
-            super.draw(chart);
-
-            if (this.orient === "left") {
-                this.chart.canvas.plotArea.axisSize.left += this.width;
-            }
-            else {
-                this.chart.canvas.plotArea.axisSize.right += this.width;
-            }
-            this.chart.canvas.plotArea.width -= this.width;
-        }
-
         public drawTitle(chart: Chart, svg: D3.Selection): void {
             super.drawTitle(chart, svg);
 
@@ -507,6 +494,18 @@ module frnk.UI.Charts {
                     .nice() // adds additional ticks to add some whitespace
                     .range([start, end]);
             }
+        }
+
+        public getSize(chart: Chart): void {
+            super.getSize(chart);
+
+            if (this.orient === "left") {
+                this.chart.canvas.plotArea.axisSize.left += this.width;
+            }
+            else {
+                this.chart.canvas.plotArea.axisSize.right += this.width;
+            }
+            this.chart.canvas.plotArea.width -= this.width;
         }
 
         public getTicks(chart: Chart): number {
