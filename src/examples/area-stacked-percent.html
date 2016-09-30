@@ -16,7 +16,7 @@
 			"canvas": {
 				"height": 300,
 				"width": 600,
-				"padding": 60
+				"padding": 20
 			},
 			"linechart": {
 				"fillArea": true,
@@ -35,7 +35,6 @@
 			},
 			"xAxis": {
 				"gridlines": "none",
-				"position": "top",
 				"labels": {
 					"rotate": 0
 				},
@@ -44,17 +43,26 @@
 					"text": "Year"
 				}
 			},
-			"yAxis": {
+			"yAxis": [{
 				"gridlines": "none",
 				"labels": {
 					"format": "%"
 				},
-				"position": "left",
 				"tickmarks": true,
 				"title": {
 					"text": "Percent"
 				}
-			},
+			}, {
+                "gridlines": "none",
+                "labels": {
+                    "format": "%"
+                },
+                "orient": "right",
+                "tickmarks": true,
+                "title": {
+                    "text": "Percent"
+                }
+            }],
 			"tooltip": { 
 				"title": "Population",
 				"valueSuffix": " people"

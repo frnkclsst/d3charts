@@ -35,6 +35,13 @@ module frnk.UI.Charts {
                     this.yAxes[j].setColor(this, ColorPalette.color(j));
                 }
             }
+
+            for (var x = 0; x < this.xAxes.length; x++) {
+                this.xAxes[x].resizeToFit();
+            }
+            for (var y = 0; y < this.yAxes.length; y++) {
+                this.yAxes[y].resizeToFit();
+            }
         }
 
         public getXCoordinate(d: any, i: number, serie: number): any {

@@ -14,7 +14,7 @@ module frnk.UI.Charts {
         }
 
         public getHeight(d: any, i: number, serie: number): any {
-            return Math.abs(this.yAxes[0].scale(this.yAxes[0].scale.domain()[0] - d.perc));
+            return Math.abs((this.yAxes[0].scale(1) - this.yAxes[0].scale(0)) * d.perc);
         }
 
         public normalizer(d: any): number {

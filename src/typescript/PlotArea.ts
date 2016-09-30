@@ -8,6 +8,12 @@ module frnk.UI.Charts {
         public width: number;
         public svg: D3.Selection;
         public padding: number;
+        public axisSize: {
+            left: number;
+            right: number;
+            top: number;
+            bottom: number;
+        };
 
         private _chart: Chart;
 
@@ -17,12 +23,17 @@ module frnk.UI.Charts {
             this.padding = settings.canvas.padding;
             this.height = settings.canvas.height - settings.title.height - this.padding * 2;
             this.width = settings.canvas.width - this.padding * 2 - settings.legend.width;
+            this.axisSize = {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            };
         }
 
         public draw(): void {
             // initialize
-            this.height = this._chart.canvas.height - this._chart.settings.title.height - this.padding * 2;
-            this.width = this._chart.canvas.width - this.padding * 2 - this._chart.settings.legend.width;
+            this.initialize();
 
             // draw plot area
             this.svg = this._chart.canvas.svg.append("g")
@@ -30,6 +41,17 @@ module frnk.UI.Charts {
                 .attr("transform", "translate(" + this.padding + ","
                     + (this._chart.settings.title.height
                     + this.padding) + ")");
+        }
+
+        public initialize(): void {
+            this.height = this._chart.canvas.height - this._chart.settings.title.height - this.padding * 2;
+            this.width = this._chart.canvas.width - this.padding * 2 - this._chart.settings.legend.width;
+            this.axisSize = {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            };
         }
     }
 }

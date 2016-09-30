@@ -1,6 +1,6 @@
 {
     "canvas": {
-        "padding": 60
+        "padding": 20
     },
     "linechart": {
         "fillArea": true,
@@ -22,10 +22,10 @@
 		"margin": 15,
 		"subtitle": "Source: wikipedia.org"
     },
-    "xAxis": {
-        "gridlines": "major",
+    "xAxis": [{
+        "gridlines": "none",
         "labels": {
-            "rotate": 0
+            "rotate": 45
         },
         "orient": "bottom",
         "tickmarks": true,
@@ -34,9 +34,21 @@
             "text": "Month"
         }
     },
+    {
+        "gridlines": "none",
+        "labels": {
+            "rotate": 45
+        },
+        "orient": "top",
+        "tickmarks": true,
+        "title": {
+            "align": "center",
+            "text": "Month"
+        }
+    }],
     "yAxis": [{
             "name": "Rainfall",
-            "gridlines": "major",
+            "gridlines": "none",
             "labels": {
                 "rotate": 0
             },
@@ -48,7 +60,7 @@
 		    }
         },{
             "name": "Temperature",
-            "gridlines": "major",
+            "gridlines": "none",
             "labels": {
                 "rotate": 0
             },
@@ -65,7 +77,7 @@
     },
     "categories": {
         "format": "%s",
-        "data": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        "data": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     },
     "series": {
         "animate": true,

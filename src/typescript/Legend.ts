@@ -63,6 +63,7 @@ module frnk.UI.Charts {
                         var slice = d3.selectAll("#slice-" + i);
                         opacity = slice.style("opacity") === "1" ? 0 : 1;
                         d3.selectAll("#slice-" + i).transition().duration(200).style("opacity", opacity);
+                        d3.selectAll("#labels-" + i).transition().duration(200).style("opacity", opacity);
                     }
                     else {
                         var serie = d3.selectAll("#serie-" + i);

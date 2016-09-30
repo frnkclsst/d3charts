@@ -1,8 +1,6 @@
 {
     "canvas": {
-        "height": 300,
-        "width": 600,
-        "padding": 50
+        "padding": 0
     },
     "linechart": {
         "fillArea": "yes",
