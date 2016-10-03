@@ -25,7 +25,7 @@
     "xAxis": [{
         "gridlines": "none",
         "labels": {
-            "rotate": 90
+            "rotate": 0
         },
         "orient": "top",
         "tickmarks": true,
@@ -36,7 +36,7 @@
     }, {
        "gridlines": "none",
        "labels": {
-           "rotate": 90
+           "rotate": 0
        },
        "orient": "bottom",
        "tickmarks": true,
@@ -97,7 +97,7 @@
         "labels": {
             "enabled" : true,
             "format": ".4f",
-            "rotate": true
+            "rotate": false
         }
     },
     "plotOptions": {

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Bar Chart - Basic</title>
+    <!-- general styles -->
+    <link rel="stylesheet" href="../../dist/css/style.css" />
+    <link rel="stylesheet" href="../../dist/css/d3charts.css" />
+    <script src="../../dist/js/d3.min.js" charset="utf-8"></script>
+    <script src="../../dist/js/d3.charts.js"></script>
+</head>
+<body>
+    <div id="chart" />
+    <script>
+		var settings = {
+			"canvas": {
+				"height": 300,
+				"width": 600,
+				"padding": 20
+			},
+			"legend": {
+				"title": "Continent",
+				"position": "right",
+				"width": 200
+			},
+			"title": {
+				"text": "Bar Chart - Basic",
+				"align": "center",
+				"height": 50
+			},
+			"xAxis": [{
+				"gridlines": "major",
+				"labels": {
+					"rotate": 0
+				},
+				"tickmark": false,
+				"title": { 
+					"text": "Population (millions)"
+				}
+			}],
+			"yAxis": [{
+				"gridlines": "none",
+				"tickmarks": true
+			}],
+			"tooltip": { 
+				"title": "Population",
+				"valueSuffix": " people"
+			},
+			"categories": {
+				"format": "%s",
+				"data": ["People living in Africa from 1800 until 2008", "People living in America from 1800 until 2008", "People living in Asia from 1800 until 2008", "People living in Europe from 1800 until 2008", "People living in Oceania from 1800 until 2008"]
+			},
+			"series": {
+				"data": [{
+						"name": "Year 1800",
+						"data": [107, 31, 635, 203, 2],
+                        "format": ","
+					}, {
+						"name": "Year 1900",
+						"data": [133, 156, 947, 408, 6],
+                        "format": ","
+					}, {
+						"name": "Year 2008",
+						"data": [973, 914, 4054, 732, 34],
+                        "format": ","
+					}],
+                "labels": {
+                    "enabled": true
+                }
+			},
+			"plotOptions": {
+				"general": { 
+					"innerPadding": 0.1,
+					"outerPadding": 0.5
+				}
+			}
+		};
+
+		var chart = new frnk.UI.Charts.BarChart(settings, "#chart");
+		chart.draw();
+    </script>
+</body>
+</html>
