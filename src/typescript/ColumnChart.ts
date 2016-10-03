@@ -55,7 +55,7 @@ module frnk.UI.Charts {
                     })
                     .each("end", (): void => {
                         count--;
-                        if (this.settings.series.showLabels === true && !count) { // only draw labels after all transitions ended
+                        if (this.settings.series.labels.enabled === true && !count) { // only draw labels after all transitions ended
                             this.drawLabels(svgSeries);
                         }
                     });
@@ -70,17 +70,35 @@ module frnk.UI.Charts {
                 var svgLabels = svg.append("g").attr("id", "labels-" + serie);
                 d3.selectAll("g#serie-" + serie).selectAll("rect")
                     .each((d: any, i: number): void  => {
+                        var rotation = 0;
+                        var x = this.getXCoordinate(d, i, serie);
+                        var y = this.getYCoordinate(d, i, serie);
+                        var dx = 0;
+                        var dy = 0;
+
+                        if (this.settings.series.labels.rotate === true) {
+                            rotation = -90;
+                        }
+
+                        if (rotation != 0) {
+                            dx = -this.getHeight(d, i, serie) / 2;
+                            dy = this.getWidth(d, i, serie) / 2;
+                        }
+                        else {
+                            dx = this.getWidth(d, i, serie) / 2;
+                            dy = this.getHeight(d, i, serie) / 2;
+                        }
+
                         svgLabels.append("text")
-                            .text(d3.format(this.series.items[serie].tooltipPointFormat)(d.y))
+                            .text(d3.format(this.series.items[serie].format)(d.y))
                             .style("text-anchor", "middle")
                             .attr({
                                 "alignment-baseline": "central",
                                 "class": "label",
                                 "fill": "#fff",
-                                "x": this.getXCoordinate(d, i, serie),
-                                "y": this.getYCoordinate(d, i, serie),
-                                "dx": this.getWidth(d, i, serie) / 2,
-                                "dy": this.getHeight(d, i, serie) / 2
+                                "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")",
+                                "dx": dx,
+                                "dy": dy
                             });
                     });
             }

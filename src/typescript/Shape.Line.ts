@@ -61,30 +61,47 @@ module frnk.UI.Charts {
                     }
 
                     // draw labels
-                    if (this.chart.settings.series.showLabels === true && this.serie === this.chart.series.length - 1) {
+                    if (this.chart.settings.series.labels.enabled === true && this.serie === this.chart.series.length - 1) {
                         this.drawLabels(this.svg);
                     }
                 });
         }
 
         public drawLabels(svg: D3.Selection): void {
-            var _self = this;
             for (var serie = 0; serie < this.chart.series.length; serie++) {
                 var svgLabels = svg.append("g").attr("id", "labels-" + serie);
                 d3.selectAll("g#serie-" + serie).selectAll("circle")
-                    .each(function (d: any, i: number): void {
-                        svgLabels.append("text")
-                            .text(d3.format(_self.chart.series.items[serie].tooltipPointFormat)(d.y))
+                    .each((d: any, i: number): void => {
+                        var rotation = 0;
+                        var x = this.chart.getXCoordinate(d, i, serie);
+                        var y = this.chart.getYCoordinate(d, i, serie);
+                        var dx = 0;
+                        var dy = 0;
+
+                        if (this.chart.settings.series.labels.rotate === true) {
+                            rotation = -90;
+                        }
+
+                        var text = svgLabels.append("text")
+                            .text(d3.format(this.chart.series.items[serie].format)(d.y))
                             .style("text-anchor", "middle")
                             .attr({
-                                "class": "label",
                                 "alignment-baseline": "central",
+                                "class": "label",
                                 "fill": "#fff",
-                                "x": _self.chart.getXCoordinate(d, i, serie),
-                                "y": _self.chart.getYCoordinate(d, i, serie),
-                                "dx": Number(this.getAttribute("width")) / 2,
-                                "dy": (Number(this.getAttribute("height")) / 2) - 12
+                                "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")"
                             });
+
+                        if (rotation != 0) {
+                            dx = Html.getHeight(text);
+                        }
+                        else {
+                            dy = -Html.getHeight(text);
+                        }
+
+                        text
+                            .attr("dy", dy)
+                            .attr("dx", dx);
                     });
             }
         }

@@ -89,8 +89,8 @@ module frnk.UI.Charts {
             if (this.chart.settings.getValue("tooltip.valueSuffix") != "") {
                 return this.chart.settings.getValue("tooltip.valueSuffix");
             }
-            if (this.chart.series.items[serie].tooltipSuffix) {
-                return this.chart.series.items[serie].tooltipSuffix;
+            if (this.chart.series.items[serie].suffix) {
+                return this.chart.series.items[serie].suffix;
             }
             return "";
         }
@@ -99,8 +99,8 @@ module frnk.UI.Charts {
             if (this.chart.settings.getValue("tooltip.valuePointFormat") != "") {
                 return this.chart.settings.getValue("tooltip.valuePointFormat");
             }
-            if (this.chart.series.items[serie].tooltipPointFormat) {
-                return this.chart.series.items[serie].tooltipPointFormat;
+            if (this.chart.series.items[serie].format) {
+                return this.chart.series.items[serie].format;
             }
             return "";
         }

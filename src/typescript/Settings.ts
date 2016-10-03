@@ -250,15 +250,23 @@ module frnk.UI.Charts {
     }
 
     export class SeriesSettings implements ISeriesSettings {
-        public data: Serie[];
-        public showLabels: boolean;
         public animate: boolean;
+        public data: Serie[];
+        public labels: {
+            enabled: boolean;
+            format: string;
+            rotate: boolean;
+        };
 
         constructor(settings: ISeriesSettings) {
             // defaults
             this.animate = true;
             this.data = [];
-            this.showLabels = false;
+            this.labels = {
+                enabled: false,
+                format: "",
+                rotate: false
+            };
 
             // apply properties from config if available
             if (typeof settings.animate != "undefined") {
@@ -269,8 +277,16 @@ module frnk.UI.Charts {
                 this.data = settings.data;
             }
 
-            if (typeof settings.showLabels != "undefined") {
-                this.showLabels = settings.showLabels;
+            if (typeof settings.labels != "undefined") {
+                if (typeof settings.labels.enabled != "undefined") {
+                    this.labels.enabled = settings.labels.enabled;
+                }
+                if (typeof settings.labels.format != "undefined") {
+                    this.labels.format = settings.labels.format;
+                }
+                if (typeof settings.labels.rotate != "undefined") {
+                    this.labels.rotate = settings.labels.rotate;
+                }
             }
         }
     }

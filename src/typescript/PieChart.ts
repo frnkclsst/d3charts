@@ -75,7 +75,7 @@ module frnk.UI.Charts {
                     })
                     .each("end", (): void => {
                         count--;
-                        if (this.settings.series.showLabels === true && !count) {
+                        if (this.settings.series.labels.enabled === true && !count) {
                             this.drawLabels(svgSeries);
                         }
                     });
@@ -100,7 +100,7 @@ module frnk.UI.Charts {
                                     return "translate(" + this.arcs[serie].centroid(d) + ")";
                                 }
                             })
-                            .text(d3.format(this.series.items[serie].tooltipPointFormat)(d.data));
+                            .text(d3.format(this.series.items[serie].format)(d.data));
                     });
             }
         }

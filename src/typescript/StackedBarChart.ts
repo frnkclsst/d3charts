@@ -37,7 +37,7 @@ module frnk.UI.Charts {
         }
 
         public normalizer(d: any): number {
-            return 1; // no normalization needed as this not 100% stacked
+            return StackType.Normal; // no normalization needed as this not 100% stacked
         }
     }
 }

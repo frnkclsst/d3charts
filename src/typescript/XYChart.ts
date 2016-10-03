@@ -56,7 +56,7 @@ module frnk.UI.Charts {
             // child classes are responsible for implementing this method
         }
 
-        protected getAxisByName(axis: AxisType, name: string): number {
+        protected getAxisByName(axis: AxisType, ref: string): number {
             var axes: any;
 
             if (axis === AxisType.X) {
@@ -66,9 +66,9 @@ module frnk.UI.Charts {
                 axes = this.yAxes;
             }
 
-            if (name != "") {
+            if (ref != "") {
                 for (var i = 0; i <  axes.length; i++) {
-                    if (axes[i].name === name) {
+                    if (axes[i].name === ref) {
                         return i;
                     }
                 }
