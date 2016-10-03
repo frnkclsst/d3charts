@@ -54,7 +54,10 @@ module frnk.UI.Charts {
     export interface ILineChartSettings {
         fillArea: boolean;
         interpolation: string;
-        showMarkers: boolean;
+        markers: {
+            enabled: boolean,
+            type: MarkerType
+        };
     }
 
     export interface IPlotAreaSettings {
@@ -74,7 +77,7 @@ module frnk.UI.Charts {
 
     export interface ISeriesSettings {
         animate: boolean;
-        data: Serie[];
+        items: Serie[];
         labels: {
             enabled: boolean,
             format: string,

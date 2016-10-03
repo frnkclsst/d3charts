@@ -14,7 +14,7 @@ module frnk.UI.Charts {
         constructor(chart: Chart) {
             this._chart = chart;
 
-            this.items = this._setSeries(chart.settings.series.data);
+            this.items = this._setSeries(chart.settings.series.items);
             this.labels = this._setLabels();
             this.length = this.items.length;
 
@@ -144,7 +144,7 @@ module frnk.UI.Charts {
         private _setSeries(series: any): Serie[] {
             var array: Serie[] = [];
             for (var i = 0; i < series.length; i++) {
-                array.push(new Serie(series[i]));
+                array.push(new Serie(this._chart, series[i]));
             }
             return array;
         }

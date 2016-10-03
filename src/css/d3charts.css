@@ -91,13 +91,15 @@ svg {
 .series .line:hover {
     opacity: 0.6;
 }
-.series .marker {
-	stroke-width:2px;
-    fill: #ffffff;
-}
+
 .series .marker:hover {
 	stroke-width:2px;
     fill: #fff;
+}
+
+.marker {
+    stroke-width:2px;
+    fill: #ffffff;
 }
 
 /* Bar Chart */

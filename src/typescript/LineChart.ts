@@ -6,13 +6,19 @@ module frnk.UI.Charts {
     export class LineChart extends XYChart {
         public fillArea: boolean;
         public interpolation: string;
-        public showMarkers: boolean;
+        public markers: {
+            enabled: boolean,
+            type: MarkerType
+        };
 
         constructor(args: ISettings, selector: string) {
             super(args, selector);
             this.fillArea = this.settings.linechart.fillArea;
             this.interpolation = this.settings.linechart.interpolation;
-            this.showMarkers = this.settings.linechart.showMarkers;
+            this.markers = {
+                enabled: this.settings.linechart.markers.enabled,
+                type: this.settings.linechart.markers.type
+            };
         }
 
         public draw(): void {
@@ -34,6 +40,45 @@ module frnk.UI.Charts {
             for (var serieLine = 0; serieLine < this.series.length; serieLine++) {
                 var line = new SVGLine(svgSeries, this, serieLine);
                 line.draw();
+            }
+        }
+
+        public drawLabels(svg: D3.Selection): void {
+            for (var serie = 0; serie < this.series.length; serie++) {
+                var svgLabels = svg.append("g").attr("id", "labels-" + serie);
+                d3.selectAll("g#serie-" + serie).selectAll("circle")
+                    .each((d: any, i: number): void => {
+                        var rotation = 0;
+                        var x = this.getXCoordinate(d, i, serie);
+                        var y = this.getYCoordinate(d, i, serie);
+                        var dx = 0;
+                        var dy = 0;
+
+                        if (this.settings.series.labels.rotate === true) {
+                            rotation = -90;
+                        }
+
+                        var text = svgLabels.append("text")
+                            .text(d3.format(this.series.items[serie].format)(d.y))
+                            .style("text-anchor", "middle")
+                            .attr({
+                                "alignment-baseline": "central",
+                                "class": "label",
+                                "fill": "#fff",
+                                "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")"
+                            });
+
+                        if (rotation != 0) {
+                            dx = Html.getHeight(text);
+                        }
+                        else {
+                            dy = -Html.getHeight(text);
+                        }
+
+                        text
+                            .attr("dy", dy)
+                            .attr("dx", dx);
+                    });
             }
         }
 

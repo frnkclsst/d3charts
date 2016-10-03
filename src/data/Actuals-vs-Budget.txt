@@ -6,7 +6,9 @@
 	},
     "linechart": {
         "interpolation": "linear",
-        "showMarkers": true
+        "markers": {
+            "enabled": true
+        }
     },
     "legend": {
        	"title": "",
@@ -37,7 +39,7 @@
         "data": ["Budget", "Actuals", "Prior Year"]
     },
     "series": {
-		"data": [{
+		"items": [{
 				"data": [769, 755, 664],
 				"name": "NASA"
 			}, 

@@ -5,9 +5,11 @@
         "padding": 80
     },
     "linechart": {
+        "fillArea": true,
         "interpolation": "linear",
-        "showMarkers": true,
-        "fillArea": true
+        "markers": {
+            "enabled": true
+        }
     },
 	"piechart": {
 		"innerRadius": 1
@@ -48,7 +50,7 @@
             "data": ["A", "B", "C", "D", "E", "F", "G"]
     },
     "series": {
-		"data": [{
+		"items": [{
                 "name": "Asia",
                 "data": [-1, 2, 3, 4, 5, 6, 7]
             },

@@ -7,8 +7,9 @@
     "linechart": {
         "fillArea": true,
         "interpolation": "linear",
-        "showMarkers": true,
-        "stacking": "percent"
+        "markers": {
+            "enabled": true
+        }
     },
 	"piechart": {
 		"innerRadius": 0.8
@@ -57,7 +58,7 @@
     },
     "series": {
 		"name": "Population",
-		"data":	[{
+		"items":	[{
                 "name": "Asia",
                 "data": [52, 635, 809, 947, 1402, 3634, 5268]
             }, 

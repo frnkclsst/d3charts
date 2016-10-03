@@ -7,20 +7,24 @@ module frnk.UI.Charts {
         public enabled: boolean;
         public format: string;
         public name: string;
+        public marker: string;
         public max: number;
         public min: number;
         public suffix: string;
         public sum: number;
         public type: string;
 
+        private _chart: Chart;
         private _data: number[];
 
-        constructor(serie: any) {
+        constructor(chart: Chart, serie: any) {
+            this._chart = chart;
             this._data = serie.data;
 
             this.enabled = true;
             this.format = serie.format;
             this.name = serie.name;
+            this.marker = this._setMarkerType(serie);
             this.max = d3.max(this._data);
             this.min = d3.min(this._data);
             this.suffix = serie.suffix;
@@ -37,6 +41,18 @@ module frnk.UI.Charts {
 
         public getValues(): number[] {
             return this._data;
+        }
+
+        private _setMarkerType(serie: any): string {
+            if (serie.marker != undefined) {
+                return serie.marker;
+            }
+            else if (this._chart.settings.linechart.markers.type != undefined) {
+                return this._chart.settings.linechart.markers.type;
+            }
+            else {
+                return "circle";
+            }
         }
     }
 }

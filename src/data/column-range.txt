@@ -5,8 +5,9 @@
     "linechart": {
         "fillArea": "yes",
         "interpolation": "linear",
-        "showMarkers": "yes",
-        "stacking": "percent"
+        "markers": {
+            "enabled": true
+        }
     },
 	"piechart": {
 		"innerRadius": 0.7

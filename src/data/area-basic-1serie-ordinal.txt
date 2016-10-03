@@ -6,7 +6,9 @@
 	},
     "linechart": {
         "interpolation": "linear",
-        "showMarkers": true
+        "markers": {
+            "enabled": true
+        }
     },
     "piechart": {
     	"innerRadius": "0.7"
@@ -41,7 +43,7 @@
         "data": ["A", "B", "C", "D", "E", "F", "G", "H"]
     },
     "series": {
-	    "data": [{
+	    "items": [{
             "data": [29.765957771107, 13, 32.807804682612, 196.45946739256, 15.19434030906893, 98.079782601442, 13.925743130903, 5.1387322875705],
             "name": "Topics",
             "format": ".2f"

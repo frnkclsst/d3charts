@@ -11,7 +11,9 @@ module frnk.UI.Charts {
         private interpolation: string;
         private data: any;
         private serie: number;
-        private showMarkers: boolean;
+        private markers: {
+            enabled: boolean
+        };
         private svg: D3.Selection;
 
         constructor(svg: D3.Selection, chart: LineChart, serie: number) {
@@ -20,7 +22,9 @@ module frnk.UI.Charts {
             this.data = chart.series.getMatrixItem(serie);
             this.interpolation = chart.interpolation;
             this.serie = serie;
-            this.showMarkers = chart.showMarkers;
+            this.markers = {
+                enabled: chart.markers.enabled
+            };
             this.svg = svg;
         }
 

@@ -204,13 +204,19 @@ module frnk.UI.Charts {
     export class LineChartSettings implements ILineChartSettings {
         public fillArea: boolean;
         public interpolation: string;
-        public showMarkers: boolean;
+        public markers: {
+            enabled: boolean,
+            type: MarkerType
+        };
 
         constructor(settings: ILineChartSettings) {
             // defaults
             this.fillArea = false;
             this.interpolation = "linear";
-            this.showMarkers = true;
+            this.markers = {
+                enabled: true,
+                type: "circle"
+            };
 
             // apply properties from config if available
             if (typeof settings.fillArea != "undefined") {
@@ -221,8 +227,13 @@ module frnk.UI.Charts {
                 this.interpolation = settings.interpolation;
             }
 
-            if (typeof settings.showMarkers != "undefined") {
-                this.showMarkers = settings.showMarkers;
+            if (typeof settings.markers != "undefined") {
+                if (typeof settings.markers.enabled != "undefined") {
+                    this.markers.enabled = settings.markers.enabled;
+                }
+                if (typeof settings.markers.type != "undefined") {
+                    this.markers.type = settings.markers.type;
+                }
             }
         }
     }
@@ -251,7 +262,7 @@ module frnk.UI.Charts {
 
     export class SeriesSettings implements ISeriesSettings {
         public animate: boolean;
-        public data: Serie[];
+        public items: Serie[];
         public labels: {
             enabled: boolean;
             format: string;
@@ -261,7 +272,7 @@ module frnk.UI.Charts {
         constructor(settings: ISeriesSettings) {
             // defaults
             this.animate = true;
-            this.data = [];
+            this.items = [];
             this.labels = {
                 enabled: false,
                 format: "",
@@ -273,8 +284,8 @@ module frnk.UI.Charts {
                 this.animate = settings.animate;
             }
 
-            if (typeof settings.data != "undefined") {
-                this.data = settings.data;
+            if (typeof settings.items != "undefined") {
+                this.items = settings.items;
             }
 
             if (typeof settings.labels != "undefined") {

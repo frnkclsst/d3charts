@@ -5,7 +5,10 @@
     "linechart": {
         "fillArea": true,
         "interpolation": "linear",
-        "showMarkers": true
+        "markers": {
+            "enabled" : true,
+            "type": "square"
+        }
     },
 	"piechart": {
 		"innerRadius": "0.5"
@@ -80,17 +83,15 @@
     },
     "series": {
         "animate": true,
-		"data":	[{
+		"items": [{
                 "name": "Rainfall",
                 "data": [49.94, 71.53, 106.40, 129.21, 144.05, 176.07, 135.68, 148.58, 216.49, 194.11, 95.64, 54.43],
-                "type": "column",
                 "suffix": " mm",
                 "format": ".2f"
             },
 			{
                 "name": "Temperature",
                 "data": [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
-                "type": "line",
                 "suffix": " °C",
                 "format": ".1f"
             }],

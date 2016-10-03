@@ -6,7 +6,9 @@
     },
     "linechart": {
         "interpolation": "linear",
-        "showMarkers": true
+        "markers": {
+            "enabled": true
+        }
     },
     "legend": {
        	"title": "",
@@ -40,7 +42,7 @@
             "data": ["Draft", "Expired", "In Translation", "Out of date", "Released", "System", "System Read-only", "To be Reviewed", "To be Translated", "Translated"]
     },
     "series": {
-		"data": [{
+		"items": [{
             "data": [-20, 10, 26, 28, 50, 40, 145, 15, 45, 78],
             "name": "Topics"
 			},

@@ -31,4 +31,12 @@ module frnk.UI.Charts {
         "right" |
         "top" |
         "";
+
+    export type MarkerType =
+        "circle" |
+        "cross" |
+        "diamond" |
+        "square" |
+        "triangle-up" |
+        "triangle-down";
 }
