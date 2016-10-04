@@ -14,54 +14,8 @@ module frnk.UI.Charts {
 
             // draw columns
             for (var serie = 0; serie < this.series.length; serie++) {
-                var svgSerie = svgSeries.append("g")
-                    .attr("id", "serie-" + serie)
-                    .selectAll("rect")
-                    .data(this.series.getMatrixItem(serie))
-                    .enter();
-
-                // draw column
-                var svgColumn = svgSerie.append("rect")
-                    .attr({
-                        "class": "bar",
-                        "fill": ColorPalette.color(serie),
-                        "height": 0,
-                        "width": (d: any, i: number): void => {
-                            return this.getWidth(d, i, serie);
-                        },
-                        "x": (d: any, i: number): void => {
-                            return this.getXCoordinate(d, i, serie);
-                        },
-                        "y": (d: any, i: number): void => {
-                            if (d.y < 0) {
-                                return this.yAxes[0].scale(0); // TODO - take the right axis in case there are multiple
-                            }
-                            else {
-                                return (this.getHeight(d, i, serie) + this.getYCoordinate(d, i, serie));
-                            }
-                        }
-                    });
-
-                // add animation
-                var duration = this.settings.series.animate === true ? 600 : 0;
-                var count = 0;
-                svgColumn
-                    .each((): void => { count++; })
-                    .transition()
-                    .duration(duration)
-                    .attr({
-                        "height": (d: any, i: number): void => { return this.getHeight(d, i, serie); },
-                        "y": (d: any, i: number): void => { return this.getYCoordinate(d, i, serie); }
-                    })
-                    .each("end", (): void => {
-                        count--;
-                        if (this.settings.series.labels.enabled === true && !count) { // only draw labels after all transitions ended
-                            this.drawLabels(svgSeries);
-                        }
-                    });
-
-                // draw tooltip
-                this.tooltip.draw(svgColumn, serie);
+                var column = new SVGColumn(svgSeries, this, serie);
+                column.draw();
             }
         }
 

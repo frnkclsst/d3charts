@@ -8,7 +8,7 @@ module frnk.UI.Charts {
 
         public svg: D3.Selection;
 
-        private chart: XYChart;
+        private chart: LineChart;
         private color: string;
         private interpolation: string;
         private data: any;
@@ -18,7 +18,12 @@ module frnk.UI.Charts {
             this.chart = chart;
             this.color = ColorPalette.color(serie);
             this.data = chart.series.getMatrixItem(serie); // TODO - Feed it in, make it more independent
-            this.interpolation = chart.interpolation;
+            if (chart.interpolation != undefined) { // TODO - Refactor, needed to make combo charts work
+                this.interpolation = chart.interpolation;
+            }
+            else {
+                this.interpolation = "linear";
+            }
             this.serie = serie;
             this.svg = svg;
         }

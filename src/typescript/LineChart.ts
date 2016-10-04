@@ -74,7 +74,7 @@ module frnk.UI.Charts {
                             dx = Html.getHeight(text) + this.settings.linechart.markers.size / 2;
                         }
                         else {
-                            dy = -Html.getHeight(text) + this.settings.linechart.markers.size / 2;
+                            dy = -Html.getHeight(text) - this.settings.linechart.markers.size / 2;
                         }
 
                         text

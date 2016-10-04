@@ -14,56 +14,8 @@ module frnk.UI.Charts {
 
             // draw bars
             for (var serie = 0; serie < this.series.length; serie++) {
-                var svgSerie = svgSeries.append("g")
-                    .attr("id", "serie-" + serie)
-                    .selectAll("rect")
-                    .data(this.series.getMatrixItem(serie))
-                    .enter();
-
-                // draw single bar
-                var svgBar = svgSerie.append("rect")
-                    .attr({
-                        "class": "bar",
-                        "fill": ColorPalette.color(serie),
-                        "height": (d: any, i: number): number => {
-                            return this.getHeight(d, i, serie);
-                        },
-                        "width": 0,
-                        "x": (d: any, i: number): number => {
-                            if (d.y < 0) {
-                                return this.xAxes[0].scale(0); // TODO - take the right axis in case there are multiple
-                            }
-                            else {
-                                return this.getXCoordinate(d, i, serie);
-                            }
-                        },
-                        "y": (d: any, i: number): void => { return this.getYCoordinate(d, i, serie); }
-                    });
-
-                // add animation
-                var duration = this.settings.series.animate === true ? 600 : 0;
-                var count = 0;
-                svgBar
-                    .each((): void => {
-                        count++; // count number of bars
-                    })
-                    .transition()
-                    .duration(duration)
-                    .attr("width", (d: any, i: number): number => {
-                        return this.getWidth(d, i, serie);
-                    })
-                    .attr("x", (d: any, i: number): number => {
-                        return this.getXCoordinate(d, i, serie);
-                    })
-                    .each("end", (): void => {
-                        count--;
-                        if (this.settings.series.labels.enabled === true && !count) { // only draw labels after all transitions ended
-                            this.drawLabels(svgSeries);
-                        }
-                    });
-
-                // draw tooltip
-                this.tooltip.draw(svgBar, serie);
+                var bar = new SVGBar(svgSeries, this, serie);
+                bar.draw();
             }
         }
 
