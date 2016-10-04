@@ -38,5 +38,14 @@ module frnk.UI.Charts {
         "diamond" |
         "square" |
         "triangle-up" |
-        "triangle-down";
+        "triangle-down" |
+        "mixed";
+
+    export var symbols =
+        ["circle",
+        "cross",
+        "diamond",
+        "square",
+        "triangle-up",
+        "triangle-down"];
 }

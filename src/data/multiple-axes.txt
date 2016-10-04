@@ -6,8 +6,7 @@
         "fillArea": true,
         "interpolation": "linear",
         "markers": {
-            "enabled" : true,
-            "type": "square"
+            "enabled" : true
         }
     },
 	"piechart": {

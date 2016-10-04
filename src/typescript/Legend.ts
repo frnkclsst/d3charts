@@ -109,22 +109,8 @@ module frnk.UI.Charts {
                 .style("stroke-width", "2");
 
             // draw marker
-            svg.append("path")
-                .attr({
-                    "class": "marker",
-                    "d": (d: any, i: number): any => {
-                        return d3.svg.symbol()
-                            .size(60)
-                            .type(this._chart.series.items[i].marker)();
-                    }, // TODO - Show correct symbol - doesn't work inside a function
-                    "stroke": (d: any, i: number): void => {
-                        return ColorPalette.color(i);
-                    },
-                    "stroke-width": 0,
-                    "transform": (d: any, i: number): string => {
-                        return "translate(" + this.symbolWidth / 2 + ", " + 6 + ")";
-                    }
-                });
+            var marker = new SVGMarker(svg, this._chart);
+            marker.draw(this.symbolWidth / 2, 6);
         }
 
         private drawSymbolAsRectangle(svg: D3.Selection): void {

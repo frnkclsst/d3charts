@@ -24,8 +24,11 @@
 /// <reference path="TitleArea.ts" />
 
 // shapes
-/// <reference path="Shape.Line.ts" />
 /// <reference path="Shape.Area.ts" />
+/// <reference path="Shape.Bar.ts" />
+/// <reference path="Shape.Column.ts" />
+/// <reference path="Shape.Line.ts" />
+/// <reference path="Shape.Marker.ts" />
 
 // tooltip
 ///  <reference path="Tooltip.ts" />

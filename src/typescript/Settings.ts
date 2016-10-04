@@ -215,7 +215,7 @@ module frnk.UI.Charts {
             this.interpolation = "linear";
             this.markers = {
                 enabled: true,
-                type: "circle"
+                type: "mixed"
             };
 
             // apply properties from config if available

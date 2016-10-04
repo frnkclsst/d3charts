@@ -144,7 +144,7 @@ module frnk.UI.Charts {
         private _setSeries(series: any): Serie[] {
             var array: Serie[] = [];
             for (var i = 0; i < series.length; i++) {
-                array.push(new Serie(this._chart, series[i]));
+                array.push(new Serie(this._chart, series[i], i));
             }
             return array;
         }

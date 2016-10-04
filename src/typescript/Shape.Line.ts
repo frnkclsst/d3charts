@@ -68,7 +68,8 @@ module frnk.UI.Charts {
         private drawMarkers(svg: D3.Selection, serie: number): D3.Selection {
             var svgMarkers = svg.selectAll(".marker")
                 .data(this.data)
-                .enter().append("path")
+                .enter()
+                .append("path")
                 .attr({
                     "class": "marker",
                     "stroke": ColorPalette.color(serie),

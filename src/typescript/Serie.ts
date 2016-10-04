@@ -3,9 +3,11 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export class Serie {
         public enabled: boolean;
         public format: string;
+        public index: number;
         public name: string;
         public marker: string;
         public max: number;
@@ -17,12 +19,13 @@ module frnk.UI.Charts {
         private _chart: Chart;
         private _data: number[];
 
-        constructor(chart: Chart, serie: any) {
+        constructor(chart: Chart, serie: any, index: number) {
             this._chart = chart;
             this._data = serie.data;
 
             this.enabled = true;
             this.format = serie.format;
+            this.index = index;
             this.name = serie.name;
             this.marker = this._setMarkerType(serie);
             this.max = d3.max(this._data);
@@ -46,6 +49,9 @@ module frnk.UI.Charts {
         private _setMarkerType(serie: any): string {
             if (serie.marker != undefined) {
                 return serie.marker;
+            }
+            else if (this._chart.settings.linechart.markers.type === "mixed") {
+                return symbols[this.index % symbols.length];
             }
             else if (this._chart.settings.linechart.markers.type != undefined) {
                 return this._chart.settings.linechart.markers.type;
