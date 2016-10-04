@@ -5,7 +5,6 @@
 module frnk.UI.Charts {
 
     export class SVGMarker {
-
         private _chart: Chart;
         private _svg: D3.Selection;
 

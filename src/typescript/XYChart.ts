@@ -3,6 +3,7 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export class XYChart extends Chart {
         public xAxes: XAxis[] = [];
         public yAxes: YAxis[] = [];

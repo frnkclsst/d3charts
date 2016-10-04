@@ -3,6 +3,7 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export class ComboChart extends XYChart {
 
         constructor(args: ISettings, selector: string) {

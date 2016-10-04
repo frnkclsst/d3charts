@@ -3,6 +3,7 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export class BarChart extends XYChart {
 
         public draw(): void {

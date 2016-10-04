@@ -3,6 +3,7 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export class Tooltip {
         public chart: Chart;
         public showPercentage: boolean;

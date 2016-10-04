@@ -3,6 +3,7 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export class PieChart extends Chart {
         private arcs: any[] = [];
         private innerRadiusPercentage: number;

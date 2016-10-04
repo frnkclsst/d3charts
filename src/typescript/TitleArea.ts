@@ -3,6 +3,7 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export class TitleArea implements IArea {
         public align: string;
         public height: number;

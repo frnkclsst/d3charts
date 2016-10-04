@@ -3,6 +3,7 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export class Series {
         public items: Serie[];
         public labels: string[];

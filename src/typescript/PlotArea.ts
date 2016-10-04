@@ -3,6 +3,7 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export class PlotArea implements IArea {
         public height: number;
         public width: number;

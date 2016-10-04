@@ -3,6 +3,7 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export interface IArea {
         height: number;
         width: number;

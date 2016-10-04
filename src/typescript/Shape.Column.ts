@@ -5,10 +5,9 @@
 module frnk.UI.Charts {
 
     export class SVGColumn {
-        public svg: D3.Selection;
-
-        private serie: number;
         private chart: ColumnChart;
+        private serie: number;
+        private svg: D3.Selection;
 
         constructor(svg: D3.Selection, chart: ColumnChart, serie: number) {
             this.chart = chart;
@@ -49,7 +48,9 @@ module frnk.UI.Charts {
             var duration = this.chart.settings.series.animate === true ? 600 : 0;
             var count = 0;
             svgColumn
-                .each((): void => { count++; })
+                .each((): void => {
+                    count++; // count number of bars
+                })
                 .transition()
                 .duration(duration)
                 .attr({

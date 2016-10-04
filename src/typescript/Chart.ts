@@ -4,6 +4,7 @@
 
 module frnk.UI.Charts {
     export class Chart {
+
         public canvas: Canvas;
         public categories: Categories;
         public series: Series;

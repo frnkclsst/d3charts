@@ -3,6 +3,7 @@
 "use strict";
 
 module frnk.UI.Charts.Html {
+
     export function getHeight(svg: any): number {
         return svg.node().getBoundingClientRect().height;
     }

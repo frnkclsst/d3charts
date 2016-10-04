@@ -3,6 +3,7 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export enum AxisType {
         X,
         Y

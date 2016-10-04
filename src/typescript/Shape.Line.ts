@@ -5,32 +5,21 @@
 module frnk.UI.Charts {
 
     export class SVGLine {
-
-        public svg: D3.Selection;
-
         private chart: LineChart;
-        private color: string;
-        private interpolation: string;
         private data: any;
         private serie: number;
+        private svg: D3.Selection;
 
         constructor(svg: D3.Selection, chart: LineChart, serie: number) {
             this.chart = chart;
-            this.color = ColorPalette.color(serie);
             this.data = chart.series.getMatrixItem(serie); // TODO - Feed it in, make it more independent
-            if (chart.interpolation != undefined) { // TODO - Refactor, needed to make combo charts work
-                this.interpolation = chart.interpolation;
-            }
-            else {
-                this.interpolation = "linear";
-            }
             this.serie = serie;
             this.svg = svg;
         }
 
         public draw(): void {
             var d3Line = d3.svg.line()
-                .interpolate(this.interpolation)
+                .interpolate(this.chart.interpolation)
                 .x((d: any, i: number): number => { return this.chart.getXCoordinate(d, i, this.serie); })
                 .y((d: any, i: number): number => { return this.chart.getYCoordinate(d, i, this.serie); });
 
@@ -40,7 +29,7 @@ module frnk.UI.Charts {
             var svgPath = svgSerie.append("path")
                 .attr("class", "line")
                 .attr("d", d3Line(this.data))
-                .attr("stroke", this.color)
+                .attr("stroke", ColorPalette.color(this.serie))
                 .attr("stroke-width", 1)
                 .attr("fill", "none");
 

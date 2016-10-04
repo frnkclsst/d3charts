@@ -5,12 +5,11 @@
 module frnk.UI.Charts {
 
     export class LegendArea implements IArea {
-        public symbolWidth: number = 24;
-
         public height: number;
         public position: string;
-        public title: string;
         public svg: D3.Selection;
+        public symbolWidth: number = 24;
+        public title: string;
         public width: number;
 
         private _chart: Chart;

@@ -3,6 +3,7 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export class LineChart extends XYChart {
         public fillArea: boolean;
         public interpolation: string;

@@ -3,6 +3,7 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export class Canvas implements IArea {
         public height: number;
         public legendArea: LegendArea;

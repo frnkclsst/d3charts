@@ -5,10 +5,9 @@
 module frnk.UI.Charts {
 
     export class SVGBar {
-        public svg: D3.Selection;
-
-        private serie: number;
         private chart: ColumnChart;
+        private serie: number;
+        private svg: D3.Selection;
 
         constructor(svg: D3.Selection, chart: BarChart, serie: number) {
             this.chart = chart;

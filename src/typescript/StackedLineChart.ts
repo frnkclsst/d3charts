@@ -3,6 +3,7 @@
 "use strict";
 
 module frnk.UI.Charts {
+
     export class StackedLineChart extends LineChart {
 
         constructor(args: ISettings, selector: string) {
