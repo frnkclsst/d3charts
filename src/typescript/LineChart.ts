@@ -48,7 +48,7 @@ module frnk.UI.Charts {
         public drawLabels(svg: D3.Selection): void {
             for (var serie = 0; serie < this.series.length; serie++) {
                 var svgLabels = svg.append("g").attr("id", "labels-" + serie);
-                d3.selectAll("g#serie-" + serie).selectAll("circle")
+                d3.selectAll("g#serie-" + serie).selectAll("path.marker")
                     .each((d: any, i: number): void => {
                         var rotation = 0;
                         var x = this.getXCoordinate(d, i, serie);
@@ -71,10 +71,10 @@ module frnk.UI.Charts {
                             });
 
                         if (rotation != 0) {
-                            dx = Html.getHeight(text);
+                            dx = Html.getHeight(text) + this.settings.linechart.markers.size / 2;
                         }
                         else {
-                            dy = -Html.getHeight(text);
+                            dy = -Html.getHeight(text) + this.settings.linechart.markers.size / 2;
                         }
 
                         text
