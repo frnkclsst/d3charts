@@ -206,6 +206,7 @@ module frnk.UI.Charts {
         public interpolation: string;
         public markers: {
             enabled: boolean,
+            size: number,
             type: MarkerType
         };
 
@@ -215,6 +216,7 @@ module frnk.UI.Charts {
             this.interpolation = "linear";
             this.markers = {
                 enabled: true,
+                size: 6,
                 type: "mixed"
             };
 
@@ -230,6 +232,9 @@ module frnk.UI.Charts {
             if (typeof settings.markers != "undefined") {
                 if (typeof settings.markers.enabled != "undefined") {
                     this.markers.enabled = settings.markers.enabled;
+                }
+                if (typeof settings.markers.size != "undefined") {
+                    this.markers.size = settings.markers.size;
                 }
                 if (typeof settings.markers.type != "undefined") {
                     this.markers.type = settings.markers.type;

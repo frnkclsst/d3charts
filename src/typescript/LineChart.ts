@@ -8,6 +8,7 @@ module frnk.UI.Charts {
         public interpolation: string;
         public markers: {
             enabled: boolean,
+            size: number,
             type: MarkerType
         };
 
@@ -17,6 +18,7 @@ module frnk.UI.Charts {
             this.interpolation = this.settings.linechart.interpolation;
             this.markers = {
                 enabled: this.settings.linechart.markers.enabled,
+                size: this.settings.linechart.markers.size,
                 type: this.settings.linechart.markers.type
             };
         }

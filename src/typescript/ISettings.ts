@@ -56,6 +56,7 @@ module frnk.UI.Charts {
         interpolation: string;
         markers: {
             enabled: boolean,
+            size: number,
             type: MarkerType
         };
     }

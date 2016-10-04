@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Donut Chart - Basic</title>
+    <title>Pie Chart - Multiple Series</title>
     <!-- general styles -->
     <link rel="stylesheet" href="../../dist/css/style.css" />
     <link rel="stylesheet" href="../../dist/css/d3charts.css" />
@@ -22,28 +22,44 @@
 				"innerRadius": 0.6
 			},
 			"legend": {
-				"title": "Browsers",
+				"title": "Year",
 				"position": "right",
 				"width": 200
 			},
 			"title": {
-				"text": "Donut Chart - Basic",
+				"text": "Pie Chart - Multiple Series",
 				"align": "center",
 				"height": 50
 			},
 			"tooltip": { 
-				"title": "Browser usage",
-				"valueSuffix": " %"
+				"title": "Population in Region",
+				"valueSuffix": " millions"
 			},
 			"categories": {
 				"format": "%s",
-				"data": ["Firefox", "IE", "Safari", "Opera", "Others"]
+				"data": ["1750", "1800", "1850", "1900", "1950", "1999", "2050"]
 			},
-			"series": { 
+			"series": {
 				"items": [{
-						"name": "Browsers",
-						"data": [45, 26.8, 8.5, 6.2, 0.7]
-					}]
+						"name": "Asia",
+						"data": [52, 635, 809, 947, 1402, 3634, 5268]
+					},
+					{
+						"name": "Africa",
+						"data": [20, 107, 111, 133, 221, 767, 1766]
+					},
+					{
+						"name": "Europe",
+						"data": [30, 203, 276, 408, 547, 729, 628]
+					},
+					{
+						"name": "America",
+						"data": [40, 31, 54, 156, 339, 818, 1201]
+					},
+					{
+						"name": "Oceania",
+						"data": [50, 20, 20, 60, 130, 300, 460]
+				}]
 			},
 			"plotOptions": {
 				"general": { 
