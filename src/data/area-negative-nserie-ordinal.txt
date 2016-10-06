@@ -5,7 +5,9 @@
         "padding": 80
     },
     "linechart": {
-        "fillArea": true,
+        "area": {
+            "enabled": true
+        },
         "interpolation": "linear",
         "markers": {
             "enabled": true

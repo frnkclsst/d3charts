@@ -106,13 +106,26 @@ svg {
 .bar {
     opacity: 0.8;
     stroke: #fff;  /* separates the bars with a white stroke */
-    stroke-width:1px;
+    stroke-width: 1px;
 }
 
 .bar:hover {
 	opacity: 0.6;
     stroke: #fff; /* separates the bars with a white stroke */
-    stroke-width:1px;
+    stroke-width: 1px;
+}
+
+/* Column Chart */
+.column {
+    opacity: 0.8;
+    stroke: #fff;  /* separates the bars with a white stroke */
+    stroke-width: 1px;
+}
+
+.column:hover {
+    opacity: 0.6;
+    stroke: #fff; /* separates the bars with a white stroke */
+    stroke-width: 1px;
 }
 
 /* Pie Chart */

@@ -4,17 +4,12 @@
 
 module frnk.UI.Charts {
 
-    export class SVGArea {
-        private chart: LineChart;
-        private data: any;
-        private serie: number;
-        private svg: D3.Selection;
+    export class SVGArea extends SVGShape {
+        protected chart: LineChart;
 
         constructor(svg: D3.Selection, chart: LineChart, serie: number) {
+            super(svg, chart, serie);
             this.chart = chart;
-            this.data = chart.series.getMatrixItem(serie);
-            this.serie = serie;
-            this.svg = svg;
         }
 
         public draw(): void {
@@ -29,7 +24,7 @@ module frnk.UI.Charts {
 
             var svgPath = svgArea.append("path")
                 .attr("class", "area")
-                .attr("d", d3Area(this.data))
+                .attr("d", d3Area(this.chart.series.getMatrixItem(this.serie)))
                 .style("fill", ColorPalette.color(this.serie))
                 .style("opacity", "0");
 
@@ -38,7 +33,7 @@ module frnk.UI.Charts {
             svgPath
                 .transition()
                 .duration(duration)
-                .style("opacity", "0.2");
+                .style("opacity", this.chart.settings.linechart.area.opacity);
         }
     }
 }

@@ -3,19 +3,22 @@
 "use strict";
 
 module frnk.UI.Charts {
-
+    // TODO - should extend from SVGShape
     export class SVGMarker {
-        private _chart: Chart;
-        private _svg: D3.Selection;
 
-        constructor(svg: D3.Selection, chart: Chart) {
-            this._chart = chart;
-            this._svg = svg;
+        protected chart: Chart;
+        protected serie: number;
+        protected svg: D3.Selection;
+
+        constructor(svg: D3.Selection, chart: Chart, serie: number) {
+            this.chart = chart;
+            this.serie = serie;
+            this.svg = svg;
         }
 
         public draw(x: number, y: number): void {
             var _self = this;
-            this._svg
+            this.svg
                 //.data([])
                 //.enter()
                 .append("path")
@@ -25,7 +28,7 @@ module frnk.UI.Charts {
                             "class": "marker",
                             "d": d3.svg.symbol()
                                 .size(60)
-                                .type(_self._chart.series.items[i].marker)(),
+                                .type(_self.chart.series.items[i].marker)(),
                             "stroke": ColorPalette.color(i),
                             "stroke-width": 0,
                             "transform": "translate(" + x + ", " + y + ")"

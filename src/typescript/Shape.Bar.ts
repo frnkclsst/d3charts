@@ -4,15 +4,12 @@
 
 module frnk.UI.Charts {
 
-    export class SVGBar {
-        private chart: ColumnChart;
-        private serie: number;
-        private svg: D3.Selection;
+    export class SVGBar extends SVGShape {
+        protected chart: BarChart;
 
         constructor(svg: D3.Selection, chart: BarChart, serie: number) {
+            super(svg, chart, serie);
             this.chart = chart;
-            this.serie = serie;
-            this.svg = svg;
         }
 
         public draw(): void {
@@ -22,7 +19,7 @@ module frnk.UI.Charts {
                 .data(this.chart.series.getMatrixItem(this.serie))
                 .enter();
 
-            // draw single bar
+            // draw bar
             var svgBar = svgSerie.append("rect")
                 .attr({
                     "class": "bar",
@@ -30,6 +27,8 @@ module frnk.UI.Charts {
                     "height": (d: any, i: number): number => {
                         return this.chart.getHeight(d, i, this.serie);
                     },
+                    "stroke": ColorPalette.color(this.serie),
+                    "stroke-width": "1px",
                     "width": 0,
                     "x": (d: any, i: number): number => {
                         if (d.y < 0) {
@@ -58,14 +57,52 @@ module frnk.UI.Charts {
                     return this.chart.getXCoordinate(d, i, this.serie);
                 })
                 .each("end", (): void => {
+                    console.log(count);
                     count--;
                     if (this.chart.settings.series.labels.enabled === true && !count) { // only draw labels after all transitions ended
-                        this.chart.drawLabels(this.svg);
+                        this.drawLabels();
                     }
                 });
 
             // draw tooltip
             this.chart.tooltip.draw(svgBar, this.serie);
+        }
+
+        public drawLabels(): void {
+            super.drawLabels();
+            d3.selectAll("g#serie-" + this.serie).selectAll("rect")
+                .each((d: any, i: number): void => {
+                    var rotation = 0;
+                    var x = this.chart.getXCoordinate(d, i, this.serie);
+                    var y = this.chart.getYCoordinate(d, i, this.serie);
+                    var dx = 0;
+                    var dy = 0;
+
+                    if (this.chart.settings.series.labels.rotate === true) {
+                        rotation = -90;
+                    }
+
+                    if (rotation != 0) {
+                        dx = -this.chart.getHeight(d, i, this.serie) / 2;
+                        dy = this.chart.getWidth(d, i, this.serie) / 2;
+                    }
+                    else {
+                        dx = this.chart.getWidth(d, i, this.serie) / 2;
+                        dy = this.chart.getHeight(d, i, this.serie) / 2;
+                    }
+
+                    this.svgLabels.append("text")
+                        .text(d3.format(this.chart.series.items[this.serie].format)(d.y))
+                        .style("text-anchor", "middle")
+                        .attr({
+                            "alignment-baseline": "central",
+                            "class": "label",
+                            "fill": "#fff",
+                            "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")",
+                            "dx": dx,
+                            "dy": dy
+                        });
+                });
         }
     }
 }

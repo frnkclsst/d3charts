@@ -202,7 +202,10 @@ module frnk.UI.Charts {
     }
 
     export class LineChartSettings implements ILineChartSettings {
-        public fillArea: boolean;
+        public area: {
+            enabled: boolean,
+            opacity: number
+        };
         public interpolation: string;
         public markers: {
             enabled: boolean,
@@ -212,7 +215,10 @@ module frnk.UI.Charts {
 
         constructor(settings: ILineChartSettings) {
             // defaults
-            this.fillArea = false;
+            this.area = {
+                enabled: false,
+                opacity: 0.2
+            };
             this.interpolation = "linear";
             this.markers = {
                 enabled: true,
@@ -221,8 +227,13 @@ module frnk.UI.Charts {
             };
 
             // apply properties from config if available
-            if (typeof settings.fillArea != "undefined") {
-                this.fillArea = settings.fillArea;
+            if (typeof settings.area != "undefined") {
+                if (typeof settings.area.enabled != "undefined") {
+                    this.area.enabled = settings.area.enabled;
+                }
+                if (typeof settings.area.opacity != "undefined") {
+                    this.area.opacity = settings.area.opacity;
+                }
             }
 
             if (typeof settings.interpolation != "undefined") {

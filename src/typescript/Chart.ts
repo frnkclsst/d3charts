@@ -46,9 +46,5 @@ module frnk.UI.Charts {
         public draw(): void {
             this.canvas.draw();
         }
-
-        public drawLabels(svg: D3.Selection): void {
-            // child classes are responsible for implementing this method
-        }
     }
 }

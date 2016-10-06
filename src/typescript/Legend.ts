@@ -9,6 +9,7 @@ module frnk.UI.Charts {
         public position: string;
         public svg: D3.Selection;
         public symbolWidth: number = 24;
+        public symbolHeight: number = 12;
         public title: string;
         public width: number;
 
@@ -25,15 +26,15 @@ module frnk.UI.Charts {
         }
 
         public draw(): void {
+            if (this.width === 0) {
+                return;
+            }
+
             if (this._chart instanceof PieChart) {
                 this._items = this._chart.categories.getLabels();
             }
             else {
                 this._items = this._chart.series.getLabels();
-            }
-
-            if (this.width === 0) {
-                return;
             }
 
             this.svg = this._chart.canvas.svg.append("g")
@@ -56,7 +57,6 @@ module frnk.UI.Charts {
                     // TODO - Refactor
                     // - add checkbox
                     // - add interpolation when in stacked / pie charts
-                    // - don't check on opacity as this can be set differently in css
                     var opacity;
                     if (this._chart instanceof PieChart) {
                         var slice = d3.selectAll("#slice-" + i);
@@ -100,16 +100,31 @@ module frnk.UI.Charts {
             svg.append("line")
                 .attr("x1", 0)
                 .attr("x2", this.symbolWidth)
-                .attr("y1", 6)
-                .attr("y2", 6)
+                .attr("y1", this.symbolHeight / 2)
+                .attr("y2", this.symbolHeight / 2)
                 .style("stroke", (d: any, i: any): string => {
                     return ColorPalette.color(i);
                 })
                 .style("stroke-width", "2");
 
+            // draw area
+            if (this._chart.settings.linechart.area.enabled === true) {
+                svg.append("rect")
+                    .attr("x", 0)
+                    .attr("y", this.symbolHeight / 2)
+                    .attr("opacity", this._chart.settings.linechart.area.opacity)
+                    .attr("width", this.symbolWidth)
+                    .attr("height", this.symbolHeight / 2)
+                    .style("fill", (d: any, i: any): string => {
+                        return ColorPalette.color(i);
+                    });
+            }
+
             // draw marker
-            var marker = new SVGMarker(svg, this._chart);
-            marker.draw(this.symbolWidth / 2, 6);
+            if (this._chart.settings.linechart.markers.enabled === true) {
+                var marker = new SVGMarker(svg, this._chart, 0); //TODO - provide correct serie number
+                marker.draw(this.symbolWidth / 2, this.symbolHeight / 2);
+            }
         }
 
         private drawSymbolAsRectangle(svg: D3.Selection): void {

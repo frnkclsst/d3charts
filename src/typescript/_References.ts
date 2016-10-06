@@ -24,6 +24,7 @@
 /// <reference path="TitleArea.ts" />
 
 // shapes
+/// <reference path="Shape.ts" />
 /// <reference path="Shape.Area.ts" />
 /// <reference path="Shape.Bar.ts" />
 /// <reference path="Shape.Column.ts" />

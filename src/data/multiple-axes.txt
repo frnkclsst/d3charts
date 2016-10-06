@@ -3,7 +3,10 @@
         "padding": 20
     },
     "linechart": {
-        "fillArea": true,
+        "area": {
+            "enabled": true,
+            "opacity": 0.2
+        },
         "interpolation": "linear",
         "markers": {
             "enabled" : true,

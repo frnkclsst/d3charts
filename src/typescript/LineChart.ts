@@ -5,7 +5,10 @@
 module frnk.UI.Charts {
 
     export class LineChart extends XYChart {
-        public fillArea: boolean;
+        public area: {
+            enabled: boolean,
+            opacity: number
+        };
         public interpolation: string;
         public markers: {
             enabled: boolean,
@@ -15,7 +18,10 @@ module frnk.UI.Charts {
 
         constructor(args: ISettings, selector: string) {
             super(args, selector);
-            this.fillArea = this.settings.linechart.fillArea;
+            this.area = {
+                enabled: this.settings.linechart.area.enabled,
+                opacity: this.settings.linechart.area.opacity
+            };
             this.interpolation = this.settings.linechart.interpolation;
             this.markers = {
                 enabled: this.settings.linechart.markers.enabled,
@@ -32,56 +38,17 @@ module frnk.UI.Charts {
 
             // draw areas
             // areas need to be drawn first, because the line and markers need to be drawn on top of it
-            if (this.fillArea === true) {
-                for (var serieArea = 0; serieArea < this.series.length; serieArea++) {
-                    var area = new SVGArea(svgSeries, this, serieArea);
+            if (this.area.enabled === true) {
+                for (var areaSerie = 0; areaSerie < this.series.length; areaSerie++) {
+                    var area = new SVGArea(svgSeries, this, areaSerie);
                     area.draw();
                 }
             }
 
             // draw lines
-            for (var serieLine = 0; serieLine < this.series.length; serieLine++) {
-                var line = new SVGLine(svgSeries, this, serieLine);
-                line.draw();
-            }
-        }
-
-        public drawLabels(svg: D3.Selection): void {
             for (var serie = 0; serie < this.series.length; serie++) {
-                var svgLabels = svg.append("g").attr("id", "labels-" + serie);
-                d3.selectAll("g#serie-" + serie).selectAll("path.marker")
-                    .each((d: any, i: number): void => {
-                        var rotation = 0;
-                        var x = this.getXCoordinate(d, i, serie);
-                        var y = this.getYCoordinate(d, i, serie);
-                        var dx = 0;
-                        var dy = 0;
-
-                        if (this.settings.series.labels.rotate === true) {
-                            rotation = -90;
-                        }
-
-                        var text = svgLabels.append("text")
-                            .text(d3.format(this.series.items[serie].format)(d.y))
-                            .style("text-anchor", "middle")
-                            .attr({
-                                "alignment-baseline": "central",
-                                "class": "label",
-                                "fill": "#fff",
-                                "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")"
-                            });
-
-                        if (rotation != 0) {
-                            dx = Html.getHeight(text) + this.settings.linechart.markers.size / 2;
-                        }
-                        else {
-                            dy = -Html.getHeight(text) - this.settings.linechart.markers.size / 2;
-                        }
-
-                        text
-                            .attr("dy", dy)
-                            .attr("dx", dx);
-                    });
+                var line = new SVGLine(svgSeries, this, serie);
+                line.draw();
             }
         }
 

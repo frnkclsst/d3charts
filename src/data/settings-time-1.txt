@@ -4,8 +4,9 @@
         "width": 600,
         "padding": 50
     },
-    "linechart": {
-        "fillArea": true,
+        "area": {
+            "enabled": true
+        },
         "interpolation": "linear",
         "markers": {
             "enabled": true

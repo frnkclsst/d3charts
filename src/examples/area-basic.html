@@ -19,7 +19,9 @@
 				"padding": 20
 			},
 			"linechart": {
-				"fillArea": true,
+                "area": {
+                    "enabled": true
+                },
 				"interpolation": "linear",
                 "markers": {
                     "enabled": false
@@ -45,14 +47,16 @@
 				},
 				"tickmarks": true,
 				"title": { 
-					"text": "Year"
+					"text": "Year",
+                    "align": "right"
 				}
 			}],
 			"yAxis": [{
 				"gridlines": "none",
 				"tickmarks": false,
 				"title": {
-					"text": "Nuclear weapon status"
+					"text": "Nuclear weapon status",
+                    "valign": "top"
 				}
 			}],
 			"tooltip": { 
@@ -66,7 +70,7 @@
 			"series": {
 				"items": [{
 					"name": "USA",
-					"data": [null, null, null, null, null, 6, 11, 32, 110, 235, 369, 640,
+					"data": [0, 0, 0, 0, 0, 6, 11, 32, 110, 235, 369, 640,
 						1005, 1436, 2063, 3057, 4618, 6444, 9822, 15468, 20434, 24126,
 						27387, 29459, 31056, 31982, 32040, 31233, 29224, 27342, 26662,
 						26956, 27912, 28999, 28965, 27826, 25579, 25722, 24826, 24605,
@@ -76,7 +80,7 @@
 				},
 				{
 					"name":	"USSR/Russia",
-					"data":	[null, null, null, null, null, null, null, null, null, null,
+					"data":	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						5, 25, 50, 120, 150, 200, 426, 660, 869, 1060, 1605, 2471, 3322,
 						4238, 5221, 6129, 7089, 8339, 9399, 10538, 11643, 13092, 14478,
 						15915, 17385, 19055, 21205, 23044, 25393, 27935, 30062, 32049,

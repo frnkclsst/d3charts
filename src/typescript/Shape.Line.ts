@@ -4,17 +4,12 @@
 
 module frnk.UI.Charts {
 
-    export class SVGLine {
-        private chart: LineChart;
-        private data: any;
-        private serie: number;
-        private svg: D3.Selection;
+    export class SVGLine extends SVGShape {
+        protected chart: LineChart;
 
         constructor(svg: D3.Selection, chart: LineChart, serie: number) {
+            super(svg, chart, serie);
             this.chart = chart;
-            this.data = chart.series.getMatrixItem(serie); // TODO - Feed it in, make it more independent
-            this.serie = serie;
-            this.svg = svg;
         }
 
         public draw(): void {
@@ -28,7 +23,7 @@ module frnk.UI.Charts {
 
             var svgPath = svgSerie.append("path")
                 .attr("class", "line")
-                .attr("d", d3Line(this.data))
+                .attr("d", d3Line(this.chart.series.getMatrixItem(this.serie)))
                 .attr("stroke", ColorPalette.color(this.serie))
                 .attr("stroke-width", 1)
                 .attr("fill", "none");
@@ -36,41 +31,83 @@ module frnk.UI.Charts {
             // add animation
             var duration = this.chart.settings.series.animate === true ? 1000 : 0;
             var pathLenght = svgPath[0][0].getTotalLength();
-
+            var count = 0;
             svgPath
+                .each((): void => {
+                    count++; // count number of bars
+                })
                 .attr("stroke-dasharray", pathLenght + " " + pathLenght)
                 .attr("stroke-dashoffset", pathLenght)
                 .transition()
                 .duration(duration)
                 .attr("stroke-dashoffset", 0)
                 .each("end", (): void => {
+                    count--;
                     // draw markers
                     if (this.chart.settings.linechart.markers.enabled === true) {
-                        var svgMarkers =  this.drawMarkers(svgSerie, this.serie);
+                        var svgMarkers =  this.drawMarkers();
 
                         // draw tooltip
                         this.chart.tooltip.draw(svgMarkers, this.serie);
                     }
 
                     // draw labels
-                    if (this.chart.settings.series.labels.enabled === true && this.serie === this.chart.series.length - 1) {
-                        this.chart.drawLabels(this.svg);
+                    if (this.chart.settings.series.labels.enabled === true && !count) {
+                        this.drawLabels();
+                        this.showLabels();
                     }
                 });
         }
 
-        private drawMarkers(svg: D3.Selection, serie: number): D3.Selection {
-            var svgMarkers = svg.selectAll(".marker")
-                .data(this.data)
+        public drawLabels(): void {
+            super.drawLabels();
+            d3.selectAll("g#serie-" + this.serie).selectAll("path.marker")
+                .each((d: any, i: number): void => {
+                    var rotation = 0;
+                    var x = this.chart.getXCoordinate(d, i, this.serie);
+                    var y = this.chart.getYCoordinate(d, i, this.serie);
+                    var dx = 0;
+                    var dy = 0;
+
+                    if (this.chart.settings.series.labels.rotate === true) {
+                        rotation = -90;
+                    }
+
+                    var text = this.svgLabels.append("text")
+                        .text(d3.format(this.chart.series.items[this.serie].format)(d.y))
+                        .style("text-anchor", "middle")
+                        .attr({
+                            "alignment-baseline": "central",
+                            "class": "label",
+                            "fill": "#fff",
+                            "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")"
+                        });
+
+                    if (rotation != 0) {
+                        dx = Html.getHeight(text) + this.chart.settings.linechart.markers.size / 2;
+                    }
+                    else {
+                        dy = -Html.getHeight(text) - this.chart.settings.linechart.markers.size / 2;
+                    }
+
+                    text
+                        .attr("dy", dy)
+                        .attr("dx", dx);
+                });
+        }
+
+        public drawMarkers(): D3.Selection {
+            var svgMarkers = this.svg.selectAll("g#serie-" + this.serie).selectAll(".marker")
+                .data(this.chart.series.getMatrixItem(this.serie))
                 .enter()
                 .append("path")
                 .attr({
                     "class": "marker",
-                    "stroke": ColorPalette.color(serie),
+                    "stroke": ColorPalette.color(this.serie),
                     "stroke-width": 0,
                     "d": d3.svg.symbol()
-                        .size(60)
-                        .type(this.chart.series.items[serie].marker)(),
+                        .size(this.chart.settings.linechart.markers.size * 10)
+                        .type(this.chart.series.items[this.serie].marker)(),
                     "transform": (d: any, i: number): string => {
                         return "translate(" + this.chart.getXCoordinate(d, i, this.serie) + ", " + this.chart.getYCoordinate(d, i, this.serie) + ")";
                     }

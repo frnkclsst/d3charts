@@ -3,7 +3,9 @@
         "padding": 0
     },
     "linechart": {
-        "fillArea": "yes",
+        "area": {
+            "enabled": true
+        },
         "interpolation": "linear",
         "markers": {
             "enabled": true

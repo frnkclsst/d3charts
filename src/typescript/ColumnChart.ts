@@ -20,45 +20,6 @@ module frnk.UI.Charts {
             }
         }
 
-        public drawLabels(svg: D3.Selection): void {
-            for (var serie = 0; serie < this.series.length; serie++) {
-                var svgLabels = svg.append("g").attr("id", "labels-" + serie);
-                d3.selectAll("g#serie-" + serie).selectAll("rect")
-                    .each((d: any, i: number): void  => {
-                        var rotation = 0;
-                        var x = this.getXCoordinate(d, i, serie);
-                        var y = this.getYCoordinate(d, i, serie);
-                        var dx = 0;
-                        var dy = 0;
-
-                        if (this.settings.series.labels.rotate === true) {
-                            rotation = -90;
-                        }
-
-                        if (rotation != 0) {
-                            dx = -this.getHeight(d, i, serie) / 2;
-                            dy = this.getWidth(d, i, serie) / 2;
-                        }
-                        else {
-                            dx = this.getWidth(d, i, serie) / 2;
-                            dy = this.getHeight(d, i, serie) / 2;
-                        }
-
-                        svgLabels.append("text")
-                            .text(d3.format(this.series.items[serie].format)(d.y))
-                            .style("text-anchor", "middle")
-                            .attr({
-                                "alignment-baseline": "central",
-                                "class": "label",
-                                "fill": "#fff",
-                                "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")",
-                                "dx": dx,
-                                "dy": dy
-                            });
-                    });
-            }
-        }
-
         public getXCoordinate(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
             var axisScale = this.categories.parseFormat(this.categories.getItem(i));

@@ -52,7 +52,10 @@ module frnk.UI.Charts {
     }
 
     export interface ILineChartSettings {
-        fillArea: boolean;
+        area: {
+            enabled: boolean;
+            opacity: number;
+        };
         interpolation: string;
         markers: {
             enabled: boolean,
