@@ -7,9 +7,11 @@ D3Charts is a reusable chart library using d3 and written in Typescript. D3 comb
 ### Getting Started 
 - [Install](https://github.com/frnkclsst/d3charts/wiki/Install)
 - [Your First Chart](https://github.com/frnkclsst/d3charts/wiki/Your-First-Chart)
-- [Loading your data](https://github.com/frnkclsst/d3charts/wiki/Loading-your-data)
+- [Load your data](https://github.com/frnkclsst/d3charts/wiki/Loading-your-data)
+- [Customize your chart](https://github.com/frnkclsst/d3charts/wiki/Customize-your-chart)
+- [Specify your chart size](https://github.com/frnkclsst/d3charts/wiki/Specify-your-chart-size)
 
-### [Supported Chart Types](https://github.com/frnkclsst/d3charts/wiki/Supported-Chart-Types)
+### Supported Chart Types
 - [Area charts](https://github.com/frnkclsst/d3charts/wiki/area-charts)
 - [Bar charts](https://github.com/frnkclsst/d3charts/wiki/bar-charts)
 - [Column charts](https://github.com/frnkclsst/d3charts/wiki/column-charts)
@@ -17,7 +19,7 @@ D3Charts is a reusable chart library using d3 and written in Typescript. D3 comb
 - [Line charts](https://github.com/frnkclsst/d3charts/wiki/line-charts)
 - [Pie charts](https://github.com/frnkclsst/d3charts/wiki/pie-charts)
 
-### [Customize your chart](https://github.com/frnkclsst/d3charts/wiki/Configuring-your-chart)
+### Chart Options
 - [Axes](https://github.com/frnkclsst/d3charts/wiki/Axes)
 - [Canvas](https://github.com/frnkclsst/d3charts/wiki/Canvas)
 - [Plot area](https://github.com/frnkclsst/d3charts/wiki/Plot-area)
@@ -25,6 +27,6 @@ D3Charts is a reusable chart library using d3 and written in Typescript. D3 comb
 - [Title](https://github.com/frnkclsst/d3charts/wiki/Title)
 - [Tooltip](https://github.com/frnkclsst/d3charts/wiki/Tooltip)
 
-### [Styling your chart](https://github.com/frnkclsst/d3charts/wiki/Styling-your-chart)
+### Styling your chart
 
 ### [Roadmap](https://github.com/frnkclsst/d3charts/wiki/Roadmap)
