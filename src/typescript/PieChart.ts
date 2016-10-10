@@ -11,9 +11,9 @@ module frnk.UI.Charts {
         private radius: number;
         private serieRadius: number;
 
-        constructor(selector: string, args: ISettings) {
-            super(selector, args);
-            this.innerRadiusPercentage = this.settings.piechart.innerRadius;
+        constructor(selector: string, data: IData, options?: IOptions) {
+            super(selector, data, options);
+            this.innerRadiusPercentage = this.options.piechart.innerRadius;
         }
 
         public draw(): void {
@@ -57,7 +57,7 @@ module frnk.UI.Charts {
                     });
 
                 // add animation
-                var duration = this.settings.series.animate === true ? 1000 : 0;
+                var duration = this.options.series.animate === true ? 1000 : 0;
                 var count = 0;
                 svgPath
                     .each((): void => {
@@ -76,7 +76,7 @@ module frnk.UI.Charts {
                     })
                     .each("end", (): void => {
                         count--;
-                        if (this.settings.series.labels.visible === true && !count) {
+                        if (this.options.series.labels.visible === true && !count) {
                             this.drawLabels(svgSeries);
                         }
                     });

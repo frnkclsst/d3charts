@@ -16,17 +16,17 @@ module frnk.UI.Charts {
             type: MarkerType
         };
 
-        constructor(selector: string, args: ISettings) {
-            super(selector, args);
+        constructor(selector: string, data: IData, options?: IOptions) {
+            super(selector, data, options);
             this.area = {
-                visible: this.settings.linechart.area.visible,
-                opacity: this.settings.linechart.area.opacity
+                visible: this.options.linechart.area.visible,
+                opacity: this.options.linechart.area.opacity
             };
-            this.interpolation = this.settings.linechart.interpolation;
+            this.interpolation = this.options.linechart.interpolation;
             this.markers = {
-                visible: this.settings.linechart.markers.visible,
-                size: this.settings.linechart.markers.size,
-                type: this.settings.linechart.markers.type
+                visible: this.options.linechart.markers.visible,
+                size: this.options.linechart.markers.size,
+                type: this.options.linechart.markers.type
             };
         }
 

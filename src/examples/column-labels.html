@@ -12,48 +12,12 @@
 <body>
     <div id="chart" />
     <script>
-		var settings = {
-			"plotArea": {
-				"padding": 20
-			},
-			"legend": {
-				"title": "Who?",
-				"position": "right",
-				"width": 200
-			},
-			"title": {
-				"text": "Column Chart - Basic",
-				"align": "center",
-				"height": 50,
-				"subtitle": "Source: WorldClimate.com"
-			},
-			"xAxis": [{
-				"gridlines": "none",
-				"labels": {
-					"rotate": 0
-				},
-				"tickmarks": false,
-				"title": { 
-					"text": "Month"
-				}
-			}],
-			"yAxis": [{
-				"gridlines": "major",
-				"tickmarks": true,
-				"ticks": 4,
-				"title": {
-					"text": "Rainfall (mm)"
-				}
-			}],
-			"tooltip": { 
-				"title": "Rainfall",
-				"valueSuffix": " mm"
-			},
-			"categories": {
-				"format": "%s",
-				"data": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-			},
-			"series": {
+        var data = {
+            "categories": {
+                "format": "%s",
+                "data": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+            },
+            "series": {
                 "items": [{
                     "name": "Tokyo",
                     "data": [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
@@ -75,10 +39,49 @@
                     "visible": true,
                     "rotate": false
                 }
-			}
-		};
+            }
+        };
 
-		var chart = new frnk.UI.Charts.ColumnChart("#chart", settings);
+        var options = {
+            "plotArea": {
+                "padding": 20
+            },
+            "legend": {
+                "title": "Who?",
+                "position": "right",
+                "width": 200
+            },
+            "title": {
+                "text": "Column Chart - Basic",
+                "align": "center",
+                "height": 50,
+                "subtitle": "Source: WorldClimate.com"
+            },
+            "xAxis": [{
+                "gridlines": "none",
+                "labels": {
+                    "rotate": 0
+                },
+                "tickmarks": false,
+                "title": {
+                    "text": "Month"
+                }
+            }],
+            "yAxis": [{
+                "gridlines": "major",
+                "tickmarks": true,
+                "ticks": 4,
+                "title": {
+                    "text": "Rainfall (mm)"
+                }
+            }],
+            "tooltip": {
+                "title": "Rainfall",
+                "valueSuffix": " mm"
+            }
+        };
+
+		var chart = new frnk.UI.Charts.ColumnChart("#chart", data, options);
 		chart.draw();
     </script>
 </body>

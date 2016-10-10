@@ -12,8 +12,8 @@ module frnk.UI.Charts {
         private _items: string[];
 
         constructor(chart: Chart) {
-            this.format = chart.settings.getValue("categories.format");
-            this._items = this._setCategories(chart.settings.getValue("categories.data"));
+            this.format = chart.data.categories.format;
+            this._items = this._setCategories(chart.data.categories.data);
             this.length = this._items.length;
         }
 

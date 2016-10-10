@@ -29,11 +29,11 @@ module frnk.UI.Charts {
                 .style("opacity", "0");
 
             // add animation
-            var duration = this.chart.settings.series.animate === true ? 2000 : 0;
+            var duration = this.chart.options.series.animate === true ? 2000 : 0;
             svgPath
                 .transition()
                 .duration(duration)
-                .style("opacity", this.chart.settings.linechart.area.opacity);
+                .style("opacity", this.chart.options.linechart.area.opacity);
         }
     }
 }

@@ -12,58 +12,61 @@
 <body>
     <div id="chart" />
     <script>
-		var settings = {
-			"plotArea": {
-				"padding": 20
-			},
-			"legend": {
-				"title": "Who?",
-				"position": "right",
-				"width": 200
-			},
-			"title": {
-				"text": "Column Chart - Negative",
-				"align": "center",
-				"height": 50
-			},
-			"xAxis": [{
-				"gridlines": "none",
-				"labels": {
-					"rotate": 0
-				},
-				"tickmarks": false
-			}],
-			"yAxis": [{
-				"gridlines": "major",
-				"tickmarks": true,
-				"ticks": 4,
-				"title": {
-					"text": "Rainfall (mm)"
-				}
-			}],
-			"tooltip": { 
-				"title": "Rainfall",
-				"valueSuffix": " mm"
-			},
-			"categories": {
-				"format": "%s",
-				"data": ["Apples", "Oranges", "Pears", "Grapes", "Bananas"]
-			},
-			"series": {
-				"items": [{
-					name: "John",
-					data: [5, 3, 4, 7, 2]
-				}, {
-					name: "Jane",
-					data: [2, -2, -3, 2, 1]
-				}, {
-					name: "Joe",
-					data: [3, 4, 4, -2, 5]
-				}]
-			}
-		};
+        var data = {
+            "categories": {
+                "format": "%s",
+                "data": ["Apples", "Oranges", "Pears", "Grapes", "Bananas"]
+            },
+            "series": {
+                "items": [{
+                    name: "John",
+                    data: [5, 3, 4, 7, 2]
+                }, {
+                    name: "Jane",
+                    data: [2, -2, -3, 2, 1]
+                }, {
+                    name: "Joe",
+                    data: [3, 4, 4, -2, 5]
+                }]
+            }
+        };
 
-		var chart = new frnk.UI.Charts.ColumnChart("#chart", settings);
+        var options = {
+            "plotArea": {
+                "padding": 20
+            },
+            "legend": {
+                "title": "Who?",
+                "position": "right",
+                "width": 200
+            },
+            "title": {
+                "text": "Column Chart - Negative",
+                "align": "center",
+                "height": 50
+            },
+            "xAxis": [{
+                "gridlines": "none",
+                "labels": {
+                    "rotate": 0
+                },
+                "tickmarks": false
+            }],
+            "yAxis": [{
+                "gridlines": "major",
+                "tickmarks": true,
+                "ticks": 4,
+                "title": {
+                    "text": "Rainfall (mm)"
+                }
+            }],
+            "tooltip": {
+                "title": "Rainfall",
+                "valueSuffix": " mm"
+            }
+        };
+
+		var chart = new frnk.UI.Charts.ColumnChart("#chart", data, options);
 		chart.draw();
     </script>
 </body>

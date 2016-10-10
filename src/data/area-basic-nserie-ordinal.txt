@@ -1,84 +1,31 @@
 {
-    "plotArea": {
-        "padding": 20
-    },
-    "linechart": {
-        "area": {
-            "visible": true
-        },
-        "interpolation": "linear",
-        "markers": {
-            "visible": true
-        }
-    },
-	"piechart": {
-		"innerRadius": 0.8
-	},
-    "legend": {
-       	"title": "Population / Regions",
-       	"position": "right",
-        "width": 200
-    },
-    "title": {
-        "text": "Population Growth per Region",
-		"align": "center",
-		"height": 50,
-		"margin": 15,
-		"subtitle": "Source: wikipedia.org"
-    },
-    "xAxis": [{
-       "gridlines": "major",
-       "orient": "bottom",
-        "labels": {
-            "rotate": -0
-        },
-        "tickmarks": true,
-           "title": {
-               "text": "Year"
-        }
-    }],
-    "yAxis": [{
-        "gridlines": "none",
-        "orient": "left",
-        "labels": {
-            "rotate": "0"
-        },
-		"tickmarks": true,
-		"title": {
-            "text": "Millions"
-        }
-    }],
-    "tooltip": {
-        "title": "Population",
-        "valueSuffix": " million"
-    },
     "categories": {
         "format": "%s",
         "data": ["1750", "1800", "1850", "1900", "1950", "1999", "2050"]
     },
     "series": {
-		"name": "Population",
-		"items":	[{
+        "name": "Population",
+        "items":	[{
                 "name": "Asia",
                 "data": [52, 635, 809, 947, 1402, 3634, 5268]
-            }, 
-			{
+            },
+            {
                 "name": "Africa",
                 "data": [20, 107, 111, 133, 221, 767, 1766]
-            }, 
-			{
+            },
+            {
                 "name": "Europe",
                 "data": [30, 203, 276, 408, 547, 729, 628]
-            }, 
-			{
+            },
+            {
                 "name": "America",
                 "data": [40, 31, 54, 156, 339, 818, 1201]
-            }, 
-			{
+            },
+            {
                 "name": "Oceania",
                 "data": [50, 20, 20, 60, 130, 300, 460]
-            }, 
-			{
+            },
+            {
                 "name": "Runkelen",
                 "data": [1075, 520, 1220, 2560, 5630, 6300, 15000]
             }],

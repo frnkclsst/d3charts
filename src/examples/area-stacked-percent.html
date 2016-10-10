@@ -12,51 +12,83 @@
 <body>
     <div id="chart" />
     <script>
-		var settings = {
-			"plotArea": {
-				"padding": 20
-			},
-			"linechart": {
+        var data = {
+            "categories": {
+                "format": "%s",
+                "data": ["1750", "1800", "1850", "1900", "1950", "1999", "2050"]
+            },
+            "series": {
+                "items": [{
+                    "name": "Oceania",
+                    "data": [2, 2, 2, 6, 13, 30, 46]
+                    },
+                    {
+                        "name": "Asia",
+                        "data": [502, 635, 809, 947, 1402, 3634, 5268]
+                    },
+                    {
+                        "name": "Africa",
+                        "data": [106, 107, 111, 133, 221, 767, 1766]
+                    },
+                    {
+                        "name": "Europe",
+                        "data": [163, 203, 276, 408, 547, 729, 628],
+                        "marker": "diamond"
+                    },
+                    {
+                        "name": "America",
+                        "data": [18, 31, 54, 156, 339, 818, 1201]
+                    }]
+            }
+        };
+
+        var options = {
+            "plotArea": {
+                "padding": 20,
+                "innerPadding": 1,
+                "outerPadding": 0
+            },
+            "linechart": {
                 "area": {
                     "visible": true
                 },
-				"interpolation": "basic",
+                "interpolation": "basic",
                 "markers": {
                     "visible": true,
                     "type": "circle",
                     "size": 6
                 }
-			},
-			"legend": {
-				"title": "Continent",
-				"position": "right",
-				"width": 200
-			},
-			"title": {
-				"text": "Area Chart - 100% Stacked",
-				"align": "center",
-				"height": 50
-			},
-			"xAxis": {
-				"gridlines": "none",
-				"labels": {
-					"rotate": 0
-				},
-				"tickmarks": false,
-				"title": { 
-					"text": "Year"
-				}
-			},
-			"yAxis": [{
-				"gridlines": "none",
-				"labels": {
-					"format": "%"
-				},
-				"tickmarks": true,
-				"title": {
-					"text": "Percent"
-				}
-			}, {
+            },
+            "legend": {
+                "title": "Continent",
+                "position": "right",
+                "width": 200
+            },
+            "title": {
+                "text": "Area Chart - 100% Stacked",
+                "align": "center",
+                "height": 50
+            },
+            "xAxis": {
+                "gridlines": "none",
+                "labels": {
+                    "rotate": 0
+                },
+                "tickmarks": false,
+                "title": {
+                    "text": "Year"
+                }
+            },
+            "yAxis": [{
+                "gridlines": "none",
+                "labels": {
+                    "format": "%"
+                },
+                "tickmarks": true,
+                "title": {
+                    "text": "Percent"
+                }
+            }, {
                 "gridlines": "none",
                 "labels": {
                     "format": "%"
@@ -67,40 +99,13 @@
                     "text": "Percent"
                 }
             }],
-			"tooltip": { 
-				"title": "Population",
-				"valueSuffix": " people"
-			},
-			"categories": {
-				"format": "%s",
-				"data": ["1750", "1800", "1850", "1900", "1950", "1999", "2050"]
-			},
-			"series": {
-				"items": [{
-						"name": "Oceania",
-						"data": [2, 2, 2, 6, 13, 30, 46]
-					},
-					{
-						"name": "Asia",
-						"data": [502, 635, 809, 947, 1402, 3634, 5268]
-					},
-					{
-						"name": "Africa",
-						"data": [106, 107, 111, 133, 221, 767, 1766]
-					},
-					{
-						"name": "Europe",
-						"data": [163, 203, 276, 408, 547, 729, 628],
-                        "marker": "diamond"
-					},
-					{
-						"name": "America",
-						"data": [18, 31, 54, 156, 339, 818, 1201]
-					}]
-			}
-		};
+            "tooltip": {
+                "title": "Population",
+                "valueSuffix": " people"
+            }
+        };
 
-		var chart = new frnk.UI.Charts.StackedPercentLineChart("#chart", settings);
+		var chart = new frnk.UI.Charts.StackedPercentLineChart("#chart", data, options);
 		chart.draw();
     </script>
 </body>

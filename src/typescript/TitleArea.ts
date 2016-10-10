@@ -15,7 +15,7 @@ module frnk.UI.Charts {
 
         private _chart: Chart;
 
-        constructor(settings: ITitleAreaSettings, chart: Chart) {
+        constructor(settings: ITitleAreaOptions, chart: Chart) {
             this._chart = chart;
 
             this.align = settings.align;

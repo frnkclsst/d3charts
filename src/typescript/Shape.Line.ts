@@ -29,7 +29,7 @@ module frnk.UI.Charts {
                 .attr("fill", "none");
 
             // add animation
-            var duration = this.chart.settings.series.animate === true ? 1000 : 0;
+            var duration = this.chart.options.series.animate === true ? 1000 : 0;
             var pathLenght = svgPath[0][0].getTotalLength();
             var count = 0;
             svgPath
@@ -44,7 +44,7 @@ module frnk.UI.Charts {
                 .each("end", (): void => {
                     count--;
                     // draw markers
-                    if (this.chart.settings.linechart.markers.visible === true) {
+                    if (this.chart.options.linechart.markers.visible === true) {
                         var svgMarkers =  this.drawMarkers();
 
                         // draw tooltip
@@ -52,7 +52,7 @@ module frnk.UI.Charts {
                     }
 
                     // draw labels
-                    if (this.chart.settings.series.labels.visible === true && !count) {
+                    if (this.chart.options.series.labels.visible === true && !count) {
                         this.drawLabels();
                         this.showLabels();
                     }
@@ -69,7 +69,7 @@ module frnk.UI.Charts {
                     var dx = 0;
                     var dy = 0;
 
-                    if (this.chart.settings.series.labels.rotate === true) {
+                    if (this.chart.options.series.labels.rotate === true) {
                         rotation = -90;
                     }
 
@@ -84,10 +84,10 @@ module frnk.UI.Charts {
                         });
 
                     if (rotation != 0) {
-                        dx = Html.getHeight(text) + this.chart.settings.linechart.markers.size / 2;
+                        dx = Html.getHeight(text) + this.chart.options.linechart.markers.size / 2;
                     }
                     else {
-                        dy = -Html.getHeight(text) - this.chart.settings.linechart.markers.size / 2;
+                        dy = -Html.getHeight(text) - this.chart.options.linechart.markers.size / 2;
                     }
 
                     text
@@ -106,7 +106,7 @@ module frnk.UI.Charts {
                     "stroke": ColorPalette.color(this.serie),
                     "stroke-width": 0,
                     "d": d3.svg.symbol()
-                        .size(this.chart.settings.linechart.markers.size * 10)
+                        .size(this.chart.options.linechart.markers.size * 10)
                         .type(this.chart.series.items[this.serie].marker)(),
                     "transform": (d: any, i: number): string => {
                         return "translate(" + this.chart.getXCoordinate(d, i, this.serie) + ", " + this.chart.getYCoordinate(d, i, this.serie) + ")";

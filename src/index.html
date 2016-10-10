@@ -41,11 +41,94 @@
     <div id="chart" />
 
     <script>
+        var options = {
+            plotArea: {
+                innerPadding: 0,
+                outerPadding: 0,
+                padding: 20
+            },
+            linechart: {
+                area: {
+                    visible: true,
+                    opacity: 0.2
+                },
+                interpolation: "linear",
+                markers: {
+                    visible: true,
+                    size: 6
+                }
+            },
+            piechart: {
+                innerRadius: 0.5
+            },
+            legend: {
+                title: "Rainfall vs Temperature",
+                position: "right",
+                width: 200
+            },
+            title: {
+                text: "Rainfall vs Temperature",
+                align: "center",
+                height: 50,
+                margin: 15,
+                subtitle: "Source: wikipedia.org"
+            },
+            xAxis: [{
+                gridlines: "none",
+                labels: {
+                    rotate: 0
+                },
+                orient: "bottom",
+                tickmarks: true,
+                title: {
+                    align: "right",
+                    text: "Month"
+                }
+            }],
+            yAxis: [{
+                name: "Rainfall",
+                gridlines: "none",
+                labels: {
+                    rotate: 0
+                },
+                orient: "left",
+                tickmarks: true,
+                title: {
+                    text: "millimeter",
+                    valign: "top"
+                }
+            }, {
+                name: "Temperature",
+                gridlines: "none",
+                labels: {
+                    rotate: 0
+                },
+                orient: "right",
+                tickmarks: true,
+                title: {
+                    text: "Degrees Celcius",
+                    valign: "top"
+                }
+            }],
+            series: {
+                animate: false,
+                labels: {
+                    visible : true,
+                    format: ".4f",
+                    rotate: false
+                }
+            },
+            tooltip: {
+                title: "Rainfall vs Temperature",
+                showPercent: false
+            }
+        };
+
         var el = document.getElementById('chart');
+        var url = "data/multiple-axes.txt";
         //var url = "data/Actuals-vs-Budget.txt";
         //var url = "data/area-basic-1serie-ordinal.txt";
         //var url = "data/area-basic-nserie-ordinal.txt";
-        var url = "data/multiple-axes.txt";
         //var url = "data/area-negative-1serie-ordinal.txt";
         //var url = "data/area-negative-nserie-ordinal.txt";
         //var url = "data/area-negative-inverted-1serie-ordinal.txt";
@@ -57,9 +140,9 @@
         $.get(url, function (data) {
 
             // Initialize
-            var settings = $.parseJSON(data);
+            var data = $.parseJSON(data);
             // Draw initial chart
-            var chart = new frnk.UI.Charts.LineChart(settings, "#chart");
+            var chart = new frnk.UI.Charts.LineChart("#chart", data, options);
             chart.draw();
 
             document.getElementById("type").onchange = function () {
@@ -67,47 +150,47 @@
                 var val = this.options[this.selectedIndex].value;
                 switch (val) {
                     case "column":
-                        var chart = new frnk.UI.Charts.ColumnChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.ColumnChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "combo":
-                        var chart = new frnk.UI.Charts.ComboChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.ComboChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "stackedcolumn":
-                        var chart = new frnk.UI.Charts.StackedColumnChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.StackedColumnChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "stackedpercentcolumn":
-                        var chart = new frnk.UI.Charts.StackedPercentColumnChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.StackedPercentColumnChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "bar":
-                        var chart = new frnk.UI.Charts.BarChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.BarChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "stackedbar":
-                        var chart = new frnk.UI.Charts.StackedBarChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.StackedBarChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "stackedpercentbar":
-                        var chart = new frnk.UI.Charts.StackedPercentBarChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.StackedPercentBarChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "line":
-                        var chart = new frnk.UI.Charts.LineChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.LineChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "stackedline":
-                        var chart = new frnk.UI.Charts.StackedLineChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.StackedLineChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "stackedpercentline":
-                        var chart = new frnk.UI.Charts.StackedPercentLineChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.StackedPercentLineChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "pie":
-                        var chart = new frnk.UI.Charts.PieChart(settings, "#chart");
+                        var chart = new frnk.UI.Charts.PieChart("#chart", data, options);
                         chart.draw();
                         break;
                 }

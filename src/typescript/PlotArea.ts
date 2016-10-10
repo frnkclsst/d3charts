@@ -18,7 +18,7 @@ module frnk.UI.Charts {
 
         private _chart: Chart;
 
-        constructor(settings: Settings, chart: Chart) {
+        constructor(settings: Options, chart: Chart) {
             this._chart = chart;
 
             this.padding = settings.plotArea.padding;
@@ -39,13 +39,13 @@ module frnk.UI.Charts {
             this.svg = this._chart.canvas.svg.append("g")
                 .attr("class", "plotarea")
                 .attr("transform", "translate(" + this.padding + ","
-                    + (this._chart.settings.title.height
+                    + (this._chart.options.title.height
                     + this.padding) + ")");
         }
 
         public initialize(): void {
-            this.height = this._chart.canvas.height - this._chart.settings.title.height - this.padding * 2;
-            this.width = this._chart.canvas.width - this.padding * 2 - this._chart.settings.legend.width;
+            this.height = this._chart.canvas.height - this._chart.options.title.height - this.padding * 2;
+            this.width = this._chart.canvas.width - this.padding * 2 - this._chart.options.legend.width;
             this.axisSize = {
                 left: 0,
                 right: 0,

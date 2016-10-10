@@ -18,12 +18,12 @@ module frnk.UI.Charts {
         constructor(chart: Chart) {
             this._chart = chart;
 
-            this.titleArea = new TitleArea(chart.settings.title, chart);
-            this.legendArea = new LegendArea(chart.settings.legend, chart);
-            this.plotArea = new PlotArea(chart.settings, chart);
+            this.titleArea = new TitleArea(chart.options.title, chart);
+            this.legendArea = new LegendArea(chart.options.legend, chart);
+            this.plotArea = new PlotArea(chart.options, chart);
 
-            this.height = chart.settings.canvas.height;
-            this.width = chart.settings.canvas.width;
+            this.height = chart.options.canvas.height;
+            this.width = chart.options.canvas.width;
         }
 
         public draw(): void {

@@ -1,53 +1,20 @@
 {
-    "plotArea": {
-        "padding": 50
-	},
-    "linechart": {
-        "interpolation": "linear",
-        "markers": {
-            "visible": true
-        }
-    },
-    "legend": {
-       	"title": "",
-        "width": 200
-    },
-    "title": {
-        "text": "Budget vs Actuals vs Prior Year"
-    },
-    "xAxis": {
-        "gridlines": "none",
-        "orient": "bottom",
-        "title": { 
-            "text": "Type"
-        }
-    },
-    "yAxis": {
-        "gridlines": "major",
-        "orient": "left",
-		"title": {
-            "text": "Million"
-        }
-    },
-    "tooltip": { 
-        "valueSuffix": " millions"
-    },
     "categories": {
         "format": "%s",
         "data": ["Budget", "Actuals", "Prior Year"]
     },
     "series": {
-		"items": [{
-				"data": [769, 755, 664],
-				"name": "NASA"
-			}, 
-			{
-				"data": [275, 168, 454],
-				"name": "EMEA"			
-			}, 
-			{
-				"data": [83, 7, 0],
-				"name": "Japan"
-			}]
+        "items": [{
+                "data": [769, 755, 664],
+                "name": "NASA"
+            },
+            {
+                "data": [275, 168, 454],
+                "name": "EMEA"
+            },
+            {
+                "data": [83, 7, 0],
+                "name": "Japan"
+            }]
     }
 }

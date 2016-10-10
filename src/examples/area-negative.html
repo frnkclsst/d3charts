@@ -12,72 +12,75 @@
 <body>
     <div id="chart" />
     <script>
-		var settings = {
-			"plotArea": {
-				"padding": 20
-			},
-			"linechart": {
+        var data = {
+            "categories": {
+                "format": "%s",
+                "data": ["Apples", "Oranges", "Pears", "Grapes", "Bananas"]
+            },
+            "series":{
+                "items": [{
+                    "name": "John",
+                    "data": [5, 3, 4, 7, 2]
+                }, {
+                    "name": "Jane",
+                    "data": [2, -2, -3, 2, 1]
+                }, {
+                    "name": "Joe",
+                    "data": [3, 4, 4, -2, 5]
+                }]
+            }
+        };
+
+        var options = {
+            "plotArea": {
+                "padding": 20
+            },
+            "linechart": {
                 "area": {
                     "visible": true
                 },
-				"interpolation": "linear",
+                "interpolation": "linear",
                 "markers": {
                     "visible": true
                 }
-			},
-			"piechart": {
-				"innerRadius": 0.7
-			},
-			"legend": {
-				"title": "Who?",
-				"position": "right",
-				"width": 200
-			},
-			"title": {
-				"text": "Area Chart - Negative values",
-				"align": "center",
-				"height": 50
-			},
-			"xAxis": [{
-				"gridlines": "none",
-				"labels": {
-					"rotate": 0
-				},
-				"tickmarks": false,
-				"title": {
-					"text": "Fruit"
-				}
-			}],
-			"yAxis": [{
-				"gridlines": "major",
-				"tickmarks": true,
-				"title": {
-					"text": "Fruit Units"
-				}
-			}],
-			"tooltip": {
-				"title": "Fruit Units",
-				"valueSuffix": " Fruit Units"
-			},
-			"categories": {
-				"format": "%s",
-				"data": ["Apples", "Oranges", "Pears", "Grapes", "Bananas"]
-			},
-			"series":{
-				"items": [{
-						"name": "John",
-						"data": [5, 3, 4, 7, 2]
-					}, {
-						"name": "Jane",
-						"data": [2, -2, -3, 2, 1]
-					}, {
-						"name": "Joe",
-						"data": [3, 4, 4, -2, 5]
-				}]
-			}
-		};
+            },
+            "piechart": {
+                "innerRadius": 0.7
+            },
+            "legend": {
+                "title": "Who?",
+                "position": "right",
+                "width": 200
+            },
+            "title": {
+                "text": "Area Chart - Negative values",
+                "align": "center",
+                "height": 50
+            },
+            "xAxis": [{
+                "gridlines": "none",
+                "labels": {
+                    "rotate": 0
+                },
+                "tickmarks": false,
+                "title": {
+                    "text": "Fruit"
+                }
+            }],
+            "yAxis": [{
+                "gridlines": "major",
+                "tickmarks": true,
+                "title": {
+                    "text": "Fruit Units"
+                }
+            }],
+            "tooltip": {
+                "title": "Fruit Units",
+                "valueSuffix": " Fruit Units"
+            }
+        };
 
-		var chart = new frnk.UI.Charts.LineChart("#chart", settings);
+		var chart = new frnk.UI.Charts.LineChart("#chart", data, options);
 		chart.draw();
     </script>
 </body>

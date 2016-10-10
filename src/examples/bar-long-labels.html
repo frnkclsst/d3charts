@@ -12,32 +12,57 @@
 <body>
     <div id="chart" />
     <script>
-		var settings = {
-			"plotArea": {
-				"padding": 20
-			},
-			"legend": {
-				"title": "Continent",
-				"position": "right",
-				"width": 200
-			},
-			"title": {
-				"text": "Bar Chart - Long Labels",
-				"align": "center",
-				"height": 50
-			},
-			"xAxis": [{
-				"gridlines": "major",
-				"labels": {
-					"rotate": 45
-				},
+        var data = {
+            "categories": {
+                "format": "%s",
+                "data": ["People living in Africa from 1800 until 2008", "People living in America from 1800 until 2008", "People living in Asia from 1800 until 2008", "People living in Europe from 1800 until 2008", "People living in Oceania from 1800 until 2008"]
+            },
+            "series": {
+                "items": [{
+                    "name": "Year 1800",
+                    "data": [107, 31, 635, 203, 2],
+                    "format": ","
+                }, {
+                    "name": "Year 1900",
+                    "data": [133, 156, 947, 408, 6],
+                    "format": ","
+                }, {
+                    "name": "Year 2008",
+                    "data": [973, 914, 4054, 732, 34],
+                    "format": ","
+                }],
+                "labels": {
+                    "visible": true
+                }
+            }
+        };
+
+        var options = {
+            "plotArea": {
+                "padding": 20
+            },
+            "legend": {
+                "title": "Continent",
+                "position": "right",
+                "width": 200
+            },
+            "title": {
+                "text": "Bar Chart - Long Labels",
+                "align": "center",
+                "height": 50
+            },
+            "xAxis": [{
+                "gridlines": "major",
+                "labels": {
+                    "rotate": 45
+                },
                 "orient": "bottom",
-				"tickmark": false,
-				"title": { 
-					"text": "Population (millions)",
+                "tickmark": false,
+                "title": {
+                    "text": "Population (millions)",
                     "align": "right"
-				}
-			},{
+                }
+            }, {
                 "gridlines": "major",
                 "labels": {
                     "rotate": 45
@@ -49,11 +74,11 @@
                     "align": "left"
                 }
             }],
-			"yAxis": [{
+            "yAxis": [{
                 "gridlines": "none",
                 "orient": "left",
                 "tickmarks": true,
-                "title" : {
+                "title": {
                     "text": "Number of people living in these continents",
                     "visible": false,
                     "valign": "middle"
@@ -65,41 +90,19 @@
                     "visible": false
                 },
                 "tickmarks": true,
-                "title" : {
+                "title": {
                     "text": "Number of people living in these continents",
                     "visible": false,
                     "valign": "middle"
                 }
             }],
-			"tooltip": { 
-				"title": "Population",
-				"valueSuffix": " people"
-			},
-			"categories": {
-				"format": "%s",
-				"data": ["People living in Africa from 1800 until 2008", "People living in America from 1800 until 2008", "People living in Asia from 1800 until 2008", "People living in Europe from 1800 until 2008", "People living in Oceania from 1800 until 2008"]
-			},
-			"series": {
-				"items": [{
-						"name": "Year 1800",
-						"data": [107, 31, 635, 203, 2],
-                        "format": ","
-					}, {
-						"name": "Year 1900",
-						"data": [133, 156, 947, 408, 6],
-                        "format": ","
-					}, {
-						"name": "Year 2008",
-						"data": [973, 914, 4054, 732, 34],
-                        "format": ","
-					}],
-                "labels": {
-                    "visible": true
-                }
-			}
-		};
+            "tooltip": {
+                "title": "Population",
+                "valueSuffix": " people"
+            }
+        };
 
-		var chart = new frnk.UI.Charts.BarChart("#chart", settings);
+		var chart = new frnk.UI.Charts.BarChart("#chart", data, options);
 		chart.draw();
     </script>
 </body>

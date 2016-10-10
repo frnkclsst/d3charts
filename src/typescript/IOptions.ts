@@ -4,21 +4,32 @@
 
 module frnk.UI.Charts {
 
-    export interface ISettings {
-        canvas: ICanvasSettings;
-        columnchart: IColumnChartSettings;
-        legend: ILegendAreaSettings;
-        linechart: ILineChartSettings;
-        piechart: IPieChartSettings;
-        plotPlotArea: PlotAreaSettings;
-        title: ITitleAreaSettings;
-        xAxes: IAxisSettings;
-        yAxes: IAxisSettings;
+    export interface IData {
+        categories: {
+            format: string,
+            data: any[]
+        };
+        series: {
+            items: Serie[];
+        };
+    }
+
+    export interface IOptions {
+        canvas?: ICanvasOptions;
+        columnchart?: IColumnChartOptions;
+        data?: IData;
+        legend?: ILegendAreaOptions;
+        linechart?: ILineChartOptions;
+        piechart?: IPieChartOptions;
+        plotArea?: PlotAreaOptions;
+        title?: ITitleAreaOptions;
+        xAxes?: IAxisOptions;
+        yAxes?: IAxisOptions;
 
         getValue(propStr: string, defaultValue?: string): any;
     }
 
-    export interface IAxisSettings {
+    export interface IAxisOptions {
         gridlines: string;
         labels: {
             format: string;
@@ -34,23 +45,23 @@ module frnk.UI.Charts {
         };
     }
 
-    export interface ICanvasSettings {
+    export interface ICanvasOptions {
         height: number;
         width: number;
     }
 
-    export interface IColumnChartSettings {
+    export interface IColumnChartOptions {
 
     }
 
-    export interface ILegendAreaSettings {
+    export interface ILegendAreaOptions {
         height: number;
         position: string;
         title: string;
         width: number;
     }
 
-    export interface ILineChartSettings {
+    export interface ILineChartOptions {
         area: {
             visible: boolean;
             opacity: number;
@@ -63,19 +74,18 @@ module frnk.UI.Charts {
         };
     }
 
-    export interface IPlotAreaSettings {
+    export interface IPlotAreaOptions {
         innerPadding: number;
         outerPadding: number;
         padding: number;
     }
 
-    export interface IPieChartSettings {
+    export interface IPieChartOptions {
         innerRadius: number;
     }
 
-    export interface ISeriesSettings {
+    export interface ISeriesOptions {
         animate: boolean;
-        items: Serie[];
         labels: {
             visible: boolean,
             format: string,
@@ -83,7 +93,7 @@ module frnk.UI.Charts {
         };
     }
 
-    export interface ITitleAreaSettings {
+    export interface ITitleAreaOptions {
         align: string;
         height: number;
         margin: number;

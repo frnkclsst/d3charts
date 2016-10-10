@@ -1,51 +1,12 @@
 {
-    "plotArea": {
-        "padding": 80
-    },
-    "linechart": {
-        "interpolation": "linear",
-         "markers": {
-             "visible": true
-         }
-    },
-	"piechart": {
-		"innerRadius": 1
-	},
-    "legend": {
-       	"title": "",
-        "width": 200
-    },
-    "title": {
-        "text": "Object Types / Status"
-    },
-    "xAxis": {
-        "gridlines": "major",
-        "orient": "top",
-		"labels": {
-			"rotate": -45
-		},
-        "title": { 
-            "text": "Status"
-        }
-    },
-    "yAxis": {
-        "gridlines": "major",
-        "orient": "left",
-		"title": {
-            "text": "# objects in this publication"
-        }
-    },
-    "tooltip": { 
-        "valueSuffix": " millions"
-    },
     "categories": {
         "format": "%s",
         "data": ["Draft", "Expired", "In Translation", "Out of date", "Released", "System", "System Read-only", "To be Reviewed", "To be Translated", "Translated"]
     },
     "series": {
-		"items":	[{
+        "items":	[{
             "data": [-50, -10, 0, 10, 20, 30, 40, 80, 90, 100],
             "name": "Topics"
-			}]
+            }]
     }
 }

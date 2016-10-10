@@ -12,40 +12,43 @@
 <body>
     <div id="chart" />
     <script>
-		var settings = {
-			"plotArea": {
-				"padding": 20
-			},
-			"piechart": {
-				"innerRadius": 0.6
-			},
-			"legend": {
-				"title": "Browsers",
-				"position": "right",
-				"width": 200
-			},
-			"title": {
-				"text": "Donut Chart - Basic",
-				"align": "center",
-				"height": 50
-			},
-			"tooltip": { 
-				"title": "Browser usage",
-				"valueSuffix": " %"
-			},
-			"categories": {
-				"format": "%s",
-				"data": ["Firefox", "IE", "Safari", "Opera", "Others"]
-			},
-			"series": { 
-				"items": [{
-						"name": "Browsers",
-						"data": [45, 26.8, 8.5, 6.2, 0.7]
-					}]
-			}
-		};
+        var data = {
+            "categories": {
+                "format": "%s",
+                "data": ["Firefox", "IE", "Safari", "Opera", "Others"]
+            },
+            "series": {
+                "items": [{
+                    "name": "Browsers",
+                    "data": [45, 26.8, 8.5, 6.2, 0.7]
+                }]
+            }
+        };
 
-		var chart = new frnk.UI.Charts.PieChart("#chart", settings);
+		var options = {
+            "plotArea": {
+                "padding": 20
+            },
+            "piechart": {
+                "innerRadius": 0.6
+            },
+            "legend": {
+                "title": "Browsers",
+                "position": "right",
+                "width": 200
+            },
+            "title": {
+                "text": "Donut Chart - Basic",
+                "align": "center",
+                "height": 50
+            },
+            "tooltip": {
+                "title": "Browser usage",
+                "valueSuffix": " %"
+            }
+        };
+
+		var chart = new frnk.UI.Charts.PieChart("#chart", data, options);
 		chart.draw();
     </script>
 </body>

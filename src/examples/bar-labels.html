@@ -12,60 +12,63 @@
 <body>
     <div id="chart" />
     <script>
-		var settings = {
-			"plotArea": {
-				"padding": 20
-			},
-			"legend": {
-				"title": "Continent",
-				"position": "right",
-				"width": 200
-			},
-			"title": {
-				"text": "Bar Chart - Labels",
-				"align": "center",
-				"height": 50
-			},
-			"xAxis": [{
-				"gridlines": "major",
-				"labels": {
-					"rotate": 0
-				},
-				"tickmark": false,
-				"title": { 
-					"text": "Population (millions)"
-				}
-			}],
-			"yAxis": [{
-				"gridlines": "none",
-				"tickmarks": true
-			}],
-			"tooltip": { 
-				"title": "Population",
-				"valueSuffix": " people"
-			},
-			"categories": {
-				"format": "%s",
-				"data": ["Africa", "America", "Asia", "Europe", "Oceania"]
-			},
-			"series": {
-				"items": [{
-						"name": "Year 1800",
-						"data": [107, 31, 635, 203, 2]
-					}, {
-						"name": "Year 1900",
-						"data": [133, 156, 947, 408, 6]
-					}, {
-						"name": "Year 2008",
-						"data": [973, 914, 4054, 732, 34]
-					}],
-					"labels": {
-                        "visible": true
-                    }
-			}
-		};
+        var data = {
+            "categories": {
+                "format": "%s",
+                "data": ["Africa", "America", "Asia", "Europe", "Oceania"]
+            },
+            "series": {
+                "items": [{
+                    "name": "Year 1800",
+                    "data": [107, 31, 635, 203, 2]
+                }, {
+                    "name": "Year 1900",
+                    "data": [133, 156, 947, 408, 6]
+                }, {
+                    "name": "Year 2008",
+                    "data": [973, 914, 4054, 732, 34]
+                }],
+                "labels": {
+                    "visible": true
+                }
+            }
+        };
 
-		var chart = new frnk.UI.Charts.BarChart("#chart", settings);
+        var options = {
+            "plotArea": {
+                "padding": 20
+            },
+            "legend": {
+                "title": "Continent",
+                "position": "right",
+                "width": 200
+            },
+            "title": {
+                "text": "Bar Chart - Labels",
+                "align": "center",
+                "height": 50
+            },
+            "xAxis": [{
+                "gridlines": "major",
+                "labels": {
+                    "rotate": 0
+                },
+                "tickmark": false,
+                "title": {
+                    "text": "Population (millions)"
+                }
+            }],
+            "yAxis": [{
+                "gridlines": "none",
+                "tickmarks": true
+            }],
+            "tooltip": {
+                "title": "Population",
+                "valueSuffix": " people"
+            }
+        };
+
+		var chart = new frnk.UI.Charts.BarChart("#chart", data, options);
 		chart.draw();
     </script>
 </body>

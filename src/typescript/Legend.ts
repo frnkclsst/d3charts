@@ -16,7 +16,7 @@ module frnk.UI.Charts {
         private _chart: Chart;
         private _items: string[];
 
-        constructor(settings: ILegendAreaSettings, chart: Chart) {
+        constructor(settings: ILegendAreaOptions, chart: Chart) {
             this._chart = chart;
 
             this.height = settings.height;
@@ -39,7 +39,7 @@ module frnk.UI.Charts {
 
             this.svg = this._chart.canvas.svg.append("g")
                 .attr("class", "legend")
-                .attr("transform", "translate(" + (this._chart.canvas.width - this.width) + "," + this._chart.settings.title.height + ")");
+                .attr("transform", "translate(" + (this._chart.canvas.width - this.width) + "," + this._chart.options.title.height + ")");
 
             this.drawLine(this.svg);
             this.drawTitle(this.svg);
@@ -84,7 +84,7 @@ module frnk.UI.Charts {
                 .attr("x1", 0)
                 .attr("y1", 0)
                 .attr("x2", 0)
-                .attr("y2", this._chart.canvas.height - this._chart.settings.title.height);
+                .attr("y2", this._chart.canvas.height - this._chart.options.title.height);
         }
 
         private drawSymbol(svg: D3.Selection): void {
@@ -108,11 +108,11 @@ module frnk.UI.Charts {
                 .style("stroke-width", "2");
 
             // draw area
-            if (this._chart.settings.linechart.area.visible === true) {
+            if (this._chart.options.linechart.area.visible === true) {
                 svg.append("rect")
                     .attr("x", 0)
                     .attr("y", this.symbolHeight / 2)
-                    .attr("opacity", this._chart.settings.linechart.area.opacity)
+                    .attr("opacity", this._chart.options.linechart.area.opacity)
                     .attr("width", this.symbolWidth)
                     .attr("height", this.symbolHeight / 2)
                     .style("fill", (d: any, i: any): string => {
@@ -121,7 +121,7 @@ module frnk.UI.Charts {
             }
 
             // draw marker
-            if (this._chart.settings.linechart.markers.visible === true) {
+            if (this._chart.options.linechart.markers.visible === true) {
                 //TODO - provide correct serie number
                 var marker = new SVGMarker(svg, this._chart, 0);
                 marker.draw(this.symbolWidth / 2, this.symbolHeight / 2);

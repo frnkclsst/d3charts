@@ -6,8 +6,8 @@ module frnk.UI.Charts {
 
     export class ComboChart extends XYChart {
 
-        constructor(selector: string, args: ISettings) {
-            super(selector, args);
+        constructor(selector: string, data: IData, options?: IOptions) {
+            super(selector, data, options);
         }
 
         public draw(): void {
@@ -37,7 +37,7 @@ module frnk.UI.Charts {
                         var dx = 0;
                         var dy = 0;
 
-                        if (this.settings.series.labels.rotate === true) {
+                        if (this.options.series.labels.rotate === true) {
                             rotation = -90;
                         }
 
@@ -52,10 +52,10 @@ module frnk.UI.Charts {
                             });
 
                         if (rotation != 0) {
-                            dx = Html.getHeight(text) + this.settings.linechart.markers.size / 2;
+                            dx = Html.getHeight(text) + this.options.linechart.markers.size / 2;
                         }
                         else {
-                            dy = -Html.getHeight(text) - this.settings.linechart.markers.size / 2;
+                            dy = -Html.getHeight(text) - this.options.linechart.markers.size / 2;
                         }
 
                         text

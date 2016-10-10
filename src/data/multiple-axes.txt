@@ -1,100 +1,20 @@
 {
-    "plotArea": {
-        "innerPadding": 0,
-        "outerPadding": 0,
-        "padding": 20
-    },
-    "linechart": {
-        "area": {
-            "visible": true,
-            "opacity": 0.2
-        },
-        "interpolation": "linear",
-        "markers": {
-            "visible" : true,
-            "size": 6
-        }
-    },
-	"piechart": {
-		"innerRadius": "0.5"
-	},
-    "legend": {
-       	"title": "Rainfall vs Temperature",
-       	"position": "right",
-        "width": 200
-    },
-    "title": {
-        "text": "Rainfall vs Temperature",
-		"align": "center",
-		"height": 50,
-		"margin": 15,
-		"subtitle": "Source: wikipedia.org"
-    },
-    "xAxis": [{
-        "gridlines": "none",
-        "labels": {
-            "rotate": 0
-        },
-        "orient": "bottom",
-        "tickmarks": true,
-        "title": {
-            "align": "right",
-            "text": "Month"
-        }
-    }],
-    "yAxis": [{
-            "name": "Rainfall",
-            "gridlines": "none",
-            "labels": {
-                "rotate": 0
-            },
-            "orient": "left",
-		    "tickmarks": true,
-		    "title": {
-		        "text": "millimeter",
-		        "valign": "top"
-		    }
-        },{
-            "name": "Temperature",
-            "gridlines": "none",
-            "labels": {
-                "rotate": 0
-            },
-            "orient": "right",
-		    "tickmarks": true,
-		    "title": {
-		        "text": "Degrees Celcius",
-		        "valign": "top"
-		    }
-    }],
-    "tooltip": {
-        "title": "Rainfall vs Temperature",
-        "showPercent": false
-    },
     "categories": {
         "format": "%s",
         "data": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     },
     "series": {
-        "animate": true,
-		"items": [{
+        "items": [{
                 "data": [49.94, 71.53, 106.40, 129.21, 144.05, 176.07, 135.68, 148.58, 216.49, 194.11, 95.64, 54.43],
                 "format": ".2f",
                 "name": "Rainfall",
-                "suffix": " mm",
-                "type": "line"
+                "suffix": " mm"
             },
-			{
+            {
                 "data": [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
                 "format": ".1f",
                 "name": "Temperature",
-                "suffix": " °C",
-                "type": "column"
-            }],
-        "labels": {
-            "visible" : true,
-            "format": ".4f",
-            "rotate": false
-        }
+                "suffix": " °C"
+            }]
     }
 }

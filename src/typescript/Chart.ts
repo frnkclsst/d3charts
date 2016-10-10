@@ -4,16 +4,16 @@
 
 module frnk.UI.Charts {
     export class Chart {
-
         public canvas: Canvas;
         public categories: Categories;
+        public data: Data;
         public series: Series;
-        public settings: Settings;
+        public options: Options;
         public selector: string;
         public stackType: StackType;
         public tooltip: Tooltip;
 
-        constructor(selector: string, args: ISettings) {
+        constructor(selector: string, data: IData, options?: IOptions) {
             this.selector = selector;
             this.stackType = StackType.None;
 
@@ -24,7 +24,15 @@ module frnk.UI.Charts {
                 }
 
                 // Load settings
-                this.settings = new Settings(args);
+                if (options != undefined) {
+                    this.options = new Options(options);
+                }
+                else {
+                    this.options = new Options(<IOptions>{});
+                }
+
+                // Load data
+                this.data = new Data(data);
 
                 // Initialize chart
                 this.canvas = new Canvas(this);

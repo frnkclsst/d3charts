@@ -4,38 +4,16 @@
 
 module frnk.UI.Charts {
 
-    export class Settings {
-        public canvas: CanvasSettings;
-        public columnchart: IColumnChartSettings;
-        public xAxes: AxisSettings[] = [];
-        public yAxes: AxisSettings[] = [];
-        public title: TitleAreaSettings;
-        public legend: LegendAreaSettings;
-        public linechart: LineChartSettings;
-        public piechart: PieChartSettings;
-        public plotArea: PlotAreaSettings;
-        public series: SeriesSettings;
+    export class Initializer {
+        protected _data: any;
 
-        private _settings: ISettings;
-
-        constructor(settings: ISettings) {
-            this._settings = settings;
-
-            this.canvas = new CanvasSettings(this.getValue("canvas"));
-            this.columnchart = new ColumnChartSettings(this.getValue("columnchart"));
-            this.title = new TitleAreaSettings(this.getValue("title"));
-            this.legend = new LegendAreaSettings(this.getValue("legend"));
-            this.xAxes = this._setAxesSettings(this.getValue("xAxis"));
-            this.yAxes = this._setAxesSettings(this.getValue("yAxis"));
-            this.series = new SeriesSettings(this.getValue("series"));
-            this.linechart = new LineChartSettings(this.getValue("linechart"));
-            this.piechart = new PieChartSettings(this.getValue("piechart"));
-            this.plotArea = new PlotAreaSettings(this.getValue("plotArea"));
+        constructor (data: any) {
+            this._data = data;
         }
 
         public getValue(propStr: string, defaultValue?: string): any {
             var parts = propStr.split(".");
-            var cur = this._settings;
+            var cur = this._data;
             for (var i = 0; i < parts.length; i++) {
                 if (!cur[parts[i]]) {
                     if (defaultValue) {
@@ -47,24 +25,52 @@ module frnk.UI.Charts {
             }
             return cur;
         }
+    }
+
+    export class Options extends Initializer {
+        public canvas: CanvasOptions;
+        public columnchart: IColumnChartOptions;
+        public xAxes: AxisOptions[] = [];
+        public yAxes: AxisOptions[] = [];
+        public title: TitleAreaOptions;
+        public legend: LegendAreaOptions;
+        public linechart: LineChartOptions;
+        public piechart: PieChartOptions;
+        public plotArea: PlotAreaOptions;
+        public series: SeriesOptions;
+
+        constructor(settings: IOptions) {
+            super(settings);
+
+            this.canvas = new CanvasOptions(this.getValue("canvas"));
+            this.columnchart = new ColumnChartOptions(this.getValue("columnchart"));
+            this.title = new TitleAreaOptions(this.getValue("title"));
+            this.legend = new LegendAreaOptions(this.getValue("legend"));
+            this.xAxes = this._setAxesSettings(this.getValue("xAxis"));
+            this.yAxes = this._setAxesSettings(this.getValue("yAxis"));
+            this.linechart = new LineChartOptions(this.getValue("linechart"));
+            this.piechart = new PieChartOptions(this.getValue("piechart"));
+            this.plotArea = new PlotAreaOptions(this.getValue("plotArea"));
+            this.series = new SeriesOptions(this.getValue("series"));
+        }
 
         // TODO - refactor - make more generic
-        private _setAxesSettings(settings: any): AxisSettings[] {
-            var array: AxisSettings[] = [];
+        private _setAxesSettings(settings: any): AxisOptions[] {
+            var array: AxisOptions[] = [];
 
             if (settings instanceof Array) {
                 for (var i = 0; i < settings.length; i++) {
-                    array.push(new AxisSettings(settings[i]));
+                    array.push(new AxisOptions(settings[i]));
                 }
             }
             else {
-                array.push(new AxisSettings(settings));
+                array.push(new AxisOptions(settings));
             }
             return array;
         }
     }
 
-    export class AxisSettings implements IAxisSettings {
+    export class AxisOptions implements IAxisOptions {
         public labels: {
             format: string;
             rotate: number;
@@ -79,7 +85,7 @@ module frnk.UI.Charts {
             valign: string;
         };
 
-        constructor(settings: IAxisSettings) {
+        constructor(settings: IAxisOptions) {
             // defaults
             this.gridlines = "none";
             this.labels = {
@@ -135,17 +141,57 @@ module frnk.UI.Charts {
         }
     }
 
-    export class ColumnChartSettings implements IColumnChartSettings {
-        constructor(settings: IColumnChartSettings) {
+    export class Data extends Initializer implements IData {
+        public categories: {
+            format: string,
+            data: any[]
+        };
+        public series: {
+            items: Serie[];
+        };
+
+        constructor(data: IData) {
+            super(data);
+
+            // defaults
+            this.categories = {
+                format: "%s",
+                data: []
+            };
+
+            this.series = {
+                items: []
+            };
+
+            // apply properties from config if available
+            if (typeof data.categories != "undefined") {
+                if (typeof data.categories.format != "undefined") {
+                    this.categories.format = data.categories.format;
+                }
+                if (typeof data.categories.data != "undefined") {
+                    this.categories.data = data.categories.data;
+                }
+            }
+
+            if (typeof data.series != "undefined") {
+                if (typeof data.series.items != "undefined") {
+                    this.series.items = data.series.items;
+                }
+            }
+        }
+    }
+
+    export class ColumnChartOptions implements IColumnChartOptions {
+        constructor(settings: IColumnChartOptions) {
 
         }
     }
 
-    export class CanvasSettings implements ICanvasSettings {
+    export class CanvasOptions implements ICanvasOptions {
         public height: number;
         public width: number;
 
-        constructor(settings: ICanvasSettings) {
+        constructor(settings: ICanvasOptions) {
             // defaults
             this.height = 0;
             this.width = 0;
@@ -161,13 +207,13 @@ module frnk.UI.Charts {
         }
     }
 
-    export class LegendAreaSettings implements ILegendAreaSettings {
+    export class LegendAreaOptions implements ILegendAreaOptions {
         public height: number;
         public position: string;
         public title: string;
         public width: number;
 
-        constructor(settings: ILegendAreaSettings) {
+        constructor(settings: ILegendAreaOptions) {
             // defaults
             this.height = 0;
             this.position = "right";
@@ -193,7 +239,7 @@ module frnk.UI.Charts {
         }
     }
 
-    export class LineChartSettings implements ILineChartSettings {
+    export class LineChartOptions implements ILineChartOptions {
         public area: {
             visible: boolean,
             opacity: number
@@ -205,7 +251,7 @@ module frnk.UI.Charts {
             type: MarkerType
         };
 
-        constructor(settings: ILineChartSettings) {
+        constructor(settings: ILineChartOptions) {
             // defaults
             this.area = {
                 visible: false,
@@ -246,10 +292,10 @@ module frnk.UI.Charts {
         }
     }
 
-    export class PieChartSettings implements IPieChartSettings {
+    export class PieChartOptions implements IPieChartOptions {
         public innerRadius: number;
 
-        constructor(settings: IPieChartSettings) {
+        constructor(settings: IPieChartOptions) {
             // defaults
             this.innerRadius = 1;
 
@@ -260,16 +306,16 @@ module frnk.UI.Charts {
         }
     }
 
-    export class PlotAreaSettings implements IPlotAreaSettings {
+    export class PlotAreaOptions implements IPlotAreaOptions {
         public innerPadding: number;
         public outerPadding: number;
         public padding: number;
 
-        constructor(settings: IPlotAreaSettings) {
+        constructor(settings: IPlotAreaOptions) {
             // defaults
-            this.innerPadding = 0.5;
+            this.innerPadding = 0.2;
             this.outerPadding = 0;
-            this.padding = 0;
+            this.padding = 20;
 
             // apply properties from config if available
             if (typeof settings.innerPadding != "undefined") {
@@ -285,19 +331,17 @@ module frnk.UI.Charts {
         }
     }
 
-    export class SeriesSettings implements ISeriesSettings {
+    export class SeriesOptions implements ISeriesOptions {
         public animate: boolean;
-        public items: Serie[];
         public labels: {
             visible: boolean;
             format: string;
             rotate: boolean;
         };
 
-        constructor(settings: ISeriesSettings) {
+        constructor(settings: ISeriesOptions) {
             // defaults
             this.animate = true;
-            this.items = [];
             this.labels = {
                 visible: false,
                 format: "",
@@ -307,10 +351,6 @@ module frnk.UI.Charts {
             // apply properties from config if available
             if (typeof settings.animate != "undefined") {
                 this.animate = settings.animate;
-            }
-
-            if (typeof settings.items != "undefined") {
-                this.items = settings.items;
             }
 
             if (typeof settings.labels != "undefined") {
@@ -327,14 +367,14 @@ module frnk.UI.Charts {
         }
     }
 
-    export class TitleAreaSettings implements ITitleAreaSettings {
+    export class TitleAreaOptions implements ITitleAreaOptions {
         public align: string;
         public height: number;
         public margin: number;
         public subtitle: string;
         public text: string;
 
-        constructor(settings: ITitleAreaSettings) {
+        constructor(settings: ITitleAreaOptions) {
             // defaults
             this.align = "left";
             this.margin = 15;

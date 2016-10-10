@@ -34,7 +34,7 @@ module frnk.UI.Charts {
         private _scaleType: ScaleType;
         private _ticks: number;
 
-        constructor(settings: IAxisSettings, chart: Chart) {
+        constructor(settings: IAxisOptions, chart: Chart) {
             this.axis = null;
             this.chart = chart;
             this.height = 0;
@@ -239,7 +239,7 @@ module frnk.UI.Charts {
 
     export class XAxis extends Axis {
 
-        constructor(settings: IAxisSettings, chart: Chart) {
+        constructor(settings: IAxisOptions, chart: Chart) {
             super(settings, chart);
 
             this.hasTickmarks = settings.tickmarks;
@@ -307,7 +307,7 @@ module frnk.UI.Charts {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
                         .domain(chart.categories.getLabels())
-                        .rangeBands([start, end], chart.settings.plotArea.innerPadding, chart.settings.plotArea.outerPadding);
+                        .rangeBands([start, end], chart.options.plotArea.innerPadding, chart.options.plotArea.outerPadding);
                 }
                 else {
                     this.setScaleType(ScaleType.Time);
@@ -426,7 +426,7 @@ module frnk.UI.Charts {
     }
 
     export class YAxis extends Axis {
-        constructor(settings: IAxisSettings, chart: Chart) {
+        constructor(settings: IAxisOptions, chart: Chart) {
             super(settings, chart);
 
             this.hasTickmarks = settings.tickmarks;
@@ -493,7 +493,7 @@ module frnk.UI.Charts {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
                         .domain(chart.categories.getLabels())
-                        .rangeRoundBands([start, end], chart.settings.plotArea.innerPadding, chart.settings.plotArea    .outerPadding);
+                        .rangeRoundBands([start, end], chart.options.plotArea.innerPadding, chart.options.plotArea    .outerPadding);
                 }
                 else {
                     this.setScaleType(ScaleType.Time);

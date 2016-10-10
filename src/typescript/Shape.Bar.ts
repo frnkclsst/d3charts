@@ -43,7 +43,7 @@ module frnk.UI.Charts {
                 });
 
             // add animation
-            var duration = this.chart.settings.series.animate === true ? 600 : 0;
+            var duration = this.chart.options.series.animate === true ? 600 : 0;
             var count = 0;
             svgBar
                 .each((): void => {
@@ -60,7 +60,7 @@ module frnk.UI.Charts {
                 .each("end", (): void => {
                     console.log(count);
                     count--;
-                    if (this.chart.settings.series.labels.visible === true && !count) { // only draw labels after all transitions ended
+                    if (this.chart.options.series.labels.visible === true && !count) { // only draw labels after all transitions ended
                         this.drawLabels();
                     }
                 });
@@ -85,7 +85,7 @@ module frnk.UI.Charts {
                     var dx = 0;
                     var dy = 0;
 
-                    if (this.chart.settings.series.labels.rotate === true) {
+                    if (this.chart.options.series.labels.rotate === true) {
                         rotation = -90;
                     }
 

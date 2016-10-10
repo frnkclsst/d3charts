@@ -8,15 +8,15 @@ module frnk.UI.Charts {
         public xAxes: XAxis[] = [];
         public yAxes: YAxis[] = [];
 
-        constructor(selector: string, args: ISettings) {
-            super(selector, args);
+        constructor(selector: string, data: IData, options?: IOptions) {
+            super(selector, data, options);
 
-            for (var i = 0; i < this.settings.xAxes.length; i++) {
-                this.xAxes.push(new XAxis(this.settings.xAxes[i], this));
+            for (var i = 0; i < this.options.xAxes.length; i++) {
+                this.xAxes.push(new XAxis(this.options.xAxes[i], this));
             }
 
-            for (var j = 0; j < this.settings.yAxes.length; j++) {
-                this.yAxes.push(new YAxis(this.settings.yAxes[j], this));
+            for (var j = 0; j < this.options.yAxes.length; j++) {
+                this.yAxes.push(new YAxis(this.options.yAxes[j], this));
             }
         }
 

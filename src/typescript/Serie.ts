@@ -50,11 +50,11 @@ module frnk.UI.Charts {
             if (serie.marker != undefined) {
                 return serie.marker;
             }
-            else if (this._chart.settings.linechart.markers.type === "mixed") {
+            else if (this._chart.options.linechart.markers.type === "mixed") {
                 return symbols[this.index % symbols.length];
             }
-            else if (this._chart.settings.linechart.markers.type != undefined) {
-                return this._chart.settings.linechart.markers.type;
+            else if (this._chart.options.linechart.markers.type != undefined) {
+                return this._chart.options.linechart.markers.type;
             }
             else {
                 return "circle";

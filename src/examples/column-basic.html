@@ -12,72 +12,75 @@
 <body>
     <div id="chart" />
     <script>
-		var settings = {
-			"plotArea": {
-				"padding": 20
-			},
-			"legend": {
-				"title": "Who?",
-				"position": "right",
-				"width": 200
-			},
-			"title": {
-				"text": "Column Chart - Basic",
-				"align": "center",
-				"height": 50,
-				"subtitle": "Source: WorldClimate.com"
-			},
-			"xAxis": [{
-				"gridlines": "none",
-				"labels": {
-					"rotate": 0
-				},
-				"tickmarks": false,
-				"title": { 
-					"text": "Month"
-				}
-			}],
-			"yAxis": [{
-				"gridlines": "major",
-				"orient": "left",
-				"ticks": 4,
-				"title": {
-					"text": "Rainfall (mm)"
-				}
-			}],
-			"tooltip": { 
-				"title": "Rainfall",
-				"valueSuffix": " mm"
-			},
-			"categories": {
-				"format": "%s",
-				"data": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-			},
-			"series": {
-				"items": [{
-					"name": "Tokyo",
-					"data": [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+        var data = {
+            "categories": {
+                "format": "%s",
+                "data": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+            },
+            "series": {
+                "items": [{
+                    "name": "Tokyo",
+                    "data": [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
 
-				}, {
-					"name": "New York",
-					"data": [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+                }, {
+                    "name": "New York",
+                    "data": [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
 
-				}, {
-					"name": "London",
-					"data": [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
+                }, {
+                    "name": "London",
+                    "data": [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
 
-				}, {
-					"name": "Berlin",
-					"data": [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
+                }, {
+                    "name": "Berlin",
+                    "data": [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
 
-				}], 
-				"labels": {
-				    "visible": false
+                }],
+                "labels": {
+                    "visible": false
                 }
-			}
-		};
+            }
+        };
 
-		var chart = new frnk.UI.Charts.ColumnChart("#chart", settings);
+        var options = {
+            "plotArea": {
+                "padding": 20
+            },
+            "legend": {
+                "title": "Who?",
+                "position": "right",
+                "width": 200
+            },
+            "title": {
+                "text": "Column Chart - Basic",
+                "align": "center",
+                "height": 50,
+                "subtitle": "Source: WorldClimate.com"
+            },
+            "xAxis": [{
+                "gridlines": "none",
+                "labels": {
+                    "rotate": 0
+                },
+                "tickmarks": false,
+                "title": {
+                    "text": "Month"
+                }
+            }],
+            "yAxis": [{
+                "gridlines": "major",
+                "orient": "left",
+                "ticks": 4,
+                "title": {
+                    "text": "Rainfall (mm)"
+                }
+            }],
+            "tooltip": {
+                "title": "Rainfall",
+                "valueSuffix": " mm"
+            }
+        };
+
+		var chart = new frnk.UI.Charts.ColumnChart("#chart", data, options);
 		chart.draw();
     </script>
 </body>

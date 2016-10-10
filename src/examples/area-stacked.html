@@ -12,80 +12,83 @@
 <body>
     <div id="chart" />
     <script>
-		var settings = {
-			"plotArea": {
-				"padding": 20
-			},
-			"linechart": {
+        var data = {
+            "categories": {
+                "format": "%s",
+                "data": ["1750", "1800", "1850", "1900", "1950", "1999", "2050"]
+            },
+            "series": {
+                "items": [{
+                    "name": "Asia",
+                    "data": [502, 635, 809, 947, 1402, 3634, 5268]
+                },
+                    {
+                        "name": "Africa",
+                        "data": [106, 107, 111, 133, 221, 767, 1766]
+                    },
+                    {
+                        "name": "Europe",
+                        "data": [163, 203, 276, 408, 547, 729, 628]
+                    },
+                    {
+                        "name": "America",
+                        "data": [18, 31, 54, 156, 339, 818, 1201]
+                    },
+                    {
+                        "name": "Oceania",
+                        "data": [2, 2, 2, 6, 13, 30, 46]
+                    }]
+            }
+        };
+
+		var options = {
+            "plotArea": {
+                "padding": 20
+            },
+            "linechart": {
                 "area": {
                     "visible": true
                 },
-				"interpolation": "cardinal",
+                "interpolation": "cardinal",
                 "markers": {
                     "visible": true,
                     "type": "circle"
                 }
-			},
-			"legend": {
-				"title": "Continent",
-				"position": "right",
-				"width": 200
-			},
-			"title": {
-				"text": "Area Chart - Stacked",
-				"align": "center",
-				"height": 50
-			},
-			"xAxis": [{
-				"gridlines": "none",
-				"labels": {
-					"rotate": 0
-				},
-				"tickmarks": false,
-				"title": { 
-					"text": "Year"
-				}
-			}],
-			"yAxis": [{
-				"gridlines": "none",
-				"tickmarks": true,
-				"title": {
-					"text": "Billions"
-				}
-			}],
-			"tooltip": { 
-				"title": "Fruit Units",
-				"valueSuffix": " fruits"
-			},
-			"categories": {
-				"format": "%s",
-				"data": ["1750", "1800", "1850", "1900", "1950", "1999", "2050"]
-			},
-			"series": {
-				"items": [{
-						"name": "Asia",
-						"data": [502, 635, 809, 947, 1402, 3634, 5268]
-					},
-					{
-						"name": "Africa",
-						"data": [106, 107, 111, 133, 221, 767, 1766]
-					},
-					{
-						"name": "Europe",
-						"data": [163, 203, 276, 408, 547, 729, 628]
-					},
-					{
-						"name": "America",
-						"data": [18, 31, 54, 156, 339, 818, 1201]
-					},
-					{
-						"name": "Oceania",
-						"data": [2, 2, 2, 6, 13, 30, 46]
-					}]
-			}
-		};
+            },
+            "legend": {
+                "title": "Continent",
+                "position": "right",
+                "width": 200
+            },
+            "title": {
+                "text": "Area Chart - Stacked",
+                "align": "center",
+                "height": 50
+            },
+            "xAxis": [{
+                "gridlines": "none",
+                "labels": {
+                    "rotate": 0
+                },
+                "tickmarks": false,
+                "title": {
+                    "text": "Year"
+                }
+            }],
+            "yAxis": [{
+                "gridlines": "none",
+                "tickmarks": true,
+                "title": {
+                    "text": "Billions"
+                }
+            }],
+            "tooltip": {
+                "title": "Fruit Units",
+                "valueSuffix": " fruits"
+            }
+        };
 
-		var chart = new frnk.UI.Charts.StackedLineChart("#chart", settings);
+		var chart = new frnk.UI.Charts.StackedLineChart("#chart", data, options);
 		chart.draw();
     </script>
 </body>

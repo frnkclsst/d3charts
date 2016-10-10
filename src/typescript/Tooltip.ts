@@ -11,7 +11,7 @@ module frnk.UI.Charts {
         constructor(chart: Chart) {
             this.chart = chart;
             // TODO - Implement showpercent param
-            this.showPercentage = this.chart.settings.getValue("tooltip.showPercentage");
+            this.showPercentage = this.chart.options.getValue("tooltip.showPercentage");
         }
 
         public draw(svg: D3.Selection, serie: number): void {
@@ -23,7 +23,7 @@ module frnk.UI.Charts {
 
             svg.on("mouseover", function (d: any, i: number): void {
                     if (_self.chart instanceof PieChart) {
-                        divTooltip.html("<div class='title'>" + _self.chart.settings.getValue("tooltip.title") + "</div>" +
+                        divTooltip.html("<div class='title'>" + _self.chart.options.getValue("tooltip.title") + "</div>" +
                             "<div class='subtitle'>" + _self.chart.series.getLabel(serie) + "</div><br/>" +
                             "<div>" +
                                 "<div class='color' style='width:24px; height: 11px; background-color:" + ColorPalette.color(i) + "'></div>" +
@@ -33,7 +33,7 @@ module frnk.UI.Charts {
                         );
                     }
                     else {
-                        divTooltip.html("<div class='title'>" + _self.chart.settings.getValue("tooltip.title") + "</div>" +
+                        divTooltip.html("<div class='title'>" + _self.chart.options.getValue("tooltip.title") + "</div>" +
                             "<div class='subtitle'>" + _self.chart.categories.getLabel(i) + "</div><br/>" +
                             "<div>" +
                                 "<div class='color' style='width:24px; height: 11px; background-color:" + ColorPalette.color(serie) + "'></div>" +
@@ -67,8 +67,8 @@ module frnk.UI.Charts {
         }
 
         public getSuffix(serie: number): string {
-            if (this.chart.settings.getValue("tooltip.valueSuffix") != "") {
-                return this.chart.settings.getValue("tooltip.valueSuffix");
+            if (this.chart.options.getValue("tooltip.valueSuffix") != "") {
+                return this.chart.options.getValue("tooltip.valueSuffix");
             }
             if (this.chart.series.items[serie].suffix) {
                 return this.chart.series.items[serie].suffix;
@@ -77,8 +77,8 @@ module frnk.UI.Charts {
         }
 
         public getPointFormat(serie: number): string {
-            if (this.chart.settings.getValue("tooltip.valuePointFormat") != "") {
-                return this.chart.settings.getValue("tooltip.valuePointFormat");
+            if (this.chart.options.getValue("tooltip.valuePointFormat") != "") {
+                return this.chart.options.getValue("tooltip.valuePointFormat");
             }
             if (this.chart.series.items[serie].format) {
                 return this.chart.series.items[serie].format;

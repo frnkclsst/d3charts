@@ -5,7 +5,7 @@
 
 // interfaces
 /// <reference path="IArea.ts" />
-/// <reference path="ISettings.ts" />
+/// <reference path="IOptions.ts" />
 
 // helpers
 /// <reference path="Html.ts" />
@@ -15,7 +15,7 @@
 /// <reference path="ColorPalette.ts" />
 /// <reference path="Serie.ts" />
 /// <reference path="Series.ts" />
-/// <reference path="Settings.ts" />
+/// <reference path="Initializer.ts" />
 
 // canvas
 /// <reference path="Canvas.ts" />

@@ -6,8 +6,8 @@ module frnk.UI.Charts {
 
     export class StackedPercentLineChart extends StackedLineChart {
 
-        constructor(selector: string, args: ISettings) {
-            super(selector, args);
+        constructor(selector: string, data: IData, options?: IOptions) {
+            super(selector, data, options);
             this.stackType = StackType.Percent;
             for (var i = 0; i < this.yAxes.length; i++) {
                 this.yAxes[i].labels.format = "%";
