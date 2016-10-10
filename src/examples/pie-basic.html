@@ -13,9 +13,7 @@
     <div id="chart" />
     <script>
 		var settings = {
-			"canvas": {
-				"height": 300,
-				"width": 600,
+			"plotArea": {
 				"padding": 20
 			},
 			"piechart": {
@@ -44,16 +42,10 @@
 						"name": "Browsers",
 						"data": [45, 26.8, 8.5, 6.2, 0.7]
 					}]
-			},
-			"plotOptions": {
-				"general": { 
-					"innerPadding": 0.1,
-					"outerPadding": 0.5
-				}
 			}
 		};
 
-		var chart = new frnk.UI.Charts.PieChart(settings, "#chart");
+		var chart = new frnk.UI.Charts.PieChart("#chart", settings);
 		chart.draw();
     </script>
 </body>

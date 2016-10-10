@@ -13,18 +13,16 @@
     <div id="chart" />
     <script>
 		var settings = {
-			"canvas": {
-				"height": 300,
-				"width": 600,
+			"plotArea": {
 				"padding": 20
 			},
 			"linechart": {
                 "area": {
-                    "enabled": true
+                    "visible": true
                 },
 				"interpolation": "basic",
                 "markers": {
-                    "enabled": true,
+                    "visible": true,
                     "type": "circle",
                     "size": 6
                 }
@@ -99,16 +97,10 @@
 						"name": "America",
 						"data": [18, 31, 54, 156, 339, 818, 1201]
 					}]
-			},
-			"plotOptions": {
-				"general": { 
-					"innerPadding": 1,
-					"outerPadding": 0
-				}
 			}
 		};
 
-		var chart = new frnk.UI.Charts.StackedPercentLineChart(settings, "#chart");
+		var chart = new frnk.UI.Charts.StackedPercentLineChart("#chart", settings);
 		chart.draw();
     </script>
 </body>

@@ -13,9 +13,7 @@
     <div id="chart" />
     <script>
 		var settings = {
-			"canvas": {
-				"height": 300,
-				"width": 600,
+			"plotArea": {
 				"padding": 20
 			},
 			"legend": {
@@ -31,17 +29,48 @@
 			"xAxis": [{
 				"gridlines": "major",
 				"labels": {
-					"rotate": 0
+					"rotate": 45
 				},
+                "orient": "bottom",
 				"tickmark": false,
 				"title": { 
-					"text": "Population (millions)"
+					"text": "Population (millions)",
+                    "align": "right"
 				}
-			}],
+			},{
+                "gridlines": "major",
+                "labels": {
+                    "rotate": 45
+                },
+                "orient": "top",
+                "tickmark": false,
+                "title": {
+                    "text": "Population (millions)",
+                    "align": "left"
+                }
+            }],
 			"yAxis": [{
-				"gridlines": "none",
-				"tickmarks": true
-			}],
+                "gridlines": "none",
+                "orient": "left",
+                "tickmarks": true,
+                "title" : {
+                    "text": "Number of people living in these continents",
+                    "visible": false,
+                    "valign": "middle"
+                }
+            }, {
+                "gridlines": "none",
+                "orient": "right",
+                "labels": {
+                    "visible": false
+                },
+                "tickmarks": true,
+                "title" : {
+                    "text": "Number of people living in these continents",
+                    "visible": false,
+                    "valign": "middle"
+                }
+            }],
 			"tooltip": { 
 				"title": "Population",
 				"valueSuffix": " people"
@@ -65,18 +94,12 @@
                         "format": ","
 					}],
                 "labels": {
-                    "enabled": true
+                    "visible": true
                 }
-			},
-			"plotOptions": {
-				"general": { 
-					"innerPadding": 0.1,
-					"outerPadding": 0.5
-				}
 			}
 		};
 
-		var chart = new frnk.UI.Charts.BarChart(settings, "#chart");
+		var chart = new frnk.UI.Charts.BarChart("#chart", settings);
 		chart.draw();
     </script>
 </body>

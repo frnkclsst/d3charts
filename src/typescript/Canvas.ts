@@ -23,7 +23,6 @@ module frnk.UI.Charts {
             this.plotArea = new PlotArea(chart.settings, chart);
 
             this.height = chart.settings.canvas.height;
-            this.padding = chart.settings.canvas.padding;
             this.width = chart.settings.canvas.width;
         }
 

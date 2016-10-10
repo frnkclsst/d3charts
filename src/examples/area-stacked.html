@@ -13,18 +13,16 @@
     <div id="chart" />
     <script>
 		var settings = {
-			"canvas": {
-				"height": 300,
-				"width": 600,
+			"plotArea": {
 				"padding": 20
 			},
 			"linechart": {
                 "area": {
-                    "enabled": true
+                    "visible": true
                 },
 				"interpolation": "cardinal",
                 "markers": {
-                    "enabled": true,
+                    "visible": true,
                     "type": "circle"
                 }
 			},
@@ -84,16 +82,10 @@
 						"name": "Oceania",
 						"data": [2, 2, 2, 6, 13, 30, 46]
 					}]
-			},
-			"plotOptions": {
-				"general": { 
-					"innerPadding": 1,
-					"outerPadding": 0
-				}
 			}
 		};
 
-		var chart = new frnk.UI.Charts.StackedLineChart(settings, "#chart");
+		var chart = new frnk.UI.Charts.StackedLineChart("#chart", settings);
 		chart.draw();
     </script>
 </body>

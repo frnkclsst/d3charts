@@ -19,8 +19,8 @@ module frnk.UI.Charts {
         public draw(x: number, y: number): void {
             var _self = this;
             this.svg
-                //.data([])
-                //.enter()
+            //.data([])
+            //.enter()
                 .append("path")
                 .each(function(d: any, i: number): void {
                     d3.select(this)

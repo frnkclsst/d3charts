@@ -6,8 +6,8 @@ module frnk.UI.Charts {
 
     export class ComboChart extends XYChart {
 
-        constructor(args: ISettings, selector: string) {
-            super(args, selector);
+        constructor(selector: string, args: ISettings) {
+            super(selector, args);
         }
 
         public draw(): void {

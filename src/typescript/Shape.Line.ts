@@ -44,7 +44,7 @@ module frnk.UI.Charts {
                 .each("end", (): void => {
                     count--;
                     // draw markers
-                    if (this.chart.settings.linechart.markers.enabled === true) {
+                    if (this.chart.settings.linechart.markers.visible === true) {
                         var svgMarkers =  this.drawMarkers();
 
                         // draw tooltip
@@ -52,7 +52,7 @@ module frnk.UI.Charts {
                     }
 
                     // draw labels
-                    if (this.chart.settings.series.labels.enabled === true && !count) {
+                    if (this.chart.settings.series.labels.visible === true && !count) {
                         this.drawLabels();
                         this.showLabels();
                     }
@@ -97,7 +97,7 @@ module frnk.UI.Charts {
         }
 
         public drawMarkers(): D3.Selection {
-            var svgMarkers = this.svg.selectAll("g#serie-" + this.serie).selectAll(".marker")
+            return this.svg.selectAll("g#serie-" + this.serie).selectAll(".marker")
                 .data(this.chart.series.getMatrixItem(this.serie))
                 .enter()
                 .append("path")
@@ -112,9 +112,6 @@ module frnk.UI.Charts {
                         return "translate(" + this.chart.getXCoordinate(d, i, this.serie) + ", " + this.chart.getYCoordinate(d, i, this.serie) + ")";
                     }
                 });
-
-            return svgMarkers;
         }
-
     }
 }

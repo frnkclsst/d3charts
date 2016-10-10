@@ -21,7 +21,7 @@ module frnk.UI.Charts {
         constructor(settings: Settings, chart: Chart) {
             this._chart = chart;
 
-            this.padding = settings.canvas.padding;
+            this.padding = settings.plotArea.padding;
             this.height = settings.canvas.height - settings.title.height - this.padding * 2;
             this.width = settings.canvas.width - this.padding * 2 - settings.legend.width;
             this.axisSize = {
@@ -36,7 +36,6 @@ module frnk.UI.Charts {
             // initialize
             this.initialize();
 
-            // draw plot area
             this.svg = this._chart.canvas.svg.append("g")
                 .attr("class", "plotarea")
                 .attr("transform", "translate(" + this.padding + ","

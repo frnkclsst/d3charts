@@ -13,18 +13,16 @@
     <div id="chart" />
     <script>
 		var settings = {
-			"canvas": {
-				"height": 300,
-				"width": 600,
+			"plotArea": {
 				"padding": 20
 			},
 			"linechart": {
                 "area": {
-                    "enabled": true
+                    "visible": true
                 },
 				"interpolation": "cardinal",
                 "markers": {
-                    "enabled": true
+                    "visible": true
                 }
 			},
 			"legend": {
@@ -70,16 +68,10 @@
 						"name": "Jane",
 						"data": [1, 3, 4, 3, 3, 5, 4]
 				}]
-			},
-			"plotOptions": {
-				"general": { 
-					"innerPadding": 0.1,
-					"outerPadding": 0.5
-				}
 			}
 		};
 
-		var chart = new frnk.UI.Charts.LineChart(settings, "#chart");
+		var chart = new frnk.UI.Charts.LineChart("#chart", settings);
 		chart.draw();
     </script>
 </body>

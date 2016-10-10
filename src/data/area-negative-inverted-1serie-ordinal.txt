@@ -1,13 +1,11 @@
 {
-    "canvas": {
-        "height": 300,
-        "width": 600,
+    "plotArea": {
         "padding": 80
     },
     "linechart": {
         "interpolation": "linear",
          "markers": {
-             "enabled": true
+             "visible": true
          }
     },
 	"piechart": {
@@ -49,11 +47,5 @@
             "data": [-50, -10, 0, 10, 20, 30, 40, 80, 90, 100],
             "name": "Topics"
 			}]
-    },
-    "plotOptions": {
-        "general": { 
-            "innerPadding": 0.1,
-			"outerPadding": 0.5
-        }
     }
 }

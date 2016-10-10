@@ -1,13 +1,11 @@
 {
-    "canvas": {
-        "height": 300,
-        "width": 600,
+    "plotArea": {
         "padding": 50
 	},
     "linechart": {
         "interpolation": "linear",
         "markers": {
-            "enabled": true
+            "visible": true
         }
     },
     "legend": {
@@ -51,11 +49,5 @@
 				"data": [83, 7, 0],
 				"name": "Japan"
 			}]
-    },
-    "plotOptions": {
-        "general": { 
-            "innerPadding": 0.1,
-			"outerPadding": 2
-        }
     }
 }

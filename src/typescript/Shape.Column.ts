@@ -35,7 +35,8 @@ module frnk.UI.Charts {
                     },
                     "y": (d: any, i: number): void => {
                         if (d.y < 0) {
-                            return this.chart.yAxes[0].scale(0); // TODO - take the right axis in case there are multiple
+                            // TODO - take the right axis in case there are multiple
+                            return this.chart.yAxes[0].scale(0);
                         }
                         else {
                             return (this.chart.getHeight(d, i, this.serie) + this.chart.getYCoordinate(d, i, this.serie));
@@ -58,7 +59,7 @@ module frnk.UI.Charts {
                 })
                 .each("end", (): void => {
                     count--;
-                    if (this.chart.settings.series.labels.enabled === true && !count) { // only draw labels after all transitions ended
+                    if (this.chart.settings.series.labels.visible === true && !count) { // only draw labels after all transitions ended
                         this.drawLabels();
                     }
                 });

@@ -1,15 +1,17 @@
 {
-    "canvas": {
+    "plotArea": {
+        "innerPadding": 0,
+        "outerPadding": 0,
         "padding": 20
     },
     "linechart": {
         "area": {
-            "enabled": true,
+            "visible": true,
             "opacity": 0.2
         },
         "interpolation": "linear",
         "markers": {
-            "enabled" : true,
+            "visible" : true,
             "size": 6
         }
     },
@@ -33,24 +35,13 @@
         "labels": {
             "rotate": 0
         },
-        "orient": "top",
+        "orient": "bottom",
         "tickmarks": true,
         "title": {
-            "align": "center",
+            "align": "right",
             "text": "Month"
         }
-    }, {
-       "gridlines": "none",
-       "labels": {
-           "rotate": 0
-       },
-       "orient": "bottom",
-       "tickmarks": true,
-       "title": {
-           "align": "center",
-           "text": "Month"
-       }
-   }],
+    }],
     "yAxis": [{
             "name": "Rainfall",
             "gridlines": "none",
@@ -60,8 +51,8 @@
             "orient": "left",
 		    "tickmarks": true,
 		    "title": {
-		        "text": "mm",
-		        "valign": "middle"
+		        "text": "millimeter",
+		        "valign": "top"
 		    }
         },{
             "name": "Temperature",
@@ -72,8 +63,8 @@
             "orient": "right",
 		    "tickmarks": true,
 		    "title": {
-		        "text": "°C",
-		        "valign": "middle"
+		        "text": "Degrees Celcius",
+		        "valign": "top"
 		    }
     }],
     "tooltip": {
@@ -101,15 +92,9 @@
                 "type": "column"
             }],
         "labels": {
-            "enabled" : true,
+            "visible" : true,
             "format": ".4f",
             "rotate": false
         }
-    },
-    "plotOptions": {
-        "general": { 
-            "innerPadding": 0.05,
-			"outerPadding": 0
-        }
-	}
+    }
 }

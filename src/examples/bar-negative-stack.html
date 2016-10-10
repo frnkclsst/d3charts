@@ -13,9 +13,7 @@
     <div id="chart" />
     <script>
 		var settings = {
-			"canvas": {
-				"height": 300,
-				"width": 600,
+			"plotArea": {
 				"padding": 20
 			},
 			"legend": {
@@ -82,16 +80,10 @@
 							1447162, 1005011, 330870, 130632, 21208],
 						"format": ","
 					}]
-			},
-			"plotOptions": {
-				"general": { 
-					"innerPadding": 0.1,
-					"outerPadding": 0.5
-				}
 			}
 		};
 
-		var chart = new frnk.UI.Charts.StackedBarChart(settings, "#chart");
+		var chart = new frnk.UI.Charts.StackedBarChart("#chart", settings);
 		chart.draw();
     </script>
 </body>

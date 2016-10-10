@@ -5,7 +5,7 @@
 module frnk.UI.Charts {
 
     export class Serie {
-        public enabled: boolean;
+        public visible: boolean;
         public format: string;
         public index: number;
         public name: string;
@@ -23,7 +23,7 @@ module frnk.UI.Charts {
             this._chart = chart;
             this._data = serie.data;
 
-            this.enabled = true;
+            this.visible = true;
             this.format = serie.format;
             this.index = index;
             this.name = serie.name;

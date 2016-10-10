@@ -54,7 +54,7 @@ module frnk.UI.Charts {
                     return "translate(" + 22 + "," + ((i * 20) + 60) + ")";
                 })
                 .on("click", (d: any, i: number): void => {
-                    // TODO - Refactor
+                    // TODO - refactor clicking items in legend
                     // - add checkbox
                     // - add interpolation when in stacked / pie charts
                     var opacity;
@@ -108,7 +108,7 @@ module frnk.UI.Charts {
                 .style("stroke-width", "2");
 
             // draw area
-            if (this._chart.settings.linechart.area.enabled === true) {
+            if (this._chart.settings.linechart.area.visible === true) {
                 svg.append("rect")
                     .attr("x", 0)
                     .attr("y", this.symbolHeight / 2)
@@ -121,8 +121,9 @@ module frnk.UI.Charts {
             }
 
             // draw marker
-            if (this._chart.settings.linechart.markers.enabled === true) {
-                var marker = new SVGMarker(svg, this._chart, 0); //TODO - provide correct serie number
+            if (this._chart.settings.linechart.markers.visible === true) {
+                //TODO - provide correct serie number
+                var marker = new SVGMarker(svg, this._chart, 0);
                 marker.draw(this.symbolWidth / 2, this.symbolHeight / 2);
             }
         }

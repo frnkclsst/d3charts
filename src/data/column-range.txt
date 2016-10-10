@@ -1,14 +1,14 @@
 {
-    "canvas": {
+    "plotArea": {
         "padding": 0
     },
     "linechart": {
         "area": {
-            "enabled": true
+            "visible": true
         },
         "interpolation": "linear",
         "markers": {
-            "enabled": true
+            "visible": true
         }
     },
 	"piechart": {
@@ -70,11 +70,4 @@
                 	[-13.5, 9.8]
                 ]
             }]
-    ,
-    "plotOptions": {
-        "general": { 
-            "innerPadding": 0.1,
-			"outerPadding": 0.5
-        }
-	}
 }

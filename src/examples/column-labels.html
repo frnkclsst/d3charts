@@ -13,9 +13,7 @@
     <div id="chart" />
     <script>
 		var settings = {
-			"canvas": {
-				"height": 300,
-				"width": 600,
+			"plotArea": {
 				"padding": 20
 			},
 			"legend": {
@@ -74,19 +72,13 @@
 
                 }],
                 "labels": {
-                    "enabled": true,
+                    "visible": true,
                     "rotate": false
                 }
-			},
-			"plotOptions": {
-				"general": { 
-					"innerPadding": 0.1,
-					"outerPadding": 0.5
-				}
 			}
 		};
 
-		var chart = new frnk.UI.Charts.ColumnChart(settings, "#chart");
+		var chart = new frnk.UI.Charts.ColumnChart("#chart", settings);
 		chart.draw();
     </script>
 </body>

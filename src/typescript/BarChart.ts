@@ -17,6 +17,12 @@ module frnk.UI.Charts {
             for (var serie = 0; serie < this.series.length; serie++) {
                 var bar = new SVGBar(svgSeries, this, serie);
                 bar.draw();
+
+                /*
+                bar.testDraw(function(d: any, i: number, s: number): number {
+                   return _self.getHeight(d, i, s);
+                }, 0, 0);
+                */
             }
         }
 
@@ -50,7 +56,8 @@ module frnk.UI.Charts {
                 return Math.abs(this.yAxes[index].scale.rangeBand() / this.series.length);
             }
             else {
-                return Math.abs(this.canvas.width / this.series.length / this.categories.length / this.series.length); // TODO - dived twice by series.length - is this correct?
+                // TODO - dived twice by series.length - is this correct?
+                return Math.abs(this.canvas.width / this.series.length / this.categories.length / this.series.length);
             }
         }
 

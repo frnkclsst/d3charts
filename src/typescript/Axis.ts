@@ -5,13 +5,20 @@
 module frnk.UI.Charts {
 
     export class Axis {
-        public format: string;
         public height: number;
+        public labels: {
+            format: string;
+            rotate: number;
+        };
         public name: string;
         public scale: any;
+        public title: {
+            align: string,
+            text: string,
+            valign: string
+        };
         public width: number;
 
-        protected align: string;
         protected axis: D3.Svg.Axis;
         protected chart: Chart;
         protected gridlineType: GridLineType;
@@ -21,9 +28,6 @@ module frnk.UI.Charts {
         protected svgGrid: D3.Selection;
         protected svgTitle: D3.Selection;
         protected svgZeroLine: D3.Selection;
-        protected textRotation: number;
-        protected title: string;
-        protected valign: string;
 
         private _innerTicksize: number;
         private _outerTicksize: number;
@@ -33,14 +37,22 @@ module frnk.UI.Charts {
         constructor(settings: IAxisSettings, chart: Chart) {
             this.axis = null;
             this.chart = chart;
-            this.format = settings.labels.format;
             this.height = 0;
+            this.labels = {
+                format: settings.labels.format,
+                rotate: settings.labels.rotate
+            };
             this.orient = null;
             this.scale = null;
             this.svgAxis = null;
             this.svgGrid = null;
             this.svgTitle = null;
             this.svgZeroLine = null;
+            this.title = {
+                align: settings.title.align,
+                text: settings.title.text,
+                valign: settings.title.valign
+            };
             this.width = 0;
             this._ticks = null;
         }
@@ -57,7 +69,7 @@ module frnk.UI.Charts {
                 .attr("transform", "translate(" + this.getXCoordinate(this.chart) + "," + this.getYCoordinate(this.chart) + ")");
 
             // align tick labels
-            if (this.textRotation % 360 != 0) {
+            if (this.labels.rotate % 360 != 0) {
                 this.svgAxis.selectAll("text")
                     .style("alignment-baseline", "middle")
                     .style("text-anchor", "end")
@@ -65,7 +77,17 @@ module frnk.UI.Charts {
                     .attr("dy", "0");
             }
 
-            // TODO - Align axis title
+            // align axis title
+            // TODO - Improve positioning axis title
+            if (this instanceof XAxis) {
+                if (this.title.align === "left") {
+                    this.svgTitle.attr("x", this.chart.canvas.plotArea.axisSize.left);
+                }
+                else {
+                    this.svgTitle.attr("x", -this.chart.canvas.plotArea.axisSize.right);
+                }
+            }
+
             this.drawGridlines(this.chart, this.axis);
             this.drawZeroLine(this.chart, this.svgAxis);
             this.removeOverlappingTicks();
@@ -83,7 +105,7 @@ module frnk.UI.Charts {
                     );
                     break;
                 case GridLineType.Minor:
-                    // TODO - Minor Gridlines
+                    // TODO - minor gridlines
                     break;
                 default:
                     // Do nothing
@@ -93,7 +115,7 @@ module frnk.UI.Charts {
 
         public drawTitle(chart: Chart, svg: D3.Selection): void {
             this.svgTitle = svg.append("text")
-                .text(this.title)
+                .text(this.title.text)
                 .attr("class", "title");
         }
 
@@ -131,8 +153,8 @@ module frnk.UI.Charts {
                 .ticks(this._ticks);
 
             // apply custom formatter
-            if (this.format != "") {
-                this.axis.tickFormat(d3.format(this.format));
+            if (this.labels.format != "") {
+                this.axis.tickFormat(d3.format(this.labels.format));
             }
 
             // draw tick marks
@@ -224,15 +246,12 @@ module frnk.UI.Charts {
             this.name = settings.name;
             this.setOrientation(settings.orient);
             this.setGridlineType(settings.gridlines);
-            this.textRotation = settings.labels.rotate;
-            this.title = settings.title.text;
-            this.align = settings.title.align;
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): void {
             super.drawTitle(chart, svg);
 
-            var x = Html.align(this.svgTitle, Html.getWidth(this.svgAxis), this.align, 0);
+            var x = Html.align(this.svgTitle, Html.getWidth(this.svgAxis), this.title.align, 0);
             var y = Html.getHeight(this.svgAxis) + 5;
 
             if (this.orient === "top") {
@@ -240,7 +259,7 @@ module frnk.UI.Charts {
             };
 
             this.svgTitle
-                .attr("text-anchor", "left")
+                .attr("text-anchor", "begin")
                 .attr("transform", "translate(" + x + "," + y + ")");
         }
 
@@ -263,6 +282,7 @@ module frnk.UI.Charts {
             return -chart.canvas.plotArea.height;
         }
 
+        // TODO? - rename to setRange
         public getScale(chart: Chart): any {
             var min = chart.series.getMinValue(this.name);
             var max = chart.series.getMaxValue(this.name);
@@ -287,7 +307,7 @@ module frnk.UI.Charts {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
                         .domain(chart.categories.getLabels())
-                        .rangeBands([start, end], chart.settings.plotOptions.innerPadding, chart.settings.plotOptions.outerPadding);
+                        .rangeBands([start, end], chart.settings.plotArea.innerPadding, chart.settings.plotArea.outerPadding);
                 }
                 else {
                     this.setScaleType(ScaleType.Time);
@@ -334,8 +354,7 @@ module frnk.UI.Charts {
         }
 
         public removeOverlappingTicks(): void {
-            // TODO - Below is an implementation that should be refactored
-            // TODO - doesn't work anymore
+            // TODO - improve how overlapping ticks are removed
             var ticks = this.svgAxis.selectAll("g.ticks").selectAll("g.tick");
             var tickOverlap = false;
             var prevRight = 0;
@@ -359,7 +378,7 @@ module frnk.UI.Charts {
 
         public rotateLabels(chart: Chart, svg: D3.Selection): void {
             var _self = this;
-            if (this.textRotation != 0) {
+            if (this.labels.rotate != 0) {
                 svg.selectAll("text")
                     .each(function(): void {
                         var text = d3.select(this);
@@ -374,19 +393,19 @@ module frnk.UI.Charts {
                             .attr("transform", "translate(" + 0 + ", " + 0 + ")");
 
                         if (_self.orient === "bottom") {
-                            if (_self.textRotation > 0) {
-                                _self.textRotation = -_self.textRotation;
+                            if (_self.labels.rotate > 0) {
+                                _self.labels.rotate = -_self.labels.rotate;
                             }
                         }
 
                         if (_self.orient === "top") {
-                            if (_self.textRotation < 0) {
-                                _self.textRotation = -_self.textRotation;
+                            if (_self.labels.rotate < 0) {
+                                _self.labels.rotate = -_self.labels.rotate;
                             }
                         }
 
                         text
-                            .attr("transform", "translate(" + 0 + ", " + y + ") rotate(" + _self.textRotation + ")");
+                            .attr("transform", "translate(" + 0 + ", " + y + ") rotate(" + _self.labels.rotate + ")");
                     });
             }
         }
@@ -414,28 +433,26 @@ module frnk.UI.Charts {
             this.name = settings.name;
             this.setOrientation(settings.orient);
             this.setGridlineType(settings.gridlines);
-            this.textRotation = settings.labels.rotate;
-            this.title = settings.title.text;
-            this.valign = settings.title.valign;
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): void {
             super.drawTitle(chart, svg);
 
             var rotation = this.orient === "left" ? -90 : 90;
+            var textAnchor = this.orient === "left" ? "end" : "begin";
+
             this.svgTitle
-                .attr("text-anchor", "middle")
+                .attr("text-anchor", textAnchor)
                 .attr("transform", "rotate(" + rotation + ")");
 
             var x = Html.getWidth(this.svgAxis) + 5;
-            var y = Html.valign(this.svgTitle, Html.getHeight(this.svgAxis), this.valign, 0);
+            var y = Html.valign(this.svgTitle, Html.getHeight(this.svgAxis), this.title.valign, 0);
 
             if (this.orient === "left") {
                 x = -x;
             }
 
             this.svgTitle
-                .attr("text-anchor", "middle")
                 .attr("transform", "translate(" + x + "," + y + ") rotate(" + rotation + ")");
         }
 
@@ -476,7 +493,7 @@ module frnk.UI.Charts {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
                         .domain(chart.categories.getLabels())
-                        .rangeRoundBands([start, end], chart.settings.plotOptions.innerPadding, chart.settings.plotOptions.outerPadding);
+                        .rangeRoundBands([start, end], chart.settings.plotArea.innerPadding, chart.settings.plotArea    .outerPadding);
                 }
                 else {
                     this.setScaleType(ScaleType.Time);
@@ -485,7 +502,7 @@ module frnk.UI.Charts {
                             return d3.time.format(chart.categories.format).parse(d);
                         }).reverse())
                         .nice() // adds additional ticks to add some whitespace
-                        .range([min, chart.canvas.plotArea.height]); // TODO - dynamic placement
+                        .range([min, chart.canvas.plotArea.height]);
                 }
             }
             else {
@@ -529,11 +546,11 @@ module frnk.UI.Charts {
         }
 
         public removeOverlappingTicks(): void {
-            // TODO - Implement removeOverlappingTicks for Y-axis
+            // TODO - implement removeOverlappingTicks for Y-axis
         }
 
         public rotateLabels(chart: Chart, svg: D3.Selection): void {
-            // TODO - Implement label rotation for Y-axis
+            // TODO - implement label rotation for Y-axis
         }
 
         public setOrientation(value: OrientationType): void {

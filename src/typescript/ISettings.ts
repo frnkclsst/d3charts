@@ -10,7 +10,7 @@ module frnk.UI.Charts {
         legend: ILegendAreaSettings;
         linechart: ILineChartSettings;
         piechart: IPieChartSettings;
-        plotOptions: PlotOptionSettings;
+        plotPlotArea: PlotAreaSettings;
         title: ITitleAreaSettings;
         xAxes: IAxisSettings;
         yAxes: IAxisSettings;
@@ -36,7 +36,6 @@ module frnk.UI.Charts {
 
     export interface ICanvasSettings {
         height: number;
-        padding: number;
         width: number;
     }
 
@@ -53,26 +52,21 @@ module frnk.UI.Charts {
 
     export interface ILineChartSettings {
         area: {
-            enabled: boolean;
+            visible: boolean;
             opacity: number;
         };
         interpolation: string;
         markers: {
-            enabled: boolean,
+            visible: boolean,
             size: number,
             type: MarkerType
         };
     }
 
     export interface IPlotAreaSettings {
-        height: number;
-        width: number;
-        padding: number;
-    }
-
-    export interface IPlotOptionSettings {
         innerPadding: number;
         outerPadding: number;
+        padding: number;
     }
 
     export interface IPieChartSettings {
@@ -83,7 +77,7 @@ module frnk.UI.Charts {
         animate: boolean;
         items: Serie[];
         labels: {
-            enabled: boolean,
+            visible: boolean,
             format: string,
             rotate: boolean
         };

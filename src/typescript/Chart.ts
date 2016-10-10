@@ -13,7 +13,7 @@ module frnk.UI.Charts {
         public stackType: StackType;
         public tooltip: Tooltip;
 
-        constructor(args: ISettings, selector: string) {
+        constructor(selector: string, args: ISettings) {
             this.selector = selector;
             this.stackType = StackType.None;
 

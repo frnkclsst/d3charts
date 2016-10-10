@@ -32,7 +32,8 @@ module frnk.UI.Charts {
                     "width": 0,
                     "x": (d: any, i: number): number => {
                         if (d.y < 0) {
-                            return this.chart.xAxes[0].scale(0); // TODO - take the right axis in case there are multiple
+                            // TODO - take the right axis in case there are multiple
+                            return this.chart.xAxes[0].scale(0);
                         }
                         else {
                             return this.chart.getXCoordinate(d, i, this.serie);
@@ -59,7 +60,7 @@ module frnk.UI.Charts {
                 .each("end", (): void => {
                     console.log(count);
                     count--;
-                    if (this.chart.settings.series.labels.enabled === true && !count) { // only draw labels after all transitions ended
+                    if (this.chart.settings.series.labels.visible === true && !count) { // only draw labels after all transitions ended
                         this.drawLabels();
                     }
                 });
@@ -67,6 +68,12 @@ module frnk.UI.Charts {
             // draw tooltip
             this.chart.tooltip.draw(svgBar, this.serie);
         }
+
+        /* Make this shape independent by using a callback
+        public testDraw(x: (d: any, i: number, serie: number) => void, d: any, i: number): void {
+            x(d, i, this.serie);
+        }
+        */
 
         public drawLabels(): void {
             super.drawLabels();

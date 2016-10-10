@@ -6,8 +6,8 @@ module frnk.UI.Charts {
 
     export class StackedColumnChart extends ColumnChart {
 
-        constructor(args: ISettings, selector: string) {
-            super(args, selector);
+        constructor(selector: string, args: ISettings) {
+            super(selector, args);
             this.stackType = StackType.Normal;
         }
 

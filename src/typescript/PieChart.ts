@@ -11,8 +11,8 @@ module frnk.UI.Charts {
         private radius: number;
         private serieRadius: number;
 
-        constructor(args: ISettings, selector: string) {
-            super(args, selector);
+        constructor(selector: string, args: ISettings) {
+            super(selector, args);
             this.innerRadiusPercentage = this.settings.piechart.innerRadius;
         }
 
@@ -76,7 +76,7 @@ module frnk.UI.Charts {
                     })
                     .each("end", (): void => {
                         count--;
-                        if (this.settings.series.labels.enabled === true && !count) {
+                        if (this.settings.series.labels.visible === true && !count) {
                             this.drawLabels(svgSeries);
                         }
                     });

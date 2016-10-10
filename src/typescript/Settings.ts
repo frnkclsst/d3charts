@@ -13,7 +13,7 @@ module frnk.UI.Charts {
         public legend: LegendAreaSettings;
         public linechart: LineChartSettings;
         public piechart: PieChartSettings;
-        public plotOptions: PlotOptionSettings;
+        public plotArea: PlotAreaSettings;
         public series: SeriesSettings;
 
         private _settings: ISettings;
@@ -30,7 +30,7 @@ module frnk.UI.Charts {
             this.series = new SeriesSettings(this.getValue("series"));
             this.linechart = new LineChartSettings(this.getValue("linechart"));
             this.piechart = new PieChartSettings(this.getValue("piechart"));
-            this.plotOptions = new PlotOptionSettings(this.getValue("plotOptions.general"));
+            this.plotArea = new PlotAreaSettings(this.getValue("plotArea"));
         }
 
         public getValue(propStr: string, defaultValue?: string): any {
@@ -38,9 +38,7 @@ module frnk.UI.Charts {
             var cur = this._settings;
             for (var i = 0; i < parts.length; i++) {
                 if (!cur[parts[i]]) {
-                    console.log(">> WARN: " + propStr + " not set in settings");
                     if (defaultValue) {
-                        console.log(">> WARN: " + propStr + " defaulted to '" + defaultValue + "'");
                         return defaultValue;
                     }
                     return "";
@@ -50,7 +48,7 @@ module frnk.UI.Charts {
             return cur;
         }
 
-        // TODO - Refactor - make more generic
+        // TODO - refactor - make more generic
         private _setAxesSettings(settings: any): AxisSettings[] {
             var array: AxisSettings[] = [];
 
@@ -145,22 +143,16 @@ module frnk.UI.Charts {
 
     export class CanvasSettings implements ICanvasSettings {
         public height: number;
-        public padding: number;
         public width: number;
 
         constructor(settings: ICanvasSettings) {
             // defaults
             this.height = 0;
-            this.padding = 50;
             this.width = 0;
 
             // apply properties from config if available
             if (typeof settings.height != "undefined") {
                 this.height = settings.height;
-            }
-
-            if (typeof settings.padding != "undefined") {
-                this.padding = settings.padding;
             }
 
             if (typeof settings.width != "undefined") {
@@ -203,12 +195,12 @@ module frnk.UI.Charts {
 
     export class LineChartSettings implements ILineChartSettings {
         public area: {
-            enabled: boolean,
+            visible: boolean,
             opacity: number
         };
         public interpolation: string;
         public markers: {
-            enabled: boolean,
+            visible: boolean,
             size: number,
             type: MarkerType
         };
@@ -216,20 +208,20 @@ module frnk.UI.Charts {
         constructor(settings: ILineChartSettings) {
             // defaults
             this.area = {
-                enabled: false,
+                visible: false,
                 opacity: 0.2
             };
             this.interpolation = "linear";
             this.markers = {
-                enabled: true,
+                visible: true,
                 size: 6,
                 type: "mixed"
             };
 
             // apply properties from config if available
             if (typeof settings.area != "undefined") {
-                if (typeof settings.area.enabled != "undefined") {
-                    this.area.enabled = settings.area.enabled;
+                if (typeof settings.area.visible != "undefined") {
+                    this.area.visible = settings.area.visible;
                 }
                 if (typeof settings.area.opacity != "undefined") {
                     this.area.opacity = settings.area.opacity;
@@ -241,8 +233,8 @@ module frnk.UI.Charts {
             }
 
             if (typeof settings.markers != "undefined") {
-                if (typeof settings.markers.enabled != "undefined") {
-                    this.markers.enabled = settings.markers.enabled;
+                if (typeof settings.markers.visible != "undefined") {
+                    this.markers.visible = settings.markers.visible;
                 }
                 if (typeof settings.markers.size != "undefined") {
                     this.markers.size = settings.markers.size;
@@ -258,8 +250,10 @@ module frnk.UI.Charts {
         public innerRadius: number;
 
         constructor(settings: IPieChartSettings) {
+            // defaults
             this.innerRadius = 1;
 
+            // apply properties from config if available
             if (typeof settings.innerRadius != "undefined") {
                 this.innerRadius = settings.innerRadius;
             }
@@ -267,12 +261,27 @@ module frnk.UI.Charts {
     }
 
     export class PlotAreaSettings implements IPlotAreaSettings {
-        public height: number;
-        public width: number;
+        public innerPadding: number;
+        public outerPadding: number;
         public padding: number;
 
         constructor(settings: IPlotAreaSettings) {
+            // defaults
+            this.innerPadding = 0.5;
+            this.outerPadding = 0;
+            this.padding = 0;
 
+            // apply properties from config if available
+            if (typeof settings.innerPadding != "undefined") {
+                this.innerPadding = Number(settings.innerPadding);
+            }
+
+            if (typeof settings.outerPadding != "undefined") {
+                this.outerPadding = Number(settings.outerPadding);
+            }
+            if (typeof settings.padding != "undefined") {
+                this.padding = settings.padding;
+            }
         }
     }
 
@@ -280,7 +289,7 @@ module frnk.UI.Charts {
         public animate: boolean;
         public items: Serie[];
         public labels: {
-            enabled: boolean;
+            visible: boolean;
             format: string;
             rotate: boolean;
         };
@@ -290,7 +299,7 @@ module frnk.UI.Charts {
             this.animate = true;
             this.items = [];
             this.labels = {
-                enabled: false,
+                visible: false,
                 format: "",
                 rotate: false
             };
@@ -305,8 +314,8 @@ module frnk.UI.Charts {
             }
 
             if (typeof settings.labels != "undefined") {
-                if (typeof settings.labels.enabled != "undefined") {
-                    this.labels.enabled = settings.labels.enabled;
+                if (typeof settings.labels.visible != "undefined") {
+                    this.labels.visible = settings.labels.visible;
                 }
                 if (typeof settings.labels.format != "undefined") {
                     this.labels.format = settings.labels.format;
@@ -351,26 +360,6 @@ module frnk.UI.Charts {
 
             if (typeof settings.text != "undefined") {
                 this.text = settings.text;
-            }
-        }
-    }
-
-    export class PlotOptionSettings implements IPlotOptionSettings {
-        public innerPadding: number;
-        public outerPadding: number;
-
-        constructor(settings: any) {
-            // defaults
-            this.innerPadding = 0.5;
-            this.outerPadding = 0;
-
-            // apply properties from config if available
-            if (typeof settings.innerPadding != "undefined") {
-                this.innerPadding = Number(settings.innerPadding);
-            }
-
-            if (typeof settings.outerPadding != "undefined") {
-                this.outerPadding = Number(settings.outerPadding);
             }
         }
     }

@@ -6,11 +6,11 @@ module frnk.UI.Charts {
 
     export class StackedPercentColumnChart extends StackedColumnChart {
 
-        constructor(args: ISettings, selector: string) {
-            super(args, selector);
+        constructor(selector: string, args: ISettings) {
+            super(selector, args);
             this.stackType = StackType.Percent;
             for (var i = 0; i < this.yAxes.length; i++) {
-                this.yAxes[i].format = "%";
+                this.yAxes[i].labels.format = "%";
             }
         }
 

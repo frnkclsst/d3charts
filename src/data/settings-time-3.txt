@@ -1,13 +1,11 @@
 {
-    "canvas": {
-        "height": 200,
-        "width": 600,
+    "plotArea": {
         "padding": 100
     },
     "linechart": {
         "interpolation": "linear",
         "markers": {
-            "enabled": flase
+            "visible": flase
         }
     },
     "legend": {
@@ -55,11 +53,5 @@
             "data": [25.94, 128.66, 233.95],
             "name": "Apple"
           }]
-    },
-    "plotOptions": {
-        "general": { 
-            "innerPadding": 0.5,
-			"outerPadding": 0.5
-        }
     }
 }

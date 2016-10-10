@@ -1,16 +1,14 @@
 {
-    "canvas": {
-        "height": 300,
-        "width": 600,
+    "plotArea": {
         "padding": 80
     },
     "linechart": {
         "area": {
-            "enabled": true
+            "visible": true
         },
         "interpolation": "linear",
         "markers": {
-            "enabled": true
+            "visible": true
         }
     },
 	"piechart": {
@@ -64,11 +62,5 @@
                 "name": "Europe",
                 "data": [-3, 5, 7, 9, 11, 13, 15]
             }]
-    },
-    "plotOptions": {
-        "general": { 
-            "innerPadding": 0.1,
-			"outerPadding": 0.5
-        }
     }
 }
