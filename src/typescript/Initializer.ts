@@ -255,7 +255,7 @@ module frnk.UI.Charts {
             // defaults
             this.area = {
                 visible: false,
-                opacity: 0.2
+                opacity: 0.3
             };
             this.interpolation = "linear";
             this.markers = {

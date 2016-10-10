@@ -58,7 +58,6 @@ module frnk.UI.Charts {
                     return this.chart.getXCoordinate(d, i, this.serie);
                 })
                 .each("end", (): void => {
-                    console.log(count);
                     count--;
                     if (this.chart.options.series.labels.visible === true && !count) { // only draw labels after all transitions ended
                         this.drawLabels();
