@@ -35,7 +35,7 @@ module frnk.UI.Charts {
         private _scaleType: ScaleType;
         private _ticks: number;
 
-        constructor(settings: IAxisOptions, chart: Chart) {
+        constructor(chart: Chart, settings: IAxisOptions) {
             this.axis = null;
             this.chart = chart;
             this.height = 0;
@@ -59,10 +59,10 @@ module frnk.UI.Charts {
         }
 
         public alignTitle(): void {
-
+            // child classes are responsible for implementing this method
         }
 
-        public draw(chart: Chart): void {
+        public draw(): void {
             this.initialize();
 
             // calculate scale
@@ -71,7 +71,7 @@ module frnk.UI.Charts {
             // draw axis
             this.svgAxis
                 .call(this.axis)
-                .attr("transform", "translate(" + this.getXCoordinate(this.chart) + "," + this.getYCoordinate(this.chart) + ")");
+                .attr("transform", "translate(" + this.getXCoordinate() + "," + this.getYCoordinate() + ")");
 
             // align tick labels
             if (this.labels.rotate % 360 != 0) {
@@ -84,12 +84,12 @@ module frnk.UI.Charts {
 
             // align axis title
             this.alignTitle();
-            this.drawGridlines(this.chart, this.axis);
-            this.drawZeroLine(this.chart, this.svgAxis);
+            this.drawGridlines(this.axis);
+            this.drawZeroLine(this.svgAxis);
             this.removeOverlappingTicks();
         }
 
-        public drawGridlines(chart: Chart, axis: D3.Svg.Axis): void {
+        public drawGridlines(axis: D3.Svg.Axis): void {
             this.svgGrid = this.svgAxis.append("g")
                 .attr("class", "grid");
 
@@ -109,14 +109,14 @@ module frnk.UI.Charts {
             }
         }
 
-        public drawTitle(chart: Chart, svg: D3.Selection): void {
+        public drawTitle(svg: D3.Selection): void {
             this.svgTitle = svg.append("text")
                 .text(this.title.text)
                 .attr("class", "title");
         }
 
-        public drawZeroLine(chart: Chart, svg: D3.Selection): void {
-            if (this.isDataAxis() && chart.series.getMinValue() < 0) {
+        public drawZeroLine(svg: D3.Selection): void {
+            if (this.isDataAxis() && this.chart.series.getMinValue() < 0) {
                 this.svgZeroLine = this.svgGrid.append("g")
                     .attr("class", "zero-line")
                     .append("line");
@@ -127,19 +127,19 @@ module frnk.UI.Charts {
             return this.gridlineType;
         }
 
-        public getInnerTicksize(chart: Chart): any {
+        public getInnerTicksize(): any {
             // child classes are responsible for implementing this method
         }
 
-        public getOuterTicksize(chart: Chart): any {
+        public getOuterTicksize(): any {
             // child classes are responsible for implementing this method
         }
 
-        public getScale(chart: Chart): any {
+        public getScale(): any {
             // child classes are responsible for implementing this method
         }
 
-        public getSize(chart: Chart): void {
+        public getSize(): void {
             this.initialize();
 
             // create d3 axis
@@ -160,15 +160,15 @@ module frnk.UI.Charts {
             }
 
             // draw axis
-            this.svgAxis = chart.canvas.plotArea.svg.append("g")
+            this.svgAxis = this.chart.canvas.plotArea.svg.append("g")
                 .attr("class", "axis");
 
             this.svgAxis.append("g")
                 .attr("class", "ticks")
                 .call(this.axis);
 
-            this.rotateLabels(chart, this.svgAxis);
-            this.drawTitle(chart, this.svgAxis);
+            this.rotateLabels(this.svgAxis);
+            this.drawTitle(this.svgAxis);
 
             // store height and width
             this.height = Html.getHeight(this.svgAxis);
@@ -179,23 +179,23 @@ module frnk.UI.Charts {
             return this._scaleType;
         }
 
-        public getTicks(chart: Chart): any {
+        public getTicks(): any {
             // child classes are responsible for implementing this method
         }
 
-        public getXCoordinate(chart: Chart): any {
+        public getXCoordinate(): any {
             // child classes are responsible for implementing this method
         }
 
-        public getYCoordinate(chart: Chart): any {
+        public getYCoordinate(): any {
             // child classes are responsible for implementing this method
         }
 
         public initialize(): void {
-            this.scale = this.getScale(this.chart);
-            this._innerTicksize = this.getInnerTicksize(this.chart);
-            this._outerTicksize = this.getOuterTicksize(this.chart);
-            this._ticks = this.getTicks(this.chart);
+            this.scale = this.getScale();
+            this._innerTicksize = this.getInnerTicksize();
+            this._outerTicksize = this.getOuterTicksize();
+            this._ticks = this.getTicks();
         }
 
         public isDataAxis(): any {
@@ -206,7 +206,7 @@ module frnk.UI.Charts {
             // child classes are responsible for implementing this method
         }
 
-        public rotateLabels(chart: Chart, svg: D3.Selection): void {
+        public rotateLabels(svg: D3.Selection): void {
             // child classes are responsible for implementing this method
         }
 
@@ -214,7 +214,7 @@ module frnk.UI.Charts {
             this._scaleType = value;
         }
 
-        public setColor(chart: Chart, color: string): void {
+        public setColor(color: string): void {
             this.svgAxis.selectAll("path")[0][0].setAttribute("style", "stroke: " + color);
         }
 
@@ -235,8 +235,8 @@ module frnk.UI.Charts {
 
     export class XAxis extends Axis {
 
-        constructor(settings: IAxisOptions, chart: Chart) {
-            super(settings, chart);
+        constructor(chart: Chart, settings: IAxisOptions) {
+            super(chart, settings);
 
             this.hasTickmarks = settings.tickmarks;
             this.name = settings.name;
@@ -257,8 +257,8 @@ module frnk.UI.Charts {
                 this.svgTitle.attr("x", -this.chart.canvas.plotArea.axisSize.right);
             }
         }
-        public drawTitle(chart: Chart, svg: D3.Selection): void {
-            super.drawTitle(chart, svg);
+        public drawTitle(svg: D3.Selection): void {
+            super.drawTitle(svg);
 
             var x = Html.align(this.svgTitle, Html.getWidth(this.svgAxis), this.title.align, 0);
             var y = Html.getHeight(this.svgAxis) + 12;
@@ -272,38 +272,38 @@ module frnk.UI.Charts {
                 .attr("transform", "translate(" + x + "," + y + ")");
         }
 
-        public drawZeroLine(chart: Chart, svg: D3.Selection): void {
-            super.drawZeroLine(chart, svg);
-            if (this.isDataAxis() && chart.series.getMinValue() < 0) {
+        public drawZeroLine(svg: D3.Selection): void {
+            super.drawZeroLine(svg);
+            if (this.isDataAxis() && this.chart.series.getMinValue() < 0) {
                 this.svgZeroLine
                     .attr("x1", this.scale(0))
                     .attr("x2", this.scale(0))
                     .attr("y1", 0)
-                    .attr("y2", this.orient === "bottom" ? -chart.canvas.plotArea.height : chart.canvas.plotArea.height);
+                    .attr("y2", this.orient === "bottom" ? -this.chart.canvas.plotArea.height : this.chart.canvas.plotArea.height);
             }
         }
 
-        public getInnerTicksize(chart: Chart): number {
-            return -chart.canvas.plotArea.height;
+        public getInnerTicksize(): number {
+            return -this.chart.canvas.plotArea.height;
         }
 
-        public getOuterTicksize(chart: Chart): number {
-            return -chart.canvas.plotArea.height;
+        public getOuterTicksize(): number {
+            return -this.chart.canvas.plotArea.height;
         }
 
-        public getScale(chart: Chart): any {
-            var min = chart.series.getMinValue(this.name);
-            var max = chart.series.getMaxValue(this.name);
+        public getScale(): any {
+            var min = this.chart.series.getMinValue(this.name);
+            var max = this.chart.series.getMaxValue(this.name);
             var start = this.chart.canvas.plotArea.axisSize.left;
-            var end =  this.chart.canvas.plotArea.axisSize.left + chart.canvas.plotArea.width;
+            var end =  this.chart.canvas.plotArea.axisSize.left + this.chart.canvas.plotArea.width;
 
-            if (chart instanceof StackedPercentBarChart) {
+            if (this.chart instanceof StackedPercentBarChart) {
                 this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
                     .domain([min < 0 ? -1 : 0, 1])
                     .range([start, end]);
             }
-            else if (chart instanceof BarChart) {
+            else if (this.chart instanceof BarChart) {
                 this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
                     .domain([min < 0 ? min : 0, max])
@@ -311,17 +311,17 @@ module frnk.UI.Charts {
                     .range([start, end]);
             }
             else {
-                if (chart.categories.format === "%s") {
+                if (this.chart.categories.format === "%s") {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
-                        .domain(chart.categories.getLabels())
-                        .rangeBands([start, end], chart.options.plotArea.innerPadding, chart.options.plotArea.outerPadding);
+                        .domain(this.chart.categories.getLabels())
+                        .rangeBands([start, end], this.chart.options.plotArea.innerPadding, this.chart.options.plotArea.outerPadding);
                 }
                 else {
                     this.setScaleType(ScaleType.Time);
                     return d3.time.scale()
-                        .domain(d3.extent(chart.categories.getLabels(), (d: any): Date => {
-                            return d3.time.format(chart.categories.format).parse(d);
+                        .domain(d3.extent(this.chart.categories.getLabels(), (d: any): Date => {
+                            return d3.time.format(this.chart.categories.format).parse(d);
                         }))
                         .nice() // adds additional ticks to add some whitespace
                         .range([start, end]);
@@ -329,8 +329,8 @@ module frnk.UI.Charts {
             }
         }
 
-        public getSize(chart: Chart): void {
-            super.getSize(this.chart);
+        public getSize(): void {
+            super.getSize();
 
             if (this.orient === "bottom") {
                 this.chart.canvas.plotArea.axisSize.bottom += this.height;
@@ -342,16 +342,16 @@ module frnk.UI.Charts {
             this.chart.canvas.plotArea.height -= this.height;
         }
 
-        public getTicks(chart: Chart): number {
-            return Math.max(chart.canvas.plotArea.width / 50, 2);
+        public getTicks(): number {
+            return Math.max(this.chart.canvas.plotArea.width / 50, 2);
         }
 
-        public getXCoordinate(chart: Chart): number {
+        public getXCoordinate(): number {
             return 0;
         }
 
-        public getYCoordinate(chart: Chart): number {
-            return this.orient === "bottom" ? chart.canvas.plotArea.axisSize.top + chart.canvas.plotArea.height : chart.canvas.plotArea.axisSize.top;
+        public getYCoordinate(): number {
+            return this.orient === "bottom" ? this.chart.canvas.plotArea.axisSize.top + this.chart.canvas.plotArea.height : this.chart.canvas.plotArea.axisSize.top;
         }
 
         public isDataAxis(): boolean {
@@ -384,7 +384,7 @@ module frnk.UI.Charts {
             }
         }
 
-        public rotateLabels(chart: Chart, svg: D3.Selection): void {
+        public rotateLabels(svg: D3.Selection): void {
             var _self = this;
             if (this.labels.rotate != 0) {
                 svg.selectAll("text")
@@ -434,8 +434,8 @@ module frnk.UI.Charts {
     }
 
     export class YAxis extends Axis {
-        constructor(settings: IAxisOptions, chart: Chart) {
-            super(settings, chart);
+        constructor(chart: Chart, settings: IAxisOptions) {
+            super(chart, settings);
 
             this.hasTickmarks = settings.tickmarks;
             this.name = settings.name;
@@ -470,8 +470,8 @@ module frnk.UI.Charts {
             }
         }
 
-        public drawTitle(chart: Chart, svg: D3.Selection): void {
-            super.drawTitle(chart, svg);
+        public drawTitle(svg: D3.Selection): void {
+            super.drawTitle(svg);
 
             var rotation = this.orient === "left" ? -90 : 90;
             var textAnchor = this.orient === "left" ? "end" : "begin";
@@ -491,30 +491,30 @@ module frnk.UI.Charts {
                 .attr("transform", "translate(" + x + "," + y + ") rotate(" + rotation + ")");
         }
 
-        public drawZeroLine(chart: Chart, svg: D3.Selection): void {
-            super.drawZeroLine(chart, svg);
-            if (this.isDataAxis() && chart.series.getMinValue() < 0) {
+        public drawZeroLine(svg: D3.Selection): void {
+            super.drawZeroLine(svg);
+            if (this.isDataAxis() && this.chart.series.getMinValue() < 0) {
                 this.svgZeroLine
                     .attr("x1", 0)
-                    .attr("x2", this.orient === "left" ? chart.canvas.plotArea.width : -chart.canvas.plotArea.width)
+                    .attr("x2", this.orient === "left" ? this.chart.canvas.plotArea.width : -this.chart.canvas.plotArea.width)
                     .attr("y1", this.scale(0))
                     .attr("y2", this.scale(0));
             }
         }
 
-        public getInnerTicksize(chart: Chart): number {
-            return -chart.canvas.plotArea.width;
+        public getInnerTicksize(): number {
+            return -this.chart.canvas.plotArea.width;
         }
 
-        public getOuterTicksize(chart: Chart): number {
-            return -chart.canvas.plotArea.width;
+        public getOuterTicksize(): number {
+            return -this.chart.canvas.plotArea.width;
         }
 
-        public getScale(chart: Chart): any {
-            var min = chart.series.getMinValue(this.name);
-            var max = chart.series.getMaxValue(this.name);
-            var start = chart.canvas.plotArea.axisSize.top;
-            var end = chart.canvas.plotArea.axisSize.top + chart.canvas.plotArea.height;
+        public getScale(): any {
+            var min = this.chart.series.getMinValue(this.name);
+            var max = this.chart.series.getMaxValue(this.name);
+            var start = this.chart.canvas.plotArea.axisSize.top;
+            var end = this.chart.canvas.plotArea.axisSize.top + this.chart.canvas.plotArea.height;
 
             if (this.chart instanceof StackedPercentColumnChart ||
                 this.chart instanceof StackedPercentLineChart) {
@@ -524,20 +524,20 @@ module frnk.UI.Charts {
                     .range([start, end]);
             }
             else if (this.chart instanceof BarChart) {
-                if (chart.categories.format === "%s") {
+                if (this.chart.categories.format === "%s") {
                     this.setScaleType(ScaleType.Ordinal);
                     return d3.scale.ordinal()
-                        .domain(chart.categories.getLabels())
-                        .rangeRoundBands([start, end], chart.options.plotArea.innerPadding, chart.options.plotArea    .outerPadding);
+                        .domain(this.chart.categories.getLabels())
+                        .rangeRoundBands([start, end], this.chart.options.plotArea.innerPadding, this.chart.options.plotArea.outerPadding);
                 }
                 else {
                     this.setScaleType(ScaleType.Time);
                     return d3.time.scale()
-                        .domain(d3.extent(chart.categories.getLabels(), (d: any): Date => {
-                            return d3.time.format(chart.categories.format).parse(d);
+                        .domain(d3.extent(this.chart.categories.getLabels(), (d: any): Date => {
+                            return d3.time.format(this.chart.categories.format).parse(d);
                         }).reverse())
                         .nice() // adds additional ticks to add some whitespace
-                        .range([min, chart.canvas.plotArea.height]);
+                        .range([min, this.chart.canvas.plotArea.height]);
                 }
             }
             else {
@@ -549,8 +549,8 @@ module frnk.UI.Charts {
             }
         }
 
-        public getSize(chart: Chart): void {
-            super.getSize(chart);
+        public getSize(): void {
+            super.getSize();
 
             if (this.orient === "left") {
                 this.chart.canvas.plotArea.axisSize.left += this.width;
@@ -561,15 +561,15 @@ module frnk.UI.Charts {
             this.chart.canvas.plotArea.width -= this.width;
         }
 
-        public getTicks(chart: Chart): number {
-            return Math.max(chart.canvas.plotArea.height / 50, 2);
+        public getTicks(): number {
+            return Math.max(this.chart.canvas.plotArea.height / 50, 2);
         }
 
-        public getXCoordinate(chart: Chart): number {
-            return this.orient === "left" ? chart.canvas.plotArea.axisSize.left : chart.canvas.plotArea.axisSize.left + chart.canvas.plotArea.width;
+        public getXCoordinate(): number {
+            return this.orient === "left" ? this.chart.canvas.plotArea.axisSize.left : this.chart.canvas.plotArea.axisSize.left + this.chart.canvas.plotArea.width;
         }
 
-        public getYCoordinate(chart: Chart): number {
+        public getYCoordinate(): number {
             return 0;
         }
 
@@ -584,7 +584,7 @@ module frnk.UI.Charts {
             // TODO - implement removeOverlappingTicks for Y-axis
         }
 
-        public rotateLabels(chart: Chart, svg: D3.Selection): void {
+        public rotateLabels(svg: D3.Selection): void {
             // TODO - implement label rotation for Y-axis
         }
 

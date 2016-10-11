@@ -11,12 +11,12 @@ module frnk.UI.Charts {
             super(selector, data, options);
 
             for (var i = 0; i < this.options.xAxes.length; i++) {
-                var xAxis = new XAxis(this.options.xAxes[i], this);
+                var xAxis = new XAxis(this, this.options.xAxes[i]);
                 this.axes.push(xAxis);
             }
 
             for (var j = 0; j < this.options.yAxes.length; j++) {
-                var yAxis = new YAxis(this.options.yAxes[j], this);
+                var yAxis = new YAxis(this, this.options.yAxes[j]);
                 this.axes.push(yAxis);
             }
         }
@@ -25,13 +25,13 @@ module frnk.UI.Charts {
             super.draw();
 
             for (var i = 0; i < this.axes.length; i++) {
-                this.axes[i].getSize(this);
+                this.axes[i].getSize();
             }
 
             for (var j = 0; j < this.axes.length; j++) {
-                this.axes[j].draw(this);
+                this.axes[j].draw();
                 if (this.axes.length > 1) {
-                    this.axes[j].setColor(this, ColorPalette.color(j));
+                    this.axes[j].setColor(ColorPalette.color(j));
                 }
             }
         }
