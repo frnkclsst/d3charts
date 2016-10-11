@@ -12,37 +12,46 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(d: any, i: number, serie: number): any {
-            if (this.xAxes[0].getScaleType() === ScaleType.Ordinal || this.xAxes[0].getScaleType() === ScaleType.Linear) {
-                return this.xAxes[0].scale(this.categories.parseFormat(this.categories.getItem(i))) + this.xAxes[0].scale.rangeBand() / 2;
+            var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+            var axis = this.axes[index];
+
+            if (axis.getScaleType() === ScaleType.Ordinal || axis.getScaleType() === ScaleType.Linear) {
+                return axis.scale(this.categories.parseFormat(this.categories.getItem(i))) + axis.scale.rangeBand() / 2;
             }
             else {
-                return this.xAxes[0].scale(this.categories.parseFormat(this.categories.getItem(i))); // for time scales
+                return axis.scale(this.categories.parseFormat(this.categories.getItem(i))); // for time scales
             }
         }
 
         public getYCoordinate(d: any, i: number, serie: number): any {
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var axis = this.axes[index];
+
             // negative numbers
             if (d.y0 < 1) {
-                return this.yAxes[0].scale((d.y0 + d.y) * this.normalizer(d));
+                return axis.scale((d.y0 + d.y) * this.normalizer(d, serie));
             }
             // positive numbers
             else {
-                return this.yAxes[0].scale(d.y0 * this.normalizer(d));
+                return axis.scale(d.y0 * this.normalizer(d, serie));
             }
         }
 
         public getY0Coordinate(d: any, i: number, serie: number): any {
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var axis = this.axes[index];
+
             // negative values
             if (d.y < 0) {
-                return (this.yAxes[0].scale(d.y0 * this.normalizer(d)));
+                return (axis.scale(d.y0 * this.normalizer(d, serie)));
             }
             // positive values
             else {
-                return (this.yAxes[0].scale((d.y0 - d.y) * this.normalizer(d)));
+                return (axis.scale((d.y0 - d.y) * this.normalizer(d, serie)));
             }
         }
 
-        protected normalizer(d: any): number {
+        protected normalizer(d: any, serie: number): number {
             return StackType.Normal; // no normalization needed as this not 100% stacked
         }
     }

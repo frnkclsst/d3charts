@@ -28,32 +28,35 @@ module frnk.UI.Charts {
 
         public getXCoordinate(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+            var axis = this.axes[index];
 
             if (d.y < 0) {
-                return Math.abs(this.xAxes[index].scale(d.y));
+                return Math.abs(axis.scale(d.y));
             }
             else {
-                return this.xAxes[index].scale(0);
+                return axis.scale(0);
             }
         }
 
         public getYCoordinate(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var axis = this.axes[index];
             var axisScale = this.categories.parseFormat(this.categories.getItem(i));
 
-            if (this.yAxes[index].getScaleType() === ScaleType.Ordinal) {
-                return this.yAxes[index].scale(axisScale) + (this.yAxes[index].scale.rangeBand() / this.series.length * serie);
+            if (axis.getScaleType() === ScaleType.Ordinal) {
+                return axis.scale(axisScale) + (axis.scale.rangeBand() / this.series.length * serie);
             }
             else {
-                return this.yAxes[index].scale(axisScale) + (this.canvas.width / this.series.length / this.categories.length / this.series.length * serie);
+                return axis.scale(axisScale) + (this.canvas.width / this.series.length / this.categories.length / this.series.length * serie);
             }
         }
 
         public getHeight(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var axis = this.axes[index];
 
-            if (this.yAxes[0].getScaleType() === ScaleType.Ordinal) {
-                return Math.abs(this.yAxes[index].scale.rangeBand() / this.series.length);
+            if (axis.getScaleType() === ScaleType.Ordinal) {
+                return Math.abs(axis.scale.rangeBand() / this.series.length);
             }
             else {
                 // TODO - dived twice by series.length - is this correct?
@@ -63,8 +66,9 @@ module frnk.UI.Charts {
 
         public getWidth(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+            var axis = this.axes[index];
 
-            return Math.abs(this.xAxes[index].scale(d.y) - this.xAxes[index].scale(0));
+            return Math.abs(axis.scale(d.y) - axis.scale(0));
         }
     }
 }

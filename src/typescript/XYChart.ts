@@ -5,42 +5,33 @@
 module frnk.UI.Charts {
 
     export class XYChart extends Chart {
-        public xAxes: XAxis[] = [];
-        public yAxes: YAxis[] = [];
+        public axes: Axis[] = [];
 
         constructor(selector: string, data: IData, options?: IOptions) {
             super(selector, data, options);
 
             for (var i = 0; i < this.options.xAxes.length; i++) {
-                this.xAxes.push(new XAxis(this.options.xAxes[i], this));
+                var xAxis = new XAxis(this.options.xAxes[i], this);
+                this.axes.push(xAxis);
             }
 
             for (var j = 0; j < this.options.yAxes.length; j++) {
-                this.yAxes.push(new YAxis(this.options.yAxes[j], this));
+                var yAxis = new YAxis(this.options.yAxes[j], this);
+                this.axes.push(yAxis);
             }
         }
 
         public draw(): void {
             super.draw();
 
-            for (var i = 0; i < this.xAxes.length; i++) {
-                this.xAxes[i].getSize(this);
+            for (var i = 0; i < this.axes.length; i++) {
+                this.axes[i].getSize(this);
             }
 
-            for (var j = 0; j < this.yAxes.length; j++) {
-                this.yAxes[j].getSize(this);
-            }
-
-            for (var x = 0; x < this.xAxes.length; x++) {
-                this.xAxes[x].draw(this);
-                if (this.xAxes.length > 1) {
-                    this.xAxes[x].setColor(this, ColorPalette.color(x));
-                }
-            }
-            for (var y = 0; y < this.yAxes.length; y++) {
-                this.yAxes[y].draw(this);
-                if (this.yAxes.length > 1) {
-                    this.yAxes[y].setColor(this, ColorPalette.color(y));
+            for (var j = 0; j < this.axes.length; j++) {
+                this.axes[j].draw(this);
+                if (this.axes.length > 1) {
+                    this.axes[j].setColor(this, ColorPalette.color(j));
                 }
             }
         }
@@ -57,24 +48,19 @@ module frnk.UI.Charts {
             // child classes are responsible for implementing this method
         }
 
-        protected getAxisByName(axis: AxisType, ref: string): number {
-            var axes: any;
-
-            if (axis === AxisType.X) {
-                axes = this.xAxes;
-            }
-            else {
-                axes = this.yAxes;
-            }
-
+        public getAxisByName(axisType: AxisType, ref: string): number {
+            var last = 0;
             if (ref != "") {
-                for (var i = 0; i <  axes.length; i++) {
-                    if (axes[i].name === ref) {
-                        return i;
+                for (var i = 0; i <  this.axes.length; i++) {
+                    if (this.axes[i].type === axisType) {
+                        last = i;
+                        if (this.axes[i].name === ref) {
+                            return i;
+                        }
                     }
                 }
             }
-            return 0;
+            return last;
         }
     }
 }

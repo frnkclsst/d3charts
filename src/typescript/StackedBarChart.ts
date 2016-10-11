@@ -12,8 +12,11 @@ module frnk.UI.Charts {
         }
 
         public getHeight(d: any, i: number, serie: number): any {
-            if (this.yAxes[0].getScaleType() === ScaleType.Ordinal || this.yAxes[0].getScaleType() === ScaleType.Linear) {
-                return this.yAxes[0].scale.rangeBand();
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var axis = this.axes[index];
+
+            if (axis.getScaleType() === ScaleType.Ordinal || axis.getScaleType() === ScaleType.Linear) {
+                return axis.scale.rangeBand();
             }
             else {
                 return this.canvas.height / this.series.length / this.categories.length;
@@ -21,23 +24,32 @@ module frnk.UI.Charts {
         }
 
         public getWidth(d: any, i: number, serie: number): any {
-            return Math.abs(this.xAxes[0].scale(0) - this.xAxes[0].scale(d.y));
+            var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+            var axis = this.axes[index];
+
+            return Math.abs(axis.scale(0) - axis.scale(d.y));
         }
 
         public getXCoordinate(d: any, i: number, serie: number): any {
+            var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+            var axis = this.axes[index];
+
             if (d.perc < 0) {
-                return this.xAxes[0].scale((d.y0 + d.y) * this.normalizer(d));
+                return axis.scale((d.y0 + d.y) * this.normalizer(d, serie));
             }
             else {
-                return this.xAxes[0].scale((d.y0 - d.y) * this.normalizer(d));
+                return axis.scale((d.y0 - d.y) * this.normalizer(d, serie));
             }
         }
 
         public getYCoordinate(d: any, i: number, serie: number): any {
-            return this.yAxes[0].scale(this.categories.parseFormat(this.categories.getItem(i)));
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var axis = this.axes[index];
+
+            return axis.scale(this.categories.parseFormat(this.categories.getItem(i)));
         }
 
-        public normalizer(d: any): number {
+        public normalizer(d: any, serie: number): number {
             return StackType.Normal; // no normalization needed as this not 100% stacked
         }
     }

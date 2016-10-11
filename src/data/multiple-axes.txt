@@ -1,7 +1,7 @@
 {
     "categories": {
         "format": "%s",
-        "data": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        "data": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     },
     "series": {
         "items": [{

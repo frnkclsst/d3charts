@@ -9,17 +9,25 @@ module frnk.UI.Charts {
         constructor(selector: string, data: IData, options?: IOptions) {
             super(selector, data, options);
             this.stackType = StackType.Percent;
-            for (var i = 0; i < this.yAxes.length; i++) {
-                this.yAxes[i].labels.format = "%";
+            for (var i = 0; i < this.axes.length; i++) {
+                if (this.axes[i] instanceof YAxis) {
+                    this.axes[i].labels.format = "%";
+                }
             }
         }
 
         public getHeight(d: any, i: number, serie: number): any {
-            return Math.abs((this.yAxes[0].scale(1) - this.yAxes[0].scale(0)) * d.perc);
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var axis = this.axes[index];
+
+            return Math.abs((axis.scale(1) - axis.scale(0)) * d.perc);
         }
 
-        public normalizer(d: any): number {
-            return this.yAxes[0].scale.domain()[0] / d.max;
+        public normalizer(d: any, serie: number): number {
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var axis = this.axes[index];
+
+            return axis.scale.domain()[0] / d.max;
         }
     }
 }

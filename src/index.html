@@ -76,9 +76,20 @@
             xAxis: [{
                 gridlines: "none",
                 labels: {
-                    rotate: 0
+                    rotate: 45
                 },
                 orient: "bottom",
+                tickmarks: true,
+                title: {
+                    align: "center",
+                    text: "Month"
+                }
+            }, {
+                gridlines: "none",
+                labels: {
+                    rotate: 45
+                },
+                orient: "top",
                 tickmarks: true,
                 title: {
                     align: "right",
@@ -95,7 +106,7 @@
                 tickmarks: true,
                 title: {
                     text: "millimeter",
-                    valign: "top"
+                    valign: "middle"
                 }
             }, {
                 name: "Temperature",
@@ -107,11 +118,11 @@
                 tickmarks: true,
                 title: {
                     text: "Degrees Celcius",
-                    valign: "top"
+                    valign: "middle"
                 }
             }],
             series: {
-                animate: false,
+                animate: true,
                 labels: {
                     visible : true,
                     format: ".4f",

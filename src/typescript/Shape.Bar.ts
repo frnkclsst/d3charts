@@ -32,8 +32,8 @@ module frnk.UI.Charts {
                     "width": 0,
                     "x": (d: any, i: number): number => {
                         if (d.y < 0) {
-                            // TODO - take the right axis in case there are multiple
-                            return this.chart.xAxes[0].scale(0);
+                            var index = this.chart.getAxisByName(AxisType.X, this.chart.series.items[this.serie].name);
+                            return this.chart.axes[index].scale(0);
                         }
                         else {
                             return this.chart.getXCoordinate(d, i, this.serie);

@@ -48,6 +48,8 @@ module frnk.UI.Charts {
 
         public updateSize(): void {
             var container = d3.select(this._chart.selector);
+
+            // get element size
             var width = Number(container.style("width").substring(0, container.style("width").length - 2));
             var height = Number(container.style("height").substring(0, container.style("height").length - 2));
             this.width = width === 0 ? this.width : width;

@@ -13,92 +13,94 @@
     <div id="chart" />
     <script>
         var data = {
-            "categories": {
-                "format": "%s",
-                "data": ["People living in Africa from 1800 until 2008", "People living in America from 1800 until 2008", "People living in Asia from 1800 until 2008", "People living in Europe from 1800 until 2008", "People living in Oceania from 1800 until 2008"]
+            categories: {
+                format: "%s",
+                data: ["People living in Africa from 1800 until 2008", "People living in America from 1800 until 2008", "People living in Asia from 1800 until 2008", "People living in Europe from 1800 until 2008", "People living in Oceania from 1800 until 2008"]
             },
-            "series": {
-                "items": [{
-                    "name": "Year 1800",
-                    "data": [107, 31, 635, 203, 2],
-                    "format": ","
+            series: {
+                items: [{
+                    name: "Year 1800",
+                    data: [107, 31, 635, 203, 2],
+                    format: ","
                 }, {
-                    "name": "Year 1900",
-                    "data": [133, 156, 947, 408, 6],
-                    "format": ","
+                    name: "Year 1900",
+                    data: [133, 156, 947, 408, 6],
+                    format: ","
                 }, {
-                    "name": "Year 2008",
-                    "data": [973, 914, 4054, 732, 34],
-                    "format": ","
+                    name: "Year 2008",
+                    data: [973, 914, 4054, 732, 34],
+                    format: ","
                 }],
-                "labels": {
-                    "visible": true
-                }
             }
         };
 
         var options = {
-            "plotArea": {
-                "padding": 20
+            plotArea: {
+                padding: 20
             },
-            "legend": {
-                "title": "Continent",
-                "position": "right",
-                "width": 200
+            legend: {
+                title: "Continent",
+                position: "right",
+                width: 200
             },
-            "title": {
-                "text": "Bar Chart - Long Labels",
-                "align": "center",
-                "height": 50
+            title: {
+                text: "Bar Chart - Long Labels",
+                align: "center",
+                height: 50
             },
-            "xAxis": [{
-                "gridlines": "major",
-                "labels": {
-                    "rotate": 45
+            xAxis: [{
+                gridlines: "major",
+                labels: {
+                    rotate: 45
                 },
-                "orient": "bottom",
-                "tickmark": false,
-                "title": {
-                    "text": "Population (millions)",
-                    "align": "right"
+                orient: "bottom",
+                tickmark: false,
+                title: {
+                    text: "Population (millions)",
+                    align: "right"
                 }
             }, {
-                "gridlines": "major",
-                "labels": {
-                    "rotate": 45
+                gridlines: "major",
+                labels: {
+                    rotate: 45
                 },
-                "orient": "top",
-                "tickmark": false,
-                "title": {
-                    "text": "Population (millions)",
-                    "align": "left"
+                orient: "top",
+                tickmark: false,
+                title: {
+                    text: "Population (millions)",
+                    align: "left"
                 }
             }],
-            "yAxis": [{
-                "gridlines": "none",
-                "orient": "left",
-                "tickmarks": true,
-                "title": {
-                    "text": "Number of people living in these continents",
-                    "visible": false,
-                    "valign": "middle"
+            yAxis: [{
+                gridlines: "none",
+                orient: "left",
+                tickmarks: true,
+                title: {
+                    text: "Number of people living in these continents",
+                    visible: false,
+                    valign: "middle"
                 }
             }, {
-                "gridlines": "none",
-                "orient": "right",
-                "labels": {
-                    "visible": false
+                gridlines: "none",
+                orient: "right",
+                labels: {
+                    visible: false
                 },
-                "tickmarks": true,
-                "title": {
-                    "text": "Number of people living in these continents",
-                    "visible": false,
-                    "valign": "middle"
+                tickmarks: true,
+                title: {
+                    text: "Number of people living in these continents",
+                    visible: false,
+                    valign: "middle"
                 }
             }],
-            "tooltip": {
-                "title": "Population",
-                "valueSuffix": " people"
+            series: {
+                labels: {
+                    visible: true
+                }
+            },
+            tooltip: {
+                title: "Population",
+                valueSuffix: " people"
             }
         };
 

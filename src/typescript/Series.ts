@@ -51,7 +51,7 @@ module frnk.UI.Charts {
         }
 
         public getMaxValue(name?: string): number {
-            if (name != undefined && name != "") {
+            if (name != undefined && name != "" && this._chart.stackType === StackType.None) {
                 return this.getSerieByName(name).max;
             }
             else if (this._chart.stackType != StackType.None && this.items.length > 1) { // can only be stacked if you have more than 1 series defined
@@ -71,7 +71,7 @@ module frnk.UI.Charts {
         }
 
         public getMinValue(name?: string): number {
-            if (name != undefined && name != "") {
+            if (name != undefined && name != "" && this._chart.stackType === StackType.None) {
                 return this.getSerieByName(name).min;
             }
             else if (this._chart.stackType != StackType.None && this.items.length > 1) { // can only be stacked if you have more than 1 series defined

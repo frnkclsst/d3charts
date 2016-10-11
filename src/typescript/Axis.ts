@@ -17,6 +17,7 @@ module frnk.UI.Charts {
             text: string,
             valign: string
         };
+        public type: AxisType;
         public width: number;
 
         protected axis: D3.Svg.Axis;
@@ -57,6 +58,10 @@ module frnk.UI.Charts {
             this._ticks = null;
         }
 
+        public alignTitle(): void {
+
+        }
+
         public draw(chart: Chart): void {
             this.initialize();
 
@@ -70,7 +75,7 @@ module frnk.UI.Charts {
 
             // align tick labels
             if (this.labels.rotate % 360 != 0) {
-                this.svgAxis.selectAll("text")
+                this.svgAxis.selectAll(".tick").selectAll("text")
                     .style("alignment-baseline", "middle")
                     .style("text-anchor", "end")
                     .attr("y", "0")
@@ -78,16 +83,7 @@ module frnk.UI.Charts {
             }
 
             // align axis title
-            // TODO - Improve positioning axis title
-            if (this instanceof XAxis) {
-                if (this.title.align === "left") {
-                    this.svgTitle.attr("x", this.chart.canvas.plotArea.axisSize.left);
-                }
-                else {
-                    this.svgTitle.attr("x", -this.chart.canvas.plotArea.axisSize.right);
-                }
-            }
-
+            this.alignTitle();
             this.drawGridlines(this.chart, this.axis);
             this.drawZeroLine(this.chart, this.svgAxis);
             this.removeOverlappingTicks();
@@ -246,13 +242,26 @@ module frnk.UI.Charts {
             this.name = settings.name;
             this.setOrientation(settings.orient);
             this.setGridlineType(settings.gridlines);
+            this.type = AxisType.X;
         }
 
+        public alignTitle(): void {
+            // TODO - Refactor alignTitle - messy
+            if (this.title.align === "left") {
+                this.svgTitle.attr("x", this.chart.canvas.plotArea.axisSize.left);
+            }
+            else if (this.title.align === "center") {
+                this.svgTitle.attr("x", 0);
+            }
+            else {
+                this.svgTitle.attr("x", -this.chart.canvas.plotArea.axisSize.right);
+            }
+        }
         public drawTitle(chart: Chart, svg: D3.Selection): void {
             super.drawTitle(chart, svg);
 
             var x = Html.align(this.svgTitle, Html.getWidth(this.svgAxis), this.title.align, 0);
-            var y = Html.getHeight(this.svgAxis) + 5;
+            var y = Html.getHeight(this.svgAxis) + 12;
 
             if (this.orient === "top") {
                 y = -y;
@@ -282,7 +291,6 @@ module frnk.UI.Charts {
             return -chart.canvas.plotArea.height;
         }
 
-        // TODO? - rename to setRange
         public getScale(chart: Chart): any {
             var min = chart.series.getMinValue(this.name);
             var max = chart.series.getMaxValue(this.name);
@@ -433,6 +441,33 @@ module frnk.UI.Charts {
             this.name = settings.name;
             this.setOrientation(settings.orient);
             this.setGridlineType(settings.gridlines);
+            this.type = AxisType.Y;
+        }
+
+        public alignTitle(): void {
+            // TODO - Refactor alignTitle - messy
+            if (this.orient === "left") {
+                if (this.title.valign === "top") {
+                    this.svgTitle.attr("x", -this.chart.canvas.plotArea.axisSize.top);
+                }
+                else if (this.title.valign === "middle") {
+                    this.svgTitle.attr("x", -this.chart.canvas.plotArea.axisSize.top / 2);
+                }
+                else {
+                    this.svgTitle.attr("x", 0);
+                }
+            }
+            else {
+                if (this.title.valign === "top") {
+                    this.svgTitle.attr("x", this.chart.canvas.plotArea.axisSize.top);
+                }
+                else if (this.title.valign === "middle") {
+                    this.svgTitle.attr("x", this.chart.canvas.plotArea.axisSize.top / 2);
+                }
+                else {
+                    this.svgTitle.attr("x", 0);
+                }
+            }
         }
 
         public drawTitle(chart: Chart, svg: D3.Selection): void {
@@ -445,7 +480,7 @@ module frnk.UI.Charts {
                 .attr("text-anchor", textAnchor)
                 .attr("transform", "rotate(" + rotation + ")");
 
-            var x = Html.getWidth(this.svgAxis) + 5;
+            var x = Html.getWidth(this.svgAxis) + 12;
             var y = Html.valign(this.svgTitle, Html.getHeight(this.svgAxis), this.title.valign, 0);
 
             if (this.orient === "left") {

@@ -12,12 +12,18 @@ module frnk.UI.Charts {
         }
 
         public getHeight(d: any, i: number, serie: number): any {
-            return  Math.abs(this.yAxes[0].scale(0) - this.yAxes[0].scale(d.y));
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var axis = this.axes[index];
+
+            return  Math.abs(axis.scale(0) - axis.scale(d.y));
         }
 
         public getWidth(d: any, i: number, serie: number): any {
-            if (this.xAxes[0].getScaleType() === ScaleType.Ordinal || this.xAxes[0].getScaleType() === ScaleType.Linear) {
-                return this.xAxes[0].scale.rangeBand();
+            var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+            var axis = this.axes[index];
+
+            if (axis.getScaleType() === ScaleType.Ordinal || axis.getScaleType() === ScaleType.Linear) {
+                return axis.scale.rangeBand();
             }
             else {
                 return this.canvas.width / this.series.length / this.categories.length; //did it to support time scales
@@ -25,14 +31,20 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(d: any, i: number, serie: number): any {
-            return this.xAxes[0].scale(this.categories.parseFormat(this.categories.getItem(i)));
+            var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+            var axis = this.axes[index];
+
+            return axis.scale(this.categories.parseFormat(this.categories.getItem(i)));
         }
 
         public getYCoordinate(d: any, i: number, serie: number): any {
-            return this.yAxes[0].scale(d.y0 * this.normalizer(d));
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var axis = this.axes[index];
+
+            return axis.scale(d.y0 * this.normalizer(d, serie));
         }
 
-        public normalizer(d: any): number {
+        public normalizer(d: any, serie: number): number {
             return StackType.Normal; // no normalization needed as this not 100% stacked
         }
     }

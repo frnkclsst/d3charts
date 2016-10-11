@@ -67,19 +67,21 @@ module frnk.UI.Charts {
 
         public getXCoordinate(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+            var axis = this.axes[index];
 
-            if (this.xAxes[index].getScaleType() === ScaleType.Ordinal) {
-                return this.xAxes[index].scale(this.categories.parseFormat(this.categories.getItem(i))) + this.xAxes[0].scale.rangeBand() / 2;
+            if (axis.getScaleType() === ScaleType.Ordinal) {
+                return axis[index].scale(this.categories.parseFormat(this.categories.getItem(i))) + axis.scale.rangeBand() / 2;
             }
             else {
-                return this.xAxes[index].scale(this.categories.parseFormat(this.categories.getItem(i)));
+                return axis.scale(this.categories.parseFormat(this.categories.getItem(i)));
             }
         }
 
         public getYCoordinate(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var axis = this.axes[index];
 
-            return this.yAxes[index].scale(d.y);
+            return axis.scale(d.y);
         }
     }
 }
