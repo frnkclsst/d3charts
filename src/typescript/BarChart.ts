@@ -47,7 +47,7 @@ module frnk.UI.Charts {
                 return axis.scale(axisScale) + (axis.scale.rangeBand() / this.series.length * serie);
             }
             else {
-                return axis.scale(axisScale) + (this.canvas.width / this.series.length / this.categories.length / this.series.length * serie);
+                return axis.scale(axisScale) + (this.canvas.plotArea.height / this.categories.length / this.series.length * serie);
             }
         }
 
@@ -59,8 +59,7 @@ module frnk.UI.Charts {
                 return Math.abs(axis.scale.rangeBand() / this.series.length);
             }
             else {
-                // TODO - dived twice by series.length - is this correct?
-                return Math.abs(this.canvas.width / this.series.length / this.categories.length / this.series.length);
+                return Math.abs(this.canvas.plotArea.height / this.series.length / this.categories.length);
             }
         }
 

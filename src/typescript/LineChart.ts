@@ -113,9 +113,8 @@ module frnk.UI.Charts {
 
         public getY0Coordinate(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
-            var axis = this.axes[index];
 
-            return axis.scale(0);
+            return this.axes[index].scale(0);
         }
     }
 }

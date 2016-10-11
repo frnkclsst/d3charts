@@ -22,41 +22,45 @@ module frnk.UI.Charts {
 
         public getHeight(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var axis = this.axes[index];
 
-            return Math.abs(this.axes[index].scale(d.y) - this.axes[index].scale(0));
+            return Math.abs(axis.scale(d.y) - this.axes[index].scale(0));
         }
 
         public getWidth(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+            var axis = this.axes[index];
 
-            if (this.axes[index].getScaleType() === ScaleType.Ordinal) {
-                return this.axes[index].scale.rangeBand() / this.series.length;
+            if (axis.getScaleType() === ScaleType.Ordinal) {
+                return axis.scale.rangeBand() / this.series.length;
             }
             else {
-                return this.canvas.width / this.series.length / this.categories.length;
+                return this.canvas.plotArea.width / this.series.length / this.categories.length;
             }
         }
 
         public getXCoordinate(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+            var axis = this.axes[index];
             var axisScale = this.categories.parseFormat(this.categories.getItem(i));
 
-            if (this.axes[index].getScaleType() === ScaleType.Ordinal) {
-                return this.axes[index].scale(axisScale) + (this.axes[index].scale.rangeBand() / this.series.length * serie);
+            if (axis.getScaleType() === ScaleType.Ordinal) {
+                return axis.scale(axisScale) + (axis.scale.rangeBand() / this.series.length * serie);
             }
             else {
-                return this.axes[index].scale(axisScale) + (this.canvas.width / this.series.length / this.categories.length * serie);
+                return axis.scale(axisScale) + (this.canvas.plotArea.width / this.series.length / this.categories.length * serie);
             }
         }
 
         public getYCoordinate(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var axis = this.axes[index];
 
             if (d.y < 0) {
-                return this.axes[index].scale(d.y) - Math.abs(this.axes[index].scale(d.y) - this.axes[index].scale(0));
+                return axis.scale(d.y) - Math.abs(axis.scale(d.y) - this.axes[index].scale(0));
             }
             else {
-                return this.axes[index].scale(d.y);
+                return axis.scale(d.y);
             }
         }
     }
