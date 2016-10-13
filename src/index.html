@@ -56,7 +56,8 @@
                 interpolation: "linear",
                 markers: {
                     visible: true,
-                    size: 6
+                    size: 6,
+                    type: "circle"
                 }
             },
             piechart: {
@@ -87,11 +88,25 @@
                 }
             }],
             yAxis: [{
+                name: "Rainfall",
                 gridlines: "none",
                 labels: {
                     rotate: 0
                 },
                 orient: "left",
+                tickmarks: true,
+                title: {
+                    text: "Weight",
+                    valign: "middle"
+                }
+            },
+            {
+                name: "Temperature",
+                gridlines: "none",
+                labels: {
+                    rotate: 0
+                },
+                orient: "right",
                 tickmarks: true,
                 title: {
                     text: "Weight",

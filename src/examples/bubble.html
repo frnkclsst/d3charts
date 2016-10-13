@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Bubble Chart</title>
+    <!-- general styles -->
+    <link rel="stylesheet" href="../../dist/css/style.css" />
+    <link rel="stylesheet" href="../../dist/css/d3charts.css" />
+    <script src="../../dist/js/d3.min.js" charset="utf-8"></script>
+    <script src="../../dist/js/d3.charts.js"></script>
+</head>
+<body>
+    <div id="chart" />
+    <script>
+        var data = {
+            "categories": {
+                "format": "%s",
+                "data": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+            },
+            "series": {
+                "items": [{
+                    "data": [49.94, 71.53, 106.40, 129.21, 144.05, 176.07, 135.68, 148.58, 216.49, 194.11, 95.64, 54.43],
+                    "format": ".2f"
+                },
+                {
+                    "name": "Serie 1",
+                    "data": [129.94, 31.53, 16.40, 149.21, 174.05, 189.07, 235.68, 48.58, 16.49, 94.11, 55.64, 44.43],
+                    "size": [100, 200, 120, 45, 74.05, 89.07, 35.68, 8.58, 16.49, 4.11, 55.64, 44.43],
+                    "format": ".2f",
+                    "axis": "A"
+                },
+                {
+                    "name": "Serie 2",
+                    "data": [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+                    "size": [59, 20, 220, 78, 174.05, 18.07, 65.68, 58.58, 46.49, 24.11, 5.64, 94.43],
+                    "format": ".1f",
+                    "axis": "B"
+                }]
+            }
+        };
+
+        var options = {
+            "plotArea": {
+                "padding": 20
+            },
+            "linechart": {
+                "interpolation": "linear",
+                "markers": {
+                    "visible": true,
+                    type: "circle"                }
+            },
+            "legend": {
+                "title": "Series",
+                "position": "right",
+                "width": 200
+            },
+            "title": {
+                "text": "Bubble Chart",
+                "align": "center",
+                "height": 50
+            },
+            "xAxis": [{
+                "gridlines": "none",
+                "labels": {
+                    "rotate": 0
+                },
+                "tickmarks": false
+            }],
+            "yAxis": [{
+                "name": "A",
+                "gridlines": "major",
+                "orient": "left",
+                "tickmarks": true,
+            },
+            {
+                "name": "B",
+                "gridlines": "major",
+                "orient": "right",
+                "tickmarks": true
+            }],
+            "series": {
+                "labels": {
+                    "visible": true
+                }
+            },
+            "tooltip": {
+                "title": "Temperature",
+                "valueSuffix": " °C"
+            }
+        };
+
+		var chart = new frnk.UI.Charts.ScatterChart("#chart", data, options);
+		chart.draw();
+    </script>
+</body>
+</html>

@@ -16,8 +16,20 @@ module frnk.UI.Charts {
             }
         }
 
+        public getYScale(axis: Axis): any {
+            var min = this.series.getMinValue(name);
+
+            var start = this.canvas.plotArea.axisSize.top;
+            var end = this.canvas.plotArea.axisSize.top + this.canvas.plotArea.height;
+
+            axis.setScaleType(ScaleType.Linear);
+            return d3.scale.linear()
+                .domain([1, min < 0 ? -1 : 0])
+                .range([start, end]);
+        }
+
         protected normalizer(d: any, serie: number): number {
-            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
             var axis = this.axes[index];
 
             return axis.scale.domain()[0] / d.max;

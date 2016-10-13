@@ -35,7 +35,7 @@ module frnk.UI.Charts {
                     },
                     "y": (d: any, i: number): void => {
                         if (d.y < 0) {
-                            var index = this.chart.getAxisByName(AxisType.Y, this.chart.series.items[this.serie].name);
+                            var index = this.chart.getAxisByName(AxisType.Y, this.chart.series.items[this.serie].axis);
                             return this.chart.axes[index].scale(0);
                         }
                         else {

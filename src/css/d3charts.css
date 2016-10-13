@@ -92,7 +92,7 @@ svg {
     opacity: 0.6;
 }
 
-.series .marker:hover {
+.marker:hover {
 	stroke-width:2px;
     fill: #fff;
 }
@@ -100,6 +100,12 @@ svg {
 .marker {
     stroke-width:2px;
     fill: #ffffff;
+}
+
+.bubble {
+    stroke-width:2px;
+    fill-opacity: 0.4;
+    stroke-opacity: 1;
 }
 
 /* Bar Chart */

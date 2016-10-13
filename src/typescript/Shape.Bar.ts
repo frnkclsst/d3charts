@@ -32,7 +32,7 @@ module frnk.UI.Charts {
                     "width": 0,
                     "x": (d: any, i: number): number => {
                         if (d.y < 0) {
-                            var index = this.chart.getAxisByName(AxisType.X, this.chart.series.items[this.serie].name);
+                            var index = this.chart.getAxisByName(AxisType.X, this.chart.series.items[this.serie].axis);
                             return this.chart.axes[index].scale(0);
                         }
                         else {

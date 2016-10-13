@@ -93,7 +93,7 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(d: any, i: number, serie: number): any {
-            var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+            var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
             var axis = this.axes[index];
 
             if (axis.getScaleType() === ScaleType.Ordinal) {
@@ -105,14 +105,14 @@ module frnk.UI.Charts {
         }
 
         public getYCoordinate(d: any, i: number, serie: number): any {
-            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
             var axis = this.axes[index];
 
             return axis.scale(d.y);
         }
 
         public getY0Coordinate(d: any, i: number, serie: number): any {
-            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
 
             return this.axes[index].scale(0);
         }

@@ -37,6 +37,10 @@ module frnk.UI.Charts {
                 this._items = this._chart.series.getLabels();
             }
 
+            if (this._chart instanceof ScatterChart) {
+                this._items = this._items.slice(1, this._items.length);
+            }
+
             this.svg = this._chart.canvas.svg.append("g")
                 .attr("class", "legend")
                 .attr("transform", "translate(" + (this._chart.canvas.width - this.width) + "," + this._chart.options.title.height + ")");
@@ -145,7 +149,15 @@ module frnk.UI.Charts {
                 .attr("dy", "0px")
                 .style("text-anchor", "begin")
                 .text((d: any, i: any): string => {
-                    return this._items[i];
+                    if (this._chart instanceof PieChart) {
+                        return this._items[i];
+                    }
+                    else if (this._chart instanceof ScatterChart) {
+                        return this._chart.series.getLabel(i + 1);
+                    }
+                    else {
+                        return this._chart.series.getLabel(i);
+                    }
                 });
         }
 

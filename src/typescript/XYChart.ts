@@ -36,22 +36,6 @@ module frnk.UI.Charts {
             }
         }
 
-        public getXCoordinate(d: any, i: number, serie: number): any {
-            // child classes are responsible for implementing this method
-        }
-
-        public getYCoordinate(d: any, i: number, serie: number): any {
-            // child classes are responsible for implementing this method
-        }
-
-        public getY0Coordinate(d: any, i: number, serie: number): any {
-            // child classes are responsible for implementing this method
-        }
-
-        public getScale(axisType: AxisType, ref: string): void {
-            // child classes are responsible for implementing this method
-        }
-
         public getAxisByName(axisType: AxisType, ref: string): number {
             var last = 0;
             if (ref != "") {
@@ -65,6 +49,53 @@ module frnk.UI.Charts {
                 }
             }
             return last;
+        }
+
+        public getXCoordinate(d: any, i: number, serie: number): any {
+            // child classes are responsible for implementing this method
+        }
+
+        public getYCoordinate(d: any, i: number, serie: number): any {
+            // child classes are responsible for implementing this method
+        }
+
+        public getY0Coordinate(d: any, i: number, serie: number): any {
+            // child classes are responsible for implementing this method
+        }
+
+        public getXScale(axis: Axis): any {
+            var start = this.canvas.plotArea.axisSize.left;
+            var end =  this.canvas.plotArea.axisSize.left + this.canvas.plotArea.width;
+
+            if (this.categories.format === "%s") {
+                axis.setScaleType(ScaleType.Ordinal);
+                return d3.scale.ordinal()
+                    .domain(this.categories.getLabels())
+                    .rangeBands([start, end], this.options.plotArea.innerPadding, this.options.plotArea.outerPadding);
+            }
+            else {
+                axis.setScaleType(ScaleType.Time);
+                return d3.time.scale()
+                    .domain(d3.extent(this.categories.getLabels(), (d: any): Date => {
+                        return d3.time.format(this.categories.format).parse(d);
+                    }))
+                    .nice() // adds additional ticks to add some whitespace
+                    .range([start, end]);
+            }
+        }
+
+        public getYScale(axis: Axis): any {
+            var min = this.series.getMinValue(axis.name);
+            var max = this.series.getMaxValue(axis.name);
+
+            var start = this.canvas.plotArea.axisSize.top;
+            var end = this.canvas.plotArea.axisSize.top + this.canvas.plotArea.height;
+
+            axis.setScaleType(ScaleType.Linear);
+            return d3.scale.linear()
+                .domain([max, min < 0 ? min : 0])
+                .nice() // adds additional ticks to add some whitespace
+                .range([start, end]);
         }
     }
 }

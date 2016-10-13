@@ -26,12 +26,14 @@ module frnk.UI.Charts {
             return this.items[i];
         }
 
-        public getSerieByName(name: string): Serie {
+        public getMatrixByAxisName(name: string): Serie[] {
+            var array = [];
             for (var i = 0; i < this.items.length; i++) {
-                if (this.items[i].name === name) {
-                    return this.items[i];
+                if (this.items[i].axis === name) {
+                    array.push(this.getMatrixItem(i));
                 }
             }
+            return array;
         }
 
         public getMatrixItem(i: number): any {
@@ -51,18 +53,23 @@ module frnk.UI.Charts {
         }
 
         public getMaxValue(name?: string): number {
+            var matrix = [];
             if (name != undefined && name != "" && this._chart.stackType === StackType.None) {
-                return this.getSerieByName(name).max;
+                matrix = this.getMatrixByAxisName(name);
             }
-            else if (this._chart.stackType != StackType.None && this.items.length > 1) { // can only be stacked if you have more than 1 series defined
-                return d3.max(this._matrix, function (array: number[]): number {
+            if (matrix.length === 0) {
+                matrix = this._matrix;
+            }
+
+            if (this._chart.stackType != StackType.None && this.items.length > 1) { // can only be stacked if you have more than 1 series defined
+                return d3.max(matrix, function (array: number[]): number {
                     return d3.max(array, function (d: any): number {
                         return d.y0;
                     });
                 });
             }
             else {
-                return d3.max(this._matrix, function (array: number[]): number {
+                return d3.max(matrix, function (array: number[]): number {
                     return d3.max(array, function (d: any): number {
                         return d.y;
                     });
@@ -71,18 +78,23 @@ module frnk.UI.Charts {
         }
 
         public getMinValue(name?: string): number {
+            var matrix = [];
             if (name != undefined && name != "" && this._chart.stackType === StackType.None) {
-                return this.getSerieByName(name).min;
+                matrix = this.getMatrixByAxisName(name);
             }
-            else if (this._chart.stackType != StackType.None && this.items.length > 1) { // can only be stacked if you have more than 1 series defined
-                return d3.min(this._matrix, function (array: number[]): number {
+            if (matrix.length === 0) {
+                matrix = this._matrix;
+            }
+
+            if (this._chart.stackType != StackType.None && this.items.length > 1) { // can only be stacked if you have more than 1 series defined
+                return d3.min(matrix, function (array: number[]): number {
                     return d3.min(array, function (d: any): number {
                         return d.y0 + d.y;
                     });
                 });
             }
             else {
-                return d3.min(this._matrix, function (array: number[]): number {
+                return d3.min(matrix, function (array: number[]): number {
                     return d3.min(array, function (d: any): number {
                         return d.y;
                     });

@@ -12,7 +12,7 @@ module frnk.UI.Charts {
         }
 
         public getXCoordinate(d: any, i: number, serie: number): any {
-            var index = this.getAxisByName(AxisType.X, this.series.items[serie].name);
+            var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
             var axis = this.axes[index];
 
             if (axis.getScaleType() === ScaleType.Ordinal || axis.getScaleType() === ScaleType.Linear) {
@@ -24,7 +24,7 @@ module frnk.UI.Charts {
         }
 
         public getYCoordinate(d: any, i: number, serie: number): any {
-            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
             var axis = this.axes[index];
 
             // negative numbers
@@ -38,7 +38,7 @@ module frnk.UI.Charts {
         }
 
         public getY0Coordinate(d: any, i: number, serie: number): any {
-            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].name);
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
             var axis = this.axes[index];
 
             // negative values

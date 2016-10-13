@@ -21,7 +21,7 @@ module frnk.UI.Charts {
         public width: number;
 
         protected axis: D3.Svg.Axis;
-        protected chart: Chart;
+        protected chart: XYChart;
         protected gridlineType: GridLineType;
         protected hasTickmarks: boolean;
         protected orient: OrientationType;
@@ -35,7 +35,7 @@ module frnk.UI.Charts {
         private _scaleType: ScaleType;
         private _ticks: number;
 
-        constructor(chart: Chart, settings: IAxisOptions) {
+        constructor(chart: XYChart, settings: IAxisOptions) {
             this.axis = null;
             this.chart = chart;
             this.height = 0;
@@ -235,7 +235,7 @@ module frnk.UI.Charts {
 
     export class XAxis extends Axis {
 
-        constructor(chart: Chart, settings: IAxisOptions) {
+        constructor(chart: XYChart, settings: IAxisOptions) {
             super(chart, settings);
 
             this.hasTickmarks = settings.tickmarks;
@@ -292,47 +292,7 @@ module frnk.UI.Charts {
         }
 
         public getScale(): any {
-            var min = this.chart.series.getMinValue(this.name);
-            var max = this.chart.series.getMaxValue(this.name);
-
-            if (this.chart instanceof ScatterChart) {
-                min = this.chart.series.items[0].min;
-                max = this.chart.series.items[0].max;
-            }
-
-            var start = this.chart.canvas.plotArea.axisSize.left;
-            var end =  this.chart.canvas.plotArea.axisSize.left + this.chart.canvas.plotArea.width;
-
-            if (this.chart instanceof StackedPercentBarChart) {
-                this.setScaleType(ScaleType.Linear);
-                return d3.scale.linear()
-                    .domain([min < 0 ? -1 : 0, 1])
-                    .range([start, end]);
-            }
-            else if (this.chart instanceof BarChart || this.chart instanceof ScatterChart) {
-                this.setScaleType(ScaleType.Linear);
-                return d3.scale.linear()
-                    .domain([min < 0 ? min : 0, max])
-                    .nice() // adds additional ticks to add some whitespace
-                    .range([start, end]);
-            }
-            else {
-                if (this.chart.categories.format === "%s") {
-                    this.setScaleType(ScaleType.Ordinal);
-                    return d3.scale.ordinal()
-                        .domain(this.chart.categories.getLabels())
-                        .rangeBands([start, end], this.chart.options.plotArea.innerPadding, this.chart.options.plotArea.outerPadding);
-                }
-                else {
-                    this.setScaleType(ScaleType.Time);
-                    return d3.time.scale()
-                        .domain(d3.extent(this.chart.categories.getLabels(), (d: any): Date => {
-                            return d3.time.format(this.chart.categories.format).parse(d);
-                        }))
-                        .nice() // adds additional ticks to add some whitespace
-                        .range([start, end]);
-                }
-            }
+            return this.chart.getXScale(this);
         }
 
         public getSize(): void {
@@ -440,7 +400,7 @@ module frnk.UI.Charts {
     }
 
     export class YAxis extends Axis {
-        constructor(chart: Chart, settings: IAxisOptions) {
+        constructor(chart: XYChart, settings: IAxisOptions) {
             super(chart, settings);
 
             this.hasTickmarks = settings.tickmarks;
@@ -517,48 +477,7 @@ module frnk.UI.Charts {
         }
 
         public getScale(): any {
-            var min = this.chart.series.getMinValue(this.name);
-            var max = this.chart.series.getMaxValue(this.name);
-
-            if (this.chart instanceof ScatterChart) {
-                min = this.chart.series.items[1].min;
-                max = this.chart.series.items[1].max;
-            }
-
-            var start = this.chart.canvas.plotArea.axisSize.top;
-            var end = this.chart.canvas.plotArea.axisSize.top + this.chart.canvas.plotArea.height;
-
-            if (this.chart instanceof StackedPercentColumnChart ||
-                this.chart instanceof StackedPercentLineChart) {
-                this.setScaleType(ScaleType.Linear);
-                return d3.scale.linear()
-                    .domain([1, min < 0 ? -1 : 0])
-                    .range([start, end]);
-            }
-            else if (this.chart instanceof BarChart) {
-                if (this.chart.categories.format === "%s") {
-                    this.setScaleType(ScaleType.Ordinal);
-                    return d3.scale.ordinal()
-                        .domain(this.chart.categories.getLabels())
-                        .rangeRoundBands([start, end], this.chart.options.plotArea.innerPadding, this.chart.options.plotArea.outerPadding);
-                }
-                else {
-                    this.setScaleType(ScaleType.Time);
-                    return d3.time.scale()
-                        .domain(d3.extent(this.chart.categories.getLabels(), (d: any): Date => {
-                            return d3.time.format(this.chart.categories.format).parse(d);
-                        }).reverse())
-                        .nice() // adds additional ticks to add some whitespace
-                        .range([min, this.chart.canvas.plotArea.height]);
-                }
-            }
-            else {
-                this.setScaleType(ScaleType.Linear);
-                return d3.scale.linear()
-                    .domain([max, min < 0 ? min : 0])
-                    .nice() // adds additional ticks to add some whitespace
-                    .range([start, end]);
-            }
+            return this.chart.getYScale(this);
         }
 
         public getSize(): void {
