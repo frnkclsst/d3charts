@@ -48,6 +48,10 @@ module frnk.UI.Charts {
             // child classes are responsible for implementing this method
         }
 
+        public getScale(axisType: AxisType, ref: string): void {
+            // child classes are responsible for implementing this method
+        }
+
         public getAxisByName(axisType: AxisType, ref: string): number {
             var last = 0;
             if (ref != "") {

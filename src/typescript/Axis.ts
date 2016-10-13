@@ -111,7 +111,7 @@ module frnk.UI.Charts {
 
         public drawTitle(svg: D3.Selection): void {
             this.svgTitle = svg.append("text")
-                .text(this.title.text)
+                .text(this.title.text) // TODO - take the name of the serie plotted
                 .attr("class", "title");
         }
 
@@ -294,6 +294,12 @@ module frnk.UI.Charts {
         public getScale(): any {
             var min = this.chart.series.getMinValue(this.name);
             var max = this.chart.series.getMaxValue(this.name);
+
+            if (this.chart instanceof ScatterChart) {
+                min = this.chart.series.items[0].min;
+                max = this.chart.series.items[0].max;
+            }
+
             var start = this.chart.canvas.plotArea.axisSize.left;
             var end =  this.chart.canvas.plotArea.axisSize.left + this.chart.canvas.plotArea.width;
 
@@ -303,7 +309,7 @@ module frnk.UI.Charts {
                     .domain([min < 0 ? -1 : 0, 1])
                     .range([start, end]);
             }
-            else if (this.chart instanceof BarChart) {
+            else if (this.chart instanceof BarChart || this.chart instanceof ScatterChart) {
                 this.setScaleType(ScaleType.Linear);
                 return d3.scale.linear()
                     .domain([min < 0 ? min : 0, max])
@@ -513,6 +519,12 @@ module frnk.UI.Charts {
         public getScale(): any {
             var min = this.chart.series.getMinValue(this.name);
             var max = this.chart.series.getMaxValue(this.name);
+
+            if (this.chart instanceof ScatterChart) {
+                min = this.chart.series.items[1].min;
+                max = this.chart.series.items[1].max;
+            }
+
             var start = this.chart.canvas.plotArea.axisSize.top;
             var end = this.chart.canvas.plotArea.axisSize.top + this.chart.canvas.plotArea.height;
 

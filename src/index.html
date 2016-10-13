@@ -26,6 +26,7 @@
                     <option value="line" onchange="draw();">Line Chart</option>
                     <option value="stackedline" onchange="draw();">Stacked Line Chart</option>
                     <option value="stackedpercentline" onchange="draw();">100% Stacked Line Chart</option>
+                    <option value="scatter" onchange="draw();">Scatter Chart</option>
                     <option value="column" onchange="draw();">Column Chart</option>
                     <option value="stackedcolumn" onchange="draw();">Stacked Column Chart</option>
                     <option value="stackedpercentcolumn" onchange="draw();">100% Stacked Column Chart</option>
@@ -82,22 +83,10 @@
                 tickmarks: true,
                 title: {
                     align: "center",
-                    text: "Month"
-                }
-            }, {
-                gridlines: "none",
-                labels: {
-                    rotate: 45
-                },
-                orient: "top",
-                tickmarks: true,
-                title: {
-                    align: "right",
-                    text: "Month"
+                    text: "Years"
                 }
             }],
             yAxis: [{
-                name: "",
                 gridlines: "none",
                 labels: {
                     rotate: 0
@@ -105,19 +94,7 @@
                 orient: "left",
                 tickmarks: true,
                 title: {
-                    text: "millimeter",
-                    valign: "middle"
-                }
-            }, {
-                name: "",
-                gridlines: "none",
-                labels: {
-                    rotate: 0
-                },
-                orient: "right",
-                tickmarks: true,
-                title: {
-                    text: "Degrees Celcius",
+                    text: "Weight",
                     valign: "middle"
                 }
             }],
@@ -136,14 +113,15 @@
         };
 
         var el = document.getElementById('chart');
-        //var url = "data/multiple-axes.txt";
+        var url = "data/multiple-axes.txt";
+        //var url = "data/scatterplot.txt";
         //var url = "data/Actuals-vs-Budget.txt";
         //var url = "data/area-basic-1serie-ordinal.txt";
         //var url = "data/area-basic-nserie-ordinal.txt";
         //var url = "data/area-negative-1serie-ordinal.txt";
         //var url = "data/area-negative-nserie-ordinal.txt";
         //var url = "data/area-negative-inverted-1serie-ordinal.txt";
-        var url = "data/area-negative-inverted-nserie-ordinal.txt";
+        //var url = "data/area-negative-inverted-nserie-ordinal.txt";
         //var url = "data/settings-time-1.txt";
         //var url = "data/settings-time-2.txt";
         //var url = "data/settings-time-3.txt";
@@ -198,6 +176,10 @@
                         break;
                     case "stackedpercentline":
                         var chart = new frnk.UI.Charts.StackedPercentLineChart("#chart", data, options);
+                        chart.draw();
+                        break;
+                    case "scatter":
+                        var chart = new frnk.UI.Charts.ScatterChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "pie":
