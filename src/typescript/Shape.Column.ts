@@ -5,18 +5,28 @@
 module frnk.UI.Charts {
 
     export class SVGColumn extends SVGShape {
-        protected chart: ColumnChart;
+        protected chart: XYChart;
 
-        constructor(svg: D3.Selection, chart: ColumnChart, serie: number) {
+        public height: (d: any, i: number, serie: number) => number;
+        public width: (d: any, i: number, serie: number) => number;
+        public x: (d: any, i: number, serie: number) => number;
+        public y: (d: any, i: number, serie: number) => number;
+
+        constructor(svg: D3.Selection, chart: XYChart, serie: number) {
             super(svg, chart, serie);
+
             this.chart = chart;
+            this.height = null;
+            this.width = null;
+            this.x = null;
+            this.y = null;
         }
 
-        public draw(): void {
+        public draw(data: any): void {
             var svgSerie = this.svg.append("g")
                 .attr("id", "serie-" + this.serie)
                 .selectAll("rect")
-                .data(this.chart.series.getMatrixItem(this.serie))
+                .data(data)
                 .enter();
 
             // draw column
@@ -27,19 +37,15 @@ module frnk.UI.Charts {
                     "height": 0,
                     "stroke": ColorPalette.color(this.serie),
                     "stroke-width": "1px",
-                    "width": (d: any, i: number): void => {
-                        return this.chart.getWidth(d, i, this.serie);
-                    },
-                    "x": (d: any, i: number): void => {
-                        return this.chart.getXCoordinate(d, i, this.serie);
-                    },
-                    "y": (d: any, i: number): void => {
+                    "width": (d: any, i: number): number => { return this.width(d, i, this.serie); },
+                    "x": (d: any, i: number): number => { return this.x(d, i, this.serie); },
+                    "y": (d: any, i: number): number => {
                         if (d.y < 0) {
                             var index = this.chart.getAxisByName(AxisType.Y, this.chart.series.items[this.serie].axis);
                             return this.chart.axes[index].scale(0);
                         }
                         else {
-                            return (this.chart.getHeight(d, i, this.serie) + this.chart.getYCoordinate(d, i, this.serie));
+                            return (this.height(d, i, this.serie) + this.y(d, i, this.serie));
                         }
                     }
                 });
@@ -54,8 +60,8 @@ module frnk.UI.Charts {
                 .transition()
                 .duration(duration)
                 .attr({
-                    "height": (d: any, i: number): void => { return this.chart.getHeight(d, i, this.serie); },
-                    "y": (d: any, i: number): void => { return this.chart.getYCoordinate(d, i, this.serie); }
+                    "height": (d: any, i: number): number => { return this.height(d, i, this.serie); },
+                    "y": (d: any, i: number): number => { return this.y(d, i, this.serie); }
                 })
                 .each("end", (): void => {
                     count--;
@@ -73,8 +79,8 @@ module frnk.UI.Charts {
             d3.selectAll("g#serie-" + this.serie).selectAll("rect")
                 .each((d: any, i: number): void  => {
                     var rotation = 0;
-                    var x = this.chart.getXCoordinate(d, i, this.serie);
-                    var y = this.chart.getYCoordinate(d, i, this.serie);
+                    var x = this.x(d, i, this.serie);
+                    var y = this.y(d, i, this.serie);
                     var dx = 0;
                     var dy = 0;
 
@@ -83,12 +89,12 @@ module frnk.UI.Charts {
                     }
 
                     if (rotation != 0) {
-                        dx = -this.chart.getHeight(d, i, this.serie) / 2;
-                        dy = this.chart.getWidth(d, i, this.serie) / 2;
+                        dx = -this.height(d, i, this.serie) / 2;
+                        dy = this.width(d, i, this.serie) / 2;
                     }
                     else {
-                        dx = this.chart.getWidth(d, i, this.serie) / 2;
-                        dy = this.chart.getHeight(d, i, this.serie) / 2;
+                        dx = this.width(d, i, this.serie) / 2;
+                        dy = this.height(d, i, this.serie) / 2;
                     }
 
                     this.svgLabels.append("text")

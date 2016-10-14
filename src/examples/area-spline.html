@@ -13,64 +13,64 @@
     <div id="chart" />
     <script>
         var data = {
-            "categories": {
-                "format": "%s",
-                "data": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+            categories: {
+                format: "%s",
+                data: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
             },
-            "series": {
-                "items": [{
-                    "name": "John",
-                    "data": [3, 4, 3, 5, 4, 10, 12]
+            series: {
+                items: [{
+                    name: "John",
+                    data: [3, 4, 3, 5, 4, 10, 12]
                 }, {
-                    "name": "Jane",
-                    "data": [1, 3, 4, 3, 3, 5, 4]
+                    name: "Jane",
+                    data: [1, 3, 4, 3, 3, 5, 4]
                 }]
             }
         };
 
         var options = {
-            "plotArea": {
-                "padding": 20
+            plotArea: {
+                padding: 20
             },
-            "linechart": {
-                "area": {
-                    "visible": true
+            linechart: {
+                area: {
+                    visible: true
                 },
-                "interpolation": "cardinal",
-                "markers": {
-                    "visible": true
+                interpolation: "cardinal",
+                markers: {
+                    visible: true
                 }
             },
-            "legend": {
-                "title": "Who?",
-                "position": "right",
-                "width": 200
+            legend: {
+                title: "Who?",
+                position: "right",
+                width: 200
             },
-            "title": {
-                "text": "Area Chart - Spline",
-                "align": "center",
-                "height": 50
+            title: {
+                text: "Area Chart - Spline",
+                align: "center",
+                height: 50
             },
-            "xAxis": [{
-                "gridlines": "none",
-                "labels": {
-                    "rotate": 0
+            xAxis: [{
+                gridlines: "none",
+                labels: {
+                    rotate: 0
                 },
-                "tickmarks": false,
-                "title": {
-                    "text": "Day"
+                tickmarks: false,
+                title: {
+                    text: "Day"
                 }
             }],
-            "yAxis": [{
-                "gridlines": "none",
-                "tickmarks": true,
-                "title": {
-                    "text": "Fruit Units"
+            yAxis: [{
+                gridlines: "none",
+                tickmarks: true,
+                title: {
+                    text: "Fruit Units"
                 }
             }],
-            "tooltip": {
-                "title": "Fruit Units",
-                "valueSuffix": " fruits"
+            tooltip: {
+                title: "Fruit Units",
+                valueSuffix: " fruits"
             }
         };
 

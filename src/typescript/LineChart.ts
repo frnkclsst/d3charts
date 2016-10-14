@@ -41,55 +41,30 @@ module frnk.UI.Charts {
             if (this.area.visible === true) {
                 for (var areaSerie = 0; areaSerie < this.series.length; areaSerie++) {
                     var area = new SVGArea(svgSeries, this, areaSerie);
-                    area.draw();
+                    area.x = (d: any, i: number, s: number): number => {
+                        return this.getXCoordinate(d, i, s);
+                    };
+                    area.y = (d: any, i: number, s: number): number => {
+                        return this.getYCoordinate(d, i, s);
+                    };
+                    area.y0 = (d: any, i: number, s: number): number => {
+                        return this.getY0Coordinate(d, i, s);
+                    };
+                    area.draw(this.series.getMatrixItem(areaSerie));
                 }
             }
 
             // draw lines
             for (var serie = 0; serie < this.series.length; serie++) {
                 var line = new SVGLine(svgSeries, this, serie);
-                line.draw();
+                line.x = (d: any, i: number, s: number): number => {
+                    return this.getXCoordinate(d, i, s);
+                };
+                line.y = (d: any, i: number, s: number): number => {
+                    return this.getYCoordinate(d, i, s);
+                };
+                line.draw(this.series.getMatrixItem(serie));
             }
-
-            // draw tooltip line
-            /* TODO - improve tooltips for line charts
-               - code below only works if ordinal scale
-               - need to use invert method to discover domain value in a linear scale
-
-            var _self = this;
-            svgSeries.append("line").attr("id", "tooltipLine");
-
-            var overlay = this.canvas.svg
-                .append("rect")
-                .attr("class", "overlay")
-                .attr("width", _self.canvas.plotArea.width)
-                .attr("height", _self.canvas.plotArea.height)
-                .attr("opacity", "0")
-                .attr("transform", "translate(" + (_self.canvas.plotArea.padding + _self.canvas.plotArea.axisSize.left) + ", "
-                    + (_self.canvas.titleArea.height + _self.canvas.plotArea.padding) + ")")
-                .on("mousemove", function (): void {
-                    if (_self instanceof LineChart) {
-                        var mouseX = d3.mouse(this)[0];
-                        var leftEdges = _self.xAxes[0].scale.range();
-                        var width = _self.xAxes[0].scale.rangeBand();
-                        var domainValue = "";
-                        for (var j = 0; j < leftEdges.length; j++) {
-                            var threshold = leftEdges[j] - width / 2;
-                            if (mouseX > threshold) {
-                                domainValue = _self.xAxes[0].scale.domain()[j];
-                            }
-                        }
-                        var left = _self.xAxes[0].scale(domainValue) + width / 2;
-
-                        svgSeries.select("#tooltipLine")
-                            .attr("x1", left)
-                            .attr("x2", left)
-                            .attr("y1", "0")
-                            .attr("y1", _self.canvas.plotArea.height)
-                            .attr("stroke", "#ddd");
-                    }
-                });
-                */
         }
 
         public getXCoordinate(d: any, i: number, serie: number): any {
@@ -118,3 +93,43 @@ module frnk.UI.Charts {
         }
     }
 }
+
+// draw tooltip line
+/* TODO - improve tooltips for line charts
+ - code below only works if ordinal scale
+ - need to use invert method to discover domain value in a linear scale
+
+ var _self = this;
+ svgSeries.append("line").attr("id", "tooltipLine");
+
+ var overlay = this.canvas.svg
+ .append("rect")
+ .attr("class", "overlay")
+ .attr("width", _self.canvas.plotArea.width)
+ .attr("height", _self.canvas.plotArea.height)
+ .attr("opacity", "0")
+ .attr("transform", "translate(" + (_self.canvas.plotArea.padding + _self.canvas.plotArea.axisSize.left) + ", "
+ + (_self.canvas.titleArea.height + _self.canvas.plotArea.padding) + ")")
+ .on("mousemove", function (): void {
+ if (_self instanceof LineChart) {
+ var mouseX = d3.mouse(this)[0];
+ var leftEdges = _self.xAxes[0].scale.range();
+ var width = _self.xAxes[0].scale.rangeBand();
+ var domainValue = "";
+ for (var j = 0; j < leftEdges.length; j++) {
+ var threshold = leftEdges[j] - width / 2;
+ if (mouseX > threshold) {
+ domainValue = _self.xAxes[0].scale.domain()[j];
+ }
+ }
+ var left = _self.xAxes[0].scale(domainValue) + width / 2;
+
+ svgSeries.select("#tooltipLine")
+ .attr("x1", left)
+ .attr("x2", left)
+ .attr("y1", "0")
+ .attr("y1", _self.canvas.plotArea.height)
+ .attr("stroke", "#ddd");
+ }
+ });
+ */

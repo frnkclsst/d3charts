@@ -44,7 +44,7 @@
     <script>
         var options = {
             plotArea: {
-                innerPadding: 0,
+                innerPadding: 0.1,
                 outerPadding: 0,
                 padding: 20
             },
@@ -84,7 +84,7 @@
                 tickmarks: true,
                 title: {
                     align: "center",
-                    text: "Years"
+                    text: ""
                 }
             }],
             yAxis: [{
@@ -96,7 +96,7 @@
                 orient: "left",
                 tickmarks: true,
                 title: {
-                    text: "Weight",
+                    text: "",
                     valign: "middle"
                 }
             },
@@ -109,16 +109,25 @@
                 orient: "right",
                 tickmarks: true,
                 title: {
-                    text: "Weight",
+                    text: "",
                     valign: "middle"
                 }
             }],
             series: {
                 animate: true,
                 labels: {
-                    visible : true,
+                    visible : false,
                     format: ".4f",
                     rotate: false
+                },
+                1: {
+                    format: ".2f"
+                },
+                2: {
+                    format: ".2f"
+                },
+                3: {
+                    format: ".1f"
                 }
             },
             tooltip: {

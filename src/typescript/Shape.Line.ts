@@ -5,25 +5,30 @@
 module frnk.UI.Charts {
 
     export class SVGLine extends SVGShape {
-        protected chart: LineChart;
+        protected chart: XYChart;
 
-        constructor(svg: D3.Selection, chart: LineChart, serie: number) {
+        public x: (d: any, i: number, serie: number) => number;
+        public y: (d: any, i: number, serie: number) => number;
+
+        constructor(svg: D3.Selection, chart: XYChart, serie: number) {
             super(svg, chart, serie);
             this.chart = chart;
+            this.x = null;
+            this.y = null;
         }
 
-        public draw(): void {
+        public draw(data: any): void {
             var d3Line = d3.svg.line()
-                .interpolate(this.chart.interpolation)
-                .x((d: any, i: number): number => { return this.chart.getXCoordinate(d, i, this.serie); })
-                .y((d: any, i: number): number => { return this.chart.getYCoordinate(d, i, this.serie); });
+                .interpolate(this.chart.options.linechart.interpolation)
+                .x((d: any, i: number): number => { return this.x(d, i, this.serie); })
+                .y((d: any, i: number): number => { return this.y(d, i, this.serie); });
 
             var svgSerie = this.svg.append("g")
                 .attr("id", "serie-" + this.serie);
 
             var svgPath = svgSerie.append("path")
                 .attr("class", "line")
-                .attr("d", d3Line(this.chart.series.getMatrixItem(this.serie)))
+                .attr("d", d3Line(data))
                 .attr("stroke", ColorPalette.color(this.serie))
                 .attr("stroke-width", 1)
                 .attr("fill", "none");
@@ -54,18 +59,20 @@ module frnk.UI.Charts {
                     // draw labels
                     if (this.chart.options.series.labels.visible === true && !count) {
                         this.drawLabels();
-                        this.showLabels();
                     }
                 });
         }
 
         public drawLabels(): void {
-            super.drawLabels();
+            this.svgLabels = this.svg.append("g")
+                .attr("id", "labels-" + this.serie)
+                .attr("opacity", "1");
+
             d3.selectAll("g#serie-" + this.serie).selectAll("path.marker")
                 .each((d: any, i: number): void => {
                     var rotation = 0;
-                    var x = this.chart.getXCoordinate(d, i, this.serie);
-                    var y = this.chart.getYCoordinate(d, i, this.serie);
+                    var x = this.x(d, i, this.serie);
+                    var y = this.y(d, i, this.serie);
                     var dx = 0;
                     var dy = 0;
 
@@ -109,7 +116,7 @@ module frnk.UI.Charts {
                         .size(this.chart.options.linechart.markers.size * 10)
                         .type(this.chart.series.items[this.serie].marker)(),
                     "transform": (d: any, i: number): string => {
-                        return "translate(" + this.chart.getXCoordinate(d, i, this.serie) + ", " + this.chart.getYCoordinate(d, i, this.serie) + ")";
+                        return "translate(" + this.x(d, i, this.serie) + ", " + this.y(d, i, this.serie) + ")";
                     }
                 });
         }

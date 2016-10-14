@@ -16,13 +16,19 @@ module frnk.UI.Charts {
             // draw bars
             for (var serie = 0; serie < this.series.length; serie++) {
                 var bar = new SVGBar(svgSeries, this, serie);
-                bar.draw();
-
-                /*
-                bar.testDraw(function(d: any, i: number, s: number): number {
-                   return _self.getHeight(d, i, s);
-                }, 0, 0);
-                */
+                bar.height = (d: any, i: number, s: number) => {
+                    return this.getHeight(d, i, s);
+                };
+                bar.width = (d: any, i: number, s: number) => {
+                    return this.getWidth(d, i, s);
+                };
+                bar.x = (d: any, i: number, s: number) => {
+                    return this.getXCoordinate(d, i, s);
+                };
+                bar.y = (d: any, i: number, s: number) => {
+                    return this.getYCoordinate(d, i, s);
+                };
+                bar.draw(this.series.getMatrixItem(serie));
             }
         }
 

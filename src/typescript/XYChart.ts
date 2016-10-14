@@ -37,7 +37,7 @@ module frnk.UI.Charts {
         }
 
         public getAxisByName(axisType: AxisType, ref: string): number {
-            var last = 0;
+            var last = -1;
             if (ref != "") {
                 for (var i = 0; i <  this.axes.length; i++) {
                     if (this.axes[i].type === axisType) {

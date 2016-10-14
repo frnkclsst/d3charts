@@ -17,7 +17,7 @@ module frnk.UI.Charts {
             this.svg = svg;
         }
 
-        public draw(): void {
+        public draw(data: any): void {
 
         }
 

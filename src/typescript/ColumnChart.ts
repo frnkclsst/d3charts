@@ -16,7 +16,19 @@ module frnk.UI.Charts {
             // draw columns
             for (var serie = 0; serie < this.series.length; serie++) {
                 var column = new SVGColumn(svgSeries, this, serie);
-                column.draw();
+                column.height = (d: any, i: number, s: number) => {
+                    return this.getHeight(d, i, s);
+                };
+                column.width = (d: any, i: number, s: number) => {
+                    return this.getWidth(d, i, s);
+                };
+                column.x = (d: any, i: number, s: number) => {
+                    return this.getXCoordinate(d, i, s);
+                };
+                column.y = (d: any, i: number, s: number) => {
+                    return this.getYCoordinate(d, i, s);
+                };
+                column.draw(this.series.getMatrixItem(serie));
             }
         }
 

@@ -5,11 +5,11 @@ html {
 
 /* Charts */
 #chart {
-    height: 80%;
+    height: 300px;
     min-width: 300px;
     min-height: 300px;
     position: fixed;
-    width: 80%;
+    width: 700px;
 }
 
 svg {
