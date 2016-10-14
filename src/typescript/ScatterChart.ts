@@ -6,6 +6,9 @@ module frnk.UI.Charts {
 
     export class ScatterChart extends XYChart {
 
+        private svgLabels: D3.Selection;
+        private svgSeries: D3.Selection;
+
         constructor(selector: string, data: IData, options?: IOptions) {
             super(selector, data, options);
         }
@@ -13,33 +16,90 @@ module frnk.UI.Charts {
         public draw(): void {
             super.draw();
 
-            var svgSeries = this.canvas.plotArea.svg.append("g")
+            this.svgSeries = this.canvas.plotArea.svg.append("g")
                 .attr("class", "series");
 
             for (var serie = 1; serie < this.series.length; serie++) {
                 var _self = this;
-                var svgSerie = svgSeries.append("g")
-                    .attr("id", "serie-" + serie)
+                var svgSerie = this.svgSeries.append("g")
+                    .attr("id", "serie-" + (serie - 1))
                     .selectAll("path")
                     .data(this.series.getMatrixItem(0))
                     .enter();
 
-                svgSerie.append("path")
+                var svgBubbles = svgSerie.append("path")
                     .each(function(d: any, i: number): void {
-                        var size = _self.series.items[serie].size != undefined ? _self.series.items[serie].size[i] * 10 : 60;
                         d3.select(this)
                             .attr({
                                 "class": "bubble",
                                 "d": d3.svg.symbol()
-                                    .size(size)
+                                    .size(0)
                                     .type(_self.series.items[serie - 1].marker)(),
-                                "fill": ColorPalette.color(serie - 1)
+                                "fill": ColorPalette.color(serie - 1),
                                 "stroke": ColorPalette.color(serie - 1),
                                 "stroke-width": 0,
                                 "transform": "translate(" + _self.getXCoordinate(d, i, 0) + ", " + _self.getYCoordinate(d, i, serie) + ")"
                             });
                     });
+
+                // add animation
+                var duration = this.options.series.animate === true ? 600 : 0;
+                var count = 0;
+                svgBubbles
+                    .each((): void => {
+                        count++; // count number of bars
+                    })
+                    .transition()
+                    .duration(duration)
+                    .attr("d", (d: any, i: number): any => {
+                        var size = _self.series.items[serie].size != undefined ? _self.series.items[serie].size[i] * 10 : 60;
+                        return d3.svg.symbol()
+                            .size(size)
+                            .type(_self.series.items[serie - 1].marker)();
+                    })
+                    .each("end", (): void => {
+                        count--;
+                        if (this.options.series.labels.visible === true && !count) { // only draw labels after all transitions ended
+                            this.drawLabels(serie - 1);
+                        }
+                    });
+
+                // draw tooltip
+                this.tooltip.draw(svgBubbles, serie);
             }
+        }
+
+        public drawLabels(serie: number): void {
+            this.svgLabels = this.svgSeries.append("g")
+                .attr("id", "labels-" + (serie - 1))
+                .attr("opacity", "1");
+
+            d3.selectAll("g#serie-" + (serie - 1)).selectAll("path.bubble")
+                .each((d: any, i: number): void => {
+                    var rotation = 0;
+                    var x = this.getXCoordinate(d, i, serie);
+                    var y = this.getYCoordinate(d, i, serie);
+                    var dx = 0;
+                    var dy = 0;
+
+                    if (this.options.series.labels.rotate === true) {
+                        rotation = -90;
+                    }
+
+                    var text = this.svgLabels.append("text")
+                        .text(d3.format(this.series.items[serie].format)(d.y))
+                        .style("text-anchor", "middle")
+                        .attr({
+                            "alignment-baseline": "central",
+                            "class": "label",
+                            "fill": "#fff",
+                            "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")"
+                        });
+
+                    text
+                        .attr("dy", dy)
+                        .attr("dx", dx);
+                });
         }
 
         public getXCoordinate(d: any, i: number, serie: number): any {

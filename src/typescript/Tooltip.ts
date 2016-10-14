@@ -22,42 +22,45 @@ module frnk.UI.Charts {
                 .style("opacity", 0);
 
             svg.on("mouseover", function (d: any, i: number): void {
-                    if (_self.chart instanceof PieChart) {
-                        divTooltip.html("<div class='title'>" + _self.chart.options.getValue("tooltip.title") + "</div>" +
-                            "<div class='subtitle'>" + _self.chart.series.getLabel(serie) + "</div><br/>" +
-                            "<div>" +
-                                "<div class='color' style='width:24px; height: 11px; background-color:" + ColorPalette.color(i) + "'></div>" +
-                                "<div class='serie'>" + _self.chart.categories.getLabel(i) + "</div>" +
-                                "<div class='value'>" + d3.format(_self.getPointFormat(serie))(d.value) + _self.getSuffix(serie) + "</div>" +
-                            "</div>"
-                        );
-                    }
-                    else {
-                        divTooltip.html("<div class='title'>" + _self.chart.options.getValue("tooltip.title") + "</div>" +
-                            "<div class='subtitle'>" + _self.chart.categories.getLabel(i) + "</div><br/>" +
-                            "<div>" +
-                                "<div class='color' style='width:24px; height: 11px; background-color:" + ColorPalette.color(serie) + "'></div>" +
-                                "<div class='serie'>" + _self.chart.series.getLabel(serie) + "</div>" +
-                                "<div class='percent'>" + Math.round(d.perc * 100) + "%</div>" +
-                                "<div class='value'>" + d3.format(_self.getPointFormat(serie))(d.y) + _self.getSuffix(serie) + "</div>" +
-                            "</div>"
-                        );
-                    }
-                    divTooltip.transition()
-                        .delay(300)
-                        .duration(100)
-                        .style("opacity", 1);
+                var title = _self.chart.options.getValue("tooltip.title");
+                var subtitle = _self.chart.categories.getLabel(i);
+                var color = ColorPalette.color(serie);
+                var serieTitle = _self.chart.series.getLabel(serie);
+                var dataPoint = d.y;
+                var percent = d.perc;
+
+                if (_self.chart instanceof PieChart) {
+                    color = ColorPalette.color(i);
+                    subtitle = _self.chart.series.getLabel(serie);
+                    serieTitle = _self.chart.categories.getLabel(i);
+                    dataPoint = d.value;
+                    percent = _self.chart.series.getMatrixItem(serie)[i].perc;
+                }
+
+                if (_self.chart instanceof ScatterChart) {
+                    color = ColorPalette.color(serie - 1);
+                }
+
+                divTooltip.html("<div class='title'>" + title + "</div>" +
+                    "<div class='subtitle'>" + subtitle + "</div><br/>" +
+                    "<div>" +
+                        "<div class='color' style='width:24px; height: 11px; background-color:" + color + "'></div>" +
+                        "<div class='serie'>" + serieTitle + "</div>" +
+                        "<div class='percent'>" + Math.round(percent * 100) + "%</div>" +
+                        "<div class='value'>" + d3.format(_self.getPointFormat(serie))(dataPoint) + _self.getSuffix(serie) + "</div>" +
+                    "</div>"
+                );
+
+                // add animation
+                divTooltip.transition()
+                    .delay(300)
+                    .duration(100)
+                    .style("opacity", 1);
                 })
                 .on("mouseout", function(d: any): void {
                     divTooltip.transition()
                         .duration(100)
                         .style("opacity", 0);
-
-                    /*
-                    divLine.transition()
-                        .duration(100)
-                        .style("opacity", 0);
-                    */
                 })
                 .on("mousemove", function(d: any): void {
                     divTooltip

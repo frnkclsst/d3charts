@@ -108,6 +108,11 @@ svg {
     stroke-opacity: 1;
 }
 
+.bubble:hover {
+    stroke-width: 2px;
+    fill-opacity: 0.3;
+    stroke-opacity: 1;
+}
 /* Bar Chart */
 .bar {
     opacity: 0.8;
