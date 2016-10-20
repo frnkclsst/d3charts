@@ -4,7 +4,7 @@
 
 module frnk.UI.Charts {
 
-    export class Canvas implements IArea {
+    export class Canvas implements IChartArea {
         public height: number;
         public legendArea: LegendArea;
         public padding: number;
@@ -12,6 +12,8 @@ module frnk.UI.Charts {
         public svg: D3.Selection;
         public titleArea: TitleArea;
         public width: number;
+        public x: number;
+        public y: number;
 
         private _chart: Chart;
 
@@ -24,11 +26,13 @@ module frnk.UI.Charts {
 
             this.height = chart.options.canvas.height;
             this.width = chart.options.canvas.width;
+            this.x = 0;
+            this.y = 0;
         }
 
         public draw(): void {
             // update canvas size
-            this.updateSize();
+            this.positionAreas();
 
             // draw chart area
             this.svg = d3.select(this._chart.selector)
@@ -36,24 +40,136 @@ module frnk.UI.Charts {
                 .attr("width", this.width)
                 .attr("height", this.height);
 
-            // draw title area
+            // TODO - should be drawn by areas themselves
+            // draw separator for title
+            if (this.titleArea.position === "bottom") {
+                this.drawSeparator(this.titleArea.x, this.width, this.titleArea.y, this.titleArea.y);
+            }
+            else {
+                // default position is top
+                this.drawSeparator(this.titleArea.x, this.width, this.titleArea.height, this.titleArea.height);
+            }
+
+            // draw separator for legend
+            if (this.legendArea.position === "right") {
+                this.drawSeparator(this.legendArea.x, this.legendArea.x, this.legendArea.y, this.legendArea.height);
+            }
+            else if (this.legendArea.position === "bottom") {
+                this.drawSeparator(this.legendArea.x, this.legendArea.width, this.legendArea.y, this.legendArea.y);
+            }
+            else if (this.legendArea.position === "top") {
+                this.drawSeparator(this.legendArea.x, this.legendArea.width, this.legendArea.y + this.legendArea.height, this.legendArea.y + this.legendArea.height);
+            }
+            else {
+                // default position is left
+                this.drawSeparator(this.legendArea.width, this.legendArea.width, this.legendArea.y, this.legendArea.height);
+            }
+
+            // draw areas
             this.titleArea.draw();
-
-            // draw legend area
             this.legendArea.draw();
-
-            // draw plot area
             this.plotArea.draw();
         }
 
-        public updateSize(): void {
+        public drawSeparator(x1: number, x2: number, y1: number, y2: number): void {
+            this.svg.append("line")
+                .attr("class", "sep")
+                .attr("x1", x1)
+                .attr("y1", y1)
+                .attr("x2", x2)
+                .attr("y2", y2);
+        }
+        public positionAreas(): void {
             var container = d3.select(this._chart.selector);
 
             // get element size
-            var width = Number(container.style("width").substring(0, container.style("width").length - 2));
-            var height = Number(container.style("height").substring(0, container.style("height").length - 2));
-            this.width = width === 0 ? this.width : width;
-            this.height =  height === 0 ? this.height : height;
+            var elementWidth = Number(container.style("width").substring(0, container.style("width").length - 2));
+            var elementHeight = Number(container.style("height").substring(0, container.style("height").length - 2));
+
+            this.width = elementWidth === 0 ? this.width : elementWidth;
+            this.height =  elementHeight === 0 ? this.height : elementHeight;
+
+            // position areas
+            this.titleArea.width = this.width;
+            this.titleArea.height = this._chart.options.title.height;
+
+            this.plotArea.height = this.height - this.titleArea.height - this.plotArea.padding * 2;
+            this.plotArea.width = this.width - this.plotArea.padding * 2 - this.legendArea.width;
+
+            if (this.titleArea.position === "bottom") {
+                this.titleArea.x = 0;
+                this.titleArea.y = this.height - this.titleArea.height;
+
+                if (this.legendArea.position === "right") {
+                    this.legendArea.x = this.width - this.legendArea.width;
+                    this.legendArea.y = 0;
+                    this.legendArea.height = this.height - this.titleArea.height;
+                    this.plotArea.x = 0;
+                    this.plotArea.y = 0;
+                }
+                else if (this.legendArea.position === "left") {
+                    this.legendArea.x = 0;
+                    this.legendArea.y = 0;
+                    this.legendArea.height = this.height - this.titleArea.height;
+                    this.plotArea.x = this.legendArea.width;
+                    this.plotArea.y = 0;
+                }
+                else if (this.legendArea.position === "bottom") {
+                    this.legendArea.x = 0;
+                    this.legendArea.y = this.height - this.legendArea.height - this.titleArea.height;
+                    this.legendArea.width = this.width;
+                    this.plotArea.x = 0;
+                    this.plotArea.y = 0;
+                    this.plotArea.height = this.plotArea.height - this.legendArea.height;
+                    this.plotArea.width = this.width - 2 * this.plotArea.padding;
+                }
+                else if (this.legendArea.position === "top") {
+                    this.legendArea.x = 0;
+                    this.legendArea.y = 0;
+                    this.legendArea.width = this.width;
+                    this.plotArea.x = 0;
+                    this.plotArea.y = this.legendArea.height;
+                    this.plotArea.height = this.plotArea.height - this.legendArea.height;
+                    this.plotArea.width = this.width - 2 * this.plotArea.padding;
+                }
+            }
+            else {
+                this.titleArea.x = 0;
+                this.titleArea.y = 0;
+
+                if (this.legendArea.position === "right") {
+                    this.legendArea.x = this.width - this.legendArea.width;
+                    this.legendArea.y = this.titleArea.height;
+                    this.legendArea.height = this.height;
+                    this.plotArea.x = 0;
+                    this.plotArea.y = this.titleArea.height;
+                }
+                else if (this.legendArea.position === "left") {
+                    this.legendArea.x = 0;
+                    this.legendArea.y = this.titleArea.height;
+                    this.legendArea.height = this.height;
+                    this.plotArea.x = this.legendArea.width;
+                    this.plotArea.y = this.titleArea.height;
+                }
+                else if (this.legendArea.position === "bottom") {
+                    this.legendArea.x = 0;
+                    this.legendArea.y = this.height - this.legendArea.height;
+                    this.legendArea.width = this.width;
+                    this.plotArea.x = 0;
+                    this.plotArea.y = this.titleArea.height;
+                    this.plotArea.height = this.plotArea.height - this.legendArea.height;
+                    this.plotArea.width = this.width - 2 * this.plotArea.padding;
+                }
+                else if (this.legendArea.position === "top") {
+                    this.legendArea.x = 0;
+                    this.legendArea.y = this.titleArea.height;
+                    this.legendArea.width = this.width;
+                    this.plotArea.x = 0;
+                    this.plotArea.y = this.titleArea.height + this.legendArea.height;
+                    this.plotArea.height = this.plotArea.height - this.legendArea.height;
+                    this.plotArea.width = this.width - 2 * this.plotArea.padding;
+                }
+            }
         }
     }
 }

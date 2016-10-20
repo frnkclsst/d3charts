@@ -4,54 +4,49 @@
 
 module frnk.UI.Charts {
 
-    export class PlotArea implements IArea {
-        public height: number;
-        public width: number;
-        public svg: D3.Selection;
-        public padding: number;
+    export class PlotArea implements IChartArea {
         public axisSize: {
             left: number;
             right: number;
             top: number;
             bottom: number;
         };
+        public height: number;
+        public padding: number;
+        public width: number;
+        public svg: D3.Selection;
+        public x: number;
+        public y: number;
 
         private _chart: Chart;
 
-        constructor(settings: Options, chart: Chart) {
+        constructor(options: Options, chart: Chart) {
             this._chart = chart;
 
-            this.padding = settings.plotArea.padding;
-            this.height = settings.canvas.height - settings.title.height - this.padding * 2;
-            this.width = settings.canvas.width - this.padding * 2 - settings.legend.width;
             this.axisSize = {
                 left: 0,
                 right: 0,
                 top: 0,
                 bottom: 0
             };
+            this.height = 0;
+            this.padding = options.plotArea.padding;
+            this.width = 0;
+            this.x = 0;
+            this.y = 0;
         }
 
         public draw(): void {
-            // initialize
-            this.initialize();
-
-            this.svg = this._chart.canvas.svg.append("g")
-                .attr("class", "plotarea")
-                .attr("transform", "translate(" + this.padding + ","
-                    + (this._chart.options.title.height
-                    + this.padding) + ")");
-        }
-
-        public initialize(): void {
-            this.height = this._chart.canvas.height - this._chart.options.title.height - this.padding * 2;
-            this.width = this._chart.canvas.width - this.padding * 2 - this._chart.options.legend.width;
             this.axisSize = {
                 left: 0,
                 right: 0,
                 top: 0,
                 bottom: 0
             };
+
+            this.svg = this._chart.canvas.svg.append("g")
+                .attr("class", "plotarea")
+                .attr("transform", "translate(" + (this.x + this.padding) + "," + (this.y + this.padding) + ")");
         }
     }
 }

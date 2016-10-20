@@ -4,30 +4,34 @@
 
 module frnk.UI.Charts {
 
-    export class TitleArea implements IArea {
+    export class TitleArea implements IChartArea {
         public align: string;
         public height: number;
         public margin: number;
+        public position: string;
         public subTitle: string;
         public svg: D3.Selection;
         public text: string;
         public width: number;
+        public x: number;
+        public y: number;
 
         private _chart: Chart;
 
-        constructor(settings: ITitleAreaOptions, chart: Chart) {
+        constructor(options: ITitleAreaOptions, chart: Chart) {
             this._chart = chart;
 
-            this.align = settings.align;
-            this.margin = settings.margin;
-            this.height = settings.height;
-            this.subTitle = settings.subtitle;
-            this.text = settings.text;
+            this.align = options.align;
+            this.margin = options.margin;
+            this.height = options.height;
+            this.position = options.position;
+            this.subTitle = options.subtitle;
+            this.text = options.text;
+            this.x = 0;
+            this.y = 0;
         }
 
         public draw(): void {
-            // initialize
-            this.width = this._chart.canvas.width;
 
             if (this.height === 0) {
                 return;
@@ -38,7 +42,7 @@ module frnk.UI.Charts {
                 .attr("class", "titlearea")
                 .attr("width", this.width)
                 .attr("height", this.height)
-                .attr("transform", "translate(0,0)");
+                .attr("transform", "translate(" + this.x + ", " + this.y + ")");
 
             var svgTitle = this.svg.append("g")
                 .attr("class", "title");
@@ -58,14 +62,6 @@ module frnk.UI.Charts {
 
             svgTitleMain.attr("transform", "translate(" + x + "," + y + ")");
             svgSubTitle.attr("transform", "translate(" + xSubtitle + ", " + (y + Html.getHeight(svgSubTitle)) + ")");
-
-            // draw line
-            this.svg.append("line")
-                .attr("class", "sep")
-                .attr("x1", 0)
-                .attr("y1", this.height)
-                .attr("x2", this.width)
-                .attr("y2", this.height);
         }
     }
 }

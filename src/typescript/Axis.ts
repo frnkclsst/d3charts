@@ -35,13 +35,13 @@ module frnk.UI.Charts {
         private _scaleType: ScaleType;
         private _ticks: number;
 
-        constructor(chart: XYChart, settings: IAxisOptions) {
+        constructor(chart: XYChart, options: IAxisOptions) {
             this.axis = null;
             this.chart = chart;
             this.height = 0;
             this.labels = {
-                format: settings.labels.format,
-                rotate: settings.labels.rotate
+                format: options.labels.format,
+                rotate: options.labels.rotate
             };
             this.orient = null;
             this.scale = null;
@@ -50,9 +50,9 @@ module frnk.UI.Charts {
             this.svgTitle = null;
             this.svgZeroLine = null;
             this.title = {
-                align: settings.title.align,
-                text: settings.title.text,
-                valign: settings.title.valign
+                align: options.title.align,
+                text: options.title.text,
+                valign: options.title.valign
             };
             this.width = 0;
             this._ticks = null;
@@ -235,13 +235,13 @@ module frnk.UI.Charts {
 
     export class XAxis extends Axis {
 
-        constructor(chart: XYChart, settings: IAxisOptions) {
-            super(chart, settings);
+        constructor(chart: XYChart, options: IAxisOptions) {
+            super(chart, options);
 
-            this.hasTickmarks = settings.tickmarks;
-            this.name = settings.name;
-            this.setOrientation(settings.orient);
-            this.setGridlineType(settings.gridlines);
+            this.hasTickmarks = options.tickmarks;
+            this.name = options.name;
+            this.setOrientation(options.orient);
+            this.setGridlineType(options.gridlines);
             this.type = AxisType.X;
         }
 
@@ -400,13 +400,13 @@ module frnk.UI.Charts {
     }
 
     export class YAxis extends Axis {
-        constructor(chart: XYChart, settings: IAxisOptions) {
-            super(chart, settings);
+        constructor(chart: XYChart, options: IAxisOptions) {
+            super(chart, options);
 
-            this.hasTickmarks = settings.tickmarks;
-            this.name = settings.name;
-            this.setOrientation(settings.orient);
-            this.setGridlineType(settings.gridlines);
+            this.hasTickmarks = options.tickmarks;
+            this.name = options.name;
+            this.setOrientation(options.orient);
+            this.setGridlineType(options.gridlines);
             this.type = AxisType.Y;
         }
 

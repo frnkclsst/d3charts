@@ -96,6 +96,7 @@ module frnk.UI.Charts {
     export interface ITitleAreaOptions {
         align: string;
         height: number;
+        position: string;
         margin: number;
         subtitle: string;
         text: string;

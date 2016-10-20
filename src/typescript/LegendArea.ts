@@ -4,25 +4,29 @@
 
 module frnk.UI.Charts {
 
-    export class LegendArea implements IArea {
+    export class LegendArea implements IChartArea {
         public height: number;
         public position: string;
         public svg: D3.Selection;
-        public symbolWidth: number = 24;
-        public symbolHeight: number = 12;
         public title: string;
         public width: number;
+        public x: number;
+        public y: number;
 
         private _chart: Chart;
         private _items: string[];
+        private _symbolWidth: number = 24;
+        private _symbolHeight: number = 12;
 
-        constructor(settings: ILegendAreaOptions, chart: Chart) {
+        constructor(options: ILegendAreaOptions, chart: Chart) {
             this._chart = chart;
 
-            this.height = settings.height;
-            this.position = settings.position;
-            this.title = settings.title;
-            this.width = settings.width;
+            this.height = options.height;
+            this.position = options.position;
+            this.title = options.title;
+            this.width = options.width;
+            this.x = 0;
+            this.y = 0;
         }
 
         public draw(): void {
@@ -43,13 +47,14 @@ module frnk.UI.Charts {
 
             this.svg = this._chart.canvas.svg.append("g")
                 .attr("class", "legend")
-                .attr("transform", "translate(" + (this._chart.canvas.width - this.width) + "," + this._chart.options.title.height + ")");
+                .attr("transform", "translate(" + this.x + "," + this.y + ")");
 
-            this.drawLine(this.svg);
             this.drawTitle(this.svg);
+            this.drawItems(this.svg);
+        }
 
-            // add legend items
-            var items = this.svg
+        private drawItems(svg: D3.Selection): void {
+            var items = svg
                 .selectAll(".item")
                 .data(this._items)
                 .enter().append("g")
@@ -81,70 +86,86 @@ module frnk.UI.Charts {
             this.drawText(items);
         }
 
-        private drawLine(svg: D3.Selection): void {
-            // draw vertical line
-            svg.append("line")
-                .attr("class", "sep")
-                .attr("x1", 0)
-                .attr("y1", 0)
-                .attr("x2", 0)
-                .attr("y2", this._chart.canvas.height - this._chart.options.title.height);
-        }
-
         private drawSymbol(svg: D3.Selection): void {
-            if (this._chart instanceof LineChart) {
-                this.drawSymbolAsLine(svg);
-            }
-            else {
-                this.drawSymbolAsRectangle(svg);
-            }
+            var _self = this;
+            svg.each(function (d: any, i: number): void {
+                var g = d3.select(this);
+                if (_self._chart instanceof ComboChart) {
+                    if (_self._chart.series.items[i].type === "line") {
+                        _self.drawLineSymbol(g, i);
+                    }
+                    else {
+                        _self.drawRectangleSymbol(g, i);
+                    }
+                }
+                else if (_self._chart instanceof ScatterChart) {
+                    _self.drawMarkerSymbol(g, i);
+                }
+                else if (_self._chart instanceof LineChart) {
+                    _self.drawLineSymbol(g, i);
+                }
+                else {
+                    _self.drawRectangleSymbol(g, i);
+                }
+                console.log(d);
+            });
         }
 
-        private drawSymbolAsLine(svg: D3.Selection): void {
+        private drawLineSymbol(svg: D3.Selection, serie: number): void {
             svg.append("line")
                 .attr("x1", 0)
-                .attr("x2", this.symbolWidth)
-                .attr("y1", this.symbolHeight / 2)
-                .attr("y2", this.symbolHeight / 2)
-                .style("stroke", (d: any, i: any): string => {
-                    return ColorPalette.color(i);
-                })
+                .attr("x2", this._symbolWidth)
+                .attr("y1", this._symbolHeight / 2)
+                .attr("y2", this._symbolHeight / 2)
+                .style("stroke", ColorPalette.color(serie))
                 .style("stroke-width", "2");
 
             // draw area
             if (this._chart.options.linechart.area.visible === true) {
                 svg.append("rect")
                     .attr("x", 0)
-                    .attr("y", this.symbolHeight / 2)
+                    .attr("y", this._symbolHeight / 2)
                     .attr("opacity", this._chart.options.linechart.area.opacity)
-                    .attr("width", this.symbolWidth)
-                    .attr("height", this.symbolHeight / 2)
-                    .style("fill", (d: any, i: any): string => {
-                        return ColorPalette.color(i);
-                    });
+                    .attr("width", this._symbolWidth)
+                    .attr("height", this._symbolHeight / 2)
+                    .style("fill", ColorPalette.color(serie));
             }
 
             // draw marker
             if (this._chart.options.linechart.markers.visible === true) {
-                //TODO - provide correct serie number
-                var marker = new SVGMarker(svg, this._chart, 0);
-                marker.draw(this.symbolWidth / 2, this.symbolHeight / 2);
+                this.drawMarkerSymbol(svg, serie);
             }
         }
 
-        private drawSymbolAsRectangle(svg: D3.Selection): void {
+        private drawMarkerSymbol(svg: D3.Selection, serie: number): void {
+            var _self = this;
+            svg
+                .append("path")
+                .each(function(d: any, i: number): void {
+                    d3.select(this)
+                        .attr({
+                            "class": "marker",
+                            "d": d3.svg.symbol()
+                                .size(60)
+                                .type(_self._chart.series.items[i].marker)(),
+                            "stroke": ColorPalette.color(serie),
+                            "stroke-width": 0,
+                            "transform": "translate(" + _self._symbolWidth / 2 + ", " + _self._symbolHeight / 2 + ")"
+                        });
+                });
+        }
+
+        private drawRectangleSymbol(svg: D3.Selection, serie: number): void {
             svg.append("rect")
                 .attr("x", 0)
-                .attr("width", this.symbolWidth)
+                .attr("width", this._symbolWidth)
                 .attr("height", 11)
-                .style("fill", (d: any, i: any): string => {
-                    return ColorPalette.color(i);
-                });
+                .style("fill", ColorPalette.color(serie));
         }
 
         private drawText(svg: D3.Selection): void {
             svg.append("text")
-                .attr("x", this.symbolWidth + 6)
+                .attr("x", this._symbolWidth + 6)
                 .attr("y", 9)
                 .attr("dy", "0px")
                 .style("text-anchor", "begin")

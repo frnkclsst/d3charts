@@ -66,11 +66,13 @@
             legend: {
                 title: "Rainfall vs Temperature",
                 position: "right",
-                width: 200
+                width: 200,
+                height: 200
             },
             title: {
                 text: "Rainfall vs Temperature",
                 align: "center",
+                position: "top",
                 height: 50,
                 margin: 15,
                 subtitle: "Source: wikipedia.org"
@@ -78,18 +80,18 @@
             xAxis: [{
                 gridlines: "none",
                 labels: {
-                    rotate: 45
+                    rotate: 0
                 },
                 orient: "bottom",
                 tickmarks: true,
                 title: {
                     align: "center",
-                    text: ""
+                    text: "test"
                 }
             }],
             yAxis: [{
                 name: "Rainfall",
-                gridlines: "none",
+                gridlines: "major",
                 labels: {
                     rotate: 0
                 },
@@ -116,7 +118,7 @@
             series: {
                 animate: true,
                 labels: {
-                    visible : false,
+                    visible : true,
                     format: ".4f",
                     rotate: false
                 },

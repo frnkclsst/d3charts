@@ -6,13 +6,8 @@ module frnk.UI.Charts {
 
     export class ComboChart extends XYChart {
 
-        private totalColumns: number;
-        private currentColumn: number;
-
         constructor(selector: string, data: IData, options?: IOptions) {
             super(selector, data, options);
-            this.totalColumns = 0;
-            this.currentColumn = -1;
         }
 
         public draw(): void {
@@ -21,17 +16,9 @@ module frnk.UI.Charts {
             var svgSeries = this.canvas.plotArea.svg.append("g")
                 .attr("class", "series");
 
-            // calculate number of columns
-            for (var nr = 0; nr < this.series.length; nr++) {
-                if (this.series.items[nr].type === "column") {
-                    this.totalColumns += 1;
-                }
-            }
-
             // draw lines
             for (var columnSerie = 0; columnSerie < this.series.length; columnSerie++) {
                 if (this.series.items[columnSerie].type === "column") {
-                    this.currentColumn += 1;
                     var column = new SVGColumn(svgSeries, this, columnSerie);
                     column.height = (d: any, i: number, s: number) => {
                         return this.getHeightColumn(d, i, s);
@@ -62,6 +49,7 @@ module frnk.UI.Charts {
                 }
             }
         }
+
         public getHeightColumn(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
             var axis = this.axes[index];
@@ -74,10 +62,10 @@ module frnk.UI.Charts {
             var axis = this.axes[index];
 
             if (axis.getScaleType() === ScaleType.Ordinal) {
-                return axis.scale.rangeBand() / this.totalColumns;
+                return axis.scale.rangeBand() / this.getColumnTotal();
             }
             else {
-                return this.canvas.plotArea.width / this.totalColumns / this.categories.length;
+                return this.canvas.plotArea.width / this.getColumnTotal() / this.categories.length;
             }
         }
 
@@ -87,10 +75,10 @@ module frnk.UI.Charts {
             var axisScale = this.categories.parseFormat(this.categories.getItem(i));
 
             if (axis.getScaleType() === ScaleType.Ordinal) {
-                return axis.scale(axisScale) + (axis.scale.rangeBand() / this.totalColumns * this.currentColumn);
+                return axis.scale(axisScale) + (axis.scale.rangeBand() / this.getColumnTotal() * this.getCurrentColumn(serie));
             }
             else {
-                return axis.scale(axisScale) + (this.canvas.plotArea.width / this.totalColumns / this.categories.length * serie);
+                return axis.scale(axisScale) + (this.canvas.plotArea.width / this.categories.length / this.getColumnTotal() * this.getCurrentColumn(serie));
             }
         }
 
@@ -129,6 +117,28 @@ module frnk.UI.Charts {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
 
             return this.axes[index].scale(0);
+        }
+
+        private getCurrentColumn(serie: number): number {
+            var count = -1;
+            for (var i = 0; i < this.series.length; i++) {
+                if (this.series.items[i].type === "column") {
+                    count += 1;
+                }
+                if (i === serie) {
+                    return count;
+                }
+            }
+        }
+
+        private getColumnTotal(): number {
+            var count = 0;
+            for (var i = 0; i < this.series.length; i++) {
+                if (this.series.items[i].type === "column") {
+                    count += 1;
+                }
+            }
+            return count;
         }
     }
 }

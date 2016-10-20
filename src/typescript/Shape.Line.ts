@@ -18,7 +18,7 @@ module frnk.UI.Charts {
         }
 
         public draw(data: any): void {
-            var d3Line = d3.svg.line()
+            var line = d3.svg.line()
                 .interpolate(this.chart.options.linechart.interpolation)
                 .x((d: any, i: number): number => { return this.x(d, i, this.serie); })
                 .y((d: any, i: number): number => { return this.y(d, i, this.serie); });
@@ -28,7 +28,7 @@ module frnk.UI.Charts {
 
             var svgPath = svgSerie.append("path")
                 .attr("class", "line")
-                .attr("d", d3Line(data))
+                .attr("d", line(data))
                 .attr("stroke", ColorPalette.color(this.serie))
                 .attr("stroke-width", 1)
                 .attr("fill", "none");

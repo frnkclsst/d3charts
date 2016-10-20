@@ -39,15 +39,15 @@ module frnk.UI.Charts {
         public plotArea: PlotAreaOptions;
         public series: SeriesOptions;
 
-        constructor(settings: IOptions) {
-            super(settings);
+        constructor(options: IOptions) {
+            super(options);
 
             this.canvas = new CanvasOptions(this.getValue("canvas"));
             this.columnchart = new ColumnChartOptions(this.getValue("columnchart"));
             this.title = new TitleAreaOptions(this.getValue("title"));
             this.legend = new LegendAreaOptions(this.getValue("legend"));
-            this.xAxes = this._setAxesSettings(this.getValue("xAxis"));
-            this.yAxes = this._setAxesSettings(this.getValue("yAxis"));
+            this.xAxes = this._setAxesOptions(this.getValue("xAxis"));
+            this.yAxes = this._setAxesOptions(this.getValue("yAxis"));
             this.linechart = new LineChartOptions(this.getValue("linechart"));
             this.piechart = new PieChartOptions(this.getValue("piechart"));
             this.plotArea = new PlotAreaOptions(this.getValue("plotArea"));
@@ -55,16 +55,16 @@ module frnk.UI.Charts {
         }
 
         // TODO - refactor - make more generic
-        private _setAxesSettings(settings: any): AxisOptions[] {
+        private _setAxesOptions(options: any): AxisOptions[] {
             var array: AxisOptions[] = [];
 
-            if (settings instanceof Array) {
-                for (var i = 0; i < settings.length; i++) {
-                    array.push(new AxisOptions(settings[i]));
+            if (options instanceof Array) {
+                for (var i = 0; i < options.length; i++) {
+                    array.push(new AxisOptions(options[i]));
                 }
             }
             else {
-                array.push(new AxisOptions(settings));
+                array.push(new AxisOptions(options));
             }
             return array;
         }
@@ -85,7 +85,7 @@ module frnk.UI.Charts {
             valign: string;
         };
 
-        constructor(settings: IAxisOptions) {
+        constructor(options: IAxisOptions) {
             // defaults
             this.gridlines = "none";
             this.labels = {
@@ -102,40 +102,40 @@ module frnk.UI.Charts {
             };
 
             // apply properties from config if available
-            if (typeof settings.gridlines != "undefined") {
-                this.gridlines = settings.gridlines;
+            if (typeof options.gridlines != "undefined") {
+                this.gridlines = options.gridlines;
             }
 
-            if (typeof settings.labels != "undefined") {
-                if (typeof settings.labels.format != "undefined") {
-                    this.labels.format = settings.labels.format;
+            if (typeof options.labels != "undefined") {
+                if (typeof options.labels.format != "undefined") {
+                    this.labels.format = options.labels.format;
                 }
-                if (typeof settings.labels.rotate != "undefined") {
-                    this.labels.rotate = settings.labels.rotate;
+                if (typeof options.labels.rotate != "undefined") {
+                    this.labels.rotate = options.labels.rotate;
                 }
             }
 
-            if (typeof settings.name != "undefined") {
-                this.name = settings.name;
+            if (typeof options.name != "undefined") {
+                this.name = options.name;
             }
 
-            if (typeof settings.orient != "undefined") {
-                this.orient = settings.orient;
+            if (typeof options.orient != "undefined") {
+                this.orient = options.orient;
             }
 
-            if (typeof settings.tickmarks != "undefined") {
-                this.tickmarks = settings.tickmarks;
+            if (typeof options.tickmarks != "undefined") {
+                this.tickmarks = options.tickmarks;
             }
 
-            if (typeof settings.title != "undefined") {
-                if (typeof settings.title.align != "undefined") {
-                    this.title.align = settings.title.align;
+            if (typeof options.title != "undefined") {
+                if (typeof options.title.align != "undefined") {
+                    this.title.align = options.title.align;
                 }
-                if (typeof settings.title.text != "undefined") {
-                    this.title.text = settings.title.text;
+                if (typeof options.title.text != "undefined") {
+                    this.title.text = options.title.text;
                 }
-                if (typeof settings.title.valign != "undefined") {
-                    this.title.valign = settings.title.valign;
+                if (typeof options.title.valign != "undefined") {
+                    this.title.valign = options.title.valign;
                 }
             }
         }
@@ -182,7 +182,7 @@ module frnk.UI.Charts {
     }
 
     export class ColumnChartOptions implements IColumnChartOptions {
-        constructor(settings: IColumnChartOptions) {
+        constructor(options: IColumnChartOptions) {
 
         }
     }
@@ -191,18 +191,18 @@ module frnk.UI.Charts {
         public height: number;
         public width: number;
 
-        constructor(settings: ICanvasOptions) {
+        constructor(options: ICanvasOptions) {
             // defaults
             this.height = 0;
             this.width = 0;
 
             // apply properties from config if available
-            if (typeof settings.height != "undefined") {
-                this.height = settings.height;
+            if (typeof options.height != "undefined") {
+                this.height = options.height;
             }
 
-            if (typeof settings.width != "undefined") {
-                this.width = settings.width;
+            if (typeof options.width != "undefined") {
+                this.width = options.width;
             }
         }
     }
@@ -213,7 +213,7 @@ module frnk.UI.Charts {
         public title: string;
         public width: number;
 
-        constructor(settings: ILegendAreaOptions) {
+        constructor(options: ILegendAreaOptions) {
             // defaults
             this.height = 0;
             this.position = "right";
@@ -221,20 +221,20 @@ module frnk.UI.Charts {
             this.width = 0;
 
             // apply properties from config if available
-            if (typeof settings.height != "undefined") {
-                this.height = settings.height;
+            if (typeof options.height != "undefined") {
+                this.height = options.height;
             }
 
-            if (typeof settings.position != "undefined") {
-                this.position = settings.position;
+            if (typeof options.position != "undefined") {
+                this.position = options.position;
             }
 
-            if (typeof settings.title != "undefined") {
-                this.title = settings.title;
+            if (typeof options.title != "undefined") {
+                this.title = options.title;
             }
 
-            if (typeof settings.width != "undefined") {
-                this.width = settings.width;
+            if (typeof options.width != "undefined") {
+                this.width = options.width;
             }
         }
     }
@@ -251,7 +251,7 @@ module frnk.UI.Charts {
             type: MarkerType
         };
 
-        constructor(settings: ILineChartOptions) {
+        constructor(options: ILineChartOptions) {
             // defaults
             this.area = {
                 visible: false,
@@ -265,28 +265,28 @@ module frnk.UI.Charts {
             };
 
             // apply properties from config if available
-            if (typeof settings.area != "undefined") {
-                if (typeof settings.area.visible != "undefined") {
-                    this.area.visible = settings.area.visible;
+            if (typeof options.area != "undefined") {
+                if (typeof options.area.visible != "undefined") {
+                    this.area.visible = options.area.visible;
                 }
-                if (typeof settings.area.opacity != "undefined") {
-                    this.area.opacity = settings.area.opacity;
+                if (typeof options.area.opacity != "undefined") {
+                    this.area.opacity = options.area.opacity;
                 }
             }
 
-            if (typeof settings.interpolation != "undefined") {
-                this.interpolation = settings.interpolation;
+            if (typeof options.interpolation != "undefined") {
+                this.interpolation = options.interpolation;
             }
 
-            if (typeof settings.markers != "undefined") {
-                if (typeof settings.markers.visible != "undefined") {
-                    this.markers.visible = settings.markers.visible;
+            if (typeof options.markers != "undefined") {
+                if (typeof options.markers.visible != "undefined") {
+                    this.markers.visible = options.markers.visible;
                 }
-                if (typeof settings.markers.size != "undefined") {
-                    this.markers.size = settings.markers.size;
+                if (typeof options.markers.size != "undefined") {
+                    this.markers.size = options.markers.size;
                 }
-                if (typeof settings.markers.type != "undefined") {
-                    this.markers.type = settings.markers.type;
+                if (typeof options.markers.type != "undefined") {
+                    this.markers.type = options.markers.type;
                 }
             }
         }
@@ -295,13 +295,13 @@ module frnk.UI.Charts {
     export class PieChartOptions implements IPieChartOptions {
         public innerRadius: number;
 
-        constructor(settings: IPieChartOptions) {
+        constructor(options: IPieChartOptions) {
             // defaults
             this.innerRadius = 1;
 
             // apply properties from config if available
-            if (typeof settings.innerRadius != "undefined") {
-                this.innerRadius = settings.innerRadius;
+            if (typeof options.innerRadius != "undefined") {
+                this.innerRadius = options.innerRadius;
             }
         }
     }
@@ -311,22 +311,22 @@ module frnk.UI.Charts {
         public outerPadding: number;
         public padding: number;
 
-        constructor(settings: IPlotAreaOptions) {
+        constructor(options: IPlotAreaOptions) {
             // defaults
             this.innerPadding = 0.2;
             this.outerPadding = 0;
             this.padding = 20;
 
             // apply properties from config if available
-            if (typeof settings.innerPadding != "undefined") {
-                this.innerPadding = Number(settings.innerPadding);
+            if (typeof options.innerPadding != "undefined") {
+                this.innerPadding = Number(options.innerPadding);
             }
 
-            if (typeof settings.outerPadding != "undefined") {
-                this.outerPadding = Number(settings.outerPadding);
+            if (typeof options.outerPadding != "undefined") {
+                this.outerPadding = Number(options.outerPadding);
             }
-            if (typeof settings.padding != "undefined") {
-                this.padding = settings.padding;
+            if (typeof options.padding != "undefined") {
+                this.padding = options.padding;
             }
         }
     }
@@ -339,7 +339,7 @@ module frnk.UI.Charts {
             rotate: boolean;
         };
 
-        constructor(settings: ISeriesOptions) {
+        constructor(options: ISeriesOptions) {
             // defaults
             this.animate = true;
             this.labels = {
@@ -349,19 +349,19 @@ module frnk.UI.Charts {
             };
 
             // apply properties from config if available
-            if (typeof settings.animate != "undefined") {
-                this.animate = settings.animate;
+            if (typeof options.animate != "undefined") {
+                this.animate = options.animate;
             }
 
-            if (typeof settings.labels != "undefined") {
-                if (typeof settings.labels.visible != "undefined") {
-                    this.labels.visible = settings.labels.visible;
+            if (typeof options.labels != "undefined") {
+                if (typeof options.labels.visible != "undefined") {
+                    this.labels.visible = options.labels.visible;
                 }
-                if (typeof settings.labels.format != "undefined") {
-                    this.labels.format = settings.labels.format;
+                if (typeof options.labels.format != "undefined") {
+                    this.labels.format = options.labels.format;
                 }
-                if (typeof settings.labels.rotate != "undefined") {
-                    this.labels.rotate = settings.labels.rotate;
+                if (typeof options.labels.rotate != "undefined") {
+                    this.labels.rotate = options.labels.rotate;
                 }
             }
         }
@@ -371,35 +371,37 @@ module frnk.UI.Charts {
         public align: string;
         public height: number;
         public margin: number;
+        public position: string;
         public subtitle: string;
         public text: string;
 
-        constructor(settings: ITitleAreaOptions) {
+        constructor(options: ITitleAreaOptions) {
             // defaults
             this.align = "left";
-            this.margin = 15;
             this.height = 0;
+            this.margin = 15;
+            this.position = "top";
             this.subtitle = "";
             this.text = "";
 
             // apply properties from config if available
-            if (typeof settings.align != "undefined") {
-                this.align = settings.align;
+            if (typeof options.align != "undefined") {
+                this.align = options.align;
             }
-
-            if (typeof settings.margin != "undefined") {
-                this.margin = settings.margin;
+            if (typeof options.margin != "undefined") {
+                this.margin = options.margin;
             }
-
-            if (typeof settings.height != "undefined") {
-                this.height = settings.height;
+            if (typeof options.height != "undefined") {
+                this.height = options.height;
             }
-            if (typeof settings.subtitle != "undefined") {
-                this.subtitle = settings.subtitle;
+            if (typeof options.position != "undefined") {
+                this.position = options.position;
             }
-
-            if (typeof settings.text != "undefined") {
-                this.text = settings.text;
+            if (typeof options.subtitle != "undefined") {
+                this.subtitle = options.subtitle;
+            }
+            if (typeof options.text != "undefined") {
+                this.text = options.text;
             }
         }
     }
