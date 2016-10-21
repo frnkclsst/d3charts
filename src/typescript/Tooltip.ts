@@ -6,12 +6,9 @@ module frnk.UI.Charts {
 
     export class Tooltip {
         public chart: Chart;
-        public showPercentage: boolean;
 
         constructor(chart: Chart) {
             this.chart = chart;
-            // TODO - Implement showpercent param
-            this.showPercentage = this.chart.options.getValue("tooltip.showPercentage");
         }
 
         public draw(svg: D3.Selection, serie: number): void {
@@ -24,13 +21,13 @@ module frnk.UI.Charts {
             svg.on("mouseover", function (d: any, i: number): void {
                 var title = _self.chart.options.getValue("tooltip.title");
                 var subtitle = _self.chart.categories.getLabel(i);
-                var color = ColorPalette.color(serie);
+                var color = _self.chart.colorPalette.color(serie);
                 var serieTitle = _self.chart.series.getLabel(serie);
                 var dataPoint = d.y;
                 var percent = d.perc;
 
                 if (_self.chart instanceof PieChart) {
-                    color = ColorPalette.color(i);
+                    color = _self.chart.colorPalette.color(i);
                     subtitle = _self.chart.series.getLabel(serie);
                     serieTitle = _self.chart.categories.getLabel(i);
                     dataPoint = d.value;
@@ -38,7 +35,7 @@ module frnk.UI.Charts {
                 }
 
                 if (_self.chart instanceof ScatterChart) {
-                    color = ColorPalette.color(serie - 1);
+                    color = _self.chart.colorPalette.color(serie - 1);
                 }
 
                 divTooltip.html("<div class='title'>" + title + "</div>" +

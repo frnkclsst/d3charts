@@ -27,29 +27,23 @@ module frnk.UI.Charts {
         }
     }
 
-    export class Options extends Initializer {
+    export class Options extends Initializer implements IOptions {
         public canvas: CanvasOptions;
-        public columnchart: IColumnChartOptions;
-        public xAxes: AxisOptions[] = [];
-        public yAxes: AxisOptions[] = [];
-        public title: TitleAreaOptions;
         public legend: LegendAreaOptions;
-        public linechart: LineChartOptions;
-        public piechart: PieChartOptions;
         public plotArea: PlotAreaOptions;
         public series: SeriesOptions;
+        public title: TitleAreaOptions;
+        public xAxes: AxisOptions[] = [];
+        public yAxes: AxisOptions[] = [];
 
         constructor(options: IOptions) {
             super(options);
 
             this.canvas = new CanvasOptions(this.getValue("canvas"));
-            this.columnchart = new ColumnChartOptions(this.getValue("columnchart"));
             this.title = new TitleAreaOptions(this.getValue("title"));
             this.legend = new LegendAreaOptions(this.getValue("legend"));
             this.xAxes = this._setAxesOptions(this.getValue("xAxis"));
             this.yAxes = this._setAxesOptions(this.getValue("yAxis"));
-            this.linechart = new LineChartOptions(this.getValue("linechart"));
-            this.piechart = new PieChartOptions(this.getValue("piechart"));
             this.plotArea = new PlotAreaOptions(this.getValue("plotArea"));
             this.series = new SeriesOptions(this.getValue("series"));
         }
@@ -146,9 +140,7 @@ module frnk.UI.Charts {
             format: string,
             data: any[]
         };
-        public series: {
-            items: Serie[];
-        };
+        public series: Serie[];
 
         constructor(data: IData) {
             super(data);
@@ -158,10 +150,7 @@ module frnk.UI.Charts {
                 format: "%s",
                 data: []
             };
-
-            this.series = {
-                items: []
-            };
+            this.series = [];
 
             // apply properties from config if available
             if (typeof data.categories != "undefined") {
@@ -174,16 +163,10 @@ module frnk.UI.Charts {
             }
 
             if (typeof data.series != "undefined") {
-                if (typeof data.series.items != "undefined") {
-                    this.series.items = data.series.items;
+                if (typeof data.series != "undefined") {
+                    this.series = data.series;
                 }
             }
-        }
-    }
-
-    export class ColumnChartOptions implements IColumnChartOptions {
-        constructor(options: IColumnChartOptions) {
-
         }
     }
 
@@ -239,32 +222,91 @@ module frnk.UI.Charts {
         }
     }
 
-    export class LineChartOptions implements ILineChartOptions {
+    export class PlotAreaOptions implements IPlotAreaOptions {
+        public animation: {
+            duration: number;
+            ease: string;
+        };
         public area: {
             visible: boolean,
             opacity: number
         };
-        public interpolation: string;
+        public bands: {
+            innerPadding: number;
+            outerPadding: number;
+        };
+        public colors: string[];
         public markers: {
             visible: boolean,
             size: number,
             type: MarkerType
         };
+        public line: {
+            interpolation: string;
+        };
+        public padding: number;
+        public pie: {
+            innerRadius: number;
+        };
 
-        constructor(options: ILineChartOptions) {
+        constructor(options: IPlotAreaOptions) {
             // defaults
+            this.animation = {
+                duration: 2000,
+                ease: "linear"
+            };
             this.area = {
                 visible: false,
                 opacity: 0.3
             };
-            this.interpolation = "linear";
+            this.bands = {
+                innerPadding: 0.2,
+                outerPadding: 0
+            };
+            this.colors = [
+                "#5491F6", //  1
+                "#7AC124", //  2
+                "#FFA300", //  3
+                "#129793", //  4
+                "#F16A73", //  5
+                "#1B487F", //  6
+                "#FF6409", //  7
+                "#CC0000", //  8
+                "#8E44AD", //  9
+                "#936A4A", // 10
+                "#2C5195", // 11
+                "#4B7717", // 12
+                "#D58A02", // 13
+                "#005D5D", // 14
+                "#BD535B", // 15
+                "#123463", // 16
+                "#980101", // 17
+                "#D85402", // 18
+                "#622E79", // 19
+                "#60452F"  // 20
+            ];
+            this.line = {
+                interpolation: "linear"
+            };
             this.markers = {
                 visible: true,
                 size: 6,
                 type: "mixed"
             };
+            this.padding = 20;
+            this.pie = {
+                innerRadius: 1
+            };
 
             // apply properties from config if available
+            if (typeof options.animation != "undefined") {
+                if (typeof options.animation.duration) {
+                    this.animation.duration = options.animation.duration;
+                }
+                if (typeof options.animation.ease) {
+                    this.animation.ease = options.animation.ease;
+                }
+            }
             if (typeof options.area != "undefined") {
                 if (typeof options.area.visible != "undefined") {
                     this.area.visible = options.area.visible;
@@ -273,11 +315,22 @@ module frnk.UI.Charts {
                     this.area.opacity = options.area.opacity;
                 }
             }
-
-            if (typeof options.interpolation != "undefined") {
-                this.interpolation = options.interpolation;
+            if (typeof options.bands != "undefined") {
+                if (typeof options.bands.innerPadding != "undefined") {
+                    this.bands.innerPadding = Number(options.bands.innerPadding);
+                }
+                if (typeof options.bands.outerPadding != "undefined") {
+                    this.bands.outerPadding = Number(options.bands.outerPadding);
+                }
             }
-
+            if (typeof options.colors != "undefined") {
+                this.colors = options.colors;
+            }
+            if (typeof options.line != "undefined") {
+                if (typeof options.line.interpolation != "undefined") {
+                    this.line.interpolation = options.line.interpolation;
+                }
+            }
             if (typeof options.markers != "undefined") {
                 if (typeof options.markers.visible != "undefined") {
                     this.markers.visible = options.markers.visible;
@@ -289,50 +342,18 @@ module frnk.UI.Charts {
                     this.markers.type = options.markers.type;
                 }
             }
-        }
-    }
-
-    export class PieChartOptions implements IPieChartOptions {
-        public innerRadius: number;
-
-        constructor(options: IPieChartOptions) {
-            // defaults
-            this.innerRadius = 1;
-
-            // apply properties from config if available
-            if (typeof options.innerRadius != "undefined") {
-                this.innerRadius = options.innerRadius;
-            }
-        }
-    }
-
-    export class PlotAreaOptions implements IPlotAreaOptions {
-        public innerPadding: number;
-        public outerPadding: number;
-        public padding: number;
-
-        constructor(options: IPlotAreaOptions) {
-            // defaults
-            this.innerPadding = 0.2;
-            this.outerPadding = 0;
-            this.padding = 20;
-
-            // apply properties from config if available
-            if (typeof options.innerPadding != "undefined") {
-                this.innerPadding = Number(options.innerPadding);
-            }
-
-            if (typeof options.outerPadding != "undefined") {
-                this.outerPadding = Number(options.outerPadding);
-            }
             if (typeof options.padding != "undefined") {
                 this.padding = options.padding;
+            }
+            if (typeof options.pie != "undefined") {
+                if (typeof options.pie.innerRadius != "undefined") {
+                    this.pie.innerRadius = options.pie.innerRadius;
+                }
             }
         }
     }
 
     export class SeriesOptions implements ISeriesOptions {
-        public animate: boolean;
         public labels: {
             visible: boolean;
             format: string;
@@ -341,7 +362,6 @@ module frnk.UI.Charts {
 
         constructor(options: ISeriesOptions) {
             // defaults
-            this.animate = true;
             this.labels = {
                 visible: false,
                 format: "",
@@ -349,10 +369,6 @@ module frnk.UI.Charts {
             };
 
             // apply properties from config if available
-            if (typeof options.animate != "undefined") {
-                this.animate = options.animate;
-            }
-
             if (typeof options.labels != "undefined") {
                 if (typeof options.labels.visible != "undefined") {
                     this.labels.visible = options.labels.visible;

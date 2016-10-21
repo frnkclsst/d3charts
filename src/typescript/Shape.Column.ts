@@ -33,9 +33,9 @@ module frnk.UI.Charts {
             var svgColumn = svgSerie.append("rect")
                 .attr({
                     "class": "column",
-                    "fill": ColorPalette.color(this.serie),
+                    "fill": this.chart.colorPalette.color(this.serie),
                     "height": 0,
-                    "stroke": ColorPalette.color(this.serie),
+                    "stroke": this.chart.colorPalette.color(this.serie),
                     "stroke-width": "1px",
                     "width": (d: any, i: number): number => { return this.width(d, i, this.serie); },
                     "x": (d: any, i: number): number => { return this.x(d, i, this.serie); },
@@ -51,14 +51,14 @@ module frnk.UI.Charts {
                 });
 
             // add animation
-            var duration = this.chart.options.series.animate === true ? 600 : 0;
             var count = 0;
             svgColumn
                 .each((): void => {
                     count++; // count number of bars
                 })
                 .transition()
-                .duration(duration)
+                .duration(this.chart.options.plotArea.animation.duration)
+                .ease(this.chart.options.plotArea.animation.ease)
                 .attr({
                     "height": (d: any, i: number): number => { return this.height(d, i, this.serie); },
                     "y": (d: any, i: number): number => { return this.y(d, i, this.serie); }

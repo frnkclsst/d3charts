@@ -1,32 +1,26 @@
 {
     "categories": {
-            "format": "%s",
-            "data": ["Draft", "Expired", "In Translation", "Out of date", "Released", "System", "System Read-only", "To be Reviewed", "To be Translated", "Translated"]
+        "format": "%s",
+        "data": ["Draft", "Expired", "In Translation", "Out of date", "Released", "System", "System Read-only", "To be Reviewed", "To be Translated", "Translated"]
     },
-    "series": {
-        "items": [{
-            "data": [-20, 10, 26, 28, 50, 40, 145, 15, 45, 78],
-            "name": "Topics"
-            },
-            {
-            "color": "red",
-            "data": [-10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
-            "name": "Maps"
-            },
-            {
-            "color": "yellow",
-            "data": [-10, 10, 36, 38, 50, 15, 156, 201, 35, 15],
-            "name": "Images"
-            },
-            {
-            "color": "green",
-            "data": [-10, 10, 26, 48, 26, 50, 60, 40, 45, 7],
-            "name": "Libraries"
-            },
-            {
-            "color": "purple",
-            "data": [-20, -10, -36, 58, 56, 40, 40, 50, 65, 47],
-            "name": "Publications"
-            }]
-    }
+    "series": [{
+        "data": [-20, 10, 26, 28, 50, 40, 145, 15, 45, 78],
+        "name": "Topics"
+    }, {
+        "color": "red",
+        "data": [-10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+        "name": "Maps"
+    }, {
+        "color": "yellow",
+        "data": [-10, 10, 36, 38, 50, 15, 156, 201, 35, 15],
+        "name": "Images"
+    }, {
+        "color": "green",
+        "data": [-10, 10, 26, 48, 26, 50, 60, 40, 45, 7],
+        "name": "Libraries"
+    }, {
+        "color": "purple",
+        "data": [-20, -10, -36, 58, 56, 40, 40, 50, 65, 47],
+        "name": "Publications"
+    }]
 }

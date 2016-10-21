@@ -17,32 +17,30 @@
                 format: "%s",
                 data: ["Apples", "Oranges", "Pears", "Grapes", "Bananas"]
             },
-            series:{
-                items: [{
-                    name: "John",
-                    data: [5, 3, 4, 7, 2]
-                }, {
-                    name: "Jane",
-                    data: [2, -2, -3, 2, 1]
-                }, {
-                    name: "Joe",
-                    data: [3, 4, 4, -2, 5]
-                }]
-            }
+            series: [{
+                name: "John",
+                data: [5, 3, 4, 7, 2]
+            }, {
+                name: "Jane",
+                data: [2, -2, -3, 2, 1]
+            }, {
+                name: "Joe",
+                data: [3, 4, 4, -2, 5]
+            }]
         };
 
         var options = {
             plotArea: {
-                padding: 20
-            },
-            linechart: {
                 area: {
                     visible: true
                 },
-                interpolation: "linear",
+                line: {
+                    interpolation: "linear"
+                },
                 markers: {
                     visible: true
-                }
+                },
+                padding: 20
             },
             piechart: {
                 innerRadius: 0.7

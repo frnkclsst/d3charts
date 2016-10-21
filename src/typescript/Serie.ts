@@ -25,6 +25,7 @@ module frnk.UI.Charts {
             this._chart = chart;
             this._data = serie.data;
 
+            // TODO - separate the options from the real data
             this.axis = serie.axis;
             this.visible = true;
             this.format = serie.format;
@@ -59,11 +60,11 @@ module frnk.UI.Charts {
             if (serie.marker != undefined) {
                 return serie.marker;
             }
-            else if (this._chart.options.linechart.markers.type === "mixed") {
+            else if (this._chart.options.plotArea.markers.type === "mixed") {
                 return symbols[this.index % symbols.length];
             }
-            else if (this._chart.options.linechart.markers.type != undefined) {
-                return this._chart.options.linechart.markers.type;
+            else if (this._chart.options.plotArea.markers.type != undefined) {
+                return this._chart.options.plotArea.markers.type;
             }
             else {
                 return "circle";

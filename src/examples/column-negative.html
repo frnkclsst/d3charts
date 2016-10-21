@@ -13,56 +13,54 @@
     <div id="chart" />
     <script>
         var data = {
-            "categories": {
-                "format": "%s",
-                "data": ["Apples", "Oranges", "Pears", "Grapes", "Bananas"]
+            categories: {
+                format: "%s",
+                data: ["Apples", "Oranges", "Pears", "Grapes", "Bananas"]
             },
-            "series": {
-                "items": [{
-                    name: "John",
-                    data: [5, 3, 4, 7, 2]
-                }, {
-                    name: "Jane",
-                    data: [2, -2, -3, 2, 1]
-                }, {
-                    name: "Joe",
-                    data: [3, 4, 4, -2, 5]
-                }]
-            }
+            series: [{
+                name: "John",
+                data: [5, 3, 4, 7, 2]
+            }, {
+                name: "Jane",
+                data: [2, -2, -3, 2, 1]
+            }, {
+                name: "Joe",
+                data: [3, 4, 4, -2, 5]
+            }]
         };
 
         var options = {
-            "plotArea": {
-                "padding": 20
+            plotArea: {
+                padding: 20
             },
-            "legend": {
-                "title": "Who?",
-                "position": "right",
-                "width": 200
+            legend: {
+                title: "Who?",
+                position: "right",
+                width: 200
             },
-            "title": {
-                "text": "Column Chart - Negative",
-                "align": "center",
-                "height": 50
+            title: {
+                text: "Column Chart - Negative",
+                align: "center",
+                height: 50
             },
-            "xAxis": [{
-                "gridlines": "none",
-                "labels": {
-                    "rotate": 0
+            xAxis: [{
+                gridlines: "none",
+                labels: {
+                    rotate: 0
                 },
-                "tickmarks": false
+                tickmarks: false
             }],
-            "yAxis": [{
-                "gridlines": "major",
-                "tickmarks": true,
-                "ticks": 4,
-                "title": {
-                    "text": "Rainfall (mm)"
+            yAxis: [{
+                gridlines: "major",
+                tickmarks: true,
+                ticks: 4,
+                title: {
+                    text: "Rainfall (mm)"
                 }
             }],
-            "tooltip": {
-                "title": "Rainfall",
-                "valueSuffix": " mm"
+            tooltip: {
+                title: "Rainfall",
+                valueSuffix: " mm"
             }
         };
 

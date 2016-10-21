@@ -3,18 +3,16 @@
         "format": "%s",
         "data": ["Budget", "Actuals", "Prior Year"]
     },
-    "series": {
-        "items": [{
-                "data": [769, 755, 664],
-                "name": "NASA"
-            },
-            {
-                "data": [275, 168, 454],
-                "name": "EMEA"
-            },
-            {
-                "data": [83, 7, 0],
-                "name": "Japan"
-            }]
-    }
+    "series": [{
+        "data": [769, 755, 664],
+        "name": "NASA"
+    },
+    {
+        "data": [275, 168, 454],
+        "name": "EMEA"
+    },
+    {
+        "data": [83, 7, 0],
+        "name": "Japan"
+    }]
 }

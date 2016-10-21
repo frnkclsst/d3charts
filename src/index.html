@@ -44,38 +44,44 @@
     <script>
         var options = {
             plotArea: {
-                innerPadding: 0.1,
-                outerPadding: 0,
-                padding: 20
-            },
-            linechart: {
+                animation: {
+                    duration: 1000,
+                    ease: "linear"
+                },
                 area: {
                     visible: true,
                     opacity: 0.3
                 },
-                interpolation: "linear",
+                bands: {
+                    innerPadding: 0.2,
+                    outerPadding: 0
+                },
+                line: {
+                    interpolation: "linear"
+                },
                 markers: {
                     visible: true,
                     size: 6,
                     type: "circle"
+                },
+                padding: 20,
+                pie: {
+                    innerRadius: 0.5
                 }
             },
-            piechart: {
-                innerRadius: 0.5
+            title: {
+                align: "center",
+                height: 50,
+                margin: 0,
+                position: "top",
+                subtitle: "Source: wikipedia.org",
+                text: "Rainfall vs Temperature",
             },
             legend: {
                 title: "Rainfall vs Temperature",
-                position: "right",
+                position: "left",
                 width: 200,
                 height: 200
-            },
-            title: {
-                text: "Rainfall vs Temperature",
-                align: "center",
-                position: "top",
-                height: 50,
-                margin: 15,
-                subtitle: "Source: wikipedia.org"
             },
             xAxis: [{
                 gridlines: "none",
@@ -86,7 +92,7 @@
                 tickmarks: true,
                 title: {
                     align: "center",
-                    text: "test"
+                    text: "Month"
                 }
             }],
             yAxis: [{
@@ -116,7 +122,6 @@
                 }
             }],
             series: {
-                animate: true,
                 labels: {
                     visible : true,
                     format: ".4f",
@@ -133,8 +138,7 @@
                 }
             },
             tooltip: {
-                title: "Rainfall vs Temperature",
-                showPercent: false
+                title: "Rainfall vs Temperature"
             }
         };
 

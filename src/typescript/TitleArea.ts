@@ -18,15 +18,15 @@ module frnk.UI.Charts {
 
         private _chart: Chart;
 
-        constructor(options: ITitleAreaOptions, chart: Chart) {
+        constructor(chart: Chart) {
             this._chart = chart;
 
-            this.align = options.align;
-            this.margin = options.margin;
-            this.height = options.height;
-            this.position = options.position;
-            this.subTitle = options.subtitle;
-            this.text = options.text;
+            this.align = chart.options.title.align;
+            this.margin = chart.options.title.margin;
+            this.height = chart.options.title.height;
+            this.position = chart.options.title.position;
+            this.subTitle = chart.options.title.subtitle;
+            this.text = chart.options.title.text;
             this.x = 0;
             this.y = 0;
         }

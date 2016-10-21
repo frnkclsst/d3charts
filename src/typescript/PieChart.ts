@@ -13,7 +13,7 @@ module frnk.UI.Charts {
 
         constructor(selector: string, data: IData, options?: IOptions) {
             super(selector, data, options);
-            this.innerRadiusPercentage = this.options.piechart.innerRadius;
+            this.innerRadiusPercentage = this.options.plotArea.pie.innerRadius;
         }
 
         public draw(): void {
@@ -50,21 +50,21 @@ module frnk.UI.Charts {
 
                 // draw arcs
                 var svgPath = svgArcs.append("path")
-                    .attr("fill", (d: any, i: number): string => { return ColorPalette.color(i); })
+                    .attr("fill", (d: any, i: number): string => { return this.colorPalette.color(i); })
                     .attr("data-serie", serie)
                     .attr("d", function (d: any): any {
                         return d3Arc(d);
                     });
 
                 // add animation
-                var duration = this.options.series.animate === true ? 1000 : 0;
                 var count = 0;
                 svgPath
                     .each((): void => {
                         count++;
                     })
                     .transition()
-                    .duration(duration)
+                    .duration(this.options.plotArea.animation.duration)
+                    .ease(this.options.plotArea.animation.ease)
                     .attrTween("d", function (d: any, i: number): any {
                         var interpolate = d3.interpolate(d.startAngle, d.endAngle);
                         var s = this.getAttribute("data-serie");

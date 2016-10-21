@@ -33,11 +33,11 @@ module frnk.UI.Charts {
             var svgBar = svgSerie.append("rect")
                 .attr({
                     "class": "bar",
-                    "fill": ColorPalette.color(this.serie),
+                    "fill": this.chart.colorPalette.color(this.serie),
                     "height": (d: any, i: number): number => {
                         return this.height(d, i, this.serie);
                     },
-                    "stroke": ColorPalette.color(this.serie),
+                    "stroke": this.chart.colorPalette.color(this.serie),
                     "stroke-width": "1px",
                     "width": 0,
                     "x": (d: any, i: number): number => {
@@ -53,14 +53,14 @@ module frnk.UI.Charts {
                 });
 
             // add animation
-            var duration = this.chart.options.series.animate === true ? 600 : 0;
             var count = 0;
             svgBar
                 .each((): void => {
                     count++; // count number of bars
                 })
                 .transition()
-                .duration(duration)
+                .duration(this.chart.options.plotArea.animation.duration)
+                .ease(this.chart.options.plotArea.animation.ease)
                 .attr("width", (d: any, i: number): number => {
                     return this.width(d, i, this.serie);
                 })

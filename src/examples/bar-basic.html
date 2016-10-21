@@ -13,55 +13,53 @@
     <div id="chart" />
     <script>
         var data = {
-            "categories": {
-                "format": "%s",
-                "data": ["Africa", "America", "Asia", "Europe", "Oceania"]
+            categories: {
+                format: "%s",
+                data: ["Africa", "America", "Asia", "Europe", "Oceania"]
             },
-            "series": {
-                "items": [{
-                    "name": "Year 1800",
-                    "data": [107, 31, 635, 203, 2]
-                }, {
-                    "name": "Year 1900",
-                    "data": [133, 156, 947, 408, 6]
-                }, {
-                    "name": "Year 2008",
-                    "data": [973, 914, 4054, 732, 34]
-                }]
-            }
+            series: [{
+                name: "Year 1800",
+                data: [107, 31, 635, 203, 2]
+            }, {
+                name: "Year 1900",
+                data: [133, 156, 947, 408, 6]
+            }, {
+                name: "Year 2008",
+                data: [973, 914, 4054, 732, 34]
+            }]
         };
 
 		var options = {
-            "plotArea": {
-                "padding": 20
+            plotArea: {
+                padding: 20
             },
-            "legend": {
-                "title": "Continent",
-                "position": "right",
-                "width": 200
+            legend: {
+                title: "Continent",
+                position: "right",
+                width: 200
             },
-            "title": {
-                "text": "Bar Chart - Basic",
-                "align": "center",
-                "height": 50
+            title: {
+                text: "Bar Chart - Basic",
+                align: "center",
+                height: 50
             },
-            "xAxis": [{
-                "gridlines": "major",
-                "labels": {
-                    "rotate": 0
+            xAxis: [{
+                gridlines: "major",
+                labels: {
+                    rotate: 0
                 },
-                "tickmark": false,
-                "title": {
-                    "text": "Population (millions)"
+                tickmark: false,
+                title: {
+                    text: "Population (millions)"
                 }
             }],
-            "yAxis": [{
-                "gridlines": "none",
-                "tickmarks": true
+            yAxis: [{
+                gridlines: "none",
+                tickmarks: true
             }],
-            "tooltip": {
-                "title": "Population",
-                "valueSuffix": " people"
+            tooltip: {
+                title: "Population",
+                valueSuffix: " people"
             }
         };
 

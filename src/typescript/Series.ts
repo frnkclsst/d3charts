@@ -15,7 +15,7 @@ module frnk.UI.Charts {
         constructor(chart: Chart) {
             this._chart = chart;
 
-            this.items = this._setSeries(chart.data.series.items);
+            this.items = this._setSeries(chart.data.series);
             this.labels = this._setLabels();
             this.length = this.items.length;
 

@@ -18,13 +18,13 @@ module frnk.UI.Charts {
         private _symbolWidth: number = 24;
         private _symbolHeight: number = 12;
 
-        constructor(options: ILegendAreaOptions, chart: Chart) {
+        constructor(chart: Chart) {
             this._chart = chart;
 
-            this.height = options.height;
-            this.position = options.position;
-            this.title = options.title;
-            this.width = options.width;
+            this.height = chart.options.legend.height;
+            this.position = chart.options.legend.position;
+            this.title = chart.options.legend.title;
+            this.width = chart.options.legend.width;
             this.x = 0;
             this.y = 0;
         }
@@ -107,7 +107,6 @@ module frnk.UI.Charts {
                 else {
                     _self.drawRectangleSymbol(g, i);
                 }
-                console.log(d);
             });
         }
 
@@ -117,22 +116,22 @@ module frnk.UI.Charts {
                 .attr("x2", this._symbolWidth)
                 .attr("y1", this._symbolHeight / 2)
                 .attr("y2", this._symbolHeight / 2)
-                .style("stroke", ColorPalette.color(serie))
+                .style("stroke", this._chart.colorPalette.color(serie))
                 .style("stroke-width", "2");
 
             // draw area
-            if (this._chart.options.linechart.area.visible === true) {
+            if (this._chart.options.plotArea.area.visible === true) {
                 svg.append("rect")
                     .attr("x", 0)
                     .attr("y", this._symbolHeight / 2)
-                    .attr("opacity", this._chart.options.linechart.area.opacity)
+                    .attr("opacity", this._chart.options.plotArea.area.opacity)
                     .attr("width", this._symbolWidth)
                     .attr("height", this._symbolHeight / 2)
-                    .style("fill", ColorPalette.color(serie));
+                    .style("fill", this._chart.colorPalette.color(serie));
             }
 
             // draw marker
-            if (this._chart.options.linechart.markers.visible === true) {
+            if (this._chart.options.plotArea.markers.visible === true) {
                 this.drawMarkerSymbol(svg, serie);
             }
         }
@@ -148,7 +147,7 @@ module frnk.UI.Charts {
                             "d": d3.svg.symbol()
                                 .size(60)
                                 .type(_self._chart.series.items[i].marker)(),
-                            "stroke": ColorPalette.color(serie),
+                            "stroke": _self._chart.colorPalette.color(serie),
                             "stroke-width": 0,
                             "transform": "translate(" + _self._symbolWidth / 2 + ", " + _self._symbolHeight / 2 + ")"
                         });
@@ -160,7 +159,7 @@ module frnk.UI.Charts {
                 .attr("x", 0)
                 .attr("width", this._symbolWidth)
                 .attr("height", 11)
-                .style("fill", ColorPalette.color(serie));
+                .style("fill", this._chart.colorPalette.color(serie));
         }
 
         private drawText(svg: D3.Selection): void {

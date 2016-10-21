@@ -13,81 +13,76 @@
     <div id="chart" />
     <script>
         var data = {
-            "categories": {
-                "format": "%s",
-                "data": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+            categories: {
+                format: "%s",
+                data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
             },
-            "series": {
-                "name": "Population",
-                "items":	[{
-                    "name": "Rainfall",
-                    "axis": "Rainfall",
-                    "data": [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
-                    "type": "column",
-                    "suffix": " mm"
-                },
-                    {
-                        "name": "Temperature",
-                        "axis": "Temperature",
-                        "data": [-5.0, -6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
-                        "type": "line",
-                        "suffix": " °C"
-                    }]
-            }
+            series: [{
+                name: "Rainfall",
+                axis: "Rainfall",
+                data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+                type: "column",
+                suffix: " mm"
+            }, {
+                name: "Temperature",
+                axis: "Temperature",
+                data: [-5.0, -6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+                type: "line",
+                suffix: " °C"
+            }]
         };
 
         var options = {
-            "plotArea": {
-                "padding": 20
-            },
-            "linechart": {
-                "interpolation": "cardinal",
-                "markers": {
-                    "visible": true
-                }
-            },
-            "legend": {
-                "title": "Rainfall vs Temperature",
-                "position": "right",
-                "width": 200
-            },
-            "title": {
-                "text": "Line Chart - Dual Axes",
-                "align": "center",
-                "height": 50,
-                "margin": 15
-            },
-            "xAxis": {
-                "gridlines": "none",
-                "orient": "bottom",
-                "labels": {
-                    "rotate": 0
+            plotArea: {
+                line: {
+                    interpolation: "cardinal"
                 },
-                "tickmarks": true,
-                "title": {
-                    "text": "Year"
+                markers: {
+                    visible: true
+                },
+                padding: 20
+            },
+            legend: {
+                title: "Rainfall vs Temperature",
+                position: "right",
+                width: 200
+            },
+            title: {
+                text: "Line Chart - Dual Axes",
+                align: "center",
+                height: 50,
+                margin: 15
+            },
+            xAxis: {
+                gridlines: "none",
+                orient: "bottom",
+                labels: {
+                    rotate: 0
+                },
+                tickmarks: true,
+                title: {
+                    text: "Year"
                 }
             },
-            "yAxis": [{
-                "name": "Rainfall",
-                "gridlines": "none",
-                "orient": "left",
-                "tickmarks": true,
-                "title": {
-                    "text": "mm"
+            yAxis: [{
+                name: "Rainfall",
+                gridlines: "none",
+                orient: "left",
+                tickmarks: true,
+                title: {
+                    text: "mm"
                 }
             }, {
-                "name": "Temperature",
-                "gridlines": "none",
-                "orient": "right",
-                "tickmarks": true,
-                "title": {
-                    "text": "°C"
+                name: "Temperature",
+                gridlines: "none",
+                orient: "right",
+                tickmarks: true,
+                title: {
+                    text: "°C"
                 }
             }],
-            "tooltip": {
-                "title": "Rainfall vs Temperature",
-                "showPercent": true
+            tooltip: {
+                title: "Rainfall vs Temperature"
             }
         };
 

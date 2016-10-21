@@ -9,22 +9,17 @@ module frnk.UI.Charts {
             format: string,
             data: any[]
         };
-        series: {
-            items: Serie[];
-        };
+        series: Serie[];
     }
 
     export interface IOptions {
         canvas?: ICanvasOptions;
-        columnchart?: IColumnChartOptions;
-        data?: IData;
         legend?: ILegendAreaOptions;
-        linechart?: ILineChartOptions;
-        piechart?: IPieChartOptions;
-        plotArea?: PlotAreaOptions;
+        plotArea?: IPlotAreaOptions;
+        series?: ISeriesOptions;
         title?: ITitleAreaOptions;
-        xAxes?: IAxisOptions;
-        yAxes?: IAxisOptions;
+        xAxes?: IAxisOptions[];
+        yAxes?: IAxisOptions[];
 
         getValue(propStr: string, defaultValue?: string): any;
     }
@@ -50,10 +45,6 @@ module frnk.UI.Charts {
         width: number;
     }
 
-    export interface IColumnChartOptions {
-
-    }
-
     export interface ILegendAreaOptions {
         height: number;
         position: string;
@@ -61,31 +52,35 @@ module frnk.UI.Charts {
         width: number;
     }
 
-    export interface ILineChartOptions {
+    export interface IPlotAreaOptions {
+        animation: {
+            duration: number;
+            ease: string;
+        };
         area: {
             visible: boolean;
             opacity: number;
         };
-        interpolation: string;
+        bands: {
+            innerPadding: number;
+            outerPadding: number;
+        };
+        colors: string[];
+        line: {
+            interpolation: string;
+        };
         markers: {
             visible: boolean,
             size: number,
             type: MarkerType
         };
-    }
-
-    export interface IPlotAreaOptions {
-        innerPadding: number;
-        outerPadding: number;
         padding: number;
-    }
-
-    export interface IPieChartOptions {
-        innerRadius: number;
+        pie: {
+          innerRadius: number;
+        };
     }
 
     export interface ISeriesOptions {
-        animate: boolean;
         labels: {
             visible: boolean,
             format: string,

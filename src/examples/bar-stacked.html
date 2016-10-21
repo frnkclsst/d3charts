@@ -13,58 +13,56 @@
     <div id="chart" />
     <script>
         var data = {
-            "categories": {
-                "format": "%s",
-                "data": ["Apples", "Oranges", "Pears", "Grapes", "Bananas"]
+            categories: {
+                format: "%s",
+                data: ["Apples", "Oranges", "Pears", "Grapes", "Bananas"]
             },
-            "series": {
-                "items": [{
-                    "name": "John",
-                    "data": [5, 3, 4, 7, 2]
-                }, {
-                    "name": "Jane",
-                    "data": [2, 2, 3, 2, 1]
-                }, {
-                    "name": "Joe",
-                    "data": [3, 4, 4, 2, 5]
-                }]
-            }
+            series: [{
+                name: "John",
+                data: [5, 3, 4, 7, 2]
+            }, {
+                name: "Jane",
+                data: [2, 2, 3, 2, 1]
+            }, {
+                name: "Joe",
+                data: [3, 4, 4, 2, 5]
+            }]
         };
 
         var options = {
-            "plotArea": {
-                "padding": 20
+            plotArea: {
+                padding: 20
             },
-            "legend": {
-                "title": "Who?",
-                "position": "right",
-                "width": 200
+            legend: {
+                title: "Who?",
+                position: "right",
+                width: 200
             },
-            "title": {
-                "text": "Bar Chart - Stacked",
-                "align": "center",
-                "height": 50
+            title: {
+                text: "Bar Chart - Stacked",
+                align: "center",
+                height: 50
             },
-            "xAxis": [{
-                "gridlines": "major",
-                "labels": {
-                    "rotate": 0
+            xAxis: [{
+                gridlines: "major",
+                labels: {
+                    rotate: 0
                 },
-                "tickmark": false,
-                "title": {
-                    "text": ""
+                tickmark: false,
+                title: {
+                    text: ""
                 }
             }],
-            "yAxis": [{
-                "gridlines": "none",
-                "tickmark": true,
-                "title": {
-                    "text": ""
+            yAxis: [{
+                gridlines: "none",
+                tickmark: true,
+                title: {
+                    text: ""
                 }
             }],
-            "tooltip": {
-                "title": "Fruit Units",
-                "valueSuffix": " fruits"
+            tooltip: {
+                title: "Fruit Units",
+                valueSuffix: " fruits"
             }
         };
 

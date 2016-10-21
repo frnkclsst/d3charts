@@ -20,9 +20,9 @@ module frnk.UI.Charts {
         constructor(chart: Chart) {
             this._chart = chart;
 
-            this.titleArea = new TitleArea(chart.options.title, chart);
-            this.legendArea = new LegendArea(chart.options.legend, chart);
-            this.plotArea = new PlotArea(chart.options, chart);
+            this.titleArea = new TitleArea(chart);
+            this.legendArea = new LegendArea(chart);
+            this.plotArea = new PlotArea(chart);
 
             this.height = chart.options.canvas.height;
             this.width = chart.options.canvas.width;

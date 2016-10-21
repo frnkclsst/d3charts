@@ -13,38 +13,36 @@
     <div id="chart" />
     <script>
         var data = {
-            "categories": {
-                "format": "%s",
-                "data": ["Firefox", "IE", "Safari", "Opera", "Others"]
+            categories: {
+                format: "%s",
+                data: ["Firefox", "IE", "Safari", "Opera", "Others"]
             },
-            "series": {
-                "items": [{
-                    "name": "Browsers",
-                    "data": [45, 26.8, 8.5, 6.2, 0.7]
-                }]
-            }
+            series: [{
+                name: "Browsers",
+                data: [45, 26.8, 8.5, 6.2, 0.7]
+            }]
         };
 
         var options = {
-            "plotArea": {
-                "padding": 20
+            plotArea: {
+                padding: 20,
+                pie: {
+                    innerRadius: 1
+                }
             },
-            "piechart": {
-                "innerRadius": 1
+            legend: {
+                title: "Browsers",
+                position: "right",
+                width: 200
             },
-            "legend": {
-                "title": "Browsers",
-                "position": "right",
-                "width": 200
+            title: {
+                text: "Pie Chart - Basic",
+                align: "center",
+                height: 50
             },
-            "title": {
-                "text": "Pie Chart - Basic",
-                "align": "center",
-                "height": 50
-            },
-            "tooltip": {
-                "title": "Browser usage",
-                "valueSuffix": " %"
+            tooltip: {
+                title: "Browser usage",
+                valueSuffix: " %"
             }
         };
 

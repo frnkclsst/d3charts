@@ -19,7 +19,7 @@ module frnk.UI.Charts {
 
         public draw(data: any): void {
             var line = d3.svg.line()
-                .interpolate(this.chart.options.linechart.interpolation)
+                .interpolate(this.chart.options.plotArea.line.interpolation)
                 .x((d: any, i: number): number => { return this.x(d, i, this.serie); })
                 .y((d: any, i: number): number => { return this.y(d, i, this.serie); });
 
@@ -29,12 +29,11 @@ module frnk.UI.Charts {
             var svgPath = svgSerie.append("path")
                 .attr("class", "line")
                 .attr("d", line(data))
-                .attr("stroke", ColorPalette.color(this.serie))
+                .attr("stroke", this.chart.colorPalette.color(this.serie))
                 .attr("stroke-width", 1)
                 .attr("fill", "none");
 
             // add animation
-            var duration = this.chart.options.series.animate === true ? 1000 : 0;
             var pathLenght = svgPath[0][0].getTotalLength();
             var count = 0;
             svgPath
@@ -44,12 +43,13 @@ module frnk.UI.Charts {
                 .attr("stroke-dasharray", pathLenght + " " + pathLenght)
                 .attr("stroke-dashoffset", pathLenght)
                 .transition()
-                .duration(duration)
+                .duration(this.chart.options.plotArea.animation.duration)
+                .ease(this.chart.options.plotArea.animation.ease)
                 .attr("stroke-dashoffset", 0)
                 .each("end", (): void => {
                     count--;
                     // draw markers
-                    if (this.chart.options.linechart.markers.visible === true) {
+                    if (this.chart.options.plotArea.markers.visible === true) {
                         var svgMarkers =  this.drawMarkers();
 
                         // draw tooltip
@@ -91,10 +91,10 @@ module frnk.UI.Charts {
                         });
 
                     if (rotation != 0) {
-                        dx = Html.getHeight(text) + this.chart.options.linechart.markers.size / 2;
+                        dx = Html.getHeight(text) + this.chart.options.plotArea.markers.size / 2;
                     }
                     else {
-                        dy = -Html.getHeight(text) - this.chart.options.linechart.markers.size / 2;
+                        dy = -Html.getHeight(text) - this.chart.options.plotArea.markers.size / 2;
                     }
 
                     text
@@ -110,10 +110,10 @@ module frnk.UI.Charts {
                 .append("path")
                 .attr({
                     "class": "marker",
-                    "stroke": ColorPalette.color(this.serie),
+                    "stroke": this.chart.colorPalette.color(this.serie),
                     "stroke-width": 0,
                     "d": d3.svg.symbol()
-                        .size(this.chart.options.linechart.markers.size * 10)
+                        .size(this.chart.options.plotArea.markers.size * 10)
                         .type(this.chart.series.items[this.serie].marker)(),
                     "transform": (d: any, i: number): string => {
                         return "translate(" + this.x(d, i, this.serie) + ", " + this.y(d, i, this.serie) + ")";

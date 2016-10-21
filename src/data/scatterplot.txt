@@ -3,16 +3,14 @@
         "format": "%s",
         "data": ["Bill", "Joe", "Frank", "Dave", "Hilde", "Artem", "Josie"]
     },
-    "series": {
-        "items": [{
-                "data": [8, 4, 11, 4, 3, 6.5, 2],
-                "name": "Age",
-                "suffix": ""
-            },
-            {
-                "data": [12, 5.5, 14, 5, 3.5, 7, 4],
-                "name": "Weight",
-                "suffix": " kg"
-            }]
-    }
+    "series": [{
+        "data": [8, 4, 11, 4, 3, 6.5, 2],
+        "name": "Age",
+        "suffix": ""
+    },
+    {
+        "data": [12, 5.5, 14, 5, 3.5, 7, 4],
+        "name": "Weight",
+        "suffix": " kg"
+    }]
 }

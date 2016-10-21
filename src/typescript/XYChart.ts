@@ -31,7 +31,7 @@ module frnk.UI.Charts {
             for (var j = 0; j < this.axes.length; j++) {
                 this.axes[j].draw();
                 if (this.axes.length > 1) {
-                    this.axes[j].setColor(ColorPalette.color(j));
+                    this.axes[j].setColor(this.colorPalette.color(j));
                 }
             }
         }
@@ -71,7 +71,7 @@ module frnk.UI.Charts {
                 axis.setScaleType(ScaleType.Ordinal);
                 return d3.scale.ordinal()
                     .domain(this.categories.getLabels())
-                    .rangeBands([start, end], this.options.plotArea.innerPadding, this.options.plotArea.outerPadding);
+                    .rangeBands([start, end], this.options.plotArea.bands.innerPadding, this.options.plotArea.bands.outerPadding);
             }
             else {
                 axis.setScaleType(ScaleType.Time);

@@ -6,6 +6,7 @@ module frnk.UI.Charts {
     export class Chart {
         public canvas: Canvas;
         public categories: Categories;
+        public colorPalette: ColorPalette;
         public data: Data;
         public series: Series;
         public options: Options;
@@ -37,6 +38,7 @@ module frnk.UI.Charts {
                 // Initialize chart
                 this.canvas = new Canvas(this);
                 this.categories = new Categories(this);
+                this.colorPalette = new ColorPalette(this);
                 this.series = new Series(this);
                 this.tooltip = new Tooltip(this);
 

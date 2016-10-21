@@ -20,7 +20,7 @@ module frnk.UI.Charts {
 
         private _chart: Chart;
 
-        constructor(options: Options, chart: Chart) {
+        constructor(chart: Chart) {
             this._chart = chart;
 
             this.axisSize = {
@@ -30,7 +30,7 @@ module frnk.UI.Charts {
                 bottom: 0
             };
             this.height = 0;
-            this.padding = options.plotArea.padding;
+            this.padding = chart.options.plotArea.padding;
             this.width = 0;
             this.x = 0;
             this.y = 0;

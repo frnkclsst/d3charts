@@ -35,22 +35,22 @@ module frnk.UI.Charts {
                                 "d": d3.svg.symbol()
                                     .size(0)
                                     .type(_self.series.items[serie - 1].marker)(),
-                                "fill": ColorPalette.color(serie - 1),
-                                "stroke": ColorPalette.color(serie - 1),
+                                "fill": _self.colorPalette.color(serie - 1),
+                                "stroke": _self.colorPalette.color(serie - 1),
                                 "stroke-width": 0,
                                 "transform": "translate(" + _self.getXCoordinate(d, i, 0) + ", " + _self.getYCoordinate(d, i, serie) + ")"
                             });
                     });
 
                 // add animation
-                var duration = this.options.series.animate === true ? 600 : 0;
                 var count = 0;
                 svgBubbles
                     .each((): void => {
                         count++; // count number of bars
                     })
                     .transition()
-                    .duration(duration)
+                    .duration(this.options.plotArea.animation.duration)
+                    .ease(this.options.plotArea.animation.ease)
                     .attr("d", (d: any, i: number): any => {
                         var size = _self.series.items[serie].size != undefined ? _self.series.items[serie].size[i] * 10 : 60;
                         return d3.svg.symbol()

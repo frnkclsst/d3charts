@@ -19,14 +19,14 @@ module frnk.UI.Charts {
         constructor(selector: string, data: IData, options?: IOptions) {
             super(selector, data, options);
             this.area = {
-                visible: this.options.linechart.area.visible,
-                opacity: this.options.linechart.area.opacity
+                visible: this.options.plotArea.area.visible,
+                opacity: this.options.plotArea.area.opacity
             };
-            this.interpolation = this.options.linechart.interpolation;
+            this.interpolation = this.options.plotArea.line.interpolation;
             this.markers = {
-                visible: this.options.linechart.markers.visible,
-                size: this.options.linechart.markers.size,
-                type: this.options.linechart.markers.type
+                visible: this.options.plotArea.markers.visible,
+                size: this.options.plotArea.markers.size,
+                type: this.options.plotArea.markers.type
             };
         }
 
