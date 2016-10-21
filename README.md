@@ -14,14 +14,18 @@ D3Charts is a reusable chart library using d3 and written in Typescript. D3 comb
 ### Supported Chart Types
 - [Area charts](https://github.com/frnkclsst/d3charts/wiki/area-charts)
 - [Bar charts](https://github.com/frnkclsst/d3charts/wiki/bar-charts)
+- [Bubble charts](https://github.com/frnkclsst/d3charts/wiki/bubble-charts)
+- [Combo charts](https://github.com/frnkclsst/d3charts/wiki/combo-charts)
 - [Column charts](https://github.com/frnkclsst/d3charts/wiki/column-charts)
 - [Donut charts](https://github.com/frnkclsst/d3charts/wiki/donut-charts)
 - [Line charts](https://github.com/frnkclsst/d3charts/wiki/line-charts)
 - [Pie charts](https://github.com/frnkclsst/d3charts/wiki/pie-charts)
+- [Scatter charts](https://github.com/frnkclsst/d3charts/wiki/scatter-charts)
 
 ### Chart Options
 - [Axes](https://github.com/frnkclsst/d3charts/wiki/Axes)
 - [Canvas](https://github.com/frnkclsst/d3charts/wiki/Canvas)
+- [Legend](https://github.com/frnkclsst/d3charts/wiki/Legend)
 - [Plot area](https://github.com/frnkclsst/d3charts/wiki/Plot-area)
 - [Series](https://github.com/frnkclsst/d3charts/wiki/Series)
 - [Title](https://github.com/frnkclsst/d3charts/wiki/Title)
