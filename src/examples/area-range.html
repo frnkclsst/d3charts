@@ -16,7 +16,7 @@
         var data = {
             categories: {
                 format: "%s",
-                data: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+                data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
             },
             series: [{
                 data: [49.94, 71.53, 106.40, 129.21, 144.05, 176.07, 135.68, 148.58, 216.49, 194.11, 95.64, 54.43],
@@ -80,6 +80,9 @@
             }],
             xAxis: {
                 gridlines: "none",
+                labels: {
+                    rotate: 0
+                },
                 orient: "left",
                 tickmarks: true,
                 title: {

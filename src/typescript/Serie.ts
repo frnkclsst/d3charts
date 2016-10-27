@@ -23,7 +23,7 @@ module frnk.UI.Charts {
 
         constructor(chart: Chart, serie: any, index: number) {
             this._chart = chart;
-            this.data = serie.data != undefined ? serie.data : []; // TODO - refactor and provide defaults
+            this.data = serie.data != undefined ? serie.data : [];
             this.max = serie.max != undefined ? serie.max : [];
             this.min = serie.min != undefined ? serie.min : [];
 

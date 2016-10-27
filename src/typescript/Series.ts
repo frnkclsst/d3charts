@@ -22,10 +22,6 @@ module frnk.UI.Charts {
             this._matrix = this._setStackedMatrix();
         }
 
-        public getSerie(i: number): Serie {
-            return this.items[i];
-        }
-
         public getMatrixByAxisName(name: string): Serie[] {
             var array = [];
             for (var i = 0; i < this.items.length; i++) {
@@ -116,12 +112,10 @@ module frnk.UI.Charts {
                 }
                 else {
                     var array = [];
-                    if (this.items[serie].min.length != 0) {
-                        array = Array.apply(null, new Array(this.items[serie].min.length)).map((): any => { return undefined; });
-                    }
-                    else if (this.items[serie].max.length) {
-                        array = Array.apply(null, new Array(this.items[serie].max.length)).map((): any => { return undefined; });
-                    }
+                    var length = 0;
+
+                    length = this.items[serie].min.length != 0 ? this.items[serie].min.length : this.items[serie].max.length;
+                    array = Array.apply(null, new Array(length)).map((): any => { return undefined; });
                     matrix.push(array);
                 }
             }
