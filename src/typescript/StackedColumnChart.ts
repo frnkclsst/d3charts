@@ -41,10 +41,10 @@ module frnk.UI.Charts {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
             var axis = this.axes[index];
 
-            return axis.scale(d.y0 * this.normalizer(d, serie));
+            return axis.scale(d.sum * this.normalizer(d, i, serie));
         }
 
-        public normalizer(d: any, serie: number): number {
+        public normalizer(d: any, i: number, serie: number): number {
             return StackType.Normal; // no normalization needed as this not 100% stacked
         }
     }

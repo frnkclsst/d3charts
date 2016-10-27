@@ -118,8 +118,8 @@ module frnk.UI.Charts {
         }
 
         public getXScale(axis: Axis): any {
-            var min = this.series.items[0].min;
-            var max = this.series.items[0].max;
+            var min = d3.min(this.series.items[0].data);
+            var max = d3.max(this.series.items[0].data);
             var start = this.canvas.plotArea.axisSize.left;
             var end =  this.canvas.plotArea.axisSize.left + this.canvas.plotArea.width;
 

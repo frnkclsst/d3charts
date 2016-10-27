@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Bubble Chart</title>
+    <title>Area Chart - Range</title>
     <!-- general styles -->
     <link rel="stylesheet" href="../../dist/css/style.css" />
     <link rel="stylesheet" href="../../dist/css/d3charts.css" />
@@ -12,6 +12,7 @@
 <body>
     <div id="chart" />
     <script>
+
         var data = {
             categories: {
                 format: "%s",
@@ -19,24 +20,27 @@
             },
             series: [{
                 data: [49.94, 71.53, 106.40, 129.21, 144.05, 176.07, 135.68, 148.58, 216.49, 194.11, 95.64, 54.43],
-                format: ".2f"
-            }, {
-                name: "Serie 1",
-                data: [129.94, 31.53, 16.40, 149.21, 174.05, 189.07, 235.68, 48.58, 16.49, 94.11, 55.64, 44.43],
-                size: [100, 200, 120, 45, 74.05, 89.07, 35.68, 8.58, 16.49, 4.11, 55.64, 44.43],
-                format: ".2f",
-                axis: "A"
-            }, {
-                name: "Serie 2",
+                min: [45.4, 61.53, 96.40, 119.21, 134.05, 166.07, 125.68, 138.58, 186.49, 184.11, 85.64, 44.43],
+                max: [59.94, 91.53, 116.40, 139.21, 154.05, 186.07, 145.68, 158.58, 256.49, 204.11, 105.64, 64.43],
+                axis: "Rainfall",
+                suffix: " mm",
+                name: "Rainfall",
+                type: "column"
+            },{
                 data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
-                size: [59, 20, 220, 78, 174.05, 18.07, 65.68, 58.58, 46.49, 24.11, 5.64, 94.43],
-                format: ".1f",
-                axis: "B"
+                min: [5.0, 4.9, 7.5, 12.5, 8.2, 17.5, 15.2, 16.5, 13.3, 8.3, 3.9, 4.6],
+                max: [10.0, 8.9, 11.5, 16.5, 21.2, 30.5, 32.2, 29.5, 24.3, 28.3, 23.9, 24.6],
+                axis: "Temperature",
+                suffix: " °C",
+                type: "line"
             }]
         };
 
         var options = {
             plotArea: {
+                area: {
+                    visible: true
+                },
                 line: {
                     interpolation: "linear"
                 },
@@ -47,46 +51,47 @@
                 padding: 20
             },
             legend: {
-                title: "Series",
+                title: "Rainfall vs Temperature",
                 position: "right",
                 width: 200
             },
             title: {
-                text: "Bubble Chart",
+                text: "Area Chart - Range",
                 align: "center",
-                height: 50
+                height: 50,
+                margin: 15
             },
-            xAxis: [{
-                gridlines: "none",
-                labels: {
-                    rotate: 0
-                },
-                tickmarks: false
-            }],
             yAxis: [{
-                name: "A",
-                gridlines: "major",
+                name: "Rainfall",
+                gridlines: "none",
                 orient: "left",
                 tickmarks: true,
-            },
-            {
-                name: "B",
-                gridlines: "major",
+                title: {
+                    text: "mm"
+                }
+            }, {
+                name: "Temperature",
+                gridlines: "none",
                 orient: "right",
-                tickmarks: true
+                tickmarks: true,
+                title: {
+                    text: "°C"
+                }
             }],
-            series: {
-                labels: {
-                    visible: true
+            xAxis: {
+                gridlines: "none",
+                orient: "left",
+                tickmarks: true,
+                title: {
+                    text: "Month"
                 }
             },
             tooltip: {
-                title: "Bubbles",
-                valueSuffix: ""
+                title: "Rainfall vs Temperature"
             }
         };
 
-		var chart = new frnk.UI.Charts.ScatterChart("#chart", data, options);
+		var chart = new frnk.UI.Charts.LineChart("#chart", data, options);
 		chart.draw();
     </script>
 </body>

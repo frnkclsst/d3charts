@@ -35,10 +35,10 @@ module frnk.UI.Charts {
             var axis = this.axes[index];
 
             if (d.perc < 0) {
-                return axis.scale((d.y0 + d.y) * this.normalizer(d, serie));
+                return axis.scale((d.sum + d.y) * this.normalizer(d, i, serie));
             }
             else {
-                return axis.scale((d.y0 - d.y) * this.normalizer(d, serie));
+                return axis.scale((d.sum - d.y) * this.normalizer(d, i, serie));
             }
         }
 
@@ -49,7 +49,7 @@ module frnk.UI.Charts {
             return axis.scale(this.categories.parseFormat(this.categories.getItem(i)));
         }
 
-        public normalizer(d: any, serie: number): number {
+        public normalizer(d: any, i: number, serie: number): number {
             return StackType.Normal; // no normalization needed as this not 100% stacked
         }
     }

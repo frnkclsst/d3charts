@@ -50,20 +50,25 @@ module frnk.UI.Charts {
                     area.y0 = (d: any, i: number, s: number): number => {
                         return this.getY0Coordinate(d, i, s);
                     };
+                    area.y1 = (d: any, i: number, s: number): number => {
+                        return this.getY1Coordinate(d, i, s);
+                    };
                     area.draw(this.series.getMatrixItem(areaSerie));
                 }
             }
 
             // draw lines
             for (var serie = 0; serie < this.series.length; serie++) {
-                var line = new SVGLine(svgSeries, this, serie);
-                line.x = (d: any, i: number, s: number): number => {
-                    return this.getXCoordinate(d, i, s);
-                };
-                line.y = (d: any, i: number, s: number): number => {
-                    return this.getYCoordinate(d, i, s);
-                };
-                line.draw(this.series.getMatrixItem(serie));
+                if (this.series.items[serie].data.length != 0) {
+                    var line = new SVGLine(svgSeries, this, serie);
+                    line.x = (d: any, i: number, s: number): number => {
+                        return this.getXCoordinate(d, i, s);
+                    };
+                    line.y = (d: any, i: number, s: number): number => {
+                        return this.getYCoordinate(d, i, s);
+                    };
+                    line.draw(this.series.getMatrixItem(serie));
+                }
             }
         }
 
@@ -88,8 +93,16 @@ module frnk.UI.Charts {
 
         public getY0Coordinate(d: any, i: number, serie: number): any {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+            var axis = this.axes[index];
 
-            return this.axes[index].scale(0);
+            return axis.scale(d.y0);
+        }
+
+        public getY1Coordinate(d: any, i: number, serie: number): any {
+            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+            var axis = this.axes[index];
+
+            return axis.scale(d.y1);
         }
     }
 }

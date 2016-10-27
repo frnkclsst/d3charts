@@ -258,6 +258,7 @@ module frnk.UI.Charts {
                 this.svgTitle.attr("x", -this.chart.canvas.plotArea.axisSize.right);
             }
         }
+
         public drawTitle(svg: D3.Selection): void {
             super.drawTitle(svg);
 

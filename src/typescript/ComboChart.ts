@@ -38,14 +38,16 @@ module frnk.UI.Charts {
 
             for (var lineSerie = 0; lineSerie < this.series.length; lineSerie++) {
                 if (this.series.items[lineSerie].type === "line") {
-                    var line = new SVGLine(svgSeries, this, lineSerie);
-                    line.x = (d: any, i: number, s: number): number => {
-                        return this.getXCoordinateLine(d, i, s);
-                    };
-                    line.y = (d: any, i: number, s: number): number => {
-                        return this.getYCoordinateLine(d, i, s);
-                    };
-                    line.draw(this.series.getMatrixItem(lineSerie));
+                    if (this.series.items[lineSerie].data.length != 0) {
+                        var line = new SVGLine(svgSeries, this, lineSerie);
+                        line.x = (d: any, i: number, s: number): number => {
+                            return this.getXCoordinateLine(d, i, s);
+                        };
+                        line.y = (d: any, i: number, s: number): number => {
+                            return this.getYCoordinateLine(d, i, s);
+                        };
+                        line.draw(this.series.getMatrixItem(lineSerie));
+                    }
                 }
             }
         }

@@ -37,10 +37,10 @@ module frnk.UI.Charts {
             var axis = this.axes[index];
 
             if (d.y < 0) {
-                return Math.abs(axis.scale(d.y));
+                return Math.abs(axis.scale(d.y0));
             }
             else {
-                return axis.scale(0);
+                return axis.scale(d.y0);
             }
         }
 
@@ -73,7 +73,7 @@ module frnk.UI.Charts {
             var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
             var axis = this.axes[index];
 
-            return Math.abs(axis.scale(d.y) - axis.scale(0));
+            return Math.abs(axis.scale(d.y1) - axis.scale(d.y0));
         }
 
         public getXScale(axis: Axis): any {

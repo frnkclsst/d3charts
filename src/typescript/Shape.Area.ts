@@ -10,6 +10,7 @@ module frnk.UI.Charts {
         public x: (d: any, i: number, serie: number) => number;
         public y: (d: any, i: number, serie: number) => number;
         public y0: (d: any, i: number, serie: number) => number;
+        public y1: (d: any, i: number, serie: number) => number;
 
         constructor(svg: D3.Selection, chart: LineChart, serie: number) {
             super(svg, chart, serie);
@@ -17,6 +18,7 @@ module frnk.UI.Charts {
             this.x = null;
             this.y = null;
             this.y0 = null;
+            this.y1 = null;
         }
 
         public draw(data: any): void {
@@ -24,7 +26,7 @@ module frnk.UI.Charts {
                 .interpolate(this.chart.options.plotArea.line.interpolation)
                 .x((d: any, i: number): number => { return this.x(d, i, this.serie); } )
                 .y0((d: any, i: number): number => { return this.y0(d, i, this.serie); })
-                .y1((d: any, i: number): number => { return this.y(d, i, this.serie); });
+                .y1((d: any, i: number): number => { return this.y1(d, i, this.serie); });
 
             var svgArea = this.svg.append("g")
                 .attr("id", "area-" + this.serie);

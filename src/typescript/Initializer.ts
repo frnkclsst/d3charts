@@ -252,7 +252,7 @@ module frnk.UI.Charts {
         constructor(options: IPlotAreaOptions) {
             // defaults
             this.animation = {
-                duration: 2000,
+                duration: 1000,
                 ease: "linear"
             };
             this.area = {

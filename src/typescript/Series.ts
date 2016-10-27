@@ -64,14 +64,17 @@ module frnk.UI.Charts {
             if (this._chart.stackType != StackType.None && this.items.length > 1) { // can only be stacked if you have more than 1 series defined
                 return d3.max(matrix, function (array: number[]): number {
                     return d3.max(array, function (d: any): number {
-                        return d.y0;
+                        return d.sum;
                     });
                 });
             }
             else {
                 return d3.max(matrix, function (array: number[]): number {
                     return d3.max(array, function (d: any): number {
-                        return d.y;
+                        if (d.y != undefined && d.y > d.y1) {
+                            return d.y;
+                        }
+                        return d.y1;
                     });
                 });
             }
@@ -89,14 +92,17 @@ module frnk.UI.Charts {
             if (this._chart.stackType != StackType.None && this.items.length > 1) { // can only be stacked if you have more than 1 series defined
                 return d3.min(matrix, function (array: number[]): number {
                     return d3.min(array, function (d: any): number {
-                        return d.y0 + d.y;
+                        return d.sum + d.y;
                     });
                 });
             }
             else {
                 return d3.min(matrix, function (array: number[]): number {
                     return d3.min(array, function (d: any): number {
-                        return d.y;
+                        if (d.y != undefined && d.y < d.y0) {
+                            return d.y;
+                        }
+                        return d.y0;
                     });
                 });
             }
@@ -105,13 +111,31 @@ module frnk.UI.Charts {
         private _getMappedMatrix(): any[] {
             var matrix = [];
             for (var serie = 0; serie < this.items.length; serie++) {
-                matrix.push(this.items[serie].getValues());
+                if (this.items[serie].data.length != 0) {
+                    matrix.push(this.items[serie].data);
+                }
+                else {
+                    var array = [];
+                    if (this.items[serie].min.length != 0) {
+                        array = Array.apply(null, new Array(this.items[serie].min.length)).map((): any => { return undefined; });
+                    }
+                    else if (this.items[serie].max.length) {
+                        array = Array.apply(null, new Array(this.items[serie].max.length)).map((): any => { return undefined; });
+                    }
+                    matrix.push(array);
+                }
             }
 
-            var mappedMatrix = matrix.map(function (data: any, i: number): any[] {
+            var mappedMatrix = matrix.map((data: any, i: number): any[] => {
                 var t = matrix[i];
-                return t.map(function (d: any, j: number): any {
-                    return { y: d, y0: 0, perc: 0 };
+                return t.map((d: any, j: number): any => {
+                    return {
+                        y: d, // base data point
+                        y0: this.items[i].min[j] != undefined ? this.items[i].min[j] : 0, // min data point
+                        y1: this.items[i].max[j] != undefined ? this.items[i].max[j] : d, // max data point
+                        perc: 0, // perc of the data point across the series
+                        sum: 0 // sum of this data point and previous one, used for stacked charts
+                    };
                 });
             });
 
@@ -132,13 +156,13 @@ module frnk.UI.Charts {
 
                 m.forEach(function (k: any): any {
                     k.perc = k.y / sum; // calculate percentage of this value across the different series
-                    k.max = sum;
+                    k.maxDataPoints = sum;
                     if (k.y < 0) {
-                        k.y0 = negBase;
+                        k.sum = negBase;
                         negBase -= Math.abs(k.y);
                     }
                     else {
-                        k.y0 = posBase = posBase + Math.abs(k.y);
+                        k.sum = posBase = posBase + Math.abs(k.y);
                     }
                 });
             });

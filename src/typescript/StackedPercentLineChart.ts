@@ -28,11 +28,11 @@ module frnk.UI.Charts {
                 .range([start, end]);
         }
 
-        protected normalizer(d: any, serie: number): number {
+        protected normalizer(d: any, i: number, serie: number): number {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
             var axis = this.axes[index];
 
-            return axis.scale.domain()[0] / d.max;
+            return axis.scale.domain()[0] / d.maxDataPoints;
         }
     }
 }

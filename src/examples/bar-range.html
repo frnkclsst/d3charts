@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Bar Chart - Range</title>
+    <!-- general styles -->
+    <link rel="stylesheet" href="../../dist/css/style.css" />
+    <link rel="stylesheet" href="../../dist/css/d3charts.css" />
+    <script src="../../dist/js/d3.min.js" charset="utf-8"></script>
+    <script src="../../dist/js/d3.charts.js"></script>
+</head>
+<body>
+    <div id="chart" />
+    <script>
+        var data = {
+            categories: {
+                format: "%s",
+                data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+            },
+            series: [{
+                name: "Temperature",
+                min: [-9.7, -8.7, -3.5, -1.4, 0, 2.9, 9.2, 7.3, 4.4, -3.1, -5.2, -13.5],
+                max: [9.4, 6.5, 9.4, 19.9, 22.6, 29.5, 30.7, 26.5, 18.0, 11.4, 10.4, 9.8]
+            }]
+        };
+
+        var options = {
+            plotArea: {
+                padding: 20
+            },
+            legend: {
+                title: "Temperature Variations",
+                position: "right",
+                width: 200
+            },
+            title: {
+                text: "Bar Chart - Range",
+                align: "center",
+                height: 50
+            },
+            xAxis: [{
+                gridlines: "none",
+                labels: {
+                    rotate: 0
+                },
+                tickmarks: false
+            }],
+            yAxis: [{
+                gridlines: "none",
+                tickmarks: true,
+                ticks: 4
+            }],
+            tooltip: {
+                title: "Temperature Variations",
+                valueSuffix: " °C"
+            }
+        };
+
+		var chart = new frnk.UI.Charts.BarChart("#chart", data, options);
+		chart.draw();
+    </script>
+</body>
+</html>

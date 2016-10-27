@@ -42,7 +42,7 @@ module frnk.UI.Charts {
                     .attr("id", "serie-" + serie);
 
                 var svgArcs = svgSerie.selectAll("g.slice")
-                    .data(d3Pie(this.series.getSerie(serie).getValues()))
+                    .data(d3Pie(this.series.getSerie(serie).data))
                     .enter()
                     .append("g")
                     .attr("id", (d: any, i: number): string => { return "slice-" + i; })

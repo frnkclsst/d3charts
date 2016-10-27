@@ -23,8 +23,21 @@ module frnk.UI.Charts {
                 var subtitle = _self.chart.categories.getLabel(i);
                 var color = _self.chart.colorPalette.color(serie);
                 var serieTitle = _self.chart.series.getLabel(serie);
-                var dataPoint = d.y;
-                var percent = d.perc;
+                var dataPoint;
+                if (d.y === d.y1) {
+                    dataPoint = d3.format(_self.getPointFormat(serie))(d.y) + _self.getSuffix(serie);
+                }
+                else if (d.y === undefined) {
+                    dataPoint =
+                        d3.format(_self.getPointFormat(serie))(d.y0) + _self.getSuffix(serie) + " - " +
+                        d3.format(_self.getPointFormat(serie))(d.y1) + _self.getSuffix(serie);
+                }
+                else {
+                    dataPoint = d3.format(_self.getPointFormat(serie))(d.y) + _self.getSuffix(serie) + " (" +
+                                d3.format(_self.getPointFormat(serie))(d.y0) + _self.getSuffix(serie) + " - " +
+                                d3.format(_self.getPointFormat(serie))(d.y1) + _self.getSuffix(serie) + ")";
+                }
+                var percent = isNaN(d.perc) ? "" : Math.round(d.perc * 100) + "%";
 
                 if (_self.chart instanceof PieChart) {
                     color = _self.chart.colorPalette.color(i);
@@ -43,8 +56,8 @@ module frnk.UI.Charts {
                     "<div>" +
                         "<div class='color' style='width:24px; height: 11px; background-color:" + color + "'></div>" +
                         "<div class='serie'>" + serieTitle + "</div>" +
-                        "<div class='percent'>" + Math.round(percent * 100) + "%</div>" +
-                        "<div class='value'>" + d3.format(_self.getPointFormat(serie))(dataPoint) + _self.getSuffix(serie) + "</div>" +
+                        "<div class='percent'>" + percent + "</div>" +
+                        "<div class='value'>" + dataPoint + "</div>" +
                     "</div>"
                 );
 

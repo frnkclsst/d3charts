@@ -6,12 +6,13 @@ module frnk.UI.Charts {
 
     export class Serie {
         public axis: string;
+        public data: number[];
         public format: string;
         public index: number;
         public marker: string;
-        public max: number;
-        public min: number;
         public name: string;
+        public max: number[];
+        public min: number[];
         public size: number;
         public suffix: string;
         public sum: number;
@@ -19,11 +20,12 @@ module frnk.UI.Charts {
         public visible: boolean;
 
         private _chart: Chart;
-        private _data: number[];
 
         constructor(chart: Chart, serie: any, index: number) {
             this._chart = chart;
-            this._data = serie.data;
+            this.data = serie.data != undefined ? serie.data : []; // TODO - refactor and provide defaults
+            this.max = serie.max != undefined ? serie.max : [];
+            this.min = serie.min != undefined ? serie.min : [];
 
             // TODO - separate the options from the real data
             this.axis = serie.axis;
@@ -31,12 +33,10 @@ module frnk.UI.Charts {
             this.format = serie.format;
             this.index = index;
             this.marker = this._setMarkerType(serie);
-            this.max = d3.max(this._data);
-            this.min = d3.min(this._data);
             this.name = serie.name;
             this.size = serie.size;
             this.suffix = serie.suffix;
-            this.sum = d3.sum(this._data);
+            this.sum = d3.sum(this.data);
             this.type = serie.type;
         }
 
@@ -50,10 +50,6 @@ module frnk.UI.Charts {
             }
 
             return "Serie " + (i + 1);
-        }
-
-        public getValues(): number[] {
-            return this._data;
         }
 
         private _setMarkerType(serie: any): string {

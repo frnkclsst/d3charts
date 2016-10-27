@@ -36,7 +36,7 @@ module frnk.UI.Charts {
             var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
             var axis = this.axes[index];
 
-            return Math.abs(axis.scale(d.y) - this.axes[index].scale(0));
+            return Math.abs(axis.scale(d.y1) - this.axes[index].scale(d.y0));
         }
 
         public getWidth(d: any, i: number, serie: number): any {
@@ -69,10 +69,10 @@ module frnk.UI.Charts {
             var axis = this.axes[index];
 
             if (d.y < 0) {
-                return axis.scale(d.y) - Math.abs(axis.scale(d.y) - this.axes[index].scale(0));
+                return Math.abs(axis.scale(0));
             }
             else {
-                return axis.scale(d.y);
+                return axis.scale(d.y1);
             }
         }
     }
