@@ -41,6 +41,7 @@ module frnk.UI.Charts {
                 .attr("height", this.height);
 
             // TODO - should be drawn by areas themselves
+            // there should be a border property on an area
             // draw separator for title
             if (this.titleArea.position === "bottom") {
                 this.drawSeparator(this.titleArea.x, this.width, this.titleArea.y, this.titleArea.y);

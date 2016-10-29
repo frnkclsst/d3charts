@@ -110,7 +110,6 @@ module frnk.UI.Charts {
         }
 
         public drawTitle(svg: D3.Selection): void {
-            // TODO - take the name of the serie plotted
             this.svgTitle = svg.append("text")
                 .text(this.title.text)
                 .attr("class", "title");
