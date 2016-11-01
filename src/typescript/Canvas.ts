@@ -37,6 +37,7 @@ module frnk.UI.Charts {
             // draw chart area
             this.svg = d3.select(this._chart.selector)
                 .append("svg")
+                .attr("class", "chart")
                 .attr("width", this.width)
                 .attr("height", this.height);
 

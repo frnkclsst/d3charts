@@ -53,11 +53,17 @@ module frnk.UI.Charts {
 
                 divTooltip.html("<div class='title'>" + title + "</div>" +
                     "<div class='subtitle'>" + subtitle + "</div><br/>" +
-                    "<div>" +
-                        "<div class='color' style='width:24px; height: 11px; background-color:" + color + "'></div>" +
-                        "<div class='serie'>" + serieTitle + "</div>" +
-                        "<div class='percent'>" + percent + "</div>" +
-                        "<div class='value'>" + dataPoint + "</div>" +
+                    "<div class='items'>" +
+                        "<div class='item'>" +
+                            "<div class='cell color'>" +
+                                "<svg width='24' height='11'>" +
+                                    "<rect x='0' width='24' height='11' style='fill: " + color + "'></rect>" + // TODO - use same symbol as in the legend
+                                "</svg>" +
+                            "</div>" +
+                            "<div class='cell serie'>" + serieTitle + "</div>" +
+                            "<div class='cell value'>" + dataPoint + "</div>" +
+                            "<div class='cell percent'>" + percent + "</div>" +
+                        "</div>" +
                     "</div>"
                 );
 

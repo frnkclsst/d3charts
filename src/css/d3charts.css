@@ -12,7 +12,7 @@ html {
     width: 80%;
 }
 
-svg {
+svg .chart {
 	background-color: #fafafa;
     box-shadow: 1px 1px 2px #ddd;
     border: 1px solid #eeeeee;
@@ -160,7 +160,6 @@ svg {
 .tooltip {
     position: absolute;
     text-align: left;
-    width: 200px;
     padding: 20px;
     font: 9px Arial;
     background: #fafafa;
@@ -206,24 +205,32 @@ svg {
     text-transform: none;
 }
 
+.tooltip .items {
+    display: table;
+    color: #262c39;
+}
+
+.tooltip .item {
+    display: table-row;
+}
+
+.tooltip .cell {
+    display: table-cell;
+    padding: 5px;
+}
+
 .tooltip .color {
-    float: left;
 }
 
 .tooltip .serie {
-    color: #262c39;
-    float: left;
-    margin-left: 5px;
+
 }
 
 .tooltip .value {
-    color: #262c39;
-    float: right;
-    margin-right: 30px;
+    text-align: right;
+    min-width: 50px;
 }
 
 .tooltip .percent {
-    color: #262c39;
-    float: right;
-    margin-left: 5px;
+
 }
