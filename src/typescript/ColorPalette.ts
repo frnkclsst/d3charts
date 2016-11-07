@@ -12,7 +12,7 @@ module frnk.UI.Charts {
         constructor(chart: Chart) {
             this._chart = chart;
             this.color = d3.scale.ordinal()
-                .range(this._chart.options.plotArea.colors);
+                .range(this._chart.options.plotOptions.colors);
         }
     }
 }

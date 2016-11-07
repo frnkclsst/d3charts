@@ -12,7 +12,7 @@ html {
     width: 80%;
 }
 
-svg .chart {
+.chart {
 	background-color: #fafafa;
     box-shadow: 1px 1px 2px #ddd;
     border: 1px solid #eeeeee;
@@ -227,10 +227,11 @@ svg .chart {
 }
 
 .tooltip .value {
-    text-align: right;
     min-width: 50px;
+    text-align: right;
 }
 
 .tooltip .percent {
-
+    min-width: 50px;
+    text-align: right;
 }

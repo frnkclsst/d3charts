@@ -19,7 +19,7 @@ module frnk.UI.Charts {
 
         public draw(data: any): void {
             var line = d3.svg.line()
-                .interpolate(this.chart.options.plotArea.line.interpolation)
+                .interpolate(this.chart.options.plotOptions.line.interpolation)
                 .x((d: any, i: number): number => { return this.x(d, i, this.serie); })
                 .y((d: any, i: number): number => { return this.y(d, i, this.serie); });
 
@@ -43,13 +43,13 @@ module frnk.UI.Charts {
                 .attr("stroke-dasharray", pathLenght + " " + pathLenght)
                 .attr("stroke-dashoffset", pathLenght)
                 .transition()
-                .duration(this.chart.options.plotArea.animation.duration)
-                .ease(this.chart.options.plotArea.animation.ease)
+                .duration(this.chart.options.plotOptions.animation.duration)
+                .ease(this.chart.options.plotOptions.animation.ease)
                 .attr("stroke-dashoffset", 0)
                 .each("end", (): void => {
                     count--;
                     // draw markers
-                    if (this.chart.options.plotArea.markers.visible === true) {
+                    if (this.chart.options.plotOptions.markers.visible === true) {
                         var svgMarkers =  this.drawMarkers();
 
                         // draw tooltip
@@ -91,10 +91,10 @@ module frnk.UI.Charts {
                         });
 
                     if (rotation != 0) {
-                        dx = Html.getHeight(text) + this.chart.options.plotArea.markers.size / 2;
+                        dx = Html.getHeight(text) + this.chart.options.plotOptions.markers.size / 2;
                     }
                     else {
-                        dy = -Html.getHeight(text) - this.chart.options.plotArea.markers.size / 2;
+                        dy = -Html.getHeight(text) - this.chart.options.plotOptions.markers.size / 2;
                     }
 
                     text
@@ -113,7 +113,7 @@ module frnk.UI.Charts {
                     "stroke": this.chart.colorPalette.color(this.serie),
                     "stroke-width": 0,
                     "d": d3.svg.symbol()
-                        .size(this.chart.options.plotArea.markers.size * 10)
+                        .size(this.chart.options.plotOptions.markers.size * 10)
                         .type(this.chart.series.items[this.serie].marker)(),
                     "transform": (d: any, i: number): string => {
                         return "translate(" + this.x(d, i, this.serie) + ", " + this.y(d, i, this.serie) + ")";

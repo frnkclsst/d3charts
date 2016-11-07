@@ -36,7 +36,7 @@
         };
 
 		var options = {
-            plotArea: {
+            plotOptions: {
                 area: {
                     visible: true
                 },
@@ -46,15 +46,17 @@
                 markers: {
                     visible: true,
                     type: "circle"
-                },
+                }
+            },
+            plotArea: {
                 padding: 20
             },
-            legend: {
+            legendArea: {
                 title: "Continent",
                 position: "right",
                 width: 200
             },
-            title: {
+            titleArea: {
                 text: "Area Chart - Stacked",
                 align: "center",
                 height: 50

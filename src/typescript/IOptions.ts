@@ -16,6 +16,7 @@ module frnk.UI.Charts {
         canvas?: ICanvasOptions;
         legend?: ILegendAreaOptions;
         plotArea?: IPlotAreaOptions;
+        plotOptions?: IPlotOptions;
         series?: ISeriesOptions;
         title?: ITitleAreaOptions;
         xAxes?: IAxisOptions[];
@@ -41,11 +42,23 @@ module frnk.UI.Charts {
     }
 
     export interface ICanvasOptions {
+        border: {
+            bottom: boolean,
+            left: boolean,
+            right: boolean,
+            top: boolean
+        };
         height: number;
         width: number;
     }
 
     export interface ILegendAreaOptions {
+        border: {
+            bottom: boolean,
+            left: boolean,
+            right: boolean,
+            top: boolean
+        };
         height: number;
         position: string;
         title: string;
@@ -53,6 +66,16 @@ module frnk.UI.Charts {
     }
 
     export interface IPlotAreaOptions {
+        border: {
+            bottom: boolean,
+            left: boolean,
+            right: boolean,
+            top: boolean
+        };
+        padding: number;
+    }
+
+    export interface IPlotOptions {
         animation: {
             duration: number;
             ease: string;
@@ -74,9 +97,8 @@ module frnk.UI.Charts {
             size: number,
             type: MarkerType
         };
-        padding: number;
         pie: {
-          innerRadius: number;
+            innerRadius: number;
         };
     }
 
@@ -90,6 +112,12 @@ module frnk.UI.Charts {
 
     export interface ITitleAreaOptions {
         align: string;
+        border: {
+            bottom: boolean,
+            left: boolean,
+            right: boolean,
+            top: boolean
+        };
         height: number;
         position: string;
         margin: number;

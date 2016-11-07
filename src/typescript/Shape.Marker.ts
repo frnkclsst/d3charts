@@ -47,8 +47,8 @@ module frnk.UI.Charts {
                     count++; // count number of bars
                 })
                 .transition()
-                .duration(this.chart.options.plotArea.animation.duration)
-                .ease(this.chart.options.plotArea.animation.ease)
+                .duration(this.chart.options.plotOptions.animation.duration)
+                .ease(this.chart.options.plotOptions.animation.ease)
                 .attr("d", (d: any, i: number): any => {
                     var size = _self.chart.series.items[this.serie].size != undefined ? _self.chart.series.items[this.serie].size[i] * 10 : 60;
                     return d3.svg.symbol()

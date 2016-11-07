@@ -71,7 +71,7 @@ module frnk.UI.Charts {
                 axis.setScaleType(ScaleType.Ordinal);
                 return d3.scale.ordinal()
                     .domain(this.categories.getLabels())
-                    .rangeBands([start, end], this.options.plotArea.bands.innerPadding, this.options.plotArea.bands.outerPadding);
+                    .rangeBands([start, end], this.options.plotOptions.bands.innerPadding, this.options.plotOptions.bands.outerPadding);
             }
             else {
                 axis.setScaleType(ScaleType.Time);

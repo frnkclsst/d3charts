@@ -59,8 +59,8 @@ module frnk.UI.Charts {
                     count++; // count number of bars
                 })
                 .transition()
-                .duration(this.chart.options.plotArea.animation.duration)
-                .ease(this.chart.options.plotArea.animation.ease)
+                .duration(this.chart.options.plotOptions.animation.duration)
+                .ease(this.chart.options.plotOptions.animation.ease)
                 .attr("width", (d: any, i: number): number => {
                     return this.width(d, i, this.serie);
                 })

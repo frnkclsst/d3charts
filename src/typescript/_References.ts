@@ -4,7 +4,6 @@
 /// <reference path="Enums.ts" />
 
 // interfaces
-/// <reference path="IChartArea.ts" />
 /// <reference path="IOptions.ts" />
 
 // helpers
@@ -17,7 +16,8 @@
 /// <reference path="Series.ts" />
 /// <reference path="Initializer.ts" />
 
-// canvas
+// areas
+/// <reference path="ChartArea.ts" />
 /// <reference path="Canvas.ts" />
 /// <reference path="PlotArea.ts" />
 /// <reference path="LegendArea.ts" />

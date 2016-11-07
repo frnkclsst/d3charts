@@ -37,7 +37,7 @@
         };
 
         var options = {
-            plotArea: {
+            plotOptions: {
                 area: {
                     visible: true
                 },
@@ -52,15 +52,17 @@
                     visible: true,
                     type: "circle",
                     size: 6
-                },
+                }
+            },
+            plotArea: {
                 padding: 20
             },
-            legend: {
+            legendArea: {
                 title: "Continent",
                 position: "right",
                 width: 200
             },
-            title: {
+            titleArea: {
                 text: "Area Chart - 100% Stacked",
                 align: "center",
                 height: 50

@@ -4,30 +4,31 @@
 
 module frnk.UI.Charts {
 
-    export class Canvas implements IChartArea {
-        public height: number;
+    export class Canvas extends ChartArea {
+        public border: {
+            bottom: boolean;
+            left: boolean;
+            right: boolean;
+            top: boolean;
+        };
         public legendArea: LegendArea;
-        public padding: number;
         public plotArea: PlotArea;
-        public svg: D3.Selection;
         public titleArea: TitleArea;
-        public width: number;
-        public x: number;
-        public y: number;
-
-        private _chart: Chart;
 
         constructor(chart: Chart) {
-            this._chart = chart;
+            super(chart);
 
             this.titleArea = new TitleArea(chart);
             this.legendArea = new LegendArea(chart);
             this.plotArea = new PlotArea(chart);
-
+            this.border = {
+                bottom: chart.options.canvas.border.bottom,
+                left: chart.options.canvas.border.left,
+                right: chart.options.canvas.border.right,
+                top: chart.options.canvas.border.top
+            };
             this.height = chart.options.canvas.height;
             this.width = chart.options.canvas.width;
-            this.x = 0;
-            this.y = 0;
         }
 
         public draw(): void {
@@ -41,46 +42,13 @@ module frnk.UI.Charts {
                 .attr("width", this.width)
                 .attr("height", this.height);
 
-            // TODO - should be drawn by areas themselves
-            // there should be a border property on an area
-            // draw separator for title
-            if (this.titleArea.position === "bottom") {
-                this.drawSeparator(this.titleArea.x, this.width, this.titleArea.y, this.titleArea.y);
-            }
-            else {
-                // default position is top
-                this.drawSeparator(this.titleArea.x, this.width, this.titleArea.height, this.titleArea.height);
-            }
-
-            // draw separator for legend
-            if (this.legendArea.position === "right") {
-                this.drawSeparator(this.legendArea.x, this.legendArea.x, this.legendArea.y, this.legendArea.height);
-            }
-            else if (this.legendArea.position === "bottom") {
-                this.drawSeparator(this.legendArea.x, this.legendArea.width, this.legendArea.y, this.legendArea.y);
-            }
-            else if (this.legendArea.position === "top") {
-                this.drawSeparator(this.legendArea.x, this.legendArea.width, this.legendArea.y + this.legendArea.height, this.legendArea.y + this.legendArea.height);
-            }
-            else {
-                // default position is left
-                this.drawSeparator(this.legendArea.width, this.legendArea.width, this.legendArea.y, this.legendArea.height);
-            }
-
             // draw areas
             this.titleArea.draw();
             this.legendArea.draw();
             this.plotArea.draw();
+            this.drawBorders();
         }
 
-        public drawSeparator(x1: number, x2: number, y1: number, y2: number): void {
-            this.svg.append("line")
-                .attr("class", "sep")
-                .attr("x1", x1)
-                .attr("y1", y1)
-                .attr("x2", x2)
-                .attr("y2", y2);
-        }
         public positionAreas(): void {
             var container = d3.select(this._chart.selector);
 
@@ -142,14 +110,14 @@ module frnk.UI.Charts {
                 if (this.legendArea.position === "right") {
                     this.legendArea.x = this.width - this.legendArea.width;
                     this.legendArea.y = this.titleArea.height;
-                    this.legendArea.height = this.height;
+                    this.legendArea.height = this.height - this.titleArea.height;
                     this.plotArea.x = 0;
                     this.plotArea.y = this.titleArea.height;
                 }
                 else if (this.legendArea.position === "left") {
                     this.legendArea.x = 0;
                     this.legendArea.y = this.titleArea.height;
-                    this.legendArea.height = this.height;
+                    this.legendArea.height = this.height - this.titleArea.height;
                     this.plotArea.x = this.legendArea.width;
                     this.plotArea.y = this.titleArea.height;
                 }

@@ -4,29 +4,27 @@
 
 module frnk.UI.Charts {
 
-    export class LegendArea implements IChartArea {
-        public height: number;
+    export class LegendArea extends ChartArea {
         public position: string;
-        public svg: D3.Selection;
         public title: string;
-        public width: number;
-        public x: number;
-        public y: number;
 
-        private _chart: Chart;
         private _items: string[];
         private _symbolWidth: number = 24;
         private _symbolHeight: number = 12;
 
         constructor(chart: Chart) {
-            this._chart = chart;
+            super(chart);
 
+            this.border = {
+                bottom: chart.options.legend.border.bottom,
+                left: chart.options.legend.border.left,
+                right: chart.options.legend.border.right,
+                top: chart.options.legend.border.top
+            };
             this.height = chart.options.legend.height;
             this.position = chart.options.legend.position;
             this.title = chart.options.legend.title;
             this.width = chart.options.legend.width;
-            this.x = 0;
-            this.y = 0;
         }
 
         public draw(): void {
@@ -51,6 +49,7 @@ module frnk.UI.Charts {
 
             this.drawTitle(this.svg);
             this.drawItems(this.svg);
+            this.drawBorders();
         }
 
         private drawItems(svg: D3.Selection): void {
@@ -120,18 +119,18 @@ module frnk.UI.Charts {
                 .style("stroke-width", "2");
 
             // draw area
-            if (this._chart.options.plotArea.area.visible === true) {
+            if (this._chart.options.plotOptions.area.visible === true) {
                 svg.append("rect")
                     .attr("x", 0)
                     .attr("y", this._symbolHeight / 2)
-                    .attr("opacity", this._chart.options.plotArea.area.opacity)
+                    .attr("opacity", this._chart.options.plotOptions.area.opacity)
                     .attr("width", this._symbolWidth)
                     .attr("height", this._symbolHeight / 2)
                     .style("fill", this._chart.colorPalette.color(serie));
             }
 
             // draw marker
-            if (this._chart.options.plotArea.markers.visible === true) {
+            if (this._chart.options.plotOptions.markers.visible === true) {
                 this.drawMarkerSymbol(svg, serie);
             }
         }

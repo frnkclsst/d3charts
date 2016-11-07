@@ -33,21 +33,23 @@
         };
 
         var options = {
-            plotArea: {
+            plotOptions: {
                 line: {
                     interpolation: "cardinal"
                 },
                 markers: {
                     visible: true
-                },
+                }
+            },
+            plotArea: {
                 padding: 20
             },
-            legend: {
+            legendArea: {
                 title: "Rainfall vs Temperature",
                 position: "right",
                 width: 200
             },
-            title: {
+           titleArea: {
                 text: "Line Chart - Dual Axes",
                 align: "center",
                 height: 50,

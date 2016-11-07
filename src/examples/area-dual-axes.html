@@ -33,7 +33,7 @@
         };
 
         var options = {
-            plotArea: {
+            plotOptions: {
                 area: {
                     visible: true
                 },
@@ -43,15 +43,17 @@
                 markers: {
                     visible: true,
                     type: "circle"
-                },
+                }
+            },
+            plotArea: {
                 padding: 20
             },
-            legend: {
+            legendArea: {
                 title: "Rainfall vs Temperature",
                 position: "right",
                 width: 200
             },
-            title: {
+            titleArea: {
                 text: "Area Chart - Dual Axes",
                 align: "center",
                 height: 50,

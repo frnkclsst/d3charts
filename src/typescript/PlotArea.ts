@@ -4,24 +4,17 @@
 
 module frnk.UI.Charts {
 
-    export class PlotArea implements IChartArea {
+    export class PlotArea extends ChartArea {
         public axisSize: {
             left: number;
             right: number;
             top: number;
             bottom: number;
         };
-        public height: number;
         public padding: number;
-        public width: number;
-        public svg: D3.Selection;
-        public x: number;
-        public y: number;
-
-        private _chart: Chart;
 
         constructor(chart: Chart) {
-            this._chart = chart;
+            super(chart);
 
             this.axisSize = {
                 left: 0,
@@ -29,11 +22,13 @@ module frnk.UI.Charts {
                 top: 0,
                 bottom: 0
             };
-            this.height = 0;
+            this.border = {
+                bottom: chart.options.plotArea.border.bottom,
+                left: chart.options.plotArea.border.left,
+                right: chart.options.plotArea.border.right,
+                top: chart.options.plotArea.border.top
+            };
             this.padding = chart.options.plotArea.padding;
-            this.width = 0;
-            this.x = 0;
-            this.y = 0;
         }
 
         public draw(): void {
@@ -47,6 +42,8 @@ module frnk.UI.Charts {
             this.svg = this._chart.canvas.svg.append("g")
                 .attr("class", "plotarea")
                 .attr("transform", "translate(" + (this.x + this.padding) + "," + (this.y + this.padding) + ")");
+
+            this.drawBorders();
         }
     }
 }

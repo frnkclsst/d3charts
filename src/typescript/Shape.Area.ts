@@ -23,7 +23,7 @@ module frnk.UI.Charts {
 
         public draw(data: any): void {
             var d3Area = d3.svg.area()
-                .interpolate(this.chart.options.plotArea.line.interpolation)
+                .interpolate(this.chart.options.plotOptions.line.interpolation)
                 .x((d: any, i: number): number => { return this.x(d, i, this.serie); } )
                 .y0((d: any, i: number): number => { return this.y0(d, i, this.serie); })
                 .y1((d: any, i: number): number => { return this.y1(d, i, this.serie); });
@@ -40,9 +40,9 @@ module frnk.UI.Charts {
             // add animation
             svgPath
                 .transition()
-                .duration(this.chart.options.plotArea.animation.duration)
-                .ease(this.chart.options.plotArea.animation.ease)
-                .style("opacity", this.chart.options.plotArea.area.opacity);
+                .duration(this.chart.options.plotOptions.animation.duration)
+                .ease(this.chart.options.plotOptions.animation.ease)
+                .style("opacity", this.chart.options.plotOptions.area.opacity);
         }
     }
 }

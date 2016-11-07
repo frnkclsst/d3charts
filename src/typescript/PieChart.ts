@@ -13,7 +13,7 @@ module frnk.UI.Charts {
 
         constructor(selector: string, data: IData, options?: IOptions) {
             super(selector, data, options);
-            this.innerRadiusPercentage = this.options.plotArea.pie.innerRadius;
+            this.innerRadiusPercentage = this.options.plotOptions.pie.innerRadius;
         }
 
         public draw(): void {
@@ -63,8 +63,8 @@ module frnk.UI.Charts {
                         count++;
                     })
                     .transition()
-                    .duration(this.options.plotArea.animation.duration)
-                    .ease(this.options.plotArea.animation.ease)
+                    .duration(this.options.plotOptions.animation.duration)
+                    .ease(this.options.plotOptions.animation.ease)
                     .attrTween("d", function (d: any, i: number): any {
                         var interpolate = d3.interpolate(d.startAngle, d.endAngle);
                         var s = this.getAttribute("data-serie");

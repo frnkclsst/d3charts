@@ -4,31 +4,28 @@
 
 module frnk.UI.Charts {
 
-    export class TitleArea implements IChartArea {
+    export class TitleArea extends ChartArea {
         public align: string;
-        public height: number;
         public margin: number;
         public position: string;
         public subTitle: string;
-        public svg: D3.Selection;
         public text: string;
-        public width: number;
-        public x: number;
-        public y: number;
-
-        private _chart: Chart;
 
         constructor(chart: Chart) {
-            this._chart = chart;
+            super(chart);
 
             this.align = chart.options.title.align;
+            this.border = {
+                bottom: chart.options.title.border.bottom,
+                left: chart.options.title.border.left,
+                right: chart.options.title.border.right,
+                top: chart.options.title.border.top
+            };
             this.margin = chart.options.title.margin;
             this.height = chart.options.title.height;
             this.position = chart.options.title.position;
             this.subTitle = chart.options.title.subtitle;
             this.text = chart.options.title.text;
-            this.x = 0;
-            this.y = 0;
         }
 
         public draw(): void {
@@ -62,6 +59,8 @@ module frnk.UI.Charts {
 
             svgTitleMain.attr("transform", "translate(" + x + "," + y + ")");
             svgSubTitle.attr("transform", "translate(" + xSubtitle + ", " + (y + Html.getHeight(svgSubTitle)) + ")");
+
+            this.drawBorders();
         }
     }
 }
