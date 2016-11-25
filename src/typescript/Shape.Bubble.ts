@@ -4,7 +4,7 @@
 
 module frnk.UI.Charts {
 
-    export class SVGMarker extends SVGShape {
+    export class SVGBubble extends SVGShape {
 
         protected chart: XYChart;
 

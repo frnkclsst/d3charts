@@ -9,8 +9,6 @@ module frnk.UI.Charts {
         public title: string;
 
         private _items: string[];
-        private _symbolWidth: number = 24;
-        private _symbolHeight: number = 12;
 
         constructor(chart: Chart) {
             super(chart);
@@ -53,129 +51,56 @@ module frnk.UI.Charts {
         }
 
         private drawItems(svg: D3.Selection): void {
-            var items = svg
-                .selectAll(".item")
-                .data(this._items)
-                .enter().append("g")
-                .attr("class", "item")
-                .attr("transform", (d: any, i: any): string => {
-                    return "translate(" + 22 + "," + ((i * 20) + 60) + ")";
-                })
-                .on("click", (d: any, i: number): void => {
-                    // TODO - refactor clicking items in legend
-                    // - add checkbox
-                    // - add interpolation when in stacked / pie charts
-                    var opacity;
-                    if (this._chart instanceof PieChart) {
-                        var slice = d3.selectAll("#slice-" + i);
-                        opacity = slice.style("opacity") === "1" ? 0 : 1;
-                        d3.selectAll("#slice-" + i).transition().duration(200).style("opacity", opacity);
-                        d3.selectAll("#labels-" + i).transition().duration(200).style("opacity", opacity);
-                    }
-                    else {
-                        var serie = d3.selectAll("#serie-" + i);
-                        opacity = serie.style("opacity") === "1" ? 0 : 1;
-                        d3.select("#serie-" + i).transition().duration(200).style("opacity", opacity);
-                        d3.select("#labels-" + i).transition().duration(200).style("opacity", opacity);
-                        d3.select("#area-" + i).transition().duration(200).style("opacity", opacity);
-                    }
-                });
+            for (var i = 0; i < this._items.length; i++) {
+                var _self = this;
+                var g = svg.append("g")
+                    .attr("class", "item")
+                    .attr("data-serie", i)
+                    .attr("transform", "translate(" + 22 + "," + ((i * 20) + 60) + ")")
+                    .on("click", function(): void {
+                        // TODO - refactor clicking items in legend
+                        // - add checkbox
+                        // - add interpolation when in stacked / pie charts
+                        var item = Number(d3.select(this).attr("data-serie"));
+                        var opacity;
+                        if (_self._chart instanceof PieChart) {
+                            var slice = d3.selectAll("#slice-" + item);
+                            opacity = slice.style("opacity") === "1" ? 0 : 1;
+                            d3.selectAll("#slice-" + item).transition().duration(200).style("opacity", opacity);
+                            d3.selectAll("#labels-" + item).transition().duration(200).style("opacity", opacity); //TODO - doesn't remove right labels
+                        }
+                        else {
+                            var serie = d3.selectAll("#serie-" + item);
+                            opacity = serie.style("opacity") === "1" ? 0 : 1;
+                            d3.select("#serie-" + item).transition().duration(200).style("opacity", opacity);
+                            d3.select("#labels-" + item).transition().duration(200).style("opacity", opacity);
+                            d3.select("#area-" + item).transition().duration(200).style("opacity", opacity);
+                        }
+                    });
 
-            this.drawSymbol(items);
-            this.drawText(items);
-        }
+                var symbol = new SVGSymbol(g, this._chart, i);
+                symbol.draw(this._items[i]);
 
-        private drawSymbol(svg: D3.Selection): void {
-            var _self = this;
-            svg.each(function (d: any, i: number): void {
-                var g = d3.select(this);
-                if (_self._chart instanceof ComboChart) {
-                    if (_self._chart.series.items[i].type === "line") {
-                        _self.drawLineSymbol(g, i);
-                    }
-                    else {
-                        _self.drawRectangleSymbol(g, i);
-                    }
-                }
-                else if (_self._chart instanceof ScatterChart) {
-                    _self.drawMarkerSymbol(g, i);
-                }
-                else if (_self._chart instanceof LineChart) {
-                    _self.drawLineSymbol(g, i);
-                }
-                else {
-                    _self.drawRectangleSymbol(g, i);
-                }
-            });
-        }
+                this.drawText(g, i);
 
-        private drawLineSymbol(svg: D3.Selection, serie: number): void {
-            svg.append("line")
-                .attr("x1", 0)
-                .attr("x2", this._symbolWidth)
-                .attr("y1", this._symbolHeight / 2)
-                .attr("y2", this._symbolHeight / 2)
-                .style("stroke", this._chart.colorPalette.color(serie))
-                .style("stroke-width", "2");
-
-            // draw area
-            if (this._chart.options.plotOptions.area.visible === true) {
-                svg.append("rect")
-                    .attr("x", 0)
-                    .attr("y", this._symbolHeight / 2)
-                    .attr("opacity", this._chart.options.plotOptions.area.opacity)
-                    .attr("width", this._symbolWidth)
-                    .attr("height", this._symbolHeight / 2)
-                    .style("fill", this._chart.colorPalette.color(serie));
-            }
-
-            // draw marker
-            if (this._chart.options.plotOptions.markers.visible === true) {
-                this.drawMarkerSymbol(svg, serie);
             }
         }
 
-        private drawMarkerSymbol(svg: D3.Selection, serie: number): void {
-            var _self = this;
-            svg
-                .append("path")
-                .each(function(d: any, i: number): void {
-                    d3.select(this)
-                        .attr({
-                            "class": "marker",
-                            "d": d3.svg.symbol()
-                                .size(60)
-                                .type(_self._chart.series.items[i].marker)(),
-                            "stroke": _self._chart.colorPalette.color(serie),
-                            "stroke-width": 0,
-                            "transform": "translate(" + _self._symbolWidth / 2 + ", " + _self._symbolHeight / 2 + ")"
-                        });
-                });
-        }
-
-        private drawRectangleSymbol(svg: D3.Selection, serie: number): void {
-            svg.append("rect")
-                .attr("x", 0)
-                .attr("width", this._symbolWidth)
-                .attr("height", 11)
-                .style("fill", this._chart.colorPalette.color(serie));
-        }
-
-        private drawText(svg: D3.Selection): void {
+        private drawText(svg: D3.Selection, serie: number): void {
             svg.append("text")
-                .attr("x", this._symbolWidth + 6)
+                .attr("x", 24 + 6)
                 .attr("y", 9)
                 .attr("dy", "0px")
                 .style("text-anchor", "begin")
-                .text((d: any, i: any): string => {
+                .text((): string => {
                     if (this._chart instanceof PieChart) {
-                        return this._items[i];
+                        return this._items[serie];
                     }
                     else if (this._chart instanceof ScatterChart) {
-                        return this._chart.series.getLabel(i + 1);
+                        return this._chart.series.getLabel(serie + 1);
                     }
                     else {
-                        return this._chart.series.getLabel(i);
+                        return this._chart.series.getLabel(serie);
                     }
                 });
         }

@@ -19,7 +19,7 @@ module frnk.UI.Charts {
                 .attr("class", "series");
 
             for (var serie = 1; serie < this.series.length; serie++) {
-                var bubbles = new SVGMarker(this.svgSeries, this, serie);
+                var bubbles = new SVGBubble(this.svgSeries, this, serie);
                 bubbles.x = (d: any, i: number, s: number) => {
                     return this.getXCoordinate(d, i, s);
                 };

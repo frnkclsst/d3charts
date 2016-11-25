@@ -7,7 +7,7 @@ module frnk.UI.Charts {
     export class SVGShape {
 
         protected chart: Chart;
-        protected serie: number; // TODO - this should be done differently
+        protected serie: number;
         protected svg: D3.Selection;
         protected svgLabels: D3.Selection;
 

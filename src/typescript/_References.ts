@@ -29,7 +29,7 @@
 /// <reference path="Shape.Bar.ts" />
 /// <reference path="Shape.Column.ts" />
 /// <reference path="Shape.Line.ts" />
-/// <reference path="Shape.Marker.ts" />
+/// <reference path="Shape.Bubble.ts" />
 
 // tooltip
 ///  <reference path="Tooltip.ts" />

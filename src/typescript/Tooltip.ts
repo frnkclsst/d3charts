@@ -23,6 +23,7 @@ module frnk.UI.Charts {
                 var subtitle = _self.chart.categories.getLabel(i);
                 var color = _self.chart.colorPalette.color(serie);
                 var serieTitle = _self.chart.series.getLabel(serie);
+
                 var dataPoint;
                 if (d.y === d.y1) {
                     dataPoint = d3.format(_self.getPointFormat(serie))(d.y) + _self.getSuffix(serie);
@@ -33,10 +34,12 @@ module frnk.UI.Charts {
                         d3.format(_self.getPointFormat(serie))(d.y1) + _self.getSuffix(serie);
                 }
                 else {
-                    dataPoint = d3.format(_self.getPointFormat(serie))(d.y) + _self.getSuffix(serie) + " (" +
-                                d3.format(_self.getPointFormat(serie))(d.y0) + _self.getSuffix(serie) + " - " +
-                                d3.format(_self.getPointFormat(serie))(d.y1) + _self.getSuffix(serie) + ")";
+                    dataPoint =
+                        d3.format(_self.getPointFormat(serie))(d.y) + _self.getSuffix(serie) + " (" +
+                        d3.format(_self.getPointFormat(serie))(d.y0) + _self.getSuffix(serie) + " - " +
+                        d3.format(_self.getPointFormat(serie))(d.y1) + _self.getSuffix(serie) + ")";
                 }
+
                 var percent = isNaN(d.perc) ? "" : Math.round(d.perc * 100) + "%";
 
                 if (_self.chart instanceof PieChart) {
@@ -51,13 +54,17 @@ module frnk.UI.Charts {
                     color = _self.chart.colorPalette.color(serie - 1);
                 }
 
+                var svgSymbol = d3.select(document.createElementNS(d3.ns.prefix.svg, "svg"));
+                var symbol = new SVGSymbol(svgSymbol, _self.chart, serie);
+                symbol.draw(svgSymbol);
+
                 divTooltip.html("<div class='title'>" + title + "</div>" +
                     "<div class='subtitle'>" + subtitle + "</div><br/>" +
                     "<div class='items'>" +
                         "<div class='item'>" +
                             "<div class='cell color'>" +
                                 "<svg width='24' height='11'>" +
-                                    "<rect x='0' width='24' height='11' style='fill: " + color + "'></rect>" + // TODO - use same symbol as in the legend
+                                    svgSymbol.html() +
                                 "</svg>" +
                             "</div>" +
                             "<div class='cell serie'>" + serieTitle + "</div>" +
