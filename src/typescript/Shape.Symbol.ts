@@ -75,7 +75,7 @@ module frnk.UI.Charts {
                             "class": "marker",
                             "d": d3.svg.symbol()
                                 .size(60)
-                                .type(_self.chart.series.items[i].marker)(),
+                                .type(_self.chart.series.items[_self.serie].marker)(),
                             "stroke": _self.chart.colorPalette.color(_self.serie),
                             "stroke-width": 0,
                             "transform": "translate(" + _self.symbolWidth / 2 + ", " + _self.symbolHeight / 2 + ")"
