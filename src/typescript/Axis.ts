@@ -116,7 +116,7 @@ module frnk.UI.Charts {
         }
 
         public drawZeroLine(svg: D3.Selection): void {
-            if (this.isDataAxis() && this.chart.series.getMinValue() < 0) {
+            if (this.isDataAxis() && this.chart.series.min() < 0) {
                 this.svgZeroLine = this.svgGrid.append("g")
                     .attr("class", "zero-line")
                     .append("line");
@@ -275,7 +275,7 @@ module frnk.UI.Charts {
 
         public drawZeroLine(svg: D3.Selection): void {
             super.drawZeroLine(svg);
-            if (this.isDataAxis() && this.chart.series.getMinValue() < 0) {
+            if (this.isDataAxis() && this.chart.series.min() < 0) {
                 this.svgZeroLine
                     .attr("x1", this.scale(0))
                     .attr("x2", this.scale(0))
@@ -460,7 +460,7 @@ module frnk.UI.Charts {
 
         public drawZeroLine(svg: D3.Selection): void {
             super.drawZeroLine(svg);
-            if (this.isDataAxis() && this.chart.series.getMinValue() < 0) {
+            if (this.isDataAxis() && this.chart.series.min() < 0) {
                 this.svgZeroLine
                     .attr("x1", 0)
                     .attr("x2", this.orient === "left" ? this.chart.canvas.plotArea.width : -this.chart.canvas.plotArea.width)

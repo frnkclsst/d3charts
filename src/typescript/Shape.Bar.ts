@@ -9,17 +9,13 @@ module frnk.UI.Charts {
 
         public height: (d: any, i: number, serie: number) => number;
         public width: (d: any, i: number, serie: number) => number;
-        public x: (d: any, i: number, serie: number) => number;
-        public y: (d: any, i: number, serie: number) => number;
 
         constructor(svg: D3.Selection, chart: XYChart, serie: number) {
             super(svg, chart, serie);
-
             this.chart = chart;
+
             this.height = null;
             this.width = null;
-            this.x = null;
-            this.y = null;
         }
 
         public draw(data: any): void {
@@ -33,11 +29,11 @@ module frnk.UI.Charts {
             var svgBar = svgSerie.append("rect")
                 .attr({
                     "class": "bar",
-                    "fill": this.chart.colorPalette.color(this.serie),
+                    "fill": this.color,
                     "height": (d: any, i: number): number => {
                         return this.height(d, i, this.serie);
                     },
-                    "stroke": this.chart.colorPalette.color(this.serie),
+                    "stroke": this.color,
                     "stroke-width": "1px",
                     "width": 0,
                     "x": (d: any, i: number): number => {
@@ -59,8 +55,8 @@ module frnk.UI.Charts {
                     count++; // count number of bars
                 })
                 .transition()
-                .duration(this.chart.options.plotOptions.animation.duration)
-                .ease(this.chart.options.plotOptions.animation.ease)
+                .duration(this.animation.duration)
+                .ease(this.animation.ease)
                 .attr("width", (d: any, i: number): number => {
                     return this.width(d, i, this.serie);
                 })
@@ -69,7 +65,7 @@ module frnk.UI.Charts {
                 })
                 .each("end", (): void => {
                     count--;
-                    if (this.chart.options.series.labels.visible === true && !count) { // only draw labels after all transitions ended
+                    if (this.labels.visible === true && !count) { // only draw labels after all transitions ended
                         this.drawLabels();
                     }
                 });
@@ -88,7 +84,7 @@ module frnk.UI.Charts {
                     var dx = 0;
                     var dy = 0;
 
-                    if (this.chart.options.series.labels.rotate === true) {
+                    if (this.labels.rotate === true) {
                         rotation = -90;
                     }
 
@@ -102,7 +98,7 @@ module frnk.UI.Charts {
                     }
 
                     this.svgLabels.append("text")
-                        .text(d3.format(this.chart.series.items[this.serie].format)(d.y))
+                        .text(d3.format(this.labels.format)(d.y))
                         .style("text-anchor", "middle")
                         .attr({
                             "alignment-baseline": "central",

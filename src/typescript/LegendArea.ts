@@ -79,6 +79,8 @@ module frnk.UI.Charts {
                     });
 
                 var symbol = new SVGSymbol(g, this._chart, i);
+                symbol.color = this._chart.colorPalette.color(i);
+                symbol.opacity = this._chart.options.plotOptions.area.opacity;
                 symbol.draw(this._items[i]);
 
                 this.drawText(g, i);

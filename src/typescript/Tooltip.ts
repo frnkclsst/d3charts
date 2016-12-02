@@ -56,6 +56,8 @@ module frnk.UI.Charts {
 
                 var svgSymbol = d3.select(document.createElementNS(d3.ns.prefix.svg, "svg"));
                 var symbol = new SVGSymbol(svgSymbol, _self.chart, serie);
+                symbol.color = color;
+                symbol.opacity = _self.chart.options.plotOptions.area.opacity;
                 symbol.draw(svgSymbol);
 
                 divTooltip.html("<div class='title'>" + title + "</div>" +

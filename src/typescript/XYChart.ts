@@ -85,8 +85,8 @@ module frnk.UI.Charts {
         }
 
         public getYScale(axis: Axis): any {
-            var min = this.series.getMinValue(axis.name);
-            var max = this.series.getMaxValue(axis.name);
+            var min = this.series.min(axis.name);
+            var max = this.series.max(axis.name);
 
             var start = this.canvas.plotArea.axisSize.top;
             var end = this.canvas.plotArea.axisSize.top + this.canvas.plotArea.height;

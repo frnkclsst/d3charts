@@ -20,6 +20,17 @@ module frnk.UI.Charts {
 
             for (var serie = 1; serie < this.series.length; serie++) {
                 var bubbles = new SVGBubble(this.svgSeries, this, serie);
+                bubbles.animation = {
+                    duration: this.options.plotOptions.animation.duration,
+                    ease: this.options.plotOptions.animation.ease
+                };
+                bubbles.color = this.colorPalette.color(serie - 1);
+                bubbles.labels = {
+                    format: this.series.items[serie].format,
+                    rotate: this.options.series.labels.rotate,
+                    visible: this.options.series.labels.visible
+                };
+                bubbles.marker.type = this.series.items[serie - 1].marker;
                 bubbles.x = (d: any, i: number, s: number) => {
                     return this.getXCoordinate(d, i, s);
                 };
@@ -59,8 +70,8 @@ module frnk.UI.Charts {
         }
 
         public getYScale(axis: Axis): any {
-            var min = this.series.getMinValue(axis.name);
-            var max = this.series.getMaxValue(axis.name);
+            var min = this.series.min(axis.name);
+            var max = this.series.max(axis.name);
 
             var start = this.canvas.plotArea.axisSize.top;
             var end = this.canvas.plotArea.axisSize.top + this.canvas.plotArea.height;

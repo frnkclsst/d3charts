@@ -16,6 +16,16 @@ module frnk.UI.Charts {
             // draw columns
             for (var serie = 0; serie < this.series.length; serie++) {
                 var column = new SVGColumn(svgSeries, this, serie);
+                column.animation = {
+                    duration: this.options.plotOptions.animation.duration,
+                    ease: this.options.plotOptions.animation.ease
+                };
+                column.color = this.colorPalette.color(serie);
+                column.labels = {
+                    format: this.series.items[serie].format,
+                    rotate: this.options.series.labels.rotate,
+                    visible: this.options.series.labels.visible
+                };
                 column.height = (d: any, i: number, s: number) => {
                     return this.getHeight(d, i, s);
                 };

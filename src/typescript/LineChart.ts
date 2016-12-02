@@ -41,6 +41,13 @@ module frnk.UI.Charts {
             if (this.area.visible === true) {
                 for (var areaSerie = 0; areaSerie < this.series.length; areaSerie++) {
                     var area = new SVGArea(svgSeries, this, areaSerie);
+                    area.animation = {
+                        duration: this.options.plotOptions.animation.duration,
+                        ease: this.options.plotOptions.animation.ease
+                    };
+                    area.color = this.colorPalette.color(areaSerie);
+                    area.opacity = this.area.opacity;
+                    area.interpolation = this.interpolation;
                     area.x = (d: any, i: number, s: number): number => {
                         return this.getXCoordinate(d, i, s);
                     };
@@ -61,6 +68,22 @@ module frnk.UI.Charts {
             for (var serie = 0; serie < this.series.length; serie++) {
                 if (this.series.items[serie].data.length != 0) {
                     var line = new SVGLine(svgSeries, this, serie);
+                    line.animation = {
+                        duration: this.options.plotOptions.animation.duration,
+                        ease: this.options.plotOptions.animation.ease
+                    };
+                    line.color = this.colorPalette.color(serie);
+                    line.interpolation = this.interpolation;
+                    line.labels = {
+                        format: this.series.items[serie].format,
+                        rotate: this.options.series.labels.rotate,
+                        visible: this.options.series.labels.visible
+                    };
+                    line.marker = {
+                        visible: this.markers.visible,
+                        size: this.markers.size,
+                        type: this.series.items[serie].marker
+                    };
                     line.x = (d: any, i: number, s: number): number => {
                         return this.getXCoordinate(d, i, s);
                     };

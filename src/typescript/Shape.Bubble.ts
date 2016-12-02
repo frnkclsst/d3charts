@@ -5,15 +5,19 @@
 module frnk.UI.Charts {
 
     export class SVGBubble extends SVGShape {
-
         protected chart: XYChart;
 
-        public x: (d: any, i: number, serie: number) => number;
-        public y: (d: any, i: number, serie: number) => number;
+        public marker: {
+            type: string;
+        };
 
         constructor(svg: D3.Selection, chart: XYChart, serie: number) {
             super(svg, chart, serie);
             this.chart = chart;
+
+            this.marker = {
+                type: "circle"
+            };
         }
 
         public draw(data: any): void {
@@ -32,9 +36,9 @@ module frnk.UI.Charts {
                             "class": "bubble",
                             "d": d3.svg.symbol()
                                 .size(0)
-                                .type(_self.chart.series.items[_self.serie - 1].marker)(),
-                            "fill": _self.chart.colorPalette.color(_self.serie - 1),
-                            "stroke": _self.chart.colorPalette.color(_self.serie - 1),
+                                .type(_self.marker.type)(),
+                            "fill": _self.color,
+                            "stroke": _self.color,
                             "stroke-width": 0,
                             "transform": "translate(" + _self.x(d, i, 0) + ", " + _self.y(d, i, _self.serie) + ")"
                         });
@@ -47,17 +51,17 @@ module frnk.UI.Charts {
                     count++; // count number of bars
                 })
                 .transition()
-                .duration(this.chart.options.plotOptions.animation.duration)
-                .ease(this.chart.options.plotOptions.animation.ease)
+                .duration(this.animation.duration)
+                .ease(this.animation.ease)
                 .attr("d", (d: any, i: number): any => {
                     var size = _self.chart.series.items[this.serie].size != undefined ? _self.chart.series.items[this.serie].size[i] * 10 : 60;
                     return d3.svg.symbol()
                         .size(size)
-                        .type(_self.chart.series.items[this.serie - 1].marker)();
+                        .type(_self.marker.type)();
                 })
                 .each("end", (): void => {
                     count--;
-                    if (this.chart.options.series.labels.visible === true && !count) { // only draw labels after all transitions ended
+                    if (this.labels.visible === true && !count) { // only draw labels after all transitions ended
                         this.drawLabels();
                     }
                 });
@@ -79,12 +83,12 @@ module frnk.UI.Charts {
                     var dx = 0;
                     var dy = 0;
 
-                    if (this.chart.options.series.labels.rotate === true) {
+                    if (this.labels.rotate === true) {
                         rotation = -90;
                     }
 
                     var text = this.svgLabels.append("text")
-                        .text(d3.format(this.chart.series.items[this.serie].format)(this.chart.series.items[this.serie].data[i]))
+                        .text(d3.format(this.labels.format)(this.chart.series.items[this.serie].data[i]))
                         .style("text-anchor", "middle")
                         .attr({
                             "alignment-baseline": "central",

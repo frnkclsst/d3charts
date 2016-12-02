@@ -7,19 +7,28 @@ module frnk.UI.Charts {
     export class SVGLine extends SVGShape {
         protected chart: XYChart;
 
-        public x: (d: any, i: number, serie: number) => number;
-        public y: (d: any, i: number, serie: number) => number;
+        public interpolation: string;
+        public marker: {
+            size: number;
+            type: string;
+            visible: boolean;
+        };
 
         constructor(svg: D3.Selection, chart: XYChart, serie: number) {
             super(svg, chart, serie);
             this.chart = chart;
-            this.x = null;
-            this.y = null;
+
+            this.interpolation = "linear";
+            this.marker = {
+                size: 6,
+                type: "circle",
+                visible: true
+            };
         }
 
         public draw(data: any): void {
             var line = d3.svg.line()
-                .interpolate(this.chart.options.plotOptions.line.interpolation)
+                .interpolate(this.interpolation)
                 .x((d: any, i: number): number => { return this.x(d, i, this.serie); })
                 .y((d: any, i: number): number => { return this.y(d, i, this.serie); });
 
@@ -29,7 +38,7 @@ module frnk.UI.Charts {
             var svgPath = svgSerie.append("path")
                 .attr("class", "line")
                 .attr("d", line(data))
-                .attr("stroke", this.chart.colorPalette.color(this.serie))
+                .attr("stroke", this.color)
                 .attr("stroke-width", 1)
                 .attr("fill", "none");
 
@@ -43,21 +52,21 @@ module frnk.UI.Charts {
                 .attr("stroke-dasharray", pathLenght + " " + pathLenght)
                 .attr("stroke-dashoffset", pathLenght)
                 .transition()
-                .duration(this.chart.options.plotOptions.animation.duration)
-                .ease(this.chart.options.plotOptions.animation.ease)
+                .duration(this.animation.duration)
+                .ease(this.animation.ease)
                 .attr("stroke-dashoffset", 0)
                 .each("end", (): void => {
                     count--;
                     // draw markers
-                    if (this.chart.options.plotOptions.markers.visible === true) {
-                        var svgMarkers =  this.drawMarkers();
+                    if (this.marker.visible === true) {
+                        var svgMarkers =  this.drawMarkers(data);
 
                         // draw tooltip
                         this.chart.tooltip.draw(svgMarkers, this.serie);
                     }
 
                     // draw labels
-                    if (this.chart.options.series.labels.visible === true && !count) {
+                    if (this.labels.visible === true && !count) {
                         this.drawLabels();
                     }
                 });
@@ -76,12 +85,12 @@ module frnk.UI.Charts {
                     var dx = 0;
                     var dy = 0;
 
-                    if (this.chart.options.series.labels.rotate === true) {
+                    if (this.labels.rotate === true) {
                         rotation = -90;
                     }
 
                     var text = this.svgLabels.append("text")
-                        .text(d3.format(this.chart.series.items[this.serie].format)(d.y))
+                        .text(d3.format(this.labels.format)(d.y))
                         .style("text-anchor", "middle")
                         .attr({
                             "alignment-baseline": "central",
@@ -91,10 +100,10 @@ module frnk.UI.Charts {
                         });
 
                     if (rotation != 0) {
-                        dx = Html.getHeight(text) + this.chart.options.plotOptions.markers.size / 2;
+                        dx = Html.getHeight(text) + this.marker.size / 2;
                     }
                     else {
-                        dy = -Html.getHeight(text) - this.chart.options.plotOptions.markers.size / 2;
+                        dy = -Html.getHeight(text) - this.marker.size / 2;
                     }
 
                     text
@@ -103,18 +112,18 @@ module frnk.UI.Charts {
                 });
         }
 
-        public drawMarkers(): D3.Selection {
+        public drawMarkers(data: any): D3.Selection {
             return this.svg.selectAll("g#serie-" + this.serie).selectAll(".marker")
-                .data(this.chart.series.getMatrixItem(this.serie))
+                .data(data)
                 .enter()
                 .append("path")
                 .attr({
                     "class": "marker",
-                    "stroke": this.chart.colorPalette.color(this.serie),
+                    "stroke": this.color,
                     "stroke-width": 0,
                     "d": d3.svg.symbol()
-                        .size(this.chart.options.plotOptions.markers.size * 10)
-                        .type(this.chart.series.items[this.serie].marker)(),
+                        .size(this.marker.size * 10)
+                        .type(this.marker.type)(),
                     "transform": (d: any, i: number): string => {
                         return "translate(" + this.x(d, i, this.serie) + ", " + this.y(d, i, this.serie) + ")";
                     }

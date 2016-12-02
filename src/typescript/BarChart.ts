@@ -16,6 +16,16 @@ module frnk.UI.Charts {
             // draw bars
             for (var serie = 0; serie < this.series.length; serie++) {
                 var bar = new SVGBar(svgSeries, this, serie);
+                bar.animation = {
+                    duration: this.options.plotOptions.animation.duration,
+                    ease: this.options.plotOptions.animation.ease
+                };
+                bar.color = this.colorPalette.color(serie);
+                bar.labels = {
+                    format: this.series.items[serie].format,
+                    rotate: this.options.series.labels.rotate,
+                    visible: this.options.series.labels.visible
+                };
                 bar.height = (d: any, i: number, s: number) => {
                     return this.getHeight(d, i, s);
                 };
@@ -77,8 +87,8 @@ module frnk.UI.Charts {
         }
 
         public getXScale(axis: Axis): any {
-            var min = this.series.getMinValue(name);
-            var max = this.series.getMaxValue(name);
+            var min = this.series.min(name);
+            var max = this.series.max(name);
 
             var start = this.canvas.plotArea.axisSize.left;
             var end =  this.canvas.plotArea.axisSize.left + this.canvas.plotArea.width;
@@ -91,7 +101,7 @@ module frnk.UI.Charts {
         }
 
         public getYScale(axis: Axis): any {
-            var min = this.series.getMinValue(name);
+            var min = this.series.min(name);
 
             var start = this.canvas.plotArea.axisSize.top;
             var end = this.canvas.plotArea.axisSize.top + this.canvas.plotArea.height;

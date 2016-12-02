@@ -24,7 +24,7 @@ module frnk.UI.Charts {
         }
 
         public getXScale(axis: Axis): any {
-            var min = this.series.getMinValue(name);
+            var min = this.series.min(name);
 
             var start = this.canvas.plotArea.axisSize.left;
             var end =  this.canvas.plotArea.axisSize.left + this.canvas.plotArea.width;
@@ -39,7 +39,7 @@ module frnk.UI.Charts {
             var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
             var axis = this.axes[index];
 
-            return axis.scale.domain()[1] / d.maxDataPoints;
+            return axis.scale.domain()[1] / d.max;
         }
     }
 }

@@ -48,7 +48,7 @@ module frnk.UI.Charts {
             return array;
         }
 
-        public getMaxValue(name?: string): number {
+        public max(name?: string): number {
             var matrix = [];
             if (name != undefined && name != "" && this._chart.stackType === StackType.None) {
                 matrix = this.getMatrixByAxisName(name);
@@ -76,7 +76,7 @@ module frnk.UI.Charts {
             }
         }
 
-        public getMinValue(name?: string): number {
+        public min(name?: string): number {
             var matrix = [];
             if (name != undefined && name != "" && this._chart.stackType === StackType.None) {
                 matrix = this.getMatrixByAxisName(name);
@@ -124,11 +124,12 @@ module frnk.UI.Charts {
                 var t = matrix[i];
                 return t.map((d: any, j: number): any => {
                     return {
+                        max: 0, // max of data points across the different series
+                        perc: 0, // perc of the data point across the series
+                        sum: 0, // sum of this data point and previous one, used for stacked charts
                         y: d, // base data point
                         y0: this.items[i].min[j] != undefined ? this.items[i].min[j] : 0, // min data point
-                        y1: this.items[i].max[j] != undefined ? this.items[i].max[j] : d, // max data point
-                        perc: 0, // perc of the data point across the series
-                        sum: 0 // sum of this data point and previous one, used for stacked charts
+                        y1: this.items[i].max[j] != undefined ? this.items[i].max[j] : d // max data point
                     };
                 });
             });
@@ -150,7 +151,7 @@ module frnk.UI.Charts {
 
                 m.forEach(function (k: any): any {
                     k.perc = k.y / sum; // calculate percentage of this value across the different series
-                    k.maxDataPoints = sum;
+                    k.max = sum;
                     if (k.y < 0) {
                         k.sum = negBase;
                         negBase -= Math.abs(k.y);
