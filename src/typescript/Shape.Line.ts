@@ -77,7 +77,7 @@ module frnk.UI.Charts {
                 .attr("id", "labels-" + this.serie)
                 .attr("opacity", "1");
 
-            d3.selectAll("g#serie-" + this.serie).selectAll("path.marker")
+            this.svg.selectAll("g#serie-" + this.serie).selectAll("path.marker")
                 .each((d: any, i: number): void => {
                     var rotation = 0;
                     var x = this.x(d, i, this.serie);

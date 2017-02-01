@@ -56,12 +56,12 @@ module frnk.UI.Charts {
         }
 
         public showLabels(): void {
-            d3.selectAll("#labels-" + this.serie)
+            this.svg.selectAll("#labels-" + this.serie)
                 .attr("opacity", "1");
         }
 
         public hideLabels(): void {
-            d3.selectAll("#labels-" + this.serie)
+            this.svg.selectAll("#labels-" + this.serie)
                 .attr("opacity", "0");
         }
     }

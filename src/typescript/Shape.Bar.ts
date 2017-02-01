@@ -76,7 +76,7 @@ module frnk.UI.Charts {
 
         public drawLabels(): void {
             super.drawLabels();
-            d3.selectAll("g#serie-" + this.serie).selectAll("rect")
+            this.svg.selectAll("g#serie-" + this.serie).selectAll("rect")
                 .each((d: any, i: number): void => {
                     var rotation = 0;
                     var x = this.x(d, i, this.serie);

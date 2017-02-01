@@ -89,8 +89,8 @@ module frnk.UI.Charts {
                 })
                 .on("mousemove", function(d: any): void {
                     divTooltip
-                        .style("left", (d3.mouse(this.ownerSVGElement)[0]) - 50 + "px")
-                        .style("top", (d3.mouse(this.ownerSVGElement)[1]) + 10 + "px");
+                        .style("left", (d3.mouse(this.ownerSVGElement)[0] - 50) + "px")
+                        .style("top", (d3.mouse(this.ownerSVGElement)[1] + 10) + "px");
                 });
         }
 

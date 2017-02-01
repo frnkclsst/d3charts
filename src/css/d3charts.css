@@ -158,7 +158,7 @@ html {
 
 /* Tooltip */
 .tooltip {
-    position: absolute;
+    position: relative;
     text-align: left;
     padding: 20px;
     font: 9px Arial;

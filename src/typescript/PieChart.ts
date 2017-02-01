@@ -89,7 +89,7 @@ module frnk.UI.Charts {
         public drawLabels(svg: D3.Selection): void {
             for (var serie = 0; serie < this.series.length; serie++) {
                 var svgLabels = svg.append("g").attr("id", "labels-" + serie);
-                d3.selectAll("g#serie-" + serie).selectAll(".slice")
+                this.canvas.svg.selectAll("g#serie-" + serie).selectAll(".slice")
                     .each((d: any, i: number): void  => {
                         svgLabels.append("text")
                             .style("text-anchor", "middle")
