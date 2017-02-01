@@ -20,6 +20,7 @@ D3Charts is a reusable chart library using d3 and written in Typescript. D3 comb
 - [Donut charts](https://github.com/frnkclsst/d3charts/wiki/donut-charts)
 - [Line charts](https://github.com/frnkclsst/d3charts/wiki/line-charts)
 - [Pie charts](https://github.com/frnkclsst/d3charts/wiki/pie-charts)
+- [Range charts](https://github.com/frnkclsst/d3charts/wiki/range-charts)
 - [Scatter charts](https://github.com/frnkclsst/d3charts/wiki/scatter-charts)
 
 ### Chart Options
@@ -27,6 +28,7 @@ D3Charts is a reusable chart library using d3 and written in Typescript. D3 comb
 - [Canvas](https://github.com/frnkclsst/d3charts/wiki/Canvas)
 - [Legend](https://github.com/frnkclsst/d3charts/wiki/Legend)
 - [Plot area](https://github.com/frnkclsst/d3charts/wiki/Plot-area)
+- [Plot Options](https://github.com/frnkclsst/d3charts/wiki/Plot-options)
 - [Series](https://github.com/frnkclsst/d3charts/wiki/Series)
 - [Title](https://github.com/frnkclsst/d3charts/wiki/Title)
 - [Tooltip](https://github.com/frnkclsst/d3charts/wiki/Tooltip)
