@@ -64,17 +64,17 @@ module frnk.UI.Charts {
                         var item = Number(d3.select(this).attr("data-serie"));
                         var opacity;
                         if (_self._chart instanceof PieChart) {
-                            var slice = this.svg.selectAll("#slice-" + item);
+                            var slice = d3.selectAll(_self._chart.selector + " #slice-" + item);
                             opacity = slice.style("opacity") === "1" ? 0 : 1;
-                            this.svg.selectAll("#slice-" + item).transition().duration(200).style("opacity", opacity);
-                            this.svg.selectAll("#labels-" + item).transition().duration(200).style("opacity", opacity); //TODO - doesn't remove right labels
+                            d3.selectAll(_self._chart.selector + " #slice-" + item).transition().duration(200).style("opacity", opacity);
+                            d3.selectAll(_self._chart.selector + " #labels-" + item).transition().duration(200).style("opacity", opacity); //TODO - doesn't remove right labels
                         }
                         else {
-                            var serie = this.svg.selectAll("#serie-" + item);
+                            var serie = d3.selectAll(_self._chart.selector + " #serie-" + item);
                             opacity = serie.style("opacity") === "1" ? 0 : 1;
-                            this.svg.select("#serie-" + item).transition().duration(200).style("opacity", opacity);
-                            this.svg.select("#labels-" + item).transition().duration(200).style("opacity", opacity);
-                            this.svg.select("#area-" + item).transition().duration(200).style("opacity", opacity);
+                            d3.select(_self._chart.selector + " #serie-" + item).transition().duration(200).style("opacity", opacity);
+                            d3.select(_self._chart.selector + " #labels-" + item).transition().duration(200).style("opacity", opacity);
+                            d3.select(_self._chart.selector + " #area-" + item).transition().duration(200).style("opacity", opacity);
                         }
                     });
 
