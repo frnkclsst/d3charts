@@ -86,7 +86,7 @@ module frnk.UI.Charts {
             this.alignTitle();
             this.drawGridlines(this.axis);
             this.drawZeroLine(this.svgAxis);
-            this.removeOverlappingTicks();
+            //this.removeOverlappingTicks();
         }
 
         public drawGridlines(axis: D3.Svg.Axis): void {
@@ -261,12 +261,12 @@ module frnk.UI.Charts {
         public drawTitle(svg: D3.Selection): void {
             super.drawTitle(svg);
 
-            var x = Html.align(this.svgTitle, Html.getWidth(this.svgAxis), this.title.align, 0);
-            var y = Html.getHeight(this.svgAxis) + 12;
+            var x = Html.align(this.svgTitle, Html.getWidth(this.svgAxis), this.title.align, 0),
+                y = Html.getHeight(this.svgAxis) + 12;
 
             if (this.orient === "top") {
                 y = -y;
-            };
+            }
 
             this.svgTitle
                 .attr("text-anchor", "begin")
@@ -330,9 +330,10 @@ module frnk.UI.Charts {
 
         public removeOverlappingTicks(): void {
             // TODO - improve how overlapping ticks are removed
-            var ticks = this.svgAxis.selectAll("g.ticks").selectAll("g.tick");
-            var tickOverlap = false;
-            var prevRight = 0;
+            var ticks = this.svgAxis.selectAll("g.ticks").selectAll("g.tick"),
+                tickOverlap = false,
+                prevRight = 0;
+
             for (var i = 0; i < ticks[0].length - 1; i++) {
                 var left = ticks[0][i].getBoundingClientRect().left;
                 var right = ticks[0][i].getBoundingClientRect().right;
@@ -352,13 +353,15 @@ module frnk.UI.Charts {
         }
 
         public rotateLabels(svg: D3.Selection): void {
-            var _self = this;
+            var _self = this,
+                text: D3.Selection,
+                y: number;
+
             if (this.labels.rotate != 0) {
                 svg.selectAll("text")
                     .each(function(): void {
-                        var text = d3.select(this);
-                        //var x = Number(text.attr("x"));
-                        var y = Number(text.attr("y"));
+                        text = d3.select(this);
+                        y = parseInt(text.attr("y"), 10);
 
                         text
                             .style("alignment-baseline", "middle")

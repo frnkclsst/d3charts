@@ -23,9 +23,7 @@ gulp.task('compile-typescript', function(cb){
 	return gulp.src(buildOptions.srcPath + '/typescript/**/*.ts')
         .pipe(gulpTypescript({
             //noImplicitAny: true,
-            outDir: 'dist/',
-            out: 'd3.charts.js',
-            declaration: true
+            out: 'd3.charts.js'
         }))
         .pipe(gulp.dest(buildOptions.distPath + '/js'));
 });

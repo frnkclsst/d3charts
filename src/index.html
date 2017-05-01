@@ -39,7 +39,7 @@
             </div>
         </div>
     </div>
-    <div id="chart" />
+    <div id="chart" class="chart" />
 
     <script>
         var options = {
@@ -114,7 +114,7 @@
             xAxis: [{
                 gridlines: "none",
                 labels: {
-                    rotate: 0
+                    rotate: -45
                 },
                 orient: "bottom",
                 tickmarks: true,
@@ -171,6 +171,7 @@
         };
 
         var el = document.getElementById('chart');
+        //var url = "data/empty.txt";
         var url = "data/multiple-axes.txt";
         //var url = "data/scatterplot.txt";
         //var url = "data/Actuals-vs-Budget.txt";

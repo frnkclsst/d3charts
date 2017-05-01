@@ -1,0 +1,10 @@
+{
+    "categories": {
+        "format": "%s",
+        "data": []
+    },
+    "series": [{
+        "data": [],
+        "name": ""
+    }]
+}

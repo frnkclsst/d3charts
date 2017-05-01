@@ -142,27 +142,32 @@ module frnk.UI.Charts {
 
             var transposedMatrix = this._transposeMatrix(matrix);
 
-            transposedMatrix.forEach(function (m: any): any {
-                var posBase = 0, negBase = 0, sum = 0;
+            if (transposedMatrix.length > 0) {
+                transposedMatrix.forEach(function (m: any): any {
+                    var posBase = 0, negBase = 0, sum = 0;
 
-                m.forEach(function (k: any): any {
-                    sum = sum + Math.abs(k.y);
+                    m.forEach(function (k: any): any {
+                        sum = sum + Math.abs(k.y);
+                    });
+
+                    m.forEach(function (k: any): any {
+                        k.perc = k.y / sum; // calculate percentage of this value across the different series
+                        k.max = sum;
+                        if (k.y < 0) {
+                            k.sum = negBase;
+                            negBase -= Math.abs(k.y);
+                        }
+                        else {
+                            k.sum = posBase = posBase + Math.abs(k.y);
+                        }
+                    });
                 });
+                return this._transposeMatrix(transposedMatrix);
+            }
+            else {
+                return matrix;
+            }
 
-                m.forEach(function (k: any): any {
-                    k.perc = k.y / sum; // calculate percentage of this value across the different series
-                    k.max = sum;
-                    if (k.y < 0) {
-                        k.sum = negBase;
-                        negBase -= Math.abs(k.y);
-                    }
-                    else {
-                        k.sum = posBase = posBase + Math.abs(k.y);
-                    }
-                });
-            });
-
-            return this._transposeMatrix(transposedMatrix);
         }
 
         private _setLabels(): string[] {

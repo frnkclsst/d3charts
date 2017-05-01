@@ -38,15 +38,28 @@ module frnk.UI.Charts {
             // draw chart area
             this.svg = d3.select(this._chart.selector)
                 .append("svg")
-                .attr("class", "chart")
+                .attr("class", "svg_chart")
                 .attr("width", this.width)
                 .attr("height", this.height);
 
             // draw areas
-            this.titleArea.draw();
-            this.legendArea.draw();
-            this.plotArea.draw();
-            this.drawBorders();
+            if (this._chart.series.items[0].data.length > 0) {
+                this.titleArea.draw();
+                this.legendArea.draw();
+                this.plotArea.draw();
+                this.drawBorders();
+            }
+            else {
+                this.svg.append("text")
+                    .attr("x", "50%")
+                    .attr("y", "50%")
+                    .attr("alignment-baseline", "middle")
+                    .attr("text-anchor", "middle")
+                    .text("No data available");
+
+                throw Error("No data available");
+            }
+
         }
 
         public positionAreas(): void {
