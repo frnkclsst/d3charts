@@ -1,9 +1,10 @@
 {
-  "name": "d3charts",
+  "name": "charts-d3-ish",
   "version": "0.1.0",
-  "description": "Chart library based on d3",
-  "readme": "readme.md",
   "author": "frank.closset@gmail.com",
+  "description": "Chart library based on d3",
+  "main": "dist/js/d3.charts.js",
+  "readme": "readme.md",
   "devDependencies": {
     "browser-sync": "~2.11.1",
     "express": "*",
