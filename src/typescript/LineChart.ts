@@ -1,132 +1,133 @@
-/// <reference path="_References.ts" />
-
 "use strict";
 
-module frnk.UI.Charts {
+import { AxisType, MarkerType, ScaleType } from "./Enums";
+import { IData, IOptions } from "./IOptions";
+import { XYChart } from "./XYChart";
+import { SVGArea } from "./Shape.Area";
+import { SVGLine } from "./Shape.Line";
 
-    export class LineChart extends XYChart {
-        public area: {
-            visible: boolean,
-            opacity: number
+export class LineChart extends XYChart {
+    public area: {
+        visible: boolean,
+        opacity: number
+    };
+    public interpolation: string;
+    public markers: {
+        visible: boolean,
+        size: number,
+        type: MarkerType
+    };
+
+    constructor(selector: string, data: IData, options?: IOptions) {
+        super(selector, data, options);
+        this.area = {
+            visible: this.options.plotOptions.area.visible,
+            opacity: this.options.plotOptions.area.opacity
         };
-        public interpolation: string;
-        public markers: {
-            visible: boolean,
-            size: number,
-            type: MarkerType
+        this.interpolation = this.options.plotOptions.line.interpolation;
+        this.markers = {
+            visible: this.options.plotOptions.markers.visible,
+            size: this.options.plotOptions.markers.size,
+            type: this.options.plotOptions.markers.type
         };
+    }
 
-        constructor(selector: string, data: IData, options?: IOptions) {
-            super(selector, data, options);
-            this.area = {
-                visible: this.options.plotOptions.area.visible,
-                opacity: this.options.plotOptions.area.opacity
-            };
-            this.interpolation = this.options.plotOptions.line.interpolation;
-            this.markers = {
-                visible: this.options.plotOptions.markers.visible,
-                size: this.options.plotOptions.markers.size,
-                type: this.options.plotOptions.markers.type
-            };
-        }
+    public draw(): void {
+        super.draw();
 
-        public draw(): void {
-            super.draw();
+        var svgSeries = this.canvas.plotArea.svg.append("g")
+            .attr("class", "series");
 
-            var svgSeries = this.canvas.plotArea.svg.append("g")
-                .attr("class", "series");
-
-            // draw areas
-            // areas need to be drawn first, because the line and markers need to be drawn on top of it
-            if (this.area.visible === true) {
-                for (var areaSerie = 0; areaSerie < this.series.length; areaSerie++) {
-                    var area = new SVGArea(svgSeries, this, areaSerie);
-                    area.animation = {
-                        duration: this.options.plotOptions.animation.duration,
-                        ease: this.options.plotOptions.animation.ease
-                    };
-                    area.color = this.colorPalette.color(areaSerie);
-                    area.opacity = this.area.opacity;
-                    area.interpolation = this.interpolation;
-                    area.x = (d: any, i: number, s: number): number => {
-                        return this.getXCoordinate(d, i, s);
-                    };
-                    area.y = (d: any, i: number, s: number): number => {
-                        return this.getYCoordinate(d, i, s);
-                    };
-                    area.y0 = (d: any, i: number, s: number): number => {
-                        return this.getY0Coordinate(d, i, s);
-                    };
-                    area.y1 = (d: any, i: number, s: number): number => {
-                        return this.getY1Coordinate(d, i, s);
-                    };
-                    area.draw(this.series.getMatrixItem(areaSerie));
-                }
-            }
-
-            // draw lines
-            for (var serie = 0; serie < this.series.length; serie++) {
-                if (this.series.items[serie].data.length != 0) {
-                    var line = new SVGLine(svgSeries, this, serie);
-                    line.animation = {
-                        duration: this.options.plotOptions.animation.duration,
-                        ease: this.options.plotOptions.animation.ease
-                    };
-                    line.color = this.colorPalette.color(serie);
-                    line.interpolation = this.interpolation;
-                    line.labels = {
-                        format: this.series.items[serie].format,
-                        rotate: this.options.series.labels.rotate,
-                        visible: this.options.series.labels.visible
-                    };
-                    line.marker = {
-                        visible: this.markers.visible,
-                        size: this.markers.size,
-                        type: this.series.items[serie].marker
-                    };
-                    line.x = (d: any, i: number, s: number): number => {
-                        return this.getXCoordinate(d, i, s);
-                    };
-                    line.y = (d: any, i: number, s: number): number => {
-                        return this.getYCoordinate(d, i, s);
-                    };
-                    line.draw(this.series.getMatrixItem(serie));
-                }
+        // draw areas
+        // areas need to be drawn first, because the line and markers need to be drawn on top of it
+        if (this.area.visible === true) {
+            for (var areaSerie = 0; areaSerie < this.series.length; areaSerie++) {
+                var area = new SVGArea(svgSeries, this, areaSerie);
+                area.animation = {
+                    duration: this.options.plotOptions.animation.duration,
+                    ease: this.options.plotOptions.animation.ease
+                };
+                area.color = this.colorPalette.color(areaSerie);
+                area.opacity = this.area.opacity;
+                area.interpolation = this.interpolation;
+                area.x = (d: any, i: number, s: number): number => {
+                    return this.getXCoordinate(d, i, s);
+                };
+                area.y = (d: any, i: number, s: number): number => {
+                    return this.getYCoordinate(d, i, s);
+                };
+                area.y0 = (d: any, i: number, s: number): number => {
+                    return this.getY0Coordinate(d, i, s);
+                };
+                area.y1 = (d: any, i: number, s: number): number => {
+                    return this.getY1Coordinate(d, i, s);
+                };
+                area.draw(this.series.getMatrixItem(areaSerie));
             }
         }
 
-        public getXCoordinate(d: any, i: number, serie: number): any {
-            var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
-            var axis = this.axes[index];
-
-            if (axis.getScaleType() === ScaleType.Ordinal) {
-                return axis.scale(this.categories.parseFormat(this.categories.getItem(i))) + axis.scale.rangeBand() / 2;
+        // draw lines
+        for (var serie = 0; serie < this.series.length; serie++) {
+            if (this.series.items[serie].data.length != 0) {
+                var line = new SVGLine(svgSeries, this, serie);
+                line.animation = {
+                    duration: this.options.plotOptions.animation.duration,
+                    ease: this.options.plotOptions.animation.ease
+                };
+                line.color = this.colorPalette.color(serie);
+                line.interpolation = this.interpolation;
+                line.labels = {
+                    format: this.series.items[serie].format,
+                    rotate: this.options.series.labels.rotate,
+                    visible: this.options.series.labels.visible
+                };
+                line.marker = {
+                    visible: this.markers.visible,
+                    size: this.markers.size,
+                    type: this.series.items[serie].marker
+                };
+                line.x = (d: any, i: number, s: number): number => {
+                    return this.getXCoordinate(d, i, s);
+                };
+                line.y = (d: any, i: number, s: number): number => {
+                    return this.getYCoordinate(d, i, s);
+                };
+                line.draw(this.series.getMatrixItem(serie));
             }
-            else {
-                return axis.scale(this.categories.parseFormat(this.categories.getItem(i)));
-            }
         }
+    }
 
-        public getYCoordinate(d: any, i: number, serie: number): any {
-            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
-            var axis = this.axes[index];
+    public getXCoordinate(d: any, i: number, serie: number): any {
+        var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+        var axis = this.axes[index];
 
-            return axis.scale(d.y);
+        if (axis.getScaleType() === ScaleType.Ordinal) {
+            return axis.scale(this.categories.parseFormat(this.categories.getItem(i))) + axis.scale.rangeBand() / 2;
         }
-
-        public getY0Coordinate(d: any, i: number, serie: number): any {
-            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
-            var axis = this.axes[index];
-
-            return axis.scale(d.y0);
+        else {
+            return axis.scale(this.categories.parseFormat(this.categories.getItem(i)));
         }
+    }
 
-        public getY1Coordinate(d: any, i: number, serie: number): any {
-            var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
-            var axis = this.axes[index];
+    public getYCoordinate(d: any, i: number, serie: number): any {
+        var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+        var axis = this.axes[index];
 
-            return axis.scale(d.y1);
-        }
+        return axis.scale(d.y);
+    }
+
+    public getY0Coordinate(d: any, i: number, serie: number): any {
+        var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+        var axis = this.axes[index];
+
+        return axis.scale(d.y0);
+    }
+
+    public getY1Coordinate(d: any, i: number, serie: number): any {
+        var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+        var axis = this.axes[index];
+
+        return axis.scale(d.y1);
     }
 }
 

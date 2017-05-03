@@ -42,6 +42,7 @@
     <div id="chart" class="chart" />
 
     <script>
+
         var options = {
             plotOptions: {
                 animation: {
@@ -190,7 +191,7 @@
             // Initialize
             var data = $.parseJSON(data);
             // Draw initial chart
-            var chart = new frnk.UI.Charts.LineChart("#chart", data, options);
+            var chart = new LineChart("#chart", data, options);
             chart.draw();
 
             document.getElementById("type").onchange = function () {
@@ -198,23 +199,23 @@
                 var val = this.options[this.selectedIndex].value;
                 switch (val) {
                     case "column":
-                        var chart = new frnk.UI.Charts.ColumnChart("#chart", data, options);
+                        var chart = new ColumnChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "combo":
-                        var chart = new frnk.UI.Charts.ComboChart("#chart", data, options);
+                        var chart = new ComboChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "stackedcolumn":
-                        var chart = new frnk.UI.Charts.StackedColumnChart("#chart", data, options);
+                        var chart = new StackedColumnChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "stackedpercentcolumn":
-                        var chart = new frnk.UI.Charts.StackedPercentColumnChart("#chart", data, options);
+                        var chart = new StackedPercentColumnChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "bar":
-                        var chart = new frnk.UI.Charts.BarChart("#chart", data, options);
+                        var chart = new BarChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "stackedbar":
@@ -222,27 +223,27 @@
                         chart.draw();
                         break;
                     case "stackedpercentbar":
-                        var chart = new frnk.UI.Charts.StackedPercentBarChart("#chart", data, options);
+                        var chart = new StackedPercentBarChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "line":
-                        var chart = new frnk.UI.Charts.LineChart("#chart", data, options);
+                        var chart = new LineChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "stackedline":
-                        var chart = new frnk.UI.Charts.StackedLineChart("#chart", data, options);
+                        var chart = new StackedLineChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "stackedpercentline":
-                        var chart = new frnk.UI.Charts.StackedPercentLineChart("#chart", data, options);
+                        var chart = new StackedPercentLineChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "scatter":
-                        var chart = new frnk.UI.Charts.ScatterChart("#chart", data, options);
+                        var chart = new ScatterChart("#chart", data, options);
                         chart.draw();
                         break;
                     case "pie":
-                        var chart = new frnk.UI.Charts.PieChart("#chart", data, options);
+                        var chart = new PieChart("#chart", data, options);
                         chart.draw();
                         break;
                 }

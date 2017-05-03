@@ -1,9 +1,15 @@
-﻿'use strict';
+﻿"use strict";
 
 var gulp = require('gulp');
 var gulpTypescript = require('gulp-typescript');
+var sourcemaps = require("gulp-sourcemaps");
 var gulpTSLint = require('gulp-tslint');
 var gulpDebug = require('gulp-debug');
+var rename = require('gulp-rename');
+var browserify = require('browserify');
+var babelify = require( 'babelify' );
+var tsify = require("tsify");
+var source = require('vinyl-source-stream');
 
 var browserSync = require('browser-sync').create();
 var fs = require('fs-extra');
@@ -17,15 +23,21 @@ var buildOptions = {
 	isDebug: true
 };
 
+var tsProject = gulpTypescript.createProject('tsconfig.json');
 
 // Gulp Tasks
 gulp.task('compile-typescript', function(cb){
-	return gulp.src(buildOptions.srcPath + '/typescript/**/*.ts')
-        .pipe(gulpTypescript({
-            //noImplicitAny: true,
-            out: 'd3.charts.js'
-        }))
-        .pipe(gulp.dest(buildOptions.distPath + '/js'));
+	return browserify({
+        basedir: '.',
+        debug: false,
+        entries: [buildOptions.srcPath + '/typescript/Chart.ts'],
+        cache: {},
+        packageCache: {}
+    })
+    .plugin(tsify)
+    .bundle()
+    .pipe(source('d3.charts.js'))
+    .pipe(gulp.dest(buildOptions.distPath + "/js"));
 });
 
 gulp.task('compile-less', function (cb) {
