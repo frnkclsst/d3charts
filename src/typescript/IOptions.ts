@@ -20,23 +20,30 @@ export interface IOptions {
     title?: ITitleAreaOptions;
     xAxes?: IAxisOptions[];
     yAxes?: IAxisOptions[];
+    titleArea?: ITitleAreaOptions;
+    tooltip?: { title: string };
 
-    getValue(propStr: string, defaultValue?: string): any;
+    /* TODO: duplicates? */
+    legendArea?: ILegendAreaOptions;
+    xAxis: IAxisOptions[];
+    yAxis: IAxisOptions[];
+
+    getValue?(propStr: string, defaultValue?: string): any;
 }
 
 export interface IAxisOptions {
     gridlines: string;
     labels: {
-        format: string;
+        format?: string;
         rotate: number;
     };
-    name: string;
+    name?: string;
     orient: OrientationType;
     tickmarks: boolean;
     title: {
-        align: string;
+        align?: string;
         text: string;
-        valign: string;
+        valign?: string;
     };
 }
 
@@ -47,8 +54,8 @@ export interface ICanvasOptions {
         right: boolean,
         top: boolean
     };
-    height: number;
-    width: number;
+    height?: number;
+    width?: number;
 }
 
 export interface ILegendAreaOptions {
@@ -87,7 +94,7 @@ export interface IPlotOptions {
         innerPadding: number;
         outerPadding: number;
     };
-    colors: string[];
+    colors?: string[];
     line: {
         interpolation: string;
     };
@@ -106,6 +113,11 @@ export interface ISeriesOptions {
         visible: boolean,
         format: string,
         rotate: boolean
+    };
+    [index: string]: {
+        visible?: boolean,
+        format: string,
+        rotate?: boolean
     };
 }
 
