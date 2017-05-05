@@ -4,7 +4,7 @@
         "sourceMap": false,
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
-        //"noImplicitAny": false,
+        //"noImplicitAny": true,
         //"noImplicitThis": true,
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
@@ -13,6 +13,7 @@
         "strictNullChecks": false
     },
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "dist"
     ]
 }

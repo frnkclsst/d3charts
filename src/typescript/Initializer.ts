@@ -443,6 +443,12 @@ export class PlotOptions implements IPlotOptions {
 }
 
 export class SeriesOptions implements ISeriesOptions {
+    [index: string]: {
+        visible?: boolean,
+        format: string,
+        rotate?: boolean
+    };
+
     public labels: {
         visible: boolean;
         format: string;

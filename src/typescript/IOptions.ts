@@ -25,8 +25,8 @@ export interface IOptions {
 
     /* TODO: duplicates? */
     legendArea?: ILegendAreaOptions;
-    xAxis: IAxisOptions[];
-    yAxis: IAxisOptions[];
+    xAxis?: IAxisOptions[];
+    yAxis?: IAxisOptions[];
 
     getValue?(propStr: string, defaultValue?: string): any;
 }
