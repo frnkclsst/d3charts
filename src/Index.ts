@@ -10,7 +10,7 @@ import { StackedLineChart } from "./typescript/StackedLineChart";
 import { StackedPercentLineChart } from "./typescript/StackedPercentLineChart";
 import { ScatterChart } from "./typescript/ScatterChart";
 import { PieChart } from "./typescript/PieChart";
-import { IOptions } from "./typescript/IOPtions";
+import { IOptions } from "./typescript/IOptions";
 
 // jQuery declaration
 declare const $: { get: (url: string, response: (rawData: string) => void) => void };
