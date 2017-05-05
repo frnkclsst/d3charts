@@ -24,6 +24,10 @@
     "start": "gulp serve",
     "build": "gulp"
   },
+  "scripts": {
+    "start": "gulp serve",
+    "build": "gulp"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/frnkclsst/d3charts.git"
