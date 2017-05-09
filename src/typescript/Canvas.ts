@@ -69,6 +69,7 @@ export class Canvas extends ChartArea {
 
         // get element size
         var elementWidth = Number(container.style("width").substring(0, container.style("width").length - 2));
+        // TODO - doesn't take height if expressed in percentage
         var elementHeight = Number(container.style("height").substring(0, container.style("height").length - 2));
 
         this.width = elementWidth === 0 ? this.width : elementWidth;
