@@ -10,7 +10,7 @@ export class Tooltip {
         this.chart = chart;
     }
 
-    public draw(svg: D3.Selection, serie: number): void {
+    public draw(svg: D3.Selection, serie: number, inverse?: boolean): void {
         var _self = this;
 
         var divTooltip = d3.select(_self.chart.selector).append("div")
@@ -18,12 +18,13 @@ export class Tooltip {
             .style("opacity", 0);
 
         svg.on("mouseover", function (d: any, i: number): void {
-            var title = _self.chart.options.getValue("tooltip.title");
-            var subtitle = _self.chart.categories.getLabel(i);
-            var color = _self.chart.colorPalette.color(serie);
-            var serieTitle = _self.chart.series.getLabel(serie);
+            var title = _self.chart.options.getValue("tooltip.title"),
+                subtitle = _self.chart.categories.getLabel(i),
+                color = _self.chart.colorPalette.color(serie),
+                serieTitle = _self.chart.series.getLabel(serie),
+                dataPoint,
+                percent;
 
-            var dataPoint;
             if (d.y === d.y1) {
                 dataPoint = d3.format(_self.getPointFormat(serie))(d.y) + _self.getSuffix(serie);
             }
@@ -39,17 +40,16 @@ export class Tooltip {
                     d3.format(_self.getPointFormat(serie))(d.y1) + _self.getSuffix(serie) + ")";
             }
 
-            var percent = isNaN(d.perc) ? "" : Math.round(d.perc * 100) + "%";
-/*
-            // TODO - Use correct tooltip for pie charts / scatter charts
-            if (_self.chart instanceof PieChart) {
+            percent = isNaN(d.perc) ? "" : Math.round(d.perc * 100) + "%";
+
+            if (inverse) {
                 color = _self.chart.colorPalette.color(i);
                 subtitle = _self.chart.series.getLabel(serie);
                 serieTitle = _self.chart.categories.getLabel(i);
                 dataPoint = d.value;
-                percent = _self.chart.series.getMatrixItem(serie)[i].perc;
+                percent = Math.round(_self.chart.series.getMatrixItem(serie)[i].perc * 100) + "%";
             }
-
+/*
             if (_self.chart instanceof ScatterChart) {
                 color = _self.chart.colorPalette.color(serie - 1);
             }

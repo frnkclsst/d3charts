@@ -84,7 +84,7 @@ export class PieChart extends Chart {
                 });
 
             // draw tooltip
-            this.tooltip.draw(svgPath, serie);
+            this.tooltip.draw(svgPath, serie, true);
         }
     }
 
