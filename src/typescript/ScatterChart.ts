@@ -12,6 +12,12 @@ export class ScatterChart extends XYChart {
 
     constructor(selector: string, data: IData, options?: IOptions) {
         super(selector, data, options);
+
+        // Overrides
+        this.canvas.legendArea.items = this.series.getLabels().slice(1, this.series.getLabels().length);
+        for (var i: number = 0; i < this.axes.length; i++) {
+            this.axes[i].isDataAxis = (this.axes[i].type === AxisType.Y);
+        }
     }
 
     public draw(): void {

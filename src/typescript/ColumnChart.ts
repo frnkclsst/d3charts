@@ -1,10 +1,20 @@
 "use strict";
 
 import { AxisType, ScaleType } from "./Enums";
-import { XYChart } from "./XYChart";
+import { IData, IOptions } from "./IOptions";
 import { SVGColumn } from "./Shape.Column";
+import { XYChart } from "./XYChart";
 
 export class ColumnChart extends XYChart {
+
+    constructor(selector: string, data: IData, options?: IOptions) {
+        super(selector, data, options);
+
+        // Overrides
+        for (var i: number = 0; i < this.axes.length; i++) {
+            this.axes[i].isDataAxis = (this.axes[i].type === AxisType.Y);
+        }
+    }
 
     public draw(): void {
         super.draw();

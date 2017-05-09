@@ -10,6 +10,11 @@ export class ComboChart extends XYChart {
 
     constructor(selector: string, data: IData, options?: IOptions) {
         super(selector, data, options);
+
+        // Overrides
+        for (var i: number = 0; i < this.axes.length; i++) {
+            this.axes[i].isDataAxis = (this.axes[i].type === AxisType.Y);
+        }
     }
 
     public draw(): void {
@@ -18,6 +23,7 @@ export class ComboChart extends XYChart {
         var svgSeries = this.canvas.plotArea.svg.append("g")
             .attr("class", "series");
 
+        // TODO - Combo chart has no fallback shape if shape type is not defined on serie
         // draw lines
         for (var columnSerie = 0; columnSerie < this.series.length; columnSerie++) {
             if (this.series.items[columnSerie].type === "column") {

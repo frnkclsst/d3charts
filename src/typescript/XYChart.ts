@@ -1,9 +1,9 @@
 "use strict";
 
 import { AxisType, ScaleType } from "./Enums";
-import { IData, IOptions } from "./IOptions";
-import { Chart } from "./Chart";
 import { Axis, XAxis, YAxis } from "./Axis";
+import { Chart } from "./Chart";
+import { IData, IOptions } from "./IOptions";
 
 export class XYChart extends Chart {
     public axes: Axis[] = [];
@@ -20,6 +20,9 @@ export class XYChart extends Chart {
             var yAxis = new YAxis(this, this.options.yAxes[j]);
             this.axes.push(yAxis);
         }
+
+        // Overrides
+        this.canvas.legendArea.items = this.series.getLabels();
     }
 
     public draw(): void {

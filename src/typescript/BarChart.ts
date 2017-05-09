@@ -4,8 +4,18 @@ import { AxisType, ScaleType } from "./Enums";
 import { Axis } from "./Axis";
 import { XYChart } from "./XYChart";
 import { SVGBar } from "./Shape.Bar";
+import { IData, IOptions } from "./IOptions";
 
 export class BarChart extends XYChart {
+
+    constructor(selector: string, data: IData, options?: IOptions) {
+        super(selector, data, options);
+
+        // Overrides
+        for (var i: number = 0; i < this.axes.length; i++) {
+            this.axes[i].isDataAxis = (this.axes[i].type === AxisType.X);
+        }
+    }
 
     public draw(): void {
         super.draw();
@@ -48,7 +58,7 @@ export class BarChart extends XYChart {
         var axis = this.axes[index];
 
         if (d.y < 0) {
-            return Math.abs(axis.scale(d.y0));
+            return Math.abs(axis.scale(d.y));
         }
         else {
             return axis.scale(d.y0);

@@ -30,6 +30,11 @@ export class LineChart extends XYChart {
             size: this.options.plotOptions.markers.size,
             type: this.options.plotOptions.markers.type
         };
+
+        // Overrides
+        for (var i: number = 0; i < this.axes.length; i++) {
+            this.axes[i].isDataAxis = (this.axes[i].type === AxisType.Y);
+        }
     }
 
     public draw(): void {

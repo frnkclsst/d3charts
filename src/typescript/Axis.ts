@@ -1,14 +1,13 @@
 "use strict";
 
 import { AxisType, GridLineType, OrientationType, ScaleType } from "./Enums";
-import { ColumnChart } from "./ColumnChart";
 import { IAxisOptions } from "./IOptions";
-import { LineChart } from "./LineChart";
 import { XYChart } from "./XYChart";
 import * as Html from "./Html";
 
 export class Axis {
     public height: number;
+    public isDataAxis: boolean;
     public labels: {
         format: string;
         rotate: number;
@@ -42,6 +41,7 @@ export class Axis {
         this.axis = null;
         this.chart = chart;
         this.height = 0;
+        this.isDataAxis = false;
         this.labels = {
             format: options.labels.format,
             rotate: options.labels.rotate
@@ -119,7 +119,7 @@ export class Axis {
     }
 
     public drawZeroLine(svg: D3.Selection): void {
-        if (this.isDataAxis() && this.chart.series.min() < 0) {
+        if (this.isDataAxis && this.chart.series.min() < 0) {
             this.svgZeroLine = this.svgGrid.append("g")
                 .attr("class", "zero-line")
                 .append("line");
@@ -201,10 +201,6 @@ export class Axis {
         this._ticks = this.getTicks();
     }
 
-    public isDataAxis(): any {
-        // child classes are responsible for implementing this method
-    }
-
     public removeOverlappingTicks(): void {
         // child classes are responsible for implementing this method
     }
@@ -249,7 +245,7 @@ export class XAxis extends Axis {
     }
 
     public alignTitle(): void {
-        // TODO - Refactor alignTitle - messy
+        // TODO - refactor alignTitle - messy
         if (this.title.align === "left") {
             this.svgTitle.attr("x", this.chart.canvas.plotArea.axisSize.left);
         }
@@ -278,7 +274,7 @@ export class XAxis extends Axis {
 
     public drawZeroLine(svg: D3.Selection): void {
         super.drawZeroLine(svg);
-        if (this.isDataAxis() && this.chart.series.min() < 0) {
+        if (this.isDataAxis && this.chart.series.min() < 0) {
             this.svgZeroLine
                 .attr("x1", this.scale(0))
                 .attr("x2", this.scale(0))
@@ -324,15 +320,8 @@ export class XAxis extends Axis {
         return this.orient === "bottom" ? this.chart.canvas.plotArea.axisSize.top + this.chart.canvas.plotArea.height : this.chart.canvas.plotArea.axisSize.top;
     }
 
-    public isDataAxis(): boolean {
-        if (this.chart instanceof LineChart || this.chart instanceof ColumnChart) {
-            return false;
-        }
-        return true;
-    }
-
+    // TODO - improve removeOverlappingTicks on X-axis
     public removeOverlappingTicks(): void {
-        // TODO - improve how overlapping ticks are removed
         var ticks = this.svgAxis.selectAll("g.ticks").selectAll("g.tick"),
             tickOverlap = false,
             prevRight = 0;
@@ -418,7 +407,7 @@ export class YAxis extends Axis {
     }
 
     public alignTitle(): void {
-        // TODO - Refactor alignTitle - messy
+        // TODO - refactor alignTitle - messy
         if (this.orient === "left") {
             if (this.title.valign === "top") {
                 this.svgTitle.attr("x", -this.chart.canvas.plotArea.axisSize.top);
@@ -466,7 +455,7 @@ export class YAxis extends Axis {
 
     public drawZeroLine(svg: D3.Selection): void {
         super.drawZeroLine(svg);
-        if (this.isDataAxis() && this.chart.series.min() < 0) {
+        if (this.isDataAxis && this.chart.series.min() < 0) {
             this.svgZeroLine
                 .attr("x1", 0)
                 .attr("x2", this.orient === "left" ? this.chart.canvas.plotArea.width : -this.chart.canvas.plotArea.width)
@@ -509,13 +498,6 @@ export class YAxis extends Axis {
 
     public getYCoordinate(): number {
         return 0;
-    }
-
-    public isDataAxis(): boolean {
-        if (this.chart instanceof ColumnChart || this.chart instanceof LineChart) {
-            return true;
-        }
-        return false;
     }
 
     public removeOverlappingTicks(): void {

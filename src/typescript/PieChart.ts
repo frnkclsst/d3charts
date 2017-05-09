@@ -13,6 +13,9 @@ export class PieChart extends Chart {
     constructor(selector: string, data: IData, options?: IOptions) {
         super(selector, data, options);
         this.innerRadiusPercentage = this.options.plotOptions.pie.innerRadius;
+
+        // Overrides
+        this.canvas.legendArea.items = this.categories.getLabels();
     }
 
     public draw(): void {
@@ -103,5 +106,13 @@ export class PieChart extends Chart {
                         .text(d3.format(this.series.items[serie].format)(d.data));
                 });
         }
+    }
+
+    public toggleSerie(data: any, index: number): void {
+        var slice = d3.selectAll(this.selector + " #slice-" + index);
+        var opacity = slice.style("opacity") === "1" ? 0 : 1;
+        d3.selectAll(this.selector + " #slice-" + index).transition().duration(200).style("opacity", opacity);
+        // TODO - remove right labels in pie chart when clicking a legend item
+        d3.selectAll(this.selector + " #labels-" + index).transition().duration(200).style("opacity", opacity);
     }
 }

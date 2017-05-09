@@ -1,16 +1,13 @@
-"use strict";
+    "use strict";
 
 import { Chart } from "./Chart";
 import { ChartArea } from "./ChartArea";
-import { PieChart } from "./PieChart";
-import { ScatterChart } from "./ScatterChart";
 import { SVGSymbol } from "./Shape.Symbol";
 
 export class LegendArea extends ChartArea {
+    public items: string[];
     public position: string;
     public title: string;
-
-    private _items: string[];
 
     constructor(chart: Chart) {
         super(chart);
@@ -32,17 +29,6 @@ export class LegendArea extends ChartArea {
             return;
         }
 
-        if (this._chart instanceof PieChart) {
-            this._items = this._chart.categories.getLabels();
-        }
-        else {
-            this._items = this._chart.series.getLabels();
-        }
-
-        if (this._chart instanceof ScatterChart) {
-            this._items = this._items.slice(1, this._items.length);
-        }
-
         this.svg = this._chart.canvas.svg.append("g")
             .attr("class", "legend")
             .attr("transform", "translate(" + this.x + "," + this.y + ")");
@@ -53,40 +39,24 @@ export class LegendArea extends ChartArea {
     }
 
     private drawItems(svg: D3.Selection): void {
-        for (var i = 0; i < this._items.length; i++) {
+        for (var i = 0; i < this.items.length; i++) {
             var _self = this;
             var g = svg.append("g")
                 .attr("class", "item")
                 .attr("data-serie", i)
                 .attr("transform", "translate(" + 22 + "," + ((i * 20) + 60) + ")")
-                .on("click", function(): void {
-                    // TODO - refactor clicking items in legend
-                    // - add checkbox
-                    // - add interpolation when in stacked / pie charts
+                .on("click", function (): void {
+                    // TODO - add checkbox next to legend item to show / hide the serie
                     var item = Number(d3.select(this).attr("data-serie"));
-                    var opacity: number;
-                    if (_self._chart instanceof PieChart) {
-                        var slice = d3.selectAll(_self._chart.selector + " #slice-" + item);
-                        opacity = slice.style("opacity") === "1" ? 0 : 1;
-                        d3.selectAll(_self._chart.selector + " #slice-" + item).transition().duration(200).style("opacity", opacity);
-                        d3.selectAll(_self._chart.selector + " #labels-" + item).transition().duration(200).style("opacity", opacity); //TODO - doesn't remove right labels
-                    }
-                    else {
-                        var serie = d3.selectAll(_self._chart.selector + " #serie-" + item);
-                        opacity = serie.style("opacity") === "1" ? 0 : 1;
-                        d3.select(_self._chart.selector + " #serie-" + item).transition().duration(200).style("opacity", opacity);
-                        d3.select(_self._chart.selector + " #labels-" + item).transition().duration(200).style("opacity", opacity);
-                        d3.select(_self._chart.selector + " #area-" + item).transition().duration(200).style("opacity", opacity);
-                    }
+                    _self._chart.toggleSerie(_self.items, item);
                 });
 
             var symbol = new SVGSymbol(g, this._chart, i);
             symbol.color = this._chart.colorPalette.color(i);
             symbol.opacity = this._chart.options.plotOptions.area.opacity;
-            symbol.draw(this._items[i]);
+            symbol.draw(this.items[i]);
 
             this.drawText(g, i);
-
         }
     }
 
@@ -97,15 +67,7 @@ export class LegendArea extends ChartArea {
             .attr("dy", "0px")
             .style("text-anchor", "begin")
             .text((): string => {
-                if (this._chart instanceof PieChart) {
-                    return this._items[serie];
-                }
-                else if (this._chart instanceof ScatterChart) {
-                    return this._chart.series.getLabel(serie + 1);
-                }
-                else {
-                    return this._chart.series.getLabel(serie);
-                }
+               return this.items[serie];
             });
     }
 

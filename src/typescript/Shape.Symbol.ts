@@ -1,10 +1,7 @@
 "use strict";
 
-import { SVGShape } from "./Shape";
 import { Chart } from "./Chart";
-import { ComboChart } from "./ComboChart";
-import { LineChart } from "./LineChart";
-import { ScatterChart } from "./ScatterChart";
+import { SVGShape } from "./Shape";
 
 export class SVGSymbol extends SVGShape {
 
@@ -35,7 +32,8 @@ export class SVGSymbol extends SVGShape {
 
     public draw(data: any): void {
         var _self = this;
-
+/*
+        // TODO - use correct symbol in legend and tooltip
         if (_self.chart instanceof ComboChart) {
             if (_self.chart.series.items[_self.serie].type === "line") {
                 _self.drawLineSymbol(this.svg);
@@ -53,8 +51,10 @@ export class SVGSymbol extends SVGShape {
         else {
             _self.drawRectangleSymbol(this.svg);
         }
+        */
+        _self.drawRectangleSymbol(this.svg);
     }
-
+/*
     private drawLineSymbol(svg: D3.Selection): void {
         svg.append("line")
             .attr("x1", 0)
@@ -98,6 +98,7 @@ export class SVGSymbol extends SVGShape {
                     });
             });
     }
+    */
 
     private drawRectangleSymbol(svg: D3.Selection): void {
         svg.append("rect")

@@ -2,8 +2,6 @@
 
 import { Chart } from "./Chart";
 import { SVGSymbol } from "./Shape.Symbol";
-import { PieChart } from "./PieChart";
-import { ScatterChart } from "./ScatterChart";
 
 export class Tooltip {
     public chart: Chart;
@@ -42,7 +40,8 @@ export class Tooltip {
             }
 
             var percent = isNaN(d.perc) ? "" : Math.round(d.perc * 100) + "%";
-
+/*
+            // TODO - Use correct tooltip for pie charts / scatter charts
             if (_self.chart instanceof PieChart) {
                 color = _self.chart.colorPalette.color(i);
                 subtitle = _self.chart.series.getLabel(serie);
@@ -54,7 +53,7 @@ export class Tooltip {
             if (_self.chart instanceof ScatterChart) {
                 color = _self.chart.colorPalette.color(serie - 1);
             }
-
+*/
             var svgSymbol = d3.select(document.createElementNS(d3.ns.prefix.svg, "svg"));
             var symbol = new SVGSymbol(svgSymbol, _self.chart, serie);
             symbol.color = color;
