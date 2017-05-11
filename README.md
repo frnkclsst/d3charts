@@ -1,4 +1,4 @@
-# D3Charts
+# D3Charts [![Build Status](https://travis-ci.org/frnkclsst/d3charts.svg?branch=master)](https://travis-ci.org/frnkclsst/d3charts)
 
 ### Introduction
 

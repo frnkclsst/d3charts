@@ -9,6 +9,8 @@ var source = require('vinyl-source-stream');
 var browserSync = require('browser-sync').create();
 var fs = require('fs-extra');
 var runSequence = require('run-sequence');
+const async = require('async');
+const path = require('path');
 let isSingleBuild = true;
 
 var buildOptions = {
@@ -21,22 +23,34 @@ var buildOptions = {
 
 // Gulp Tasks
 gulp.task('compile-typescript', function (cb) {
-    return browserify({
-        basedir: buildOptions.srcPath,
-        debug: buildOptions.isDebug,
-        entries: ['Index.ts'],
-        extension: ['js', 'ts']
-    })
-        .plugin(tsify)
-        .bundle()
-        .on('error', function (error) {
-            if (isSingleBuild) {
-                throw new Error(error);
-            }
-            console.error(error.toString());
-        })
-        .pipe(source('d3.charts.js'))
-        .pipe(gulp.dest(buildOptions.distPath + "/js"));
+    const bundle = (entry, done) => {
+        const bundleFileName = path.basename(entry, '.ts').toLowerCase() + ".js";
+
+        browserify({
+                basedir: buildOptions.srcPath,
+                debug: buildOptions.isDebug,
+                entries: [entry],
+                extension: ['js', 'ts']
+            })
+                .plugin(tsify)
+                .bundle()
+                .on('error', function (error) {
+                    if (isSingleBuild) {
+                        throw new Error(error);
+                    }
+                    console.error(error.toString());
+                })
+                .pipe(source(bundleFileName))
+                .pipe(gulpDebug({ title: `Bundled ${entry}` }))
+                .pipe(gulp.dest(buildOptions.distPath + '/js'))
+                .on('end', done);
+    };
+
+    async.series([
+        next => bundle('Index.ts', next),
+        next => bundle('Lib.ts', next)
+    ], cb);
+
 });
 
 gulp.task('compile-less', function (cb) {
@@ -46,8 +60,7 @@ gulp.task('compile-less', function (cb) {
 gulp.task('run-tslint', function (cb) {
     gulp.src(
         [
-            buildOptions.srcPath + '/typescript/**/*.ts',
-            buildOptions.testPath + '/test/**/*.ts',
+            buildOptions.srcPath + '/**/*.ts',
             '!' + buildOptions.srcPath + '/typescript/typings/**',
             '!' + buildOptions.distPath + '**'
         ])
@@ -73,7 +86,7 @@ gulp.task('copy-src', function (cb) {
         buildOptions.srcPath + '/**',
         '!' + buildOptions.distPath,
         '!' + buildOptions.distPath + '/**',
-        '!' + buildOptions.srcPath + '/typescript/**/*.ts',
+        '!' + buildOptions.srcPath + '/**/*.ts',
         '!' + buildOptions.srcPath + '/less/**/*.less'])
         .pipe(gulp.dest(buildOptions.distPath));
 });

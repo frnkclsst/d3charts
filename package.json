@@ -1,11 +1,12 @@
 {
-  "name": "charts-d3-ish",
+  "name": "@sdl/d3charts",
   "version": "0.1.0",
   "author": "frank.closset@gmail.com",
   "description": "Chart library based on d3",
-  "main": "dist/js/d3.charts.js",
+  "main": "dist/js/lib.js",
   "readme": "readme.md",
   "devDependencies": {
+    "async": "^2.4.0",
     "browser-sync": "~2.11.1",
     "browserify": "^14.3.0",
     "fs-extra": "~0.30.0",
@@ -19,10 +20,6 @@
     "typescript": "^2.3.2",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
-  },
-  "scripts": {
-    "start": "gulp serve",
-    "build": "gulp"
   },
   "scripts": {
     "start": "gulp serve",
