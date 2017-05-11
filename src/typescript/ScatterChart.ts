@@ -23,29 +23,31 @@ export class ScatterChart extends XYChart {
     public draw(): void {
         super.draw();
 
-        this.svgSeries = this.canvas.plotArea.svg.append("g")
-            .attr("class", "series");
+        if (this.hasData()) {
+            this.svgSeries = this.canvas.plotArea.svg.append("g")
+                .attr("class", "series");
 
-        for (var serie = 1; serie < this.series.length; serie++) {
-            var bubbles = new SVGBubble(this.svgSeries, this, serie);
-            bubbles.animation = {
-                duration: this.options.plotOptions.animation.duration,
-                ease: this.options.plotOptions.animation.ease
-            };
-            bubbles.color = this.colorPalette.color(serie - 1);
-            bubbles.labels = {
-                format: this.series.items[serie].format,
-                rotate: this.options.series.labels.rotate,
-                visible: this.options.series.labels.visible
-            };
-            bubbles.marker.type = this.series.items[serie - 1].marker;
-            bubbles.x = (d: any, i: number, s: number) => {
-                return this.getXCoordinate(d, i, s);
-            };
-            bubbles.y = (d: any, i: number, s: number) => {
-                return this.getYCoordinate(d, i, s);
-            };
-            bubbles.draw(this.series.getMatrixItem(0));
+            for (var serie = 1; serie < this.series.length; serie++) {
+                var bubbles = new SVGBubble(this.svgSeries, this, serie);
+                bubbles.animation = {
+                    duration: this.options.plotOptions.animation.duration,
+                    ease: this.options.plotOptions.animation.ease
+                };
+                bubbles.color = this.colorPalette.color(serie - 1);
+                bubbles.labels = {
+                    format: this.series.items[serie].format,
+                    rotate: this.options.series.labels.rotate,
+                    visible: this.options.series.labels.visible
+                };
+                bubbles.marker.type = this.series.items[serie - 1].marker;
+                bubbles.x = (d: any, i: number, s: number) => {
+                    return this.getXCoordinate(d, i, s);
+                };
+                bubbles.y = (d: any, i: number, s: number) => {
+                    return this.getYCoordinate(d, i, s);
+                };
+                bubbles.draw(this.series.getMatrixItem(0));
+            }
         }
     }
 

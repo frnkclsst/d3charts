@@ -28,14 +28,16 @@ export class XYChart extends Chart {
     public draw(): void {
         super.draw();
 
-        for (var i = 0; i < this.axes.length; i++) {
-            this.axes[i].getSize();
-        }
+        if (this.hasData()) {
+            for (var i = 0; i < this.axes.length; i++) {
+                this.axes[i].getSize();
+            }
 
-        for (var j = 0; j < this.axes.length; j++) {
-            this.axes[j].draw();
-            if (this.axes.length > 1) {
-                this.axes[j].setColor(this.colorPalette.color(j));
+            for (var j = 0; j < this.axes.length; j++) {
+                this.axes[j].draw();
+                if (this.axes.length > 1) {
+                    this.axes[j].setColor(this.colorPalette.color(j));
+                }
             }
         }
     }

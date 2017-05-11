@@ -1,6 +1,6 @@
 {
   "name": "@sdl/d3charts",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "frank.closset@gmail.com",
   "description": "Chart library based on d3",
   "main": "dist/js/Lib.js",

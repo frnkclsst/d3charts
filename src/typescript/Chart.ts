@@ -63,6 +63,10 @@ export class Chart {
         this.canvas.draw();
     }
 
+    public hasData(): boolean {
+        return (this.series.items[0].data.length > 0);
+    }
+
     // TODO - Move to shape.ts
     public toggleSerie(data: any, index: number): void {
         var serie = d3.selectAll(this.selector + " #serie-" + index);

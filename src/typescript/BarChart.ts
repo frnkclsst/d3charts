@@ -20,36 +20,38 @@ export class BarChart extends XYChart {
     public draw(): void {
         super.draw();
 
-        // draw chart
-        var svgSeries = this.canvas.plotArea.svg.append("g")
-            .attr("class", "series");
+        if (this.hasData()) {
+            // draw chart
+            var svgSeries = this.canvas.plotArea.svg.append("g")
+                .attr("class", "series");
 
-        // draw bars
-        for (var serie = 0; serie < this.series.length; serie++) {
-            var bar = new SVGBar(svgSeries, this, serie);
-            bar.animation = {
-                duration: this.options.plotOptions.animation.duration,
-                ease: this.options.plotOptions.animation.ease
-            };
-            bar.color = this.colorPalette.color(serie);
-            bar.labels = {
-                format: this.series.items[serie].format,
-                rotate: this.options.series.labels.rotate,
-                visible: this.options.series.labels.visible
-            };
-            bar.height = (d: any, i: number, s: number) => {
-                return this.getHeight(d, i, s);
-            };
-            bar.width = (d: any, i: number, s: number) => {
-                return this.getWidth(d, i, s);
-            };
-            bar.x = (d: any, i: number, s: number) => {
-                return this.getXCoordinate(d, i, s);
-            };
-            bar.y = (d: any, i: number, s: number) => {
-                return this.getYCoordinate(d, i, s);
-            };
-            bar.draw(this.series.getMatrixItem(serie));
+            // draw bars
+            for (var serie = 0; serie < this.series.length; serie++) {
+                var bar = new SVGBar(svgSeries, this, serie);
+                bar.animation = {
+                    duration: this.options.plotOptions.animation.duration,
+                    ease: this.options.plotOptions.animation.ease
+                };
+                bar.color = this.colorPalette.color(serie);
+                bar.labels = {
+                    format: this.series.items[serie].format,
+                    rotate: this.options.series.labels.rotate,
+                    visible: this.options.series.labels.visible
+                };
+                bar.height = (d: any, i: number, s: number) => {
+                    return this.getHeight(d, i, s);
+                };
+                bar.width = (d: any, i: number, s: number) => {
+                    return this.getWidth(d, i, s);
+                };
+                bar.x = (d: any, i: number, s: number) => {
+                    return this.getXCoordinate(d, i, s);
+                };
+                bar.y = (d: any, i: number, s: number) => {
+                    return this.getYCoordinate(d, i, s);
+                };
+                bar.draw(this.series.getMatrixItem(serie));
+            }
         }
     }
 

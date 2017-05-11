@@ -45,7 +45,7 @@ export class Canvas extends ChartArea {
             .attr("height", this.height);
 
         // draw areas
-        if (this._chart.series.items[0].data.length > 0) {
+        if (this._chart.hasData()) {
             this.titleArea.draw();
             this.legendArea.draw();
             this.plotArea.draw();
@@ -58,10 +58,7 @@ export class Canvas extends ChartArea {
                 .attr("alignment-baseline", "middle")
                 .attr("text-anchor", "middle")
                 .text("No data available");
-
-            throw Error("No data available");
         }
-
     }
 
     public positionAreas(): void {

@@ -19,36 +19,38 @@ export class ColumnChart extends XYChart {
     public draw(): void {
         super.draw();
 
-        // draw chart
-        var svgSeries = this.canvas.plotArea.svg.append("g")
-            .attr("class", "series");
+        if (this.hasData()) {
+            // draw chart
+            var svgSeries = this.canvas.plotArea.svg.append("g")
+                .attr("class", "series");
 
-        // draw columns
-        for (var serie = 0; serie < this.series.length; serie++) {
-            var column = new SVGColumn(svgSeries, this, serie);
-            column.animation = {
-                duration: this.options.plotOptions.animation.duration,
-                ease: this.options.plotOptions.animation.ease
-            };
-            column.color = this.colorPalette.color(serie);
-            column.labels = {
-                format: this.series.items[serie].format,
-                rotate: this.options.series.labels.rotate,
-                visible: this.options.series.labels.visible
-            };
-            column.height = (d: any, i: number, s: number) => {
-                return this.getHeight(d, i, s);
-            };
-            column.width = (d: any, i: number, s: number) => {
-                return this.getWidth(d, i, s);
-            };
-            column.x = (d: any, i: number, s: number) => {
-                return this.getXCoordinate(d, i, s);
-            };
-            column.y = (d: any, i: number, s: number) => {
-                return this.getYCoordinate(d, i, s);
-            };
-            column.draw(this.series.getMatrixItem(serie));
+            // draw columns
+            for (var serie = 0; serie < this.series.length; serie++) {
+                var column = new SVGColumn(svgSeries, this, serie);
+                column.animation = {
+                    duration: this.options.plotOptions.animation.duration,
+                    ease: this.options.plotOptions.animation.ease
+                };
+                column.color = this.colorPalette.color(serie);
+                column.labels = {
+                    format: this.series.items[serie].format,
+                    rotate: this.options.series.labels.rotate,
+                    visible: this.options.series.labels.visible
+                };
+                column.height = (d: any, i: number, s: number) => {
+                    return this.getHeight(d, i, s);
+                };
+                column.width = (d: any, i: number, s: number) => {
+                    return this.getWidth(d, i, s);
+                };
+                column.x = (d: any, i: number, s: number) => {
+                    return this.getXCoordinate(d, i, s);
+                };
+                column.y = (d: any, i: number, s: number) => {
+                    return this.getYCoordinate(d, i, s);
+                };
+                column.draw(this.series.getMatrixItem(serie));
+            }
         }
     }
 
