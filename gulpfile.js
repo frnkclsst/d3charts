@@ -69,7 +69,7 @@ gulp.task('create-bundles', ['compile-typescript'], cb => {
     async.series([
         next => bundle(buildOptions.distPath + '/js/Index.js', next),
         next => bundle(buildOptions.distPath + '/js/Lib.js', next)
-    ], cb);
+    ], cb)
 });
 
 gulp.task('compile-less', function (cb) {
@@ -126,6 +126,7 @@ gulp.task('serve', ['default'], function (cb) {
         buildOptions.srcPath + '**/typescript/**/*.ts',
         buildOptions.srcPath + '**/*.htm',
         buildOptions.srcPath + '**/*.html',
+        buildOptions.srcPath + '**/*.ts',
         buildOptions.testPath + '**/*.ts',
         buildOptions.testPath + '**/*.xml',
         '!' + buildOptions.libPath + '**',

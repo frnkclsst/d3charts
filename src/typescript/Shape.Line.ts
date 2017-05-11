@@ -1,8 +1,9 @@
 "use strict";
 
+import * as d3 from "d3";
+import * as Html from "./Html";
 import { SVGShape } from "./Shape";
 import { XYChart } from "./XYChart";
-import * as Html from "./Html";
 
 export class SVGLine extends SVGShape {
     protected chart: XYChart;
@@ -14,7 +15,7 @@ export class SVGLine extends SVGShape {
         visible: boolean;
     };
 
-    constructor(svg: D3.Selection, chart: XYChart, serie: number) {
+    constructor(svg: d3.Selection<any>, chart: XYChart, serie: number) {
         super(svg, chart, serie);
         this.chart = chart;
 
@@ -43,7 +44,8 @@ export class SVGLine extends SVGShape {
             .attr("fill", "none");
 
         // add animation
-        var pathLenght = svgPath[0][0].getTotalLength();
+        var pathElement: SVGPathElement = <SVGPathElement>svgPath[0][0];
+        var pathLenght = pathElement.getTotalLength();
         var count = 0;
         svgPath
             .each((): void => {
@@ -112,7 +114,7 @@ export class SVGLine extends SVGShape {
             });
     }
 
-    public drawMarkers(data: any): D3.Selection {
+    public drawMarkers(data: any): d3.Selection<any> {
         return this.svg.selectAll("g#serie-" + this.serie).selectAll(".marker")
             .data(data)
             .enter()
@@ -123,7 +125,7 @@ export class SVGLine extends SVGShape {
                 "stroke-width": 0,
                 "d": d3.svg.symbol()
                     .size(this.marker.size * 10)
-                    .type(this.marker.type)(),
+                    .type(this.marker.type)(0, 0),
                 "transform": (d: any, i: number): string => {
                     return "translate(" + this.x(d, i, this.serie) + ", " + this.y(d, i, this.serie) + ")";
                 }

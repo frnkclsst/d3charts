@@ -1,5 +1,6 @@
 "use strict";
 
+import * as d3 from "d3";
 import { Chart } from "./Chart";
 import { SVGShape } from "./Shape";
 
@@ -16,7 +17,7 @@ export class SVGSymbol extends SVGShape {
         visible: boolean;
     };
 
-    constructor(svg: D3.Selection, chart: Chart, serie: number) {
+    constructor(svg: d3.Selection<any>, chart: Chart, serie: number) {
         super(svg, chart, serie);
         this.chart = chart;
 
@@ -100,7 +101,7 @@ export class SVGSymbol extends SVGShape {
     }
     */
 
-    private drawRectangleSymbol(svg: D3.Selection): void {
+    private drawRectangleSymbol(svg: d3.Selection<any>): void {
         svg.append("rect")
             .attr("x", 0)
             .attr("width", this.symbolWidth)

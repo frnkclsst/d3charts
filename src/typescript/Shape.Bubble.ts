@@ -1,5 +1,6 @@
 "use strict";
 
+import * as d3 from "d3";
 import { SVGShape } from "./Shape";
 import { XYChart } from "./XYChart";
 
@@ -10,7 +11,7 @@ export class SVGBubble extends SVGShape {
         type: string;
     };
 
-    constructor(svg: D3.Selection, chart: XYChart, serie: number) {
+    constructor(svg: d3.Selection<any>, chart: XYChart, serie: number) {
         super(svg, chart, serie);
         this.chart = chart;
 
@@ -35,7 +36,7 @@ export class SVGBubble extends SVGShape {
                         "class": "bubble",
                         "d": d3.svg.symbol()
                             .size(0)
-                            .type(_self.marker.type)(),
+                            .type(_self.marker.type)(0, 0),
                         "fill": _self.color,
                         "stroke": _self.color,
                         "stroke-width": 0,
@@ -53,10 +54,10 @@ export class SVGBubble extends SVGShape {
             .duration(this.animation.duration)
             .ease(this.animation.ease)
             .attr("d", (d: any, i: number): any => {
-                var size = _self.chart.series.items[this.serie].size != undefined ? _self.chart.series.items[this.serie].size[i] * 10 : 60;
+                var size: number = _self.chart.series.items[this.serie].size != undefined ? _self.chart.series.items[this.serie].size[i] * 10 : 60;
                 return d3.svg.symbol()
                     .size(size)
-                    .type(_self.marker.type)();
+                    .type(_self.marker.type)(d, i);
             })
             .each("end", (): void => {
                 count--;

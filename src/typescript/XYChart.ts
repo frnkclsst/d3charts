@@ -1,5 +1,6 @@
 "use strict";
 
+import * as d3 from "d3";
 import { AxisType, ScaleType } from "./Enums";
 import { Axis, XAxis, YAxis } from "./Axis";
 import { Chart } from "./Chart";

@@ -1,9 +1,10 @@
 "use strict";
 
+import * as d3 from "d3";
+import * as Html from "./Html";
 import { AxisType, GridLineType, OrientationType, ScaleType } from "./Enums";
 import { IAxisOptions } from "./IOptions";
 import { XYChart } from "./XYChart";
-import * as Html from "./Html";
 
 export class Axis {
     public height: number;
@@ -22,15 +23,15 @@ export class Axis {
     public type: AxisType;
     public width: number;
 
-    protected axis: D3.Svg.Axis;
+    protected axis: d3.svg.Axis;
     protected chart: XYChart;
     protected gridlineType: GridLineType;
     protected hasTickmarks: boolean;
     protected orient: OrientationType;
-    protected svgAxis: D3.Selection;
-    protected svgGrid: D3.Selection;
-    protected svgTitle: D3.Selection;
-    protected svgZeroLine: D3.Selection;
+    protected svgAxis: d3.Selection<any>;
+    protected svgGrid: d3.Selection<any>;
+    protected svgTitle: d3.Selection<any>;
+    protected svgZeroLine: d3.Selection<any>;
 
     private _innerTicksize: number;
     private _outerTicksize: number;
@@ -92,7 +93,7 @@ export class Axis {
         //this.removeOverlappingTicks();
     }
 
-    public drawGridlines(axis: D3.Svg.Axis): void {
+    public drawGridlines(axis: d3.svg.Axis): void {
         this.svgGrid = this.svgAxis.append("g")
             .attr("class", "grid");
 
@@ -112,13 +113,13 @@ export class Axis {
         }
     }
 
-    public drawTitle(svg: D3.Selection): void {
+    public drawTitle(svg: d3.Selection<any>): void {
         this.svgTitle = svg.append("text")
             .text(this.title.text)
             .attr("class", "title");
     }
 
-    public drawZeroLine(svg: D3.Selection): void {
+    public drawZeroLine(svg: d3.Selection<any>): void {
         if (this.isDataAxis && this.chart.series.min() < 0) {
             this.svgZeroLine = this.svgGrid.append("g")
                 .attr("class", "zero-line")
@@ -205,7 +206,7 @@ export class Axis {
         // child classes are responsible for implementing this method
     }
 
-    public rotateLabels(svg: D3.Selection): void {
+    public rotateLabels(svg: d3.Selection<any>): void {
         // child classes are responsible for implementing this method
     }
 
@@ -214,7 +215,8 @@ export class Axis {
     }
 
     public setColor(color: string): void {
-        this.svgAxis.selectAll("path")[0][0].setAttribute("style", "stroke: " + color);
+        var element: Element = <Element>this.svgAxis.selectAll("path")[0][0];
+        element.setAttribute("style", "stroke: " + color);
     }
 
     protected setGridlineType(type: string): void {
@@ -257,7 +259,7 @@ export class XAxis extends Axis {
         }
     }
 
-    public drawTitle(svg: D3.Selection): void {
+    public drawTitle(svg: d3.Selection<any>): void {
         super.drawTitle(svg);
 
         var x = Html.align(this.svgTitle, Html.getWidth(this.svgAxis), this.title.align, 0),
@@ -272,7 +274,7 @@ export class XAxis extends Axis {
             .attr("transform", "translate(" + x + "," + y + ")");
     }
 
-    public drawZeroLine(svg: D3.Selection): void {
+    public drawZeroLine(svg: d3.Selection<any>): void {
         super.drawZeroLine(svg);
         if (this.isDataAxis && this.chart.series.min() < 0) {
             this.svgZeroLine
@@ -327,8 +329,9 @@ export class XAxis extends Axis {
             prevRight = 0;
 
         for (var i = 0; i < ticks[0].length - 1; i++) {
-            var left = ticks[0][i].getBoundingClientRect().left;
-            var right = ticks[0][i].getBoundingClientRect().right;
+            var ticksElement = <SVGElement>ticks[0][i];
+            var left = ticksElement.getBoundingClientRect().left;
+            var right = ticksElement.getBoundingClientRect().right;
             if (prevRight > left) {
                 tickOverlap = true;
             }
@@ -339,21 +342,22 @@ export class XAxis extends Axis {
 
         for (var j = 0; j < ticks[0].length; j++) {
             if (tickOverlap && Math.abs(j % 2) === 1) {
-                ticks[0][j].setAttribute("style", "opacity: 0");
+                ticksElement = <SVGElement>ticks[0][j];
+                ticksElement.setAttribute("style", "opacity: 0");
             }
         }
     }
 
-    public rotateLabels(svg: D3.Selection): void {
+    public rotateLabels(svg: d3.Selection<any>): void {
         var _self = this,
-            text: D3.Selection,
+            text: d3.Selection<any>,
             y: number;
 
         if (this.labels.rotate != 0) {
             svg.selectAll("text")
                 .each(function(): void {
                     text = d3.select(this);
-                    y = parseInt(text.attr("y"), 10);
+                    y = Number(text.attr("y"));
 
                     text
                         .style("alignment-baseline", "middle")
@@ -432,7 +436,7 @@ export class YAxis extends Axis {
         }
     }
 
-    public drawTitle(svg: D3.Selection): void {
+    public drawTitle(svg: d3.Selection<any>): void {
         super.drawTitle(svg);
 
         var rotation = this.orient === "left" ? -90 : 90;
@@ -453,7 +457,7 @@ export class YAxis extends Axis {
             .attr("transform", "translate(" + x + "," + y + ") rotate(" + rotation + ")");
     }
 
-    public drawZeroLine(svg: D3.Selection): void {
+    public drawZeroLine(svg: d3.Selection<any>): void {
         super.drawZeroLine(svg);
         if (this.isDataAxis && this.chart.series.min() < 0) {
             this.svgZeroLine
@@ -504,7 +508,7 @@ export class YAxis extends Axis {
         // TODO - implement removeOverlappingTicks for Y-axis
     }
 
-    public rotateLabels(svg: D3.Selection): void {
+    public rotateLabels(svg: d3.Selection<any>): void {
         // TODO - implement label rotation for Y-axis
     }
 

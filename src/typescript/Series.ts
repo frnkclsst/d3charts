@@ -1,5 +1,6 @@
 "use strict";
 
+import * as d3 from "d3";
 import { StackType } from "./Enums";
 import { Serie } from "./Serie";
 import { Chart } from "./Chart";

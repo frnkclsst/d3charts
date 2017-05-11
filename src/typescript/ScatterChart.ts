@@ -1,5 +1,6 @@
 "use strict";
 
+import * as d3 from "d3";
 import { AxisType, ScaleType } from "./Enums";
 import { IData, IOptions } from "./IOptions";
 import { Axis } from "./Axis";
@@ -8,7 +9,7 @@ import { SVGBubble } from "./Shape.Bubble";
 
 export class ScatterChart extends XYChart {
 
-    private svgSeries: D3.Selection;
+    private svgSeries: d3.Selection<any>;
 
     constructor(selector: string, data: IData, options?: IOptions) {
         super(selector, data, options);

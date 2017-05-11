@@ -16,6 +16,35 @@ import { IOptions } from "./typescript/IOptions";
 declare const $: { get: (url: string, response: (rawData: string) => void) => void };
 
 const options: IOptions = {
+    canvas: {
+        border: {
+            bottom: true,
+            left: true,
+            right: true,
+            top: true
+        }
+    },
+    legendArea: {
+        border: {
+            bottom: false,
+            left: false,
+            right: true,
+            top: false
+        },
+        title: "Rainfall vs Temperature",
+        position: "left",
+        width: 200,
+        height: 200
+    },
+    plotArea: {
+        border: {
+            bottom: false,
+            left: false,
+            right: false,
+            top: false
+        },
+        padding: 50
+    },
     plotOptions: {
         animation: {
             duration: 500,
@@ -41,22 +70,24 @@ const options: IOptions = {
             innerRadius: 0.5
         }
     },
-    plotArea: {
-        border: {
-            bottom: false,
-            left: false,
-            right: false,
-            top: false
+    series: {
+        labels: {
+            visible: true,
+            format: ".4f",
+            rotate: false
         },
-        padding: 50
-    },
-    canvas: {
-        border: {
-            bottom: true,
-            left: true,
-            right: true,
-            top: true
+        1: {
+            format: ".2f"
+        },
+        2: {
+            format: ".2f"
+        },
+        3: {
+            format: ".1f"
         }
+    },
+    tooltip: {
+        title: "Rainfall vs Temperature"
     },
     titleArea: {
         align: "center",
@@ -71,18 +102,6 @@ const options: IOptions = {
         position: "top",
         subtitle: "Source: wikipedia.org",
         text: "Rainfall vs Temperature"
-    },
-    legendArea: {
-        border: {
-            bottom: false,
-            left: false,
-            right: true,
-            top: false
-        },
-        title: "Rainfall vs Temperature",
-        position: "left",
-        width: 200,
-        height: 200
     },
     xAxis: [{
         gridlines: "none",
@@ -121,26 +140,7 @@ const options: IOptions = {
             text: "",
             valign: "middle"
         }
-    }],
-    series: {
-        labels: {
-            visible: true,
-            format: ".4f",
-            rotate: false
-        },
-        1: {
-            format: ".2f"
-        },
-        2: {
-            format: ".2f"
-        },
-        3: {
-            format: ".1f"
-        }
-    },
-    tooltip: {
-        title: "Rainfall vs Temperature"
-    }
+    }]
 };
 
 //const url = "data/empty.txt";

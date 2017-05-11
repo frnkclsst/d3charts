@@ -1,5 +1,6 @@
 "use strict";
 
+import * as d3 from "d3";
 import { Chart } from "./Chart";
 import { SVGSymbol } from "./Shape.Symbol";
 
@@ -10,7 +11,7 @@ export class Tooltip {
         this.chart = chart;
     }
 
-    public draw(svg: D3.Selection, serie: number, inverse?: boolean): void {
+    public draw(svg: d3.Selection<any>, serie: number, inverse?: boolean): void {
         var _self = this;
 
         var divTooltip = d3.select(_self.chart.selector).append("div")

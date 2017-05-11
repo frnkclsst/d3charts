@@ -1,5 +1,6 @@
 "use strict";
 
+import * as d3 from "d3";
 import { AxisType } from "./Enums";
 import { SVGShape } from "./Shape";
 import { XYChart } from "./XYChart";
@@ -10,7 +11,7 @@ export class SVGBar extends SVGShape {
     public height: (d: any, i: number, serie: number) => number;
     public width: (d: any, i: number, serie: number) => number;
 
-    constructor(svg: D3.Selection, chart: XYChart, serie: number) {
+    constructor(svg: d3.Selection<any>, chart: XYChart, serie: number) {
         super(svg, chart, serie);
         this.chart = chart;
 
