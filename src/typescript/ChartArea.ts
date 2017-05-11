@@ -1,5 +1,6 @@
 "use strict";
 
+import * as d3 from "d3";
 import { Chart } from "./Chart";
 
 export class ChartArea {
@@ -12,7 +13,7 @@ export class ChartArea {
     public height: number;
     public padding: number;
     public width: number;
-    public svg: D3.Selection;
+    public svg: d3.Selection<any>;
     public x: number;
     public y: number;
 

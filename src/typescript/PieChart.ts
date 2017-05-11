@@ -1,5 +1,6 @@
 "use strict";
 
+import * as d3 from "d3";
 import { IData, IOptions } from "./IOptions";
 import { Chart } from "./Chart";
 
@@ -94,7 +95,7 @@ export class PieChart extends Chart {
         }
     }
 
-    public drawLabels(svg: D3.Selection): void {
+    public drawLabels(svg: d3.Selection<any>): void {
         for (var serie = 0; serie < this.series.length; serie++) {
             var svgLabels = svg.append("g").attr("id", "labels-" + serie);
             this.canvas.svg.selectAll("g#serie-" + serie).selectAll(".slice")

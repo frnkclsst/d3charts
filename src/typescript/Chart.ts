@@ -1,5 +1,6 @@
 "use strict";
 
+import * as d3 from "d3";
 import { Canvas } from "./Canvas";
 import { Categories } from "./Categories";
 import { ColorPalette } from "./ColorPalette";

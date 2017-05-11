@@ -1,5 +1,6 @@
 "use strict";
 
+import * as d3 from "d3";
 import { Chart } from "./Chart";
 import { ChartArea } from "./ChartArea";
 import { LegendArea } from "./LegendArea";

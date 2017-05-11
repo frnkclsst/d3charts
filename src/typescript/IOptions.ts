@@ -13,18 +13,13 @@ export interface IData {
 
 export interface IOptions {
     canvas?: ICanvasOptions;
-    legend?: ILegendAreaOptions;
+    legendArea?: ILegendAreaOptions;
     plotArea?: IPlotAreaOptions;
     plotOptions?: IPlotOptions;
     series?: ISeriesOptions;
     title?: ITitleAreaOptions;
-    xAxes?: IAxisOptions[];
-    yAxes?: IAxisOptions[];
     titleArea?: ITitleAreaOptions;
     tooltip?: { title: string };
-
-    /* TODO: duplicates? */
-    legendArea?: ILegendAreaOptions;
     xAxis?: IAxisOptions[];
     yAxis?: IAxisOptions[];
 
@@ -48,27 +43,27 @@ export interface IAxisOptions {
 }
 
 export interface ICanvasOptions {
-    border: {
-        bottom: boolean,
-        left: boolean,
-        right: boolean,
-        top: boolean
+    border?: {
+        bottom?: boolean,
+        left?: boolean,
+        right?: boolean,
+        top?: boolean
     };
     height?: number;
     width?: number;
 }
 
 export interface ILegendAreaOptions {
-    border: {
-        bottom: boolean,
-        left: boolean,
-        right: boolean,
-        top: boolean
+    border?: {
+        bottom?: boolean,
+        left?: boolean,
+        right?: boolean,
+        top?: boolean
     };
-    height: number;
-    position: string;
-    title: string;
-    width: number;
+    height?: number;
+    position?: OrientationType;
+    title?: string;
+    width?: number;
 }
 
 export interface IPlotAreaOptions {

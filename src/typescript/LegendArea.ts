@@ -1,5 +1,6 @@
-    "use strict";
+"use strict";
 
+import * as d3 from "d3";
 import { Chart } from "./Chart";
 import { ChartArea } from "./ChartArea";
 import { SVGSymbol } from "./Shape.Symbol";
@@ -38,7 +39,7 @@ export class LegendArea extends ChartArea {
         this.drawBorders();
     }
 
-    private drawItems(svg: D3.Selection): void {
+    private drawItems(svg: d3.Selection<any>): void {
         for (var i = 0; i < this.items.length; i++) {
             var _self = this;
             var g = svg.append("g")
@@ -60,7 +61,7 @@ export class LegendArea extends ChartArea {
         }
     }
 
-    private drawText(svg: D3.Selection, serie: number): void {
+    private drawText(svg: d3.Selection<any>, serie: number): void {
         svg.append("text")
             .attr("x", 24 + 6)
             .attr("y", 9)
@@ -71,7 +72,7 @@ export class LegendArea extends ChartArea {
             });
     }
 
-    private drawTitle(svg: D3.Selection): void {
+    private drawTitle(svg: d3.Selection<any>): void {
         // draw horizontal line
         var svgTitle = svg.append("g")
             .attr("class", "title");

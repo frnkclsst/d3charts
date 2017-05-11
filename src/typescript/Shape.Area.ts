@@ -1,5 +1,6 @@
 "use strict";
 
+import * as d3 from "d3";
 import { SVGShape } from "./Shape";
 import { XYChart } from "./XYChart";
 import { LineChart } from "./LineChart";
@@ -11,7 +12,7 @@ export class SVGArea extends SVGShape {
     public y0: (d: any, i: number, serie: number) => number;
     public y1: (d: any, i: number, serie: number) => number;
 
-    constructor(svg: D3.Selection, chart: LineChart, serie: number) {
+    constructor(svg: d3.Selection<any>, chart: LineChart, serie: number) {
         super(svg, chart, serie);
         this.chart = chart;
 

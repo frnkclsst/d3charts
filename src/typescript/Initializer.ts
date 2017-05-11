@@ -226,7 +226,7 @@ export class LegendAreaOptions implements ILegendAreaOptions {
         top: boolean
     };
     public height: number;
-    public position: string;
+    public position: OrientationType;
     public title: string;
     public width: number;
 

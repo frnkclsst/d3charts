@@ -1,5 +1,6 @@
 "use strict";
 
+import * as d3 from "d3";
 import { symbols } from "./Enums";
 import { Chart } from "./Chart";
 
@@ -12,7 +13,7 @@ export class Serie {
     public name: string;
     public max: number[];
     public min: number[];
-    public size: number;
+    public size: number[];
     public suffix: string;
     public sum: number;
     public type: string;

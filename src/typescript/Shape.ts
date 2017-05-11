@@ -1,13 +1,14 @@
 "use strict";
 
+import * as d3 from "d3";
 import { Chart } from "./Chart";
 
 export class SVGShape {
 
     protected chart: Chart;
     protected serie: number;
-    protected svg: D3.Selection;
-    protected svgLabels: D3.Selection;
+    protected svg: d3.Selection<any>;
+    protected svgLabels: d3.Selection<any>;
 
     public animation: {
         duration: number,
@@ -23,7 +24,7 @@ export class SVGShape {
     public x: (d: any, i: number, serie: number) => number;
     public y: (d: any, i: number, serie: number) => number;
 
-    constructor(svg: D3.Selection, chart: Chart, serie: number) {
+    constructor(svg: d3.Selection<any>, chart: Chart, serie: number) {
         this.chart = chart;
         this.serie = serie;
         this.svg = svg;
