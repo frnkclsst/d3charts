@@ -1,17 +1,19 @@
 ﻿"use strict";
 
-var gulp = require('gulp');
-var gulpTSLint = require('gulp-tslint');
-var gulpDebug = require('gulp-debug');
-var browserify = require('browserify');
-var tsify = require("tsify");
-var source = require('vinyl-source-stream');
-var browserSync = require('browser-sync').create();
-var fs = require('fs-extra');
-var runSequence = require('run-sequence');
+const gulp = require('gulp');
+const gulpTSLint = require('gulp-tslint');
+const gulpDebug = require('gulp-debug');
+const browserify = require('browserify');
+const gulpTypescript = require('gulp-typescript');
+const source = require('vinyl-source-stream');
+const browserSync = require('browser-sync').create();
+const fs = require('fs-extra');
+const runSequence = require('run-sequence');
 const async = require('async');
 const path = require('path');
+
 let isSingleBuild = true;
+const tsProject = gulpTypescript.createProject("tsconfig.json");
 
 var buildOptions = {
     version: '1.0.0',
@@ -22,35 +24,47 @@ var buildOptions = {
 };
 
 // Gulp Tasks
-gulp.task('compile-typescript', function (cb) {
+gulp.task('compile-typescript', cb => {
+    const tsOutput = tsProject.src()
+        .pipe(tsProject());
+
+    async.parallel([
+        next => {
+            tsOutput.js
+                .pipe(gulpDebug({ title: `Compiled` }))
+                .pipe(gulp.dest(buildOptions.distPath + '/js'))
+                .on('end', next);
+        },
+        next => tsOutput.dts.pipe(gulp.dest(buildOptions.distPath + '/typings')).on('end', next)
+    ], cb);
+});
+
+gulp.task('create-bundles', ['compile-typescript'], cb => {
     const bundle = (entry, done) => {
-        const bundleFileName = path.basename(entry, '.ts').toLowerCase() + ".js";
+        const bundleFileName = path.basename(entry, '.js').toLowerCase() + ".bundle.js";
 
         browserify({
-                basedir: buildOptions.srcPath,
-                debug: buildOptions.isDebug,
-                entries: [entry],
-                extension: ['js', 'ts']
+            debug: buildOptions.isDebug,
+            entries: [entry],
+            extension: ['js', 'ts']
+        })
+            .bundle()
+            .on('error', function (error) {
+                if (isSingleBuild) {
+                    throw new Error(error);
+                }
+                console.error(error.toString());
             })
-                .plugin(tsify)
-                .bundle()
-                .on('error', function (error) {
-                    if (isSingleBuild) {
-                        throw new Error(error);
-                    }
-                    console.error(error.toString());
-                })
-                .pipe(source(bundleFileName))
-                .pipe(gulpDebug({ title: `Bundled ${entry}` }))
-                .pipe(gulp.dest(buildOptions.distPath + '/js'))
-                .on('end', done);
+            .pipe(source(bundleFileName))
+            .pipe(gulpDebug({ title: `Bundled ${entry}` }))
+            .pipe(gulp.dest(buildOptions.distPath + '/js'))
+            .on('end', done);
     };
 
     async.series([
-        next => bundle('Index.ts', next),
-        next => bundle('Lib.ts', next)
+        next => bundle(buildOptions.distPath + '/js/Index.js', next),
+        next => bundle(buildOptions.distPath + '/js/Lib.js', next)
     ], cb);
-
 });
 
 gulp.task('compile-less', function (cb) {
@@ -120,7 +134,7 @@ gulp.task('serve', ['default'], function (cb) {
             if (_.endsWith(filePath, '.less')) {
                 runSequence('compile-less', reload);
             } else if (_.endsWith(filePath, '.ts')) {
-                runSequence(['run-tslint', 'compile-typescript'], function (err) {
+                runSequence(['run-tslint', 'create-bundles'], function (err) {
                     if (err) {
                         console.error(err);
                     } else {
@@ -175,7 +189,7 @@ gulp.task('clean', function (cb) {
 });
 
 gulp.task('build', function (cb) {
-    runSequence('clean', 'copy-src', 'run-tslint', 'compile-typescript', cb);
+    runSequence('clean', 'copy-src', 'run-tslint', 'create-bundles', cb);
 });
 
 gulp.task('default', function (cb) {
