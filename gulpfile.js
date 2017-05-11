@@ -35,7 +35,12 @@ gulp.task('compile-typescript', cb => {
                 .pipe(gulp.dest(buildOptions.distPath + '/js'))
                 .on('end', next);
         },
-        next => tsOutput.dts.pipe(gulp.dest(buildOptions.distPath + '/typings')).on('end', next)
+        next => {
+            tsOutput.dts
+                .pipe(gulpDebug({ title: `Declaration file` }))
+                .pipe(gulp.dest(buildOptions.distPath + '/typings'))
+                .on('end', next);
+        }
     ], cb);
 });
 
