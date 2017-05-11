@@ -77,7 +77,7 @@
       "property-declaration": "nospace",
       "variable-declaration": "nospace"
     }],
-    "variable-name": [true, "allow-leading-underscore", "allow-trailing-underscore"],
+    "variable-name": [true, "allow-leading-underscore", "allow-trailing-underscore", "allow-pascal-case"],
     "whitespace": [true,
       "check-branch",
       "check-decl",

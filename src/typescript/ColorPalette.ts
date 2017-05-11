@@ -1,18 +1,15 @@
-/// <reference path="_References.ts" />
-
 "use strict";
 
-module frnk.UI.Charts {
+import { Chart } from "./Chart";
 
-    export class ColorPalette {
-        public color: any;
+export class ColorPalette {
+    public color: any;
 
-        private _chart: Chart;
+    private _chart: Chart;
 
-        constructor(chart: Chart) {
-            this._chart = chart;
-            this.color = d3.scale.ordinal()
-                .range(this._chart.options.plotOptions.colors);
-        }
+    constructor(chart: Chart) {
+        this._chart = chart;
+        this.color = d3.scale.ordinal()
+            .range(this._chart.options.plotOptions.colors);
     }
 }
