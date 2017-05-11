@@ -1,4 +1,4 @@
-# D3Charts [![Build Status](https://travis-ci.org/frnkclsst/d3charts.svg?branch=master)](https://travis-ci.org/frnkclsst/d3charts)
+# D3Charts [![Build Status](https://travis-ci.org/frnkclsst/d3charts.svg?branch=master)](https://travis-ci.org/frnkclsst/d3charts) [![npm version](https://badge.fury.io/js/%40sdl%2Fd3charts.svg)](https://badge.fury.io/js/%40sdl%2Fd3charts)
 
 ### Introduction
 
