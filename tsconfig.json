@@ -10,7 +10,8 @@
         "noFallthroughCasesInSwitch": true,
         "noUnusedLocals": true,
         "noUnusedParameters": false,
-        "strictNullChecks": false
+        "strictNullChecks": false,
+        "declaration": true
     },
     "exclude": [
         "node_modules",

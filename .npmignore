@@ -1,0 +1,6 @@
+.npmignore
+
+# IDE
+.vscode
+.vs
+.idea
