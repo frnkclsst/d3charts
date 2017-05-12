@@ -45,12 +45,13 @@ gulp.task('compile-typescript', cb => {
 });
 
 gulp.task('create-bundles', ['compile-typescript'], cb => {
-    const bundle = (entry, done) => {
+    const bundle = (entry, done, standalone = undefined) => {
         const bundleFileName = path.basename(entry, '.js').toLowerCase() + ".bundle.js";
 
         browserify({
             debug: buildOptions.isDebug,
             entries: [entry],
+            standalone: standalone,
             extension: ['js', 'ts']
         })
             .bundle()
@@ -68,7 +69,7 @@ gulp.task('create-bundles', ['compile-typescript'], cb => {
 
     async.series([
         next => bundle(buildOptions.distPath + '/js/Index.js', next),
-        next => bundle(buildOptions.distPath + '/js/Lib.js', next)
+        next => bundle(buildOptions.distPath + '/js/Lib.js', next, 'Sdl.D3charts')
     ], cb)
 });
 
