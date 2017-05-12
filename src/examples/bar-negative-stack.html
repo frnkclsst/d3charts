@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <title>Bar Chart - Negative Stack</title>
     <!-- general styles -->
     <link rel="stylesheet" href="../../dist/css/style.css" />
     <link rel="stylesheet" href="../../dist/css/d3charts.css" />
-    <script src="../../dist/js/d3.min.js" charset="utf-8"></script>
-    <script src="../../dist/js/d3.charts.js"></script>
+    <script src="../../dist/js/lib.bundle.js"></script>
 </head>
+
 <body>
     <div id="chart" />
     <script>
@@ -24,8 +25,8 @@
             series: [{
                 name: "Male",
                 data: [-1746181, -1884428, -2089758, -2222362, -2537431, -2507081, -2443179,
-                    -2664537, -3556505, -3680231, -3143062, -2721122, -2229181, -2227768,
-                    -2176300, -1329968, -836804, -354784, -90569, -28367, -3878],
+                -2664537, -3556505, -3680231, -3143062, -2721122, -2229181, -2227768,
+                -2176300, -1329968, -836804, -354784, -90569, -28367, -3878],
                 format: ","
             }, {
                 name: "Female",
@@ -45,7 +46,7 @@
                 position: "right",
                 width: 200
             },
-           titleArea: {
+            titleArea: {
                 text: "Bar Chart - Negative Stack",
                 align: "center",
                 height: 50
@@ -83,8 +84,9 @@
             }
         };
 
-		var chart = new frnk.UI.Charts.StackedBarChart("#chart", data, options);
-		chart.draw();
+        var chart = new Sdl.D3charts.StackedBarChart("#chart", data, options);
+        chart.draw();
     </script>
 </body>
+
 </html>

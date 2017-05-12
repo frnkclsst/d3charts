@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <title>Combo Chart</title>
     <!-- general styles -->
     <link rel="stylesheet" href="../../dist/css/style.css" />
     <link rel="stylesheet" href="../../dist/css/d3charts.css" />
-    <script src="../../dist/js/d3.min.js" charset="utf-8"></script>
-    <script src="../../dist/js/d3.charts.js"></script>
+    <script src="../../dist/js/lib.bundle.js"></script>
 </head>
+
 <body>
     <div id="chart" />
     <script>
@@ -93,8 +94,9 @@
             }
         };
 
-		var chart = new frnk.UI.Charts.ComboChart("#chart", data, options);
-		chart.draw();
+        var chart = new Sdl.D3charts.ComboChart("#chart", data, options);
+        chart.draw();
     </script>
 </body>
+
 </html>

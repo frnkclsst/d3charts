@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <title>Bar Chart - Basic</title>
     <!-- general styles -->
     <link rel="stylesheet" href="../../dist/css/style.css" />
     <link rel="stylesheet" href="../../dist/css/d3charts.css" />
-    <script src="../../dist/js/d3.min.js" charset="utf-8"></script>
-    <script src="../../dist/js/d3.charts.js"></script>
+    <script src="../../dist/js/lib.bundle.js"></script>
 </head>
+
 <body>
     <div id="chart" />
     <script>
@@ -29,7 +30,7 @@
             }]
         };
 
-		var options = {
+        var options = {
             plotArea: {
                 padding: 20
             },
@@ -38,7 +39,7 @@
                 position: "right",
                 width: 200
             },
-           titleArea: {
+            titleArea: {
                 text: "Bar Chart - Basic",
                 align: "center",
                 height: 50
@@ -63,8 +64,9 @@
             }
         };
 
-		var chart = new frnk.UI.Charts.BarChart("#chart", data, options);
-		chart.draw();
+        var chart = new Sdl.D3charts.BarChart("#chart", data, options);
+        chart.draw();
     </script>
 </body>
+
 </html>

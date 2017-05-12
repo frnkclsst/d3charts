@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <title>Column Chart - Range</title>
     <!-- general styles -->
     <link rel="stylesheet" href="../../dist/css/style.css" />
     <link rel="stylesheet" href="../../dist/css/d3charts.css" />
-    <script src="../../dist/js/d3.min.js" charset="utf-8"></script>
-    <script src="../../dist/js/d3.charts.js"></script>
+    <script src="../../dist/js/lib.bundle.js"></script>
 </head>
+
 <body>
     <div id="chart" />
     <script>
@@ -33,7 +34,7 @@
                 position: "right",
                 width: 200
             },
-           titleArea: {
+            titleArea: {
                 text: "Column Chart - Range",
                 align: "center",
                 height: 50
@@ -50,7 +51,7 @@
                 tickmarks: true,
                 ticks: 4,
                 title: {
-                        text: "Temperature"
+                    text: "Temperature"
                 }
             }],
             tooltip: {
@@ -59,8 +60,9 @@
             }
         };
 
-		var chart = new frnk.UI.Charts.ColumnChart("#chart", data, options);
-		chart.draw();
+        var chart = new Sdl.D3charts.ColumnChart("#chart", data, options);
+        chart.draw();
     </script>
 </body>
+
 </html>

@@ -6,8 +6,7 @@
     <!-- general styles -->
     <link rel="stylesheet" href="../../dist/css/style.css" />
     <link rel="stylesheet" href="../../dist/css/d3charts.css" />
-    <script src="../../dist/js/d3.min.js" charset="utf-8"></script>
-    <script src="../../dist/js/d3.charts.js"></script>
+    <script src="../../dist/js/lib.bundle.js"></script>
 </head>
 <body>
     <div id="chart" />
@@ -90,7 +89,7 @@
             }
         };
 
-		var chart = new frnk.UI.Charts.StackedPercentColumnChart("#chart", data, options);
+		var chart = new Sdl.D3charts.StackedPercentColumnChart("#chart", data, options);
 		chart.draw();
     </script>
 </body>
