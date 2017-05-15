@@ -2,16 +2,16 @@
 
 import * as d3 from "d3";
 import { AxisType, ScaleType } from "./Enums";
-import { IData, IOptions } from "./IOptions";
+import { IDatum, IChartData, IOptions } from "./IInterfaces";
 import { Axis } from "./Axis";
 import { XYChart } from "./XYChart";
 import { SVGBubble } from "./Shape.Bubble";
 
 export class ScatterChart extends XYChart {
 
-    private svgSeries: d3.Selection<any>;
+    private svgSeries: d3.Selection<SVGElement>;
 
-    constructor(selector: string, data: IData, options?: IOptions) {
+    constructor(selector: string, data: IChartData, options?: IOptions) {
         super(selector, data, options);
 
         // Overrides
@@ -41,10 +41,10 @@ export class ScatterChart extends XYChart {
                     visible: this.options.series.labels.visible
                 };
                 bubbles.marker.type = this.series.items[serie - 1].marker;
-                bubbles.x = (d: any, i: number, s: number) => {
+                bubbles.x = (d: IDatum, i: number, s: number) => {
                     return this.getXCoordinate(d, i, s);
                 };
-                bubbles.y = (d: any, i: number, s: number) => {
+                bubbles.y = (d: IDatum, i: number, s: number) => {
                     return this.getYCoordinate(d, i, s);
                 };
                 bubbles.draw(this.series.getMatrixItem(0));
@@ -52,14 +52,14 @@ export class ScatterChart extends XYChart {
         }
     }
 
-    public getXCoordinate(d: any, i: number, serie: number): any {
+    public getXCoordinate(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
         var axis = this.axes[index];
 
         return axis.scale(d.y);
     }
 
-    public getYCoordinate(d: any, i: number, serie: number): any {
+    public getYCoordinate(d: IDatum, i: number, serie: number): number {
         var data = this.series.getMatrixItem(serie);
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
@@ -67,7 +67,7 @@ export class ScatterChart extends XYChart {
         return axis.scale(data[i].y);
     }
 
-    public getXScale(axis: Axis): any {
+    public getXScale(axis: Axis): d3.scale.Linear<number, number> {
         var min = d3.min(this.series.items[0].data);
         var max = d3.max(this.series.items[0].data);
         var start = this.canvas.plotArea.axisSize.left;
@@ -80,7 +80,7 @@ export class ScatterChart extends XYChart {
             .range([start, end]);
     }
 
-    public getYScale(axis: Axis): any {
+    public getYScale(axis: Axis): d3.scale.Linear<number, number> {
         var min = this.series.min(axis.name);
         var max = this.series.max(axis.name);
 

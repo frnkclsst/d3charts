@@ -2,13 +2,13 @@
 
 import { AxisType, ScaleType } from "./Enums";
 import { XYChart } from "./XYChart";
-import { IData, IOptions } from "./IOptions";
+import { IDatum, IChartData, IOptions } from "./IInterfaces";
 import { SVGColumn } from "./Shape.Column";
 import { SVGLine } from "./Shape.Line";
 
 export class ComboChart extends XYChart {
 
-    constructor(selector: string, data: IData, options?: IOptions) {
+    constructor(selector: string, data: IChartData, options?: IOptions) {
         super(selector, data, options);
 
         // Overrides
@@ -39,16 +39,16 @@ export class ComboChart extends XYChart {
                         rotate: this.options.series.labels.rotate,
                         visible: this.options.series.labels.visible
                     };
-                    column.height = (d: any, i: number, s: number) => {
+                    column.height = (d: IDatum, i: number, s: number) => {
                         return this.getHeightColumn(d, i, s);
                     };
-                    column.width = (d: any, i: number, s: number) => {
+                    column.width = (d: IDatum, i: number, s: number) => {
                         return this.getWidthColumn(d, i, s);
                     };
-                    column.x = (d: any, i: number, s: number) => {
+                    column.x = (d: IDatum, i: number, s: number) => {
                         return this.getXCoordinateColumn(d, i, s);
                     };
-                    column.y = (d: any, i: number, s: number) => {
+                    column.y = (d: IDatum, i: number, s: number) => {
                         return this.getYCoordinateColumn(d, i, s);
                     };
                     column.draw(this.series.getMatrixItem(columnSerie));
@@ -69,10 +69,10 @@ export class ComboChart extends XYChart {
                             rotate: this.options.series.labels.rotate,
                             visible: this.options.series.labels.visible
                         };
-                        line.x = (d: any, i: number, s: number): number => {
+                        line.x = (d: IDatum, i: number, s: number): number => {
                             return this.getXCoordinateLine(d, i, s);
                         };
-                        line.y = (d: any, i: number, s: number): number => {
+                        line.y = (d: IDatum, i: number, s: number): number => {
                             return this.getYCoordinateLine(d, i, s);
                         };
                         line.draw(this.series.getMatrixItem(lineSerie));
@@ -82,14 +82,14 @@ export class ComboChart extends XYChart {
         }
     }
 
-    public getHeightColumn(d: any, i: number, serie: number): any {
+    public getHeightColumn(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 
         return Math.abs(axis.scale(d.y) - this.axes[index].scale(0));
     }
 
-    public getWidthColumn(d: any, i: number, serie: number): any {
+    public getWidthColumn(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
         var axis = this.axes[index];
 
@@ -101,7 +101,7 @@ export class ComboChart extends XYChart {
         }
     }
 
-    public getXCoordinateColumn(d: any, i: number, serie: number): any {
+    public getXCoordinateColumn(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
         var axis = this.axes[index];
         var axisScale = this.categories.parseFormat(this.categories.getItem(i));
@@ -114,7 +114,7 @@ export class ComboChart extends XYChart {
         }
     }
 
-    public getYCoordinateColumn(d: any, i: number, serie: number): any {
+    public getYCoordinateColumn(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 
@@ -126,7 +126,7 @@ export class ComboChart extends XYChart {
         }
     }
 
-    public getXCoordinateLine(d: any, i: number, serie: number): any {
+    public getXCoordinateLine(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
         var axis = this.axes[index];
 
@@ -138,14 +138,14 @@ export class ComboChart extends XYChart {
         }
     }
 
-    public getYCoordinateLine(d: any, i: number, serie: number): any {
+    public getYCoordinateLine(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 
         return axis.scale(d.y);
     }
 
-    public getY0CoordinateLine(d: any, i: number, serie: number): any {
+    public getY0CoordinateLine(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
 
         return this.axes[index].scale(0);

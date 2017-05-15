@@ -1,7 +1,7 @@
 "use strict";
 
 import * as d3 from "d3";
-import { IData, IOptions } from "./IOptions";
+import { IArcDatum, IChartData, IOptions } from "./IInterfaces";
 import { Chart } from "./Chart";
 
 export class PieChart extends Chart {
@@ -11,7 +11,7 @@ export class PieChart extends Chart {
     private radius: number;
     private serieRadius: number;
 
-    constructor(selector: string, data: IData, options?: IOptions) {
+    constructor(selector: string, data: IChartData, options?: IOptions) {
         super(selector, data, options);
         this.innerRadiusPercentage = this.options.plotOptions.pie.innerRadius;
 
@@ -49,18 +49,18 @@ export class PieChart extends Chart {
                     .data(d3Pie(this.series.items[serie].data))
                     .enter()
                     .append("g")
-                    .attr("id", (d: any, i: number): string => {
+                    .attr("id", (d: IArcDatum, i: number): string => {
                         return "slice-" + i;
                     })
                     .attr("class", "slice");
 
                 // draw arcs
                 var svgPath = svgArcs.append("path")
-                    .attr("fill", (d: any, i: number): string => {
+                    .attr("fill", (d: IArcDatum, i: number): string => {
                         return this.colorPalette.color(i);
                     })
                     .attr("data-serie", serie)
-                    .attr("d", function (d: any): any {
+                    .attr("d", function (d: any /*d3.svg.Arc*/): string {
                         return d3Arc(d);
                     });
 
@@ -73,7 +73,7 @@ export class PieChart extends Chart {
                     .transition()
                     .duration(this.options.plotOptions.animation.duration)
                     .ease(this.options.plotOptions.animation.ease)
-                    .attrTween("d", function (d: any, i: number): any {
+                    .attrTween("d", function (d: IArcDatum, i: number): any {
                         var interpolate = d3.interpolate(d.startAngle, d.endAngle);
                         var s = this.getAttribute("data-serie");
                         var arc = _self.arcs[s];
@@ -95,11 +95,11 @@ export class PieChart extends Chart {
         }
     }
 
-    public drawLabels(svg: d3.Selection<any>): void {
+    public drawLabels(svg: d3.Selection<SVGElement>): void {
         for (var serie = 0; serie < this.series.length; serie++) {
             var svgLabels = svg.append("g").attr("id", "labels-" + serie);
             this.canvas.svg.selectAll("g#serie-" + serie).selectAll(".slice")
-                .each((d: any, i: number): void  => {
+                .each((d: IArcDatum, i: number): void  => {
                     svgLabels.append("text")
                         .style("text-anchor", "middle")
                         .attr({
@@ -115,7 +115,7 @@ export class PieChart extends Chart {
         }
     }
 
-    public toggleSerie(data: any, index: number): void {
+    public toggleSerie(data: string[], index: number): void {
         var slice = d3.selectAll(this.selector + " #slice-" + index);
         var opacity = slice.style("opacity") === "1" ? 0 : 1;
         d3.selectAll(this.selector + " #slice-" + index).transition().duration(200).style("opacity", opacity);

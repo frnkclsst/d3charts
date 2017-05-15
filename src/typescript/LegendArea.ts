@@ -39,7 +39,7 @@ export class LegendArea extends ChartArea {
         this.drawBorders();
     }
 
-    private drawItems(svg: d3.Selection<any>): void {
+    private drawItems(svg: d3.Selection<SVGElement>): void {
         for (var i = 0; i < this.items.length; i++) {
             var _self = this;
             var g = svg.append("g")
@@ -55,13 +55,13 @@ export class LegendArea extends ChartArea {
             var symbol = new SVGSymbol(g, this._chart, i);
             symbol.color = this._chart.colorPalette.color(i);
             symbol.opacity = this._chart.options.plotOptions.area.opacity;
-            symbol.draw(this.items[i]);
+            symbol.draw();
 
             this.drawText(g, i);
         }
     }
 
-    private drawText(svg: d3.Selection<any>, serie: number): void {
+    private drawText(svg: d3.Selection<SVGElement>, serie: number): void {
         svg.append("text")
             .attr("x", 24 + 6)
             .attr("y", 9)
@@ -72,7 +72,7 @@ export class LegendArea extends ChartArea {
             });
     }
 
-    private drawTitle(svg: d3.Selection<any>): void {
+    private drawTitle(svg: d3.Selection<SVGElement>): void {
         // draw horizontal line
         var svgTitle = svg.append("g")
             .attr("class", "title");

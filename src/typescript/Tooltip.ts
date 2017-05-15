@@ -2,6 +2,7 @@
 
 import * as d3 from "d3";
 import { Chart } from "./Chart";
+import { IDatum } from "./IInterfaces";
 import { SVGSymbol } from "./Shape.Symbol";
 
 export class Tooltip {
@@ -11,14 +12,14 @@ export class Tooltip {
         this.chart = chart;
     }
 
-    public draw(svg: d3.Selection<any>, serie: number, inverse?: boolean): void {
+    public draw(svg: d3.Selection<{}>, serie: number, inverse?: boolean): void {
         var _self = this;
 
         var divTooltip = d3.select(_self.chart.selector).append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
 
-        svg.on("mouseover", function (d: any, i: number): void {
+        svg.on("mouseover", function (d: IDatum, i: number): void {
             var title = _self.chart.options.getValue("tooltip.title"),
                 subtitle = _self.chart.categories.getLabel(i),
                 color = _self.chart.colorPalette.color(serie),
@@ -42,7 +43,7 @@ export class Tooltip {
             }
 
             percent = isNaN(d.perc) ? "" : Math.round(d.perc * 100) + "%";
-
+/*
             if (inverse) {
                 color = _self.chart.colorPalette.color(i);
                 subtitle = _self.chart.series.getLabel(serie);
@@ -50,7 +51,7 @@ export class Tooltip {
                 dataPoint = d.value;
                 percent = Math.round(_self.chart.series.getMatrixItem(serie)[i].perc * 100) + "%";
             }
-/*
+
             if (_self.chart instanceof ScatterChart) {
                 color = _self.chart.colorPalette.color(serie - 1);
             }
@@ -59,7 +60,7 @@ export class Tooltip {
             var symbol = new SVGSymbol(svgSymbol, _self.chart, serie);
             symbol.color = color;
             symbol.opacity = _self.chart.options.plotOptions.area.opacity;
-            symbol.draw(svgSymbol);
+            symbol.draw();
 
             divTooltip.html("<div class='title'>" + title + "</div>" +
                 "<div class='subtitle'>" + subtitle + "</div><br/>" +
@@ -83,12 +84,12 @@ export class Tooltip {
                 .duration(100)
                 .style("opacity", 1);
             })
-            .on("mouseout", function(d: any): void {
+            .on("mouseout", function(): void {
                 divTooltip.transition()
                     .duration(100)
                     .style("opacity", 0);
             })
-            .on("mousemove", function(d: any): void {
+            .on("mousemove", function(): void {
                 divTooltip
                     .style("left", (d3.mouse(this.ownerSVGElement)[0] - 50) + "px")
                     .style("top", (d3.mouse(this.ownerSVGElement)[1] + 10) + "px");

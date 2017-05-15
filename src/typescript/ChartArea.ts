@@ -13,7 +13,7 @@ export class ChartArea {
     public height: number;
     public padding: number;
     public width: number;
-    public svg: d3.Selection<any>;
+    public svg: d3.Selection<SVGElement>;
     public x: number;
     public y: number;
 
@@ -52,5 +52,4 @@ export class ChartArea {
             this.drawBorder(this.width, this.width, 0, this.height);
         }
     }
-
 }

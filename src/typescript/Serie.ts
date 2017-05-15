@@ -1,8 +1,9 @@
 "use strict";
 
 import * as d3 from "d3";
-import { symbols } from "./Enums";
 import { Chart } from "./Chart";
+import { ISerie } from "./IInterfaces";
+import { SymbolType } from "./Enums";
 
 export class Serie {
     public axis: string;
@@ -21,7 +22,7 @@ export class Serie {
 
     private _chart: Chart;
 
-    constructor(chart: Chart, serie: any, index: number) {
+    constructor(chart: Chart, serie: ISerie, index: number) {
         this._chart = chart;
         this.data = serie.data != undefined ? serie.data : [];
         this.max = serie.max != undefined ? serie.max : [];
@@ -52,12 +53,12 @@ export class Serie {
         return "Serie " + (i + 1);
     }
 
-    private _setMarkerType(serie: any): string {
+    private _setMarkerType(serie: ISerie): string {
         if (serie.marker != undefined) {
             return serie.marker;
         }
         else if (this._chart.options.plotOptions.markers.type === "mixed") {
-            return symbols[this.index % symbols.length];
+            return SymbolType[this.index % SymbolType.length];
         }
         else if (this._chart.options.plotOptions.markers.type != undefined) {
             return this._chart.options.plotOptions.markers.type;

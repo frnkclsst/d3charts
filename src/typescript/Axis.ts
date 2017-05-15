@@ -3,7 +3,7 @@
 import * as d3 from "d3";
 import * as Html from "./Html";
 import { AxisType, GridLineType, OrientationType, ScaleType } from "./Enums";
-import { IAxisOptions } from "./IOptions";
+import { IDatum, IAxisOptions } from "./IInterfaces";
 import { XYChart } from "./XYChart";
 
 export class Axis {
@@ -28,10 +28,10 @@ export class Axis {
     protected gridlineType: GridLineType;
     protected hasTickmarks: boolean;
     protected orient: OrientationType;
-    protected svgAxis: d3.Selection<any>;
-    protected svgGrid: d3.Selection<any>;
-    protected svgTitle: d3.Selection<any>;
-    protected svgZeroLine: d3.Selection<any>;
+    protected svgAxis: d3.Selection<SVGElement>;
+    protected svgGrid: d3.Selection<SVGElement>;
+    protected svgTitle: d3.Selection<SVGElement>;
+    protected svgZeroLine: d3.Selection<SVGElement>;
 
     private _innerTicksize: number;
     private _outerTicksize: number;
@@ -90,6 +90,7 @@ export class Axis {
         this.alignTitle();
         this.drawGridlines(this.axis);
         this.drawZeroLine(this.svgAxis);
+
         //this.removeOverlappingTicks();
     }
 
@@ -101,7 +102,7 @@ export class Axis {
             case GridLineType.Major:
                 this.svgGrid.call(axis
                     .tickSize(this._innerTicksize, this._outerTicksize)
-                    .tickFormat((d: any): string => { return ""; }) // return no label for the grid lines
+                    .tickFormat((d: IDatum): string => { return ""; }) // return no label for the grid lines
                 );
                 break;
             case GridLineType.Minor:
@@ -113,13 +114,13 @@ export class Axis {
         }
     }
 
-    public drawTitle(svg: d3.Selection<any>): void {
+    public drawTitle(svg: d3.Selection<SVGElement>): void {
         this.svgTitle = svg.append("text")
             .text(this.title.text)
             .attr("class", "title");
     }
 
-    public drawZeroLine(svg: d3.Selection<any>): void {
+    public drawZeroLine(svg: d3.Selection<SVGElement>): void {
         if (this.isDataAxis && this.chart.series.min() < 0) {
             this.svgZeroLine = this.svgGrid.append("g")
                 .attr("class", "zero-line")
@@ -131,19 +132,78 @@ export class Axis {
         return this.gridlineType;
     }
 
-    public getInnerTicksize(): any {
+    public getInnerTicksize(): number {
         // child classes are responsible for implementing this method
+        return 0;
     }
 
-    public getOuterTicksize(): any {
+    public getOuterTicksize(): number {
         // child classes are responsible for implementing this method
+        return 0;
     }
 
     public getScale(): any {
         // child classes are responsible for implementing this method
     }
 
-    public getSize(): void {
+    public getScaleType(): ScaleType {
+        return this._scaleType;
+    }
+
+    public getTicks(): number {
+        // child classes are responsible for implementing this method
+        return 0;
+    }
+
+    public getXCoordinate(): number {
+        // child classes are responsible for implementing this method
+        return 0;
+    }
+
+    public getYCoordinate(): number {
+        // child classes are responsible for implementing this method
+        return 0;
+    }
+
+    public initialize(): void {
+        this.scale = this.getScale();
+        this._innerTicksize = this.getInnerTicksize();
+        this._outerTicksize = this.getOuterTicksize();
+        this._ticks = this.getTicks();
+    }
+
+    public removeOverlappingTicks(): void {
+        // child classes are responsible for implementing this method
+    }
+
+    public rotateLabels(svg: d3.Selection<SVGElement>): void {
+        // child classes are responsible for implementing this method
+    }
+
+    public setColor(color: string): void {
+        var element: Element = <Element>this.svgAxis.selectAll("path")[0][0];
+        element.setAttribute("style", "stroke: " + color);
+    }
+
+    protected setGridlineType(type: string): void {
+        switch (type.toUpperCase()) {
+            case "MAJOR":
+                this.gridlineType = GridLineType.Major;
+                break;
+            case "MINOR":
+                this.gridlineType = GridLineType.Minor;
+                break;
+            default:
+                this.gridlineType = GridLineType.None;
+                break;
+        }
+    }
+
+    public setScaleType(value: ScaleType): void {
+        this._scaleType = value;
+    }
+
+    public setSize(): void {
         this.initialize();
 
         // create d3 axis
@@ -178,60 +238,6 @@ export class Axis {
         this.height = Html.getHeight(this.svgAxis);
         this.width = Html.getWidth(this.svgAxis);
     }
-
-    public getScaleType(): ScaleType {
-        return this._scaleType;
-    }
-
-    public getTicks(): any {
-        // child classes are responsible for implementing this method
-    }
-
-    public getXCoordinate(): any {
-        // child classes are responsible for implementing this method
-    }
-
-    public getYCoordinate(): any {
-        // child classes are responsible for implementing this method
-    }
-
-    public initialize(): void {
-        this.scale = this.getScale();
-        this._innerTicksize = this.getInnerTicksize();
-        this._outerTicksize = this.getOuterTicksize();
-        this._ticks = this.getTicks();
-    }
-
-    public removeOverlappingTicks(): void {
-        // child classes are responsible for implementing this method
-    }
-
-    public rotateLabels(svg: d3.Selection<any>): void {
-        // child classes are responsible for implementing this method
-    }
-
-    public setScaleType(value: ScaleType): void {
-        this._scaleType = value;
-    }
-
-    public setColor(color: string): void {
-        var element: Element = <Element>this.svgAxis.selectAll("path")[0][0];
-        element.setAttribute("style", "stroke: " + color);
-    }
-
-    protected setGridlineType(type: string): void {
-        switch (type.toUpperCase()) {
-            case "MAJOR":
-                this.gridlineType = GridLineType.Major;
-                break;
-            case "MINOR":
-                this.gridlineType = GridLineType.Minor;
-                break;
-            default:
-                this.gridlineType = GridLineType.None;
-                break;
-        }
-    }
 }
 
 export class XAxis extends Axis {
@@ -259,7 +265,7 @@ export class XAxis extends Axis {
         }
     }
 
-    public drawTitle(svg: d3.Selection<any>): void {
+    public drawTitle(svg: d3.Selection<SVGElement>): void {
         super.drawTitle(svg);
 
         var x = Html.align(this.svgTitle, Html.getWidth(this.svgAxis), this.title.align, 0),
@@ -274,7 +280,7 @@ export class XAxis extends Axis {
             .attr("transform", "translate(" + x + "," + y + ")");
     }
 
-    public drawZeroLine(svg: d3.Selection<any>): void {
+    public drawZeroLine(svg: d3.Selection<SVGElement>): void {
         super.drawZeroLine(svg);
         if (this.isDataAxis && this.chart.series.min() < 0) {
             this.svgZeroLine
@@ -297,8 +303,8 @@ export class XAxis extends Axis {
         return this.chart.getXScale(this);
     }
 
-    public getSize(): void {
-        super.getSize();
+    public setSize(): void {
+        super.setSize();
 
         if (this.orient === "bottom") {
             this.chart.canvas.plotArea.axisSize.bottom += this.height;
@@ -348,9 +354,9 @@ export class XAxis extends Axis {
         }
     }
 
-    public rotateLabels(svg: d3.Selection<any>): void {
+    public rotateLabels(svg: d3.Selection<SVGElement>): void {
         var _self = this,
-            text: d3.Selection<any>,
+            text: d3.Selection<SVGElement>,
             y: number;
 
         if (this.labels.rotate != 0) {
@@ -436,7 +442,7 @@ export class YAxis extends Axis {
         }
     }
 
-    public drawTitle(svg: d3.Selection<any>): void {
+    public drawTitle(svg: d3.Selection<SVGElement>): void {
         super.drawTitle(svg);
 
         var rotation = this.orient === "left" ? -90 : 90;
@@ -457,7 +463,7 @@ export class YAxis extends Axis {
             .attr("transform", "translate(" + x + "," + y + ") rotate(" + rotation + ")");
     }
 
-    public drawZeroLine(svg: d3.Selection<any>): void {
+    public drawZeroLine(svg: d3.Selection<SVGElement>): void {
         super.drawZeroLine(svg);
         if (this.isDataAxis && this.chart.series.min() < 0) {
             this.svgZeroLine
@@ -480,8 +486,8 @@ export class YAxis extends Axis {
         return this.chart.getYScale(this);
     }
 
-    public getSize(): void {
-        super.getSize();
+    public setSize(): void {
+        super.setSize();
 
         if (this.orient === "left") {
             this.chart.canvas.plotArea.axisSize.left += this.width;
@@ -508,7 +514,7 @@ export class YAxis extends Axis {
         // TODO - implement removeOverlappingTicks for Y-axis
     }
 
-    public rotateLabels(svg: d3.Selection<any>): void {
+    public rotateLabels(svg: d3.Selection<SVGElement>): void {
         // TODO - implement label rotation for Y-axis
     }
 

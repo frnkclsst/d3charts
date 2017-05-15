@@ -8,7 +8,7 @@ import { StackType } from "./Enums";
 import { Data, Options } from "./Initializer";
 import { Series } from "./Series";
 import { Tooltip } from "./Tooltip";
-import { IData, IOptions } from "./IOptions";
+import { IChartData, IOptions } from "./IInterfaces";
 
 export class Chart {
     public canvas: Canvas;
@@ -21,7 +21,7 @@ export class Chart {
     public stackType: StackType;
     public tooltip: Tooltip;
 
-    constructor(selector: string, data: IData, options?: IOptions) {
+    constructor(selector: string, data: IChartData, options?: IOptions) {
         this.selector = selector;
         this.stackType = StackType.None;
 
@@ -65,13 +65,14 @@ export class Chart {
     }
 
     public hasData(): boolean {
-        return (this.series.items[0].data.length > 0);
+        return (this.series.items[0].data.length > 0 || (this.series.items[0].min.length > 0 && this.series.items[0].max.length > 0));
     }
 
     // TODO - Move to shape.ts
     public toggleSerie(data: any, index: number): void {
-        var serie = d3.selectAll(this.selector + " #serie-" + index);
-        var opacity = serie.style("opacity") === "1" ? 0 : 1;
+        var serie = d3.selectAll(this.selector + " #serie-" + index),
+            opacity = serie.style("opacity") === "1" ? 0 : 1;
+
         d3.select(this.selector + " #serie-" + index).transition().duration(200).style("opacity", opacity);
         d3.select(this.selector + " #labels-" + index).transition().duration(200).style("opacity", opacity);
         d3.select(this.selector + " #area-" + index).transition().duration(200).style("opacity", opacity);

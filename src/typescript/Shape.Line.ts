@@ -2,6 +2,7 @@
 
 import * as d3 from "d3";
 import * as Html from "./Html";
+import { IDatum } from "./IInterfaces";
 import { SVGShape } from "./Shape";
 import { XYChart } from "./XYChart";
 
@@ -15,7 +16,7 @@ export class SVGLine extends SVGShape {
         visible: boolean;
     };
 
-    constructor(svg: d3.Selection<any>, chart: XYChart, serie: number) {
+    constructor(svg: d3.Selection<SVGElement>, chart: XYChart, serie: number) {
         super(svg, chart, serie);
         this.chart = chart;
 
@@ -30,8 +31,12 @@ export class SVGLine extends SVGShape {
     public draw(data: any): void {
         var line = d3.svg.line()
             .interpolate(this.interpolation)
-            .x((d: any, i: number): number => { return this.x(d, i, this.serie); })
-            .y((d: any, i: number): number => { return this.y(d, i, this.serie); });
+            .x((d: any, i: number): number => {
+                return this.x(d, i, this.serie);
+            })
+            .y((d: any, i: number): number => {
+                return this.y(d, i, this.serie);
+            });
 
         var svgSerie = this.svg.append("g")
             .attr("id", "serie-" + this.serie);
@@ -80,7 +85,7 @@ export class SVGLine extends SVGShape {
             .attr("opacity", "1");
 
         this.svg.selectAll("g#serie-" + this.serie).selectAll("path.marker")
-            .each((d: any, i: number): void => {
+            .each((d: IDatum, i: number): void => {
                 var rotation = 0;
                 var x = this.x(d, i, this.serie);
                 var y = this.y(d, i, this.serie);
@@ -114,7 +119,7 @@ export class SVGLine extends SVGShape {
             });
     }
 
-    public drawMarkers(data: any): d3.Selection<any> {
+    public drawMarkers(data: any): any {
         return this.svg.selectAll("g#serie-" + this.serie).selectAll(".marker")
             .data(data)
             .enter()
@@ -126,7 +131,7 @@ export class SVGLine extends SVGShape {
                 "d": d3.svg.symbol()
                     .size(this.marker.size * 10)
                     .type(this.marker.type)(0, 0),
-                "transform": (d: any, i: number): string => {
+                "transform": (d: IDatum, i: number): string => {
                     return "translate(" + this.x(d, i, this.serie) + ", " + this.y(d, i, this.serie) + ")";
                 }
             });

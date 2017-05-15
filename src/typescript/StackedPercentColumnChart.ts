@@ -2,13 +2,13 @@
 
 import * as d3 from "d3";
 import { AxisType, ScaleType, StackType } from "./Enums";
-import { IData, IOptions } from "./IOptions";
+import { IDatum, IChartData, IOptions } from "./IInterfaces";
 import { Axis, YAxis } from "./Axis";
 import { StackedColumnChart } from "./StackedColumnChart";
 
 export class StackedPercentColumnChart extends StackedColumnChart {
 
-    constructor(selector: string, data: IData, options?: IOptions) {
+    constructor(selector: string, data: IChartData, options?: IOptions) {
         super(selector, data, options);
         this.stackType = StackType.Percent;
         for (var i = 0; i < this.axes.length; i++) {
@@ -18,14 +18,14 @@ export class StackedPercentColumnChart extends StackedColumnChart {
         }
     }
 
-    public getHeight(d: any, i: number, serie: number): any {
+    public getHeight(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 
         return Math.abs((axis.scale(1) - axis.scale(0)) * d.perc);
     }
 
-    public getYScale(axis: Axis): any {
+    public getYScale(axis: Axis): d3.scale.Linear<number, number> {
         var min = this.series.min(name);
 
         var start = this.canvas.plotArea.axisSize.top;
@@ -37,7 +37,7 @@ export class StackedPercentColumnChart extends StackedColumnChart {
             .range([start, end]);
     }
 
-    public normalizer(d: any, i: number, serie: number): number {
+    public normalizer(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 

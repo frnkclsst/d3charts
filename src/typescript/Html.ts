@@ -1,14 +1,16 @@
 "use strict";
 
-export function getHeight(svg: any): number {
-    return svg.node().getBoundingClientRect().height;
+export function getHeight(svg: d3.Selection<SVGElement>): number {
+    let node = <HTMLElement>svg.node();
+    return node.getBoundingClientRect().height;
 }
 
-export function getWidth(svg: any): number {
-    return svg.node().getBoundingClientRect().width;
+export function getWidth(svg: d3.Selection<SVGElement>): number {
+    let node = <HTMLElement>svg.node();
+    return node.getBoundingClientRect().width;
 }
 
-export function align (svg: any, width: number, alignment: string, margin: number): number {
+export function align (svg: d3.Selection<SVGElement>, width: number, alignment: string, margin: number): number {
     var x: number = 0;
     switch (alignment) {
         case "left":
@@ -24,7 +26,7 @@ export function align (svg: any, width: number, alignment: string, margin: numbe
     return x;
 }
 
-export function valign(svg: any, height: number, alignment: string, margin: number): number {
+export function valign(svg: d3.Selection<SVGElement>, height: number, alignment: string, margin: number): number {
     var y: number = 0;
     switch (alignment) {
         case "top":

@@ -1,17 +1,17 @@
 "use strict";
 
 import { AxisType, ScaleType, StackType} from "./Enums";
-import { IData, IOptions } from "./IOptions";
+import { IDatum, IChartData, IOptions } from "./IInterfaces";
 import { LineChart } from "./LineChart";
 
 export class StackedLineChart extends LineChart {
 
-    constructor(selector: string, data: IData, options?: IOptions) {
+    constructor(selector: string, data: IChartData, options?: IOptions) {
         super(selector, data, options);
         this.stackType = StackType.Normal;
     }
 
-    public getXCoordinate(d: any, i: number, serie: number): any {
+    public getXCoordinate(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
         var axis = this.axes[index];
 
@@ -23,7 +23,7 @@ export class StackedLineChart extends LineChart {
         }
     }
 
-    public getYCoordinate(d: any, i: number, serie: number): any {
+    public getYCoordinate(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 
@@ -37,7 +37,7 @@ export class StackedLineChart extends LineChart {
         }
     }
 
-    public getY0Coordinate(d: any, i: number, serie: number): any {
+    public getY0Coordinate(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 
@@ -51,14 +51,14 @@ export class StackedLineChart extends LineChart {
         }
     }
 
-    public getY1Coordinate(d: any, i: number, serie: number): any {
+    public getY1Coordinate(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 
         return axis.scale(d.sum * this.normalizer(d, i, serie));
     }
 
-    protected normalizer(d: any, i: number, serie: number): number {
+    protected normalizer(d: IDatum, i: number, serie: number): number {
         return StackType.Normal; // no normalization needed as this not 100% stacked
     }
 }

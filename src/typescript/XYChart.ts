@@ -4,12 +4,12 @@ import * as d3 from "d3";
 import { AxisType, ScaleType } from "./Enums";
 import { Axis, XAxis, YAxis } from "./Axis";
 import { Chart } from "./Chart";
-import { IData, IOptions } from "./IOptions";
+import { IDatum, IChartData, IOptions } from "./IInterfaces";
 
 export class XYChart extends Chart {
     public axes: Axis[] = [];
 
-    constructor(selector: string, data: IData, options?: IOptions) {
+    constructor(selector: string, data: IChartData, options?: IOptions) {
         super(selector, data, options);
 
         for (var i = 0; i < this.options.xAxes.length; i++) {
@@ -31,7 +31,7 @@ export class XYChart extends Chart {
 
         if (this.hasData()) {
             for (var i = 0; i < this.axes.length; i++) {
-                this.axes[i].getSize();
+                this.axes[i].setSize();
             }
 
             for (var j = 0; j < this.axes.length; j++) {
@@ -58,16 +58,19 @@ export class XYChart extends Chart {
         return last;
     }
 
-    public getXCoordinate(d: any, i: number, serie: number): any {
+    public getXCoordinate(d: IDatum, i: number, serie: number): number {
         // child classes are responsible for implementing this method
+        return 0;
     }
 
-    public getYCoordinate(d: any, i: number, serie: number): any {
+    public getYCoordinate(d: IDatum, i: number, serie: number): number {
         // child classes are responsible for implementing this method
+        return 0;
     }
 
-    public getY0Coordinate(d: any, i: number, serie: number): any {
+    public getY0Coordinate(d: IDatum, i: number, serie: number): number {
         // child classes are responsible for implementing this method
+        return 0;
     }
 
     public getXScale(axis: Axis): any {
@@ -83,7 +86,7 @@ export class XYChart extends Chart {
         else {
             axis.setScaleType(ScaleType.Time);
             return d3.time.scale()
-                .domain(d3.extent(this.categories.getLabels(), (d: any): Date => {
+                .domain(d3.extent(this.categories.getLabels(), (d: string): Date => {
                     return d3.time.format(this.categories.format).parse(d);
                 }))
                 .nice() // adds additional ticks to add some whitespace
@@ -91,7 +94,7 @@ export class XYChart extends Chart {
         }
     }
 
-    public getYScale(axis: Axis): any {
+    public getYScale(axis: Axis): d3.scale.Linear<number, number> {
         var min = this.series.min(axis.name);
         var max = this.series.max(axis.name);
 

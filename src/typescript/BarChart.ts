@@ -5,11 +5,11 @@ import { AxisType, ScaleType } from "./Enums";
 import { Axis } from "./Axis";
 import { XYChart } from "./XYChart";
 import { SVGBar } from "./Shape.Bar";
-import { IData, IOptions } from "./IOptions";
+import { IDatum, IChartData, IOptions } from "./IInterfaces";
 
 export class BarChart extends XYChart {
 
-    constructor(selector: string, data: IData, options?: IOptions) {
+    constructor(selector: string, data: IChartData, options?: IOptions) {
         super(selector, data, options);
 
         // Overrides
@@ -39,16 +39,16 @@ export class BarChart extends XYChart {
                     rotate: this.options.series.labels.rotate,
                     visible: this.options.series.labels.visible
                 };
-                bar.height = (d: any, i: number, s: number) => {
+                bar.height = (d: IDatum, i: number, s: number) => {
                     return this.getHeight(d, i, s);
                 };
-                bar.width = (d: any, i: number, s: number) => {
+                bar.width = (d: IDatum, i: number, s: number) => {
                     return this.getWidth(d, i, s);
                 };
-                bar.x = (d: any, i: number, s: number) => {
+                bar.x = (d: IDatum, i: number, s: number) => {
                     return this.getXCoordinate(d, i, s);
                 };
-                bar.y = (d: any, i: number, s: number) => {
+                bar.y = (d: IDatum, i: number, s: number) => {
                     return this.getYCoordinate(d, i, s);
                 };
                 bar.draw(this.series.getMatrixItem(serie));
@@ -56,7 +56,7 @@ export class BarChart extends XYChart {
         }
     }
 
-    public getXCoordinate(d: any, i: number, serie: number): any {
+    public getXCoordinate(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
         var axis = this.axes[index];
 
@@ -68,7 +68,7 @@ export class BarChart extends XYChart {
         }
     }
 
-    public getYCoordinate(d: any, i: number, serie: number): any {
+    public getYCoordinate(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
         var axisScale = this.categories.parseFormat(this.categories.getItem(i));
@@ -81,7 +81,7 @@ export class BarChart extends XYChart {
         }
     }
 
-    public getHeight(d: any, i: number, serie: number): any {
+    public getHeight(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 
@@ -93,14 +93,14 @@ export class BarChart extends XYChart {
         }
     }
 
-    public getWidth(d: any, i: number, serie: number): any {
+    public getWidth(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
         var axis = this.axes[index];
 
         return Math.abs(axis.scale(d.y1) - axis.scale(d.y0));
     }
 
-    public getXScale(axis: Axis): any {
+    public getXScale(axis: Axis): d3.scale.Linear<number, number> {
         var min = this.series.min(name);
         var max = this.series.max(name);
 
@@ -129,7 +129,7 @@ export class BarChart extends XYChart {
         else {
             axis.setScaleType(ScaleType.Time);
             return d3.time.scale()
-                .domain(d3.extent(this.categories.getLabels(), (d: any): Date => {
+                .domain(d3.extent(this.categories.getLabels(), (d: string): Date => {
                     return d3.time.format(this.categories.format).parse(d);
                 }).reverse())
                 .nice() // adds additional ticks to add some whitespace

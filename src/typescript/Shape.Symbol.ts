@@ -2,25 +2,26 @@
 
 import * as d3 from "d3";
 import { Chart } from "./Chart";
-import { SVGShape } from "./Shape";
 
-export class SVGSymbol extends SVGShape {
-
-    public symbolWidth: number = 24;
-    public symbolHeight: number = 12;
+export class SVGSymbol {
     public area: {
         visible: boolean;
     };
+    public chart: Chart;
+    public color: string;
     public marker: {
         size: number;
         type: string;
         visible: boolean;
     };
+    public opacity: number;
+    public svg: d3.Selection<SVGElement>;
+    public symbolWidth: number = 24;
+    public symbolHeight: number = 12;
 
-    constructor(svg: d3.Selection<any>, chart: Chart, serie: number) {
-        super(svg, chart, serie);
+    constructor(svg: d3.Selection<SVGElement>, chart: Chart, serie: number) {
         this.chart = chart;
-
+        this.svg = svg;
         this.area = {
             visible: chart.options.plotOptions.area.visible
         };
@@ -31,7 +32,7 @@ export class SVGSymbol extends SVGShape {
         };
     }
 
-    public draw(data: any): void {
+    public draw(): void {
         var _self = this;
 /*
         // TODO - use correct symbol in legend and tooltip
@@ -86,7 +87,7 @@ export class SVGSymbol extends SVGShape {
         var _self = this;
         svg
             .append("path")
-            .each(function(d: any, i: number): void {
+            .each(function(d: IDatum, i: number): void {
                 d3.select(this)
                     .attr({
                         "class": "marker",
@@ -101,7 +102,7 @@ export class SVGSymbol extends SVGShape {
     }
     */
 
-    private drawRectangleSymbol(svg: d3.Selection<any>): void {
+    private drawRectangleSymbol(svg: d3.Selection<SVGElement>): void {
         svg.append("rect")
             .attr("x", 0)
             .attr("width", this.symbolWidth)

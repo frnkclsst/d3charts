@@ -1,13 +1,13 @@
 "use strict";
 
 import { AxisType, ScaleType } from "./Enums";
-import { IData, IOptions } from "./IOptions";
+import { IDatum, IChartData, IOptions} from "./IInterfaces";
 import { SVGColumn } from "./Shape.Column";
 import { XYChart } from "./XYChart";
 
 export class ColumnChart extends XYChart {
 
-    constructor(selector: string, data: IData, options?: IOptions) {
+    constructor(selector: string, data: IChartData, options?: IOptions) {
         super(selector, data, options);
 
         // Overrides
@@ -37,16 +37,16 @@ export class ColumnChart extends XYChart {
                     rotate: this.options.series.labels.rotate,
                     visible: this.options.series.labels.visible
                 };
-                column.height = (d: any, i: number, s: number) => {
+                column.height = (d: IDatum, i: number, s: number) => {
                     return this.getHeight(d, i, s);
                 };
-                column.width = (d: any, i: number, s: number) => {
+                column.width = (d: IDatum, i: number, s: number) => {
                     return this.getWidth(d, i, s);
                 };
-                column.x = (d: any, i: number, s: number) => {
+                column.x = (d: IDatum, i: number, s: number) => {
                     return this.getXCoordinate(d, i, s);
                 };
-                column.y = (d: any, i: number, s: number) => {
+                column.y = (d: IDatum, i: number, s: number) => {
                     return this.getYCoordinate(d, i, s);
                 };
                 column.draw(this.series.getMatrixItem(serie));
@@ -54,14 +54,14 @@ export class ColumnChart extends XYChart {
         }
     }
 
-    public getHeight(d: any, i: number, serie: number): any {
+    public getHeight(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 
         return Math.abs(axis.scale(d.y1) - this.axes[index].scale(d.y0));
     }
 
-    public getWidth(d: any, i: number, serie: number): any {
+    public getWidth(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
         var axis = this.axes[index];
 
@@ -73,7 +73,7 @@ export class ColumnChart extends XYChart {
         }
     }
 
-    public getXCoordinate(d: any, i: number, serie: number): any {
+    public getXCoordinate(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
         var axis = this.axes[index];
         var axisScale = this.categories.parseFormat(this.categories.getItem(i));
@@ -86,7 +86,7 @@ export class ColumnChart extends XYChart {
         }
     }
 
-    public getYCoordinate(d: any, i: number, serie: number): any {
+    public getYCoordinate(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 

@@ -1,6 +1,7 @@
 "use strict";
 
 import * as d3 from "d3";
+import { IDatum } from "./IInterfaces";
 import { SVGShape } from "./Shape";
 import { XYChart } from "./XYChart";
 
@@ -11,7 +12,7 @@ export class SVGBubble extends SVGShape {
         type: string;
     };
 
-    constructor(svg: d3.Selection<any>, chart: XYChart, serie: number) {
+    constructor(svg: d3.Selection<SVGElement>, chart: XYChart, serie: number) {
         super(svg, chart, serie);
         this.chart = chart;
 
@@ -20,7 +21,7 @@ export class SVGBubble extends SVGShape {
         };
     }
 
-    public draw(data: any): void {
+    public draw(data: IDatum[]): void {
         var _self = this;
 
         var svgSerie = this.svg.append("g")
@@ -30,7 +31,7 @@ export class SVGBubble extends SVGShape {
             .enter();
 
         var svgBubbles = svgSerie.append("path")
-            .each(function(d: any, i: number): void {
+            .each(function(d: IDatum, i: number): void {
                 d3.select(this)
                     .attr({
                         "class": "bubble",
@@ -53,7 +54,7 @@ export class SVGBubble extends SVGShape {
             .transition()
             .duration(this.animation.duration)
             .ease(this.animation.ease)
-            .attr("d", (d: any, i: number): any => {
+            .attr("d", (d: IDatum, i: number): string => {
                 var size: number = _self.chart.series.items[this.serie].size != undefined ? _self.chart.series.items[this.serie].size[i] * 10 : 60;
                 return d3.svg.symbol()
                     .size(size)
@@ -76,7 +77,7 @@ export class SVGBubble extends SVGShape {
             .attr("opacity", "1");
 
         this.svg.selectAll("g#serie-" + (this.serie - 1)).selectAll("path.bubble")
-            .each((d: any, i: number): void => {
+            .each((d: IDatum, i: number): void => {
                 var rotation = 0;
                 var x = this.x(d, i, this.serie);
                 var y = this.y(d, i, this.serie);

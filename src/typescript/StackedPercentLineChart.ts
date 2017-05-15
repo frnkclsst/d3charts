@@ -3,12 +3,12 @@
 import * as d3 from "d3";
 import { AxisType, ScaleType, StackType} from "./Enums";
 import { Axis, YAxis } from "./Axis";
-import { IData, IOptions } from "./IOptions";
+import { IDatum, IChartData, IOptions } from "./IInterfaces";
 import { StackedLineChart } from "./StackedLineChart";
 
 export class StackedPercentLineChart extends StackedLineChart {
 
-    constructor(selector: string, data: IData, options?: IOptions) {
+    constructor(selector: string, data: IChartData, options?: IOptions) {
         super(selector, data, options);
         this.stackType = StackType.Percent;
         for (var i = 0; i < this.axes.length; i++) {
@@ -18,7 +18,7 @@ export class StackedPercentLineChart extends StackedLineChart {
         }
     }
 
-    public getYScale(axis: Axis): any {
+    public getYScale(axis: Axis): d3.scale.Linear<number, number> {
         var min = this.series.min(name);
 
         var start = this.canvas.plotArea.axisSize.top;
@@ -30,7 +30,7 @@ export class StackedPercentLineChart extends StackedLineChart {
             .range([start, end]);
     }
 
-    protected normalizer(d: any, i: number, serie: number): number {
+    protected normalizer(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 

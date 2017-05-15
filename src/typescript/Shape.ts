@@ -1,14 +1,15 @@
 "use strict";
 
 import * as d3 from "d3";
+import { IDatum } from "./IInterfaces";
 import { Chart } from "./Chart";
 
 export class SVGShape {
 
     protected chart: Chart;
     protected serie: number;
-    protected svg: d3.Selection<any>;
-    protected svgLabels: d3.Selection<any>;
+    protected svg: d3.Selection<SVGElement>;
+    protected svgLabels: d3.Selection<SVGElement>;
 
     public animation: {
         duration: number,
@@ -21,10 +22,10 @@ export class SVGShape {
         visible: boolean;
     };
     public opacity: number;
-    public x: (d: any, i: number, serie: number) => number;
-    public y: (d: any, i: number, serie: number) => number;
+    public x: (d: IDatum, i: number, serie: number) => number;
+    public y: (d: IDatum, i: number, serie: number) => number;
 
-    constructor(svg: d3.Selection<any>, chart: Chart, serie: number) {
+    constructor(svg: d3.Selection<SVGElement>, chart: Chart, serie: number) {
         this.chart = chart;
         this.serie = serie;
         this.svg = svg;
@@ -44,7 +45,7 @@ export class SVGShape {
         this.y = null;
     }
 
-    public draw(data: any): void {
+    public draw(data: IDatum[]): void {
 
     }
 

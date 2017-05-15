@@ -1,6 +1,7 @@
 "use strict";
 
 import * as d3 from "d3";
+import { IDatum } from "./IInterfaces";
 import { SVGShape } from "./Shape";
 import { XYChart } from "./XYChart";
 import { LineChart } from "./LineChart";
@@ -9,10 +10,10 @@ export class SVGArea extends SVGShape {
     protected chart: XYChart;
 
     public interpolation: string;
-    public y0: (d: any, i: number, serie: number) => number;
-    public y1: (d: any, i: number, serie: number) => number;
+    public y0: (d: IDatum, i: number, serie: number) => number;
+    public y1: (d: IDatum, i: number, serie: number) => number;
 
-    constructor(svg: d3.Selection<any>, chart: LineChart, serie: number) {
+    constructor(svg: d3.Selection<SVGElement>, chart: LineChart, serie: number) {
         super(svg, chart, serie);
         this.chart = chart;
 
@@ -21,7 +22,7 @@ export class SVGArea extends SVGShape {
         this.y1 = null;
     }
 
-    public draw(data: any): void {
+    public draw(data: any[]): void {
         var d3Area = d3.svg.area()
             .interpolate(this.interpolation)
             .x((d: any, i: number): number => { return this.x(d, i, this.serie); } )
@@ -31,7 +32,7 @@ export class SVGArea extends SVGShape {
         var svgArea = this.svg.append("g")
             .attr("id", "area-" + this.serie);
 
-        var svgPath = svgArea.append("path")
+        var svgPath: d3.Selection<SVGElement> = svgArea.append("path")
             .attr("class", "area")
             .attr("d", d3Area(data))
             .style("fill", this.color)

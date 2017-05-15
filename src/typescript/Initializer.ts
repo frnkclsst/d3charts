@@ -1,7 +1,7 @@
 "use strict";
 
 import { MarkerType, OrientationType } from "./Enums";
-import { IAxisOptions, ICanvasOptions, IData, ILegendAreaOptions, IOptions, IPlotAreaOptions, IPlotOptions, ISeriesOptions, ITitleAreaOptions } from "./IOptions";
+import { IAxisOptions, ICanvasOptions, IChartData, ILegendAreaOptions, IOptions, IPlotAreaOptions, IPlotOptions, ISeriesOptions, ITitleAreaOptions } from "./IInterfaces";
 import { Serie } from "./Serie";
 
 export class Initializer {
@@ -137,14 +137,14 @@ export class AxisOptions implements IAxisOptions {
     }
 }
 
-export class Data extends Initializer implements IData {
+export class Data extends Initializer implements IChartData {
     public categories: {
         format: string,
         data: any[]
     };
     public series: Serie[];
 
-    constructor(data: IData) {
+    constructor(data: IChartData) {
         super(data);
 
         // defaults

@@ -1,7 +1,7 @@
 "use strict";
 
 import { AxisType, MarkerType, ScaleType } from "./Enums";
-import { IData, IOptions } from "./IOptions";
+import { IDatum, IChartData, IOptions } from "./IInterfaces";
 import { XYChart } from "./XYChart";
 import { SVGArea } from "./Shape.Area";
 import { SVGLine } from "./Shape.Line";
@@ -18,7 +18,7 @@ export class LineChart extends XYChart {
         type: MarkerType
     };
 
-    constructor(selector: string, data: IData, options?: IOptions) {
+    constructor(selector: string, data: IChartData, options?: IOptions) {
         super(selector, data, options);
         this.area = {
             visible: this.options.plotOptions.area.visible,
@@ -56,16 +56,16 @@ export class LineChart extends XYChart {
                     area.color = this.colorPalette.color(areaSerie);
                     area.opacity = this.area.opacity;
                     area.interpolation = this.interpolation;
-                    area.x = (d: any, i: number, s: number): number => {
+                    area.x = (d: IDatum, i: number, s: number): number => {
                         return this.getXCoordinate(d, i, s);
                     };
-                    area.y = (d: any, i: number, s: number): number => {
+                    area.y = (d: IDatum, i: number, s: number): number => {
                         return this.getYCoordinate(d, i, s);
                     };
-                    area.y0 = (d: any, i: number, s: number): number => {
+                    area.y0 = (d: IDatum, i: number, s: number): number => {
                         return this.getY0Coordinate(d, i, s);
                     };
-                    area.y1 = (d: any, i: number, s: number): number => {
+                    area.y1 = (d: IDatum, i: number, s: number): number => {
                         return this.getY1Coordinate(d, i, s);
                     };
                     area.draw(this.series.getMatrixItem(areaSerie));
@@ -92,10 +92,10 @@ export class LineChart extends XYChart {
                         size: this.markers.size,
                         type: this.series.items[serie].marker
                     };
-                    line.x = (d: any, i: number, s: number): number => {
+                    line.x = (d: IDatum, i: number, s: number): number => {
                         return this.getXCoordinate(d, i, s);
                     };
-                    line.y = (d: any, i: number, s: number): number => {
+                    line.y = (d: IDatum, i: number, s: number): number => {
                         return this.getYCoordinate(d, i, s);
                     };
                     line.draw(this.series.getMatrixItem(serie));
@@ -104,7 +104,7 @@ export class LineChart extends XYChart {
         }
     }
 
-    public getXCoordinate(d: any, i: number, serie: number): any {
+    public getXCoordinate(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
         var axis = this.axes[index];
 
@@ -116,21 +116,21 @@ export class LineChart extends XYChart {
         }
     }
 
-    public getYCoordinate(d: any, i: number, serie: number): any {
+    public getYCoordinate(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 
         return axis.scale(d.y);
     }
 
-    public getY0Coordinate(d: any, i: number, serie: number): any {
+    public getY0Coordinate(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 
         return axis.scale(d.y0);
     }
 
-    public getY1Coordinate(d: any, i: number, serie: number): any {
+    public getY1Coordinate(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 

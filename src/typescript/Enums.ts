@@ -10,24 +10,17 @@ export enum GridLineType {
     Minor
 }
 
-export enum StackType {
-    None,
-    Normal,
-    Percent
-}
-
 export enum ScaleType {
     Linear,
     Ordinal,
     Time
 }
 
-export type OrientationType =
-    "bottom" |
-    "left" |
-    "right" |
-    "top" |
-    "";
+export enum StackType {
+    None,
+    Normal,
+    Percent
+}
 
 export type MarkerType =
     "circle" |
@@ -38,7 +31,14 @@ export type MarkerType =
     "triangle-down" |
     "mixed";
 
-export var symbols =
+export type OrientationType =
+    "bottom" |
+    "left" |
+    "right" |
+    "top" |
+    "";
+
+export var SymbolType =
     ["circle",
     "cross",
     "diamond",

@@ -1,6 +1,7 @@
 "use strict";
 
 import * as d3 from "d3";
+import { IDatum } from "./IInterfaces";
 import { AxisType } from "./Enums";
 import { SVGShape } from "./Shape";
 import { XYChart } from "./XYChart";
@@ -8,10 +9,10 @@ import { XYChart } from "./XYChart";
 export class SVGBar extends SVGShape {
     protected chart: XYChart;
 
-    public height: (d: any, i: number, serie: number) => number;
-    public width: (d: any, i: number, serie: number) => number;
+    public height: (d: IDatum, i: number, serie: number) => number;
+    public width: (d: IDatum, i: number, serie: number) => number;
 
-    constructor(svg: d3.Selection<any>, chart: XYChart, serie: number) {
+    constructor(svg: d3.Selection<SVGElement>, chart: XYChart, serie: number) {
         super(svg, chart, serie);
         this.chart = chart;
 
@@ -19,7 +20,7 @@ export class SVGBar extends SVGShape {
         this.width = null;
     }
 
-    public draw(data: any): void {
+    public draw(data: IDatum[]): void {
         var svgSerie = this.svg.append("g")
             .attr("id", "serie-" + this.serie)
             .selectAll("rect")
@@ -27,17 +28,17 @@ export class SVGBar extends SVGShape {
             .enter();
 
         // draw bar
-        var svgBar = svgSerie.append("rect")
+        var svgBar: d3.Selection<{}> = svgSerie.append("rect")
             .attr({
                 "class": "bar",
                 "fill": this.color,
-                "height": (d: any, i: number): number => {
+                "height": (d: IDatum, i: number): number => {
                     return this.height(d, i, this.serie);
                 },
                 "stroke": this.color,
                 "stroke-width": "1px",
                 "width": 0,
-                "x": (d: any, i: number): number => {
+                "x": (d: IDatum, i: number): number => {
                     if (d.y < 0) {
                         var index = this.chart.getAxisByName(AxisType.X, this.chart.series.items[this.serie].axis);
                         return this.chart.axes[index].scale(0);
@@ -46,7 +47,7 @@ export class SVGBar extends SVGShape {
                         return this.x(d, i, this.serie);
                     }
                 },
-                "y": (d: any, i: number): number => { return this.y(d, i, this.serie); }
+                "y": (d: IDatum, i: number): number => { return this.y(d, i, this.serie); }
             });
 
         // add animation
@@ -58,10 +59,10 @@ export class SVGBar extends SVGShape {
             .transition()
             .duration(this.animation.duration)
             .ease(this.animation.ease)
-            .attr("width", (d: any, i: number): number => {
+            .attr("width", (d: IDatum, i: number): number => {
                 return this.width(d, i, this.serie);
             })
-            .attr("x", (d: any, i: number): number => {
+            .attr("x", (d: IDatum, i: number): number => {
                 return this.x(d, i, this.serie);
             })
             .each("end", (): void => {
@@ -78,7 +79,7 @@ export class SVGBar extends SVGShape {
     public drawLabels(): void {
         super.drawLabels();
         this.svg.selectAll("g#serie-" + this.serie).selectAll("rect")
-            .each((d: any, i: number): void => {
+            .each((d: IDatum, i: number): void => {
                 var rotation = 0;
                 var x = this.x(d, i, this.serie);
                 var y = this.y(d, i, this.serie);

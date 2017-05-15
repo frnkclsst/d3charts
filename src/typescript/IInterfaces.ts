@@ -3,14 +3,6 @@
 import { OrientationType, MarkerType } from "./Enums";
 import { Serie } from "./Serie";
 
-export interface IData {
-    categories: {
-        format: string,
-        data: any[]
-    };
-    series: Serie[];
-}
-
 export interface IDatum {
     max: number;
     perc: number;
@@ -18,6 +10,35 @@ export interface IDatum {
     y: number;
     y0: number;
     y1: number;
+}
+
+export interface IArcDatum {
+    data: number;
+    endAngle: number;
+    padAngle: number;
+    startAngle: number;
+    value: number;
+}
+
+export interface IChartData {
+    categories: {
+        format: string,
+        data: string[]
+    };
+    series: Serie[];
+}
+
+export interface ISerie {
+    axis: string;
+    data: number[];
+    format: string;
+    name: string;
+    marker: string;
+    min: number[];
+    max: number[];
+    size: number[];
+    suffix: string;
+    type: string;
 }
 
 export interface IOptions {
