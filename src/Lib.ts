@@ -27,7 +27,7 @@ export * from "./typescript/Shape.Area";
 export * from "./typescript/Shape.Bubble";
 export * from "./typescript/Shape.Column";
 export * from "./typescript/Shape.Line";
-export * from "./typescript/Shape.Symbol";
+export * from "./typescript/Symbol";
 export * from "./typescript/Shape";
 export * from "./typescript/StackedBarChart";
 export * from "./typescript/StackedColumnChart";

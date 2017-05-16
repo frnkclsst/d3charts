@@ -2,7 +2,7 @@
 
 import { AxisType, ScaleType } from "./Enums";
 import { IDatum, IChartData, IOptions} from "./IInterfaces";
-import { SVGColumn } from "./Shape.Column";
+import { ColumnShape } from "./Shape.Column";
 import { XYChart } from "./XYChart";
 
 export class ColumnChart extends XYChart {
@@ -26,30 +26,32 @@ export class ColumnChart extends XYChart {
 
             // draw columns
             for (var serie = 0; serie < this.series.length; serie++) {
-                var column = new SVGColumn(svgSeries, this, serie);
-                column.animation = {
-                    duration: this.options.plotOptions.animation.duration,
-                    ease: this.options.plotOptions.animation.ease
-                };
-                column.color = this.colorPalette.color(serie);
-                column.labels = {
-                    format: this.series.items[serie].format,
-                    rotate: this.options.series.labels.rotate,
-                    visible: this.options.series.labels.visible
-                };
-                column.height = (d: IDatum, i: number, s: number) => {
-                    return this.getHeight(d, i, s);
-                };
-                column.width = (d: IDatum, i: number, s: number) => {
-                    return this.getWidth(d, i, s);
-                };
-                column.x = (d: IDatum, i: number, s: number) => {
-                    return this.getXCoordinate(d, i, s);
-                };
-                column.y = (d: IDatum, i: number, s: number) => {
-                    return this.getYCoordinate(d, i, s);
-                };
-                column.draw(this.series.getMatrixItem(serie));
+                var column = new ColumnShape(svgSeries, this, serie);
+
+                column
+                    .animation(
+                        this.options.plotOptions.animation.duration,
+                        this.options.plotOptions.animation.ease
+                    )
+                    .color(this.colorPalette.color(serie))
+                    .height((d: IDatum, i: number, s: number) => {
+                        return this.getHeight(d, i, s);
+                    })
+                    .labels(
+                        this.series.items[serie].format,
+                        this.options.series.labels.rotate,
+                        this.options.series.labels.visible
+                    )
+                    .width((d: IDatum, i: number, s: number) => {
+                        return this.getWidth(d, i, s);
+                    })
+                    .x((d: IDatum, i: number, s: number) => {
+                        return this.getXCoordinate(d, i, s);
+                    })
+                    .y((d: IDatum, i: number, s: number) => {
+                        return this.getYCoordinate(d, i, s);
+                    })
+                    .draw(this.series.getMatrixItem(serie));
             }
         }
     }

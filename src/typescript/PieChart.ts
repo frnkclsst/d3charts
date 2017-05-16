@@ -5,18 +5,18 @@ import { IArcDatum, IChartData, IOptions } from "./IInterfaces";
 import { Chart } from "./Chart";
 
 export class PieChart extends Chart {
-    private arcs: any[] = [];
-    private innerRadiusPercentage: number;
-    private innerRadius: number;
-    private radius: number;
-    private serieRadius: number;
+    private _arcs: any[] = [];
+    private _innerRadiusPercentage: number;
+    private _innerRadius: number;
+    private _radius: number;
+    private _serieRadius: number;
 
     constructor(selector: string, data: IChartData, options?: IOptions) {
         super(selector, data, options);
-        this.innerRadiusPercentage = this.options.plotOptions.pie.innerRadius;
+        this._innerRadiusPercentage = this.options.plotOptions.pie.innerRadius;
 
         // Overrides
-        this.canvas.legendArea.items = this.categories.getLabels();
+        this.canvas.legendArea.items = this.categories.labels;
     }
 
     public draw(): void {
@@ -25,9 +25,9 @@ export class PieChart extends Chart {
         if (this.hasData()) {
             var _self = this;
 
-            this.radius = Math.min(this.canvas.plotArea.width / 2, this.canvas.plotArea.height / 2);
-            this.innerRadius = this.radius - (this.radius * this.innerRadiusPercentage);
-            this.serieRadius = (this.radius - this.innerRadius) / this.series.length;
+            this._radius = Math.min(this.canvas.plotArea.width / 2, this.canvas.plotArea.height / 2);
+            this._innerRadius = this._radius - (this._radius * this._innerRadiusPercentage);
+            this._serieRadius = (this._radius - this._innerRadius) / this.series.length;
 
             var svgSeries = this.canvas.plotArea.svg.append("g")
                 .attr("class", "series")
@@ -38,9 +38,9 @@ export class PieChart extends Chart {
                     .sort(null);
 
                 var d3Arc = d3.svg.arc()
-                    .innerRadius(this.innerRadius + (this.serieRadius * serie)) // inner radius = 1 => pie chart
-                    .outerRadius(this.serieRadius * (serie + 1) + this.innerRadius);
-                this.arcs.push(d3Arc);
+                    .innerRadius(this._innerRadius + (this._serieRadius * serie)) // inner radius = 1 => pie chart
+                    .outerRadius(this._serieRadius * (serie + 1) + this._innerRadius);
+                this._arcs.push(d3Arc);
 
                 var svgSerie = svgSeries.append("g")
                     .attr("id", "serie-" + serie);
@@ -76,7 +76,7 @@ export class PieChart extends Chart {
                     .attrTween("d", function (d: IArcDatum, i: number): any {
                         var interpolate = d3.interpolate(d.startAngle, d.endAngle);
                         var s = this.getAttribute("data-serie");
-                        var arc = _self.arcs[s];
+                        var arc = _self._arcs[s];
                         return (t: any): any => {
                             d.endAngle = interpolate(t);
                             return arc(d);
@@ -107,7 +107,7 @@ export class PieChart extends Chart {
                             "class": "label",
                             "fill": "#fff",
                             "transform": (): string => {
-                                return "translate(" + this.arcs[serie].centroid(d) + ")";
+                                return "translate(" + this._arcs[serie].centroid(d) + ")";
                             }
                         })
                         .text(d3.format(this.series.items[serie].format)(d.data));

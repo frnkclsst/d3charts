@@ -23,15 +23,15 @@ export class Axis {
     public type: AxisType;
     public width: number;
 
-    protected axis: d3.svg.Axis;
-    protected chart: XYChart;
-    protected gridlineType: GridLineType;
-    protected hasTickmarks: boolean;
-    protected orient: OrientationType;
-    protected svgAxis: d3.Selection<SVGElement>;
-    protected svgGrid: d3.Selection<SVGElement>;
-    protected svgTitle: d3.Selection<SVGElement>;
-    protected svgZeroLine: d3.Selection<SVGElement>;
+    protected _axis: d3.svg.Axis;
+    protected _chart: XYChart;
+    protected _gridlineType: GridLineType;
+    protected _hasTickmarks: boolean;
+    protected _orient: OrientationType;
+    protected _svgAxis: d3.Selection<SVGElement>;
+    protected _svgGrid: d3.Selection<SVGElement>;
+    protected _svgTitle: d3.Selection<SVGElement>;
+    protected _svgZeroLine: d3.Selection<SVGElement>;
 
     private _innerTicksize: number;
     private _outerTicksize: number;
@@ -39,20 +39,20 @@ export class Axis {
     private _ticks: number;
 
     constructor(chart: XYChart, options: IAxisOptions) {
-        this.axis = null;
-        this.chart = chart;
+        this._axis = null;
+        this._chart = chart;
         this.height = 0;
         this.isDataAxis = false;
         this.labels = {
             format: options.labels.format,
             rotate: options.labels.rotate
         };
-        this.orient = null;
+        this._orient = null;
         this.scale = null;
-        this.svgAxis = null;
-        this.svgGrid = null;
-        this.svgTitle = null;
-        this.svgZeroLine = null;
+        this._svgAxis = null;
+        this._svgGrid = null;
+        this._svgTitle = null;
+        this._svgZeroLine = null;
         this.title = {
             align: options.title.align,
             text: options.title.text,
@@ -70,16 +70,16 @@ export class Axis {
         this.initialize();
 
         // calculate scale
-        this.axis.scale(this.scale);
+        this._axis.scale(this.scale);
 
         // draw axis
-        this.svgAxis
-            .call(this.axis)
+        this._svgAxis
+            .call(this._axis)
             .attr("transform", "translate(" + this.getXCoordinate() + "," + this.getYCoordinate() + ")");
 
         // align tick labels
         if (this.labels.rotate % 360 != 0) {
-            this.svgAxis.selectAll(".tick").selectAll("text")
+            this._svgAxis.selectAll(".tick").selectAll("text")
                 .style("alignment-baseline", "middle")
                 .style("text-anchor", "end")
                 .attr("y", "0")
@@ -88,19 +88,19 @@ export class Axis {
 
         // align axis title
         this.alignTitle();
-        this.drawGridlines(this.axis);
-        this.drawZeroLine(this.svgAxis);
+        this.drawGridlines(this._axis);
+        this.drawZeroLine(this._svgAxis);
 
         //this.removeOverlappingTicks();
     }
 
     public drawGridlines(axis: d3.svg.Axis): void {
-        this.svgGrid = this.svgAxis.append("g")
+        this._svgGrid = this._svgAxis.append("g")
             .attr("class", "grid");
 
         switch (this.getGridlineType()) {
             case GridLineType.Major:
-                this.svgGrid.call(axis
+                this._svgGrid.call(axis
                     .tickSize(this._innerTicksize, this._outerTicksize)
                     .tickFormat((d: IDatum): string => { return ""; }) // return no label for the grid lines
                 );
@@ -115,21 +115,21 @@ export class Axis {
     }
 
     public drawTitle(svg: d3.Selection<SVGElement>): void {
-        this.svgTitle = svg.append("text")
+        this._svgTitle = svg.append("text")
             .text(this.title.text)
             .attr("class", "title");
     }
 
     public drawZeroLine(svg: d3.Selection<SVGElement>): void {
-        if (this.isDataAxis && this.chart.series.min() < 0) {
-            this.svgZeroLine = this.svgGrid.append("g")
+        if (this.isDataAxis && this._chart.series.min() < 0) {
+            this._svgZeroLine = this._svgGrid.append("g")
                 .attr("class", "zero-line")
                 .append("line");
         }
     }
 
     public getGridlineType(): GridLineType {
-        return this.gridlineType;
+        return this._gridlineType;
     }
 
     public getInnerTicksize(): number {
@@ -181,20 +181,20 @@ export class Axis {
     }
 
     public setColor(color: string): void {
-        var element: Element = <Element>this.svgAxis.selectAll("path")[0][0];
+        var element: Element = <Element>this._svgAxis.selectAll("path")[0][0];
         element.setAttribute("style", "stroke: " + color);
     }
 
-    protected setGridlineType(type: string): void {
+    protected _setGridlineType(type: string): void {
         switch (type.toUpperCase()) {
             case "MAJOR":
-                this.gridlineType = GridLineType.Major;
+                this._gridlineType = GridLineType.Major;
                 break;
             case "MINOR":
-                this.gridlineType = GridLineType.Minor;
+                this._gridlineType = GridLineType.Minor;
                 break;
             default:
-                this.gridlineType = GridLineType.None;
+                this._gridlineType = GridLineType.None;
                 break;
         }
     }
@@ -207,36 +207,36 @@ export class Axis {
         this.initialize();
 
         // create d3 axis
-        this.axis = d3.svg.axis()
+        this._axis = d3.svg.axis()
             .scale(this.scale)
-            .orient(this.orient)
+            .orient(this._orient)
             .ticks(this._ticks);
 
         // apply custom formatter
         if (this.labels.format != "") {
-            this.axis.tickFormat(d3.format(this.labels.format));
+            this._axis.tickFormat(d3.format(this.labels.format));
         }
 
         // draw tick marks
-        if (this.hasTickmarks != true) {
-            this.axis.tickSize(0);
-            this.axis.tickPadding(12);
+        if (this._hasTickmarks != true) {
+            this._axis.tickSize(0);
+            this._axis.tickPadding(12);
         }
 
         // draw axis
-        this.svgAxis = this.chart.canvas.plotArea.svg.append("g")
+        this._svgAxis = this._chart.canvas.plotArea.svg.append("g")
             .attr("class", "axis");
 
-        this.svgAxis.append("g")
+        this._svgAxis.append("g")
             .attr("class", "ticks")
-            .call(this.axis);
+            .call(this._axis);
 
-        this.rotateLabels(this.svgAxis);
-        this.drawTitle(this.svgAxis);
+        this.rotateLabels(this._svgAxis);
+        this.drawTitle(this._svgAxis);
 
         // store height and width
-        this.height = Html.getHeight(this.svgAxis);
-        this.width = Html.getWidth(this.svgAxis);
+        this.height = Html.getHeight(this._svgAxis);
+        this.width = Html.getWidth(this._svgAxis);
     }
 }
 
@@ -245,79 +245,79 @@ export class XAxis extends Axis {
     constructor(chart: XYChart, options: IAxisOptions) {
         super(chart, options);
 
-        this.hasTickmarks = options.tickmarks;
+        this._hasTickmarks = options.tickmarks;
         this.name = options.name;
         this.setOrientation(options.orient);
-        this.setGridlineType(options.gridlines);
+        this._setGridlineType(options.gridlines);
         this.type = AxisType.X;
     }
 
     public alignTitle(): void {
         // TODO - refactor alignTitle - messy
         if (this.title.align === "left") {
-            this.svgTitle.attr("x", this.chart.canvas.plotArea.axisSize.left);
+            this._svgTitle.attr("x", this._chart.canvas.plotArea.axisSize.left);
         }
         else if (this.title.align === "center") {
-            this.svgTitle.attr("x", 0);
+            this._svgTitle.attr("x", 0);
         }
         else {
-            this.svgTitle.attr("x", -this.chart.canvas.plotArea.axisSize.right);
+            this._svgTitle.attr("x", -this._chart.canvas.plotArea.axisSize.right);
         }
     }
 
     public drawTitle(svg: d3.Selection<SVGElement>): void {
         super.drawTitle(svg);
 
-        var x = Html.align(this.svgTitle, Html.getWidth(this.svgAxis), this.title.align, 0),
-            y = Html.getHeight(this.svgAxis) + 12;
+        var x = Html.align(this._svgTitle, Html.getWidth(this._svgAxis), this.title.align, 0),
+            y = Html.getHeight(this._svgAxis) + 12;
 
-        if (this.orient === "top") {
+        if (this._orient === "top") {
             y = -y;
         }
 
-        this.svgTitle
+        this._svgTitle
             .attr("text-anchor", "begin")
             .attr("transform", "translate(" + x + "," + y + ")");
     }
 
     public drawZeroLine(svg: d3.Selection<SVGElement>): void {
         super.drawZeroLine(svg);
-        if (this.isDataAxis && this.chart.series.min() < 0) {
-            this.svgZeroLine
+        if (this.isDataAxis && this._chart.series.min() < 0) {
+            this._svgZeroLine
                 .attr("x1", this.scale(0))
                 .attr("x2", this.scale(0))
                 .attr("y1", 0)
-                .attr("y2", this.orient === "bottom" ? -this.chart.canvas.plotArea.height : this.chart.canvas.plotArea.height);
+                .attr("y2", this._orient === "bottom" ? -this._chart.canvas.plotArea.height : this._chart.canvas.plotArea.height);
         }
     }
 
     public getInnerTicksize(): number {
-        return -this.chart.canvas.plotArea.height;
+        return -this._chart.canvas.plotArea.height;
     }
 
     public getOuterTicksize(): number {
-        return -this.chart.canvas.plotArea.height;
+        return -this._chart.canvas.plotArea.height;
     }
 
     public getScale(): any {
-        return this.chart.getXScale(this);
+        return this._chart.getXScale(this);
     }
 
     public setSize(): void {
         super.setSize();
 
-        if (this.orient === "bottom") {
-            this.chart.canvas.plotArea.axisSize.bottom += this.height;
+        if (this._orient === "bottom") {
+            this._chart.canvas.plotArea.axisSize.bottom += this.height;
         }
         else {
-            this.chart.canvas.plotArea.axisSize.top += this.height;
+            this._chart.canvas.plotArea.axisSize.top += this.height;
         }
 
-        this.chart.canvas.plotArea.height -= this.height;
+        this._chart.canvas.plotArea.height -= this.height;
     }
 
     public getTicks(): number {
-        return Math.max(this.chart.canvas.plotArea.width / 50, 2);
+        return Math.max(this._chart.canvas.plotArea.width / 50, 2);
     }
 
     public getXCoordinate(): number {
@@ -325,12 +325,12 @@ export class XAxis extends Axis {
     }
 
     public getYCoordinate(): number {
-        return this.orient === "bottom" ? this.chart.canvas.plotArea.axisSize.top + this.chart.canvas.plotArea.height : this.chart.canvas.plotArea.axisSize.top;
+        return this._orient === "bottom" ? this._chart.canvas.plotArea.axisSize.top + this._chart.canvas.plotArea.height : this._chart.canvas.plotArea.axisSize.top;
     }
 
     // TODO - improve removeOverlappingTicks on X-axis
     public removeOverlappingTicks(): void {
-        var ticks = this.svgAxis.selectAll("g.ticks").selectAll("g.tick"),
+        var ticks = this._svgAxis.selectAll("g.ticks").selectAll("g.tick"),
             tickOverlap = false,
             prevRight = 0;
 
@@ -372,13 +372,13 @@ export class XAxis extends Axis {
                         .attr("dy", "0")
                         .attr("transform", "translate(" + 0 + ", " + 0 + ")");
 
-                    if (_self.orient === "bottom") {
+                    if (_self._orient === "bottom") {
                         if (_self.labels.rotate > 0) {
                             _self.labels.rotate = -_self.labels.rotate;
                         }
                     }
 
-                    if (_self.orient === "top") {
+                    if (_self._orient === "top") {
                         if (_self.labels.rotate < 0) {
                             _self.labels.rotate = -_self.labels.rotate;
                         }
@@ -393,13 +393,13 @@ export class XAxis extends Axis {
     public setOrientation(value: OrientationType): void {
         switch (value.toUpperCase()) {
             case "BOTTOM":
-                this.orient = "bottom";
+                this._orient = "bottom";
                 break;
             case "TOP":
-                this.orient = "top";
+                this._orient = "top";
                 break;
             default:
-                this.orient = "bottom";
+                this._orient = "bottom";
                 break;
         }
     }
@@ -409,35 +409,35 @@ export class YAxis extends Axis {
     constructor(chart: XYChart, options: IAxisOptions) {
         super(chart, options);
 
-        this.hasTickmarks = options.tickmarks;
+        this._hasTickmarks = options.tickmarks;
         this.name = options.name;
         this.setOrientation(options.orient);
-        this.setGridlineType(options.gridlines);
+        this._setGridlineType(options.gridlines);
         this.type = AxisType.Y;
     }
 
     public alignTitle(): void {
         // TODO - refactor alignTitle - messy
-        if (this.orient === "left") {
+        if (this._orient === "left") {
             if (this.title.valign === "top") {
-                this.svgTitle.attr("x", -this.chart.canvas.plotArea.axisSize.top);
+                this._svgTitle.attr("x", -this._chart.canvas.plotArea.axisSize.top);
             }
             else if (this.title.valign === "middle") {
-                this.svgTitle.attr("x", -this.chart.canvas.plotArea.axisSize.top / 2);
+                this._svgTitle.attr("x", -this._chart.canvas.plotArea.axisSize.top / 2);
             }
             else {
-                this.svgTitle.attr("x", 0);
+                this._svgTitle.attr("x", 0);
             }
         }
         else {
             if (this.title.valign === "top") {
-                this.svgTitle.attr("x", this.chart.canvas.plotArea.axisSize.top);
+                this._svgTitle.attr("x", this._chart.canvas.plotArea.axisSize.top);
             }
             else if (this.title.valign === "middle") {
-                this.svgTitle.attr("x", this.chart.canvas.plotArea.axisSize.top / 2);
+                this._svgTitle.attr("x", this._chart.canvas.plotArea.axisSize.top / 2);
             }
             else {
-                this.svgTitle.attr("x", 0);
+                this._svgTitle.attr("x", 0);
             }
         }
     }
@@ -445,65 +445,65 @@ export class YAxis extends Axis {
     public drawTitle(svg: d3.Selection<SVGElement>): void {
         super.drawTitle(svg);
 
-        var rotation = this.orient === "left" ? -90 : 90;
-        var textAnchor = this.orient === "left" ? "end" : "begin";
+        var rotation = this._orient === "left" ? -90 : 90;
+        var textAnchor = this._orient === "left" ? "end" : "begin";
 
-        this.svgTitle
+        this._svgTitle
             .attr("text-anchor", textAnchor)
             .attr("transform", "rotate(" + rotation + ")");
 
-        var x = Html.getWidth(this.svgAxis) + 12;
-        var y = Html.valign(this.svgTitle, Html.getHeight(this.svgAxis), this.title.valign, 0);
+        var x = Html.getWidth(this._svgAxis) + 12;
+        var y = Html.valign(this._svgTitle, Html.getHeight(this._svgAxis), this.title.valign, 0);
 
-        if (this.orient === "left") {
+        if (this._orient === "left") {
             x = -x;
         }
 
-        this.svgTitle
+        this._svgTitle
             .attr("transform", "translate(" + x + "," + y + ") rotate(" + rotation + ")");
     }
 
     public drawZeroLine(svg: d3.Selection<SVGElement>): void {
         super.drawZeroLine(svg);
-        if (this.isDataAxis && this.chart.series.min() < 0) {
-            this.svgZeroLine
+        if (this.isDataAxis && this._chart.series.min() < 0) {
+            this._svgZeroLine
                 .attr("x1", 0)
-                .attr("x2", this.orient === "left" ? this.chart.canvas.plotArea.width : -this.chart.canvas.plotArea.width)
+                .attr("x2", this._orient === "left" ? this._chart.canvas.plotArea.width : -this._chart.canvas.plotArea.width)
                 .attr("y1", this.scale(0))
                 .attr("y2", this.scale(0));
         }
     }
 
     public getInnerTicksize(): number {
-        return -this.chart.canvas.plotArea.width;
+        return -this._chart.canvas.plotArea.width;
     }
 
     public getOuterTicksize(): number {
-        return -this.chart.canvas.plotArea.width;
+        return -this._chart.canvas.plotArea.width;
     }
 
     public getScale(): any {
-        return this.chart.getYScale(this);
+        return this._chart.getYScale(this);
     }
 
     public setSize(): void {
         super.setSize();
 
-        if (this.orient === "left") {
-            this.chart.canvas.plotArea.axisSize.left += this.width;
+        if (this._orient === "left") {
+            this._chart.canvas.plotArea.axisSize.left += this.width;
         }
         else {
-            this.chart.canvas.plotArea.axisSize.right += this.width;
+            this._chart.canvas.plotArea.axisSize.right += this.width;
         }
-        this.chart.canvas.plotArea.width -= this.width;
+        this._chart.canvas.plotArea.width -= this.width;
     }
 
     public getTicks(): number {
-        return Math.max(this.chart.canvas.plotArea.height / 50, 2);
+        return Math.max(this._chart.canvas.plotArea.height / 50, 2);
     }
 
     public getXCoordinate(): number {
-        return this.orient === "left" ? this.chart.canvas.plotArea.axisSize.left : this.chart.canvas.plotArea.axisSize.left + this.chart.canvas.plotArea.width;
+        return this._orient === "left" ? this._chart.canvas.plotArea.axisSize.left : this._chart.canvas.plotArea.axisSize.left + this._chart.canvas.plotArea.width;
     }
 
     public getYCoordinate(): number {
@@ -521,13 +521,13 @@ export class YAxis extends Axis {
     public setOrientation(value: OrientationType): void {
         switch (value.toUpperCase()) {
             case "LEFT":
-                this.orient = "left";
+                this._orient = "left";
                 break;
             case "RIGHT":
-                this.orient = "right";
+                this._orient = "right";
                 break;
             default:
-                this.orient = "left";
+                this._orient = "left";
                 break;
         }
     }

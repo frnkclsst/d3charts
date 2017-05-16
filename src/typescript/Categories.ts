@@ -11,17 +11,13 @@ export class Categories {
     private _items: string[];
 
     constructor(chart: Chart) {
-        this.format = chart.data.categories.format;
         this._items = this._setCategories(chart.data.categories.data);
+        this.format = chart.data.categories.format;
         this.length = this._items.length;
     }
 
     public getItem(i: number): string {
         return this._items[i];
-    }
-
-    public getLabels(): string[] {
-        return this._items;
     }
 
     public getLabel(i: number): string {
@@ -46,5 +42,9 @@ export class Categories {
             array.push(categories[i]);
         }
         return array;
+    }
+
+    get labels(): string[] {
+        return this._items;
     }
 }

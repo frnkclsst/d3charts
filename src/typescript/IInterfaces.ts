@@ -33,7 +33,7 @@ export interface ISerie {
     data: number[];
     format: string;
     name: string;
-    marker: string;
+    marker: MarkerType;
     min: number[];
     max: number[];
     size: number[];

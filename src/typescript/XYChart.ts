@@ -80,13 +80,13 @@ export class XYChart extends Chart {
         if (this.categories.format === "%s") {
             axis.setScaleType(ScaleType.Ordinal);
             return d3.scale.ordinal()
-                .domain(this.categories.getLabels())
+                .domain(this.categories.labels)
                 .rangeBands([start, end], this.options.plotOptions.bands.innerPadding, this.options.plotOptions.bands.outerPadding);
         }
         else {
             axis.setScaleType(ScaleType.Time);
             return d3.time.scale()
-                .domain(d3.extent(this.categories.getLabels(), (d: string): Date => {
+                .domain(d3.extent(this.categories.labels, (d: string): Date => {
                     return d3.time.format(this.categories.format).parse(d);
                 }))
                 .nice() // adds additional ticks to add some whitespace

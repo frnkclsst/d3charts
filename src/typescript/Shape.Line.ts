@@ -2,49 +2,45 @@
 
 import * as d3 from "d3";
 import * as Html from "./Html";
+import { MarkerType } from "./Enums";
 import { IDatum } from "./IInterfaces";
-import { SVGShape } from "./Shape";
+import { Shape } from "./Shape";
 import { XYChart } from "./XYChart";
 
-export class SVGLine extends SVGShape {
-    protected chart: XYChart;
-
-    public interpolation: string;
-    public marker: {
+export class LineShape extends Shape {
+    protected _chart: XYChart;
+    protected _interpolation: string;
+    protected _marker: {
         size: number;
-        type: string;
+        type: MarkerType;
         visible: boolean;
     };
 
     constructor(svg: d3.Selection<SVGElement>, chart: XYChart, serie: number) {
         super(svg, chart, serie);
-        this.chart = chart;
+        this._chart = chart;
 
-        this.interpolation = "linear";
-        this.marker = {
-            size: 6,
-            type: "circle",
-            visible: true
-        };
+        this.interpolation("linear");
+        this.marker(6, "circle", true);
     }
 
     public draw(data: any): void {
         var line = d3.svg.line()
-            .interpolate(this.interpolation)
+            .interpolate(this._interpolation)
             .x((d: any, i: number): number => {
-                return this.x(d, i, this.serie);
+                return this._x(d, i, this._serie);
             })
             .y((d: any, i: number): number => {
-                return this.y(d, i, this.serie);
+                return this._y(d, i, this._serie);
             });
 
-        var svgSerie = this.svg.append("g")
-            .attr("id", "serie-" + this.serie);
+        var svgSerie = this._svg.append("g")
+            .attr("id", "serie-" + this._serie);
 
         var svgPath = svgSerie.append("path")
             .attr("class", "line")
             .attr("d", line(data))
-            .attr("stroke", this.color)
+            .attr("stroke", this._color)
             .attr("stroke-width", 1)
             .attr("fill", "none");
 
@@ -59,45 +55,45 @@ export class SVGLine extends SVGShape {
             .attr("stroke-dasharray", pathLenght + " " + pathLenght)
             .attr("stroke-dashoffset", pathLenght)
             .transition()
-            .duration(this.animation.duration)
-            .ease(this.animation.ease)
+            .duration(this._animation.duration)
+            .ease(this._animation.ease)
             .attr("stroke-dashoffset", 0)
             .each("end", (): void => {
                 count--;
                 // draw markers
-                if (this.marker.visible === true) {
+                if (this._marker.visible === true) {
                     var svgMarkers =  this.drawMarkers(data);
 
                     // draw tooltip
-                    this.chart.tooltip.draw(svgMarkers, this.serie);
+                    this._chart.tooltip.draw(svgMarkers, this._serie);
                 }
 
                 // draw labels
-                if (this.labels.visible === true && !count) {
+                if (this._labels.visible === true && !count) {
                     this.drawLabels();
                 }
             });
     }
 
     public drawLabels(): void {
-        this.svgLabels = this.svg.append("g")
-            .attr("id", "labels-" + this.serie)
+        this._svgLabels = this._svg.append("g")
+            .attr("id", "labels-" + this._serie)
             .attr("opacity", "1");
 
-        this.svg.selectAll("g#serie-" + this.serie).selectAll("path.marker")
+        this._svg.selectAll("g#serie-" + this._serie).selectAll("path.marker")
             .each((d: IDatum, i: number): void => {
                 var rotation = 0;
-                var x = this.x(d, i, this.serie);
-                var y = this.y(d, i, this.serie);
+                var x = this._x(d, i, this._serie);
+                var y = this._y(d, i, this._serie);
                 var dx = 0;
                 var dy = 0;
 
-                if (this.labels.rotate === true) {
+                if (this._labels.rotate === true) {
                     rotation = -90;
                 }
 
-                var text = this.svgLabels.append("text")
-                    .text(d3.format(this.labels.format)(d.y))
+                var text = this._svgLabels.append("text")
+                    .text(d3.format(this._labels.format)(d.y))
                     .style("text-anchor", "middle")
                     .attr({
                         "alignment-baseline": "central",
@@ -107,10 +103,10 @@ export class SVGLine extends SVGShape {
                     });
 
                 if (rotation != 0) {
-                    dx = Html.getHeight(text) + this.marker.size / 2;
+                    dx = Html.getHeight(text) + this._marker.size / 2;
                 }
                 else {
-                    dy = -Html.getHeight(text) - this.marker.size / 2;
+                    dy = -Html.getHeight(text) - this._marker.size / 2;
                 }
 
                 text
@@ -120,20 +116,64 @@ export class SVGLine extends SVGShape {
     }
 
     public drawMarkers(data: any): any {
-        return this.svg.selectAll("g#serie-" + this.serie).selectAll(".marker")
+        return this._svg.selectAll("g#serie-" + this._serie).selectAll(".marker")
             .data(data)
             .enter()
             .append("path")
             .attr({
                 "class": "marker",
-                "stroke": this.color,
+                "stroke": this._color,
                 "stroke-width": 0,
                 "d": d3.svg.symbol()
-                    .size(this.marker.size * 10)
-                    .type(this.marker.type)(0, 0),
+                    .size(this._marker.size * 10)
+                    .type(this._marker.type)(0, 0),
                 "transform": (d: IDatum, i: number): string => {
-                    return "translate(" + this.x(d, i, this.serie) + ", " + this.y(d, i, this.serie) + ")";
+                    return "translate(" + this._x(d, i, this._serie) + ", " + this._y(d, i, this._serie) + ")";
                 }
             });
+    }
+
+    public animation(duration: number, ease: string): LineShape {
+        super.animation(duration, ease);
+        return this;
+    }
+
+    public color(color: string): LineShape {
+        super.color(color);
+        return this;
+    }
+
+    public interpolation(interpolation: string): LineShape {
+        this._interpolation = interpolation;
+        return this;
+    }
+
+    public labels(format: string, rotate: boolean, visible: boolean): LineShape {
+        super.labels(format, rotate, visible);
+        return this;
+    }
+
+    public marker(size: number, type: MarkerType, visible: boolean): LineShape {
+        this._marker = {
+            size: size,
+            type: type,
+            visible: visible
+        };
+        return this;
+    }
+
+    public opacity(opacity: number): LineShape {
+        super.opacity(opacity);
+        return this;
+    }
+
+    public x(x: (d: IDatum, i: number, s: number) => number): LineShape {
+        super.x(x);
+        return this;
+    }
+
+    public y(y: (d: IDatum, i: number, s: number) => number): LineShape {
+        super.y(y);
+        return this;
     }
 }

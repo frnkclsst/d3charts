@@ -54,7 +54,7 @@ export class SVGSymbol {
             _self.drawRectangleSymbol(this.svg);
         }
         */
-        _self.drawRectangleSymbol(this.svg);
+        _self._drawRectangleSymbol(this.svg);
     }
 /*
     private drawLineSymbol(svg: D3.Selection): void {
@@ -102,7 +102,7 @@ export class SVGSymbol {
     }
     */
 
-    private drawRectangleSymbol(svg: d3.Selection<SVGElement>): void {
+    private _drawRectangleSymbol(svg: d3.Selection<SVGElement>): void {
         svg.append("rect")
             .attr("x", 0)
             .attr("width", this.symbolWidth)

@@ -5,11 +5,11 @@ import { AxisType, ScaleType } from "./Enums";
 import { IDatum, IChartData, IOptions } from "./IInterfaces";
 import { Axis } from "./Axis";
 import { XYChart } from "./XYChart";
-import { SVGBubble } from "./Shape.Bubble";
+import { BubbleShape } from "./Shape.Bubble";
 
 export class ScatterChart extends XYChart {
 
-    private svgSeries: d3.Selection<SVGElement>;
+    private _svgSeries: d3.Selection<SVGElement>;
 
     constructor(selector: string, data: IChartData, options?: IOptions) {
         super(selector, data, options);
@@ -25,28 +25,30 @@ export class ScatterChart extends XYChart {
         super.draw();
 
         if (this.hasData()) {
-            this.svgSeries = this.canvas.plotArea.svg.append("g")
+            this._svgSeries = this.canvas.plotArea.svg.append("g")
                 .attr("class", "series");
 
             for (var serie = 1; serie < this.series.length; serie++) {
-                var bubbles = new SVGBubble(this.svgSeries, this, serie);
-                bubbles.animation = {
-                    duration: this.options.plotOptions.animation.duration,
-                    ease: this.options.plotOptions.animation.ease
-                };
-                bubbles.color = this.colorPalette.color(serie - 1);
-                bubbles.labels = {
-                    format: this.series.items[serie].format,
-                    rotate: this.options.series.labels.rotate,
-                    visible: this.options.series.labels.visible
-                };
-                bubbles.marker.type = this.series.items[serie - 1].marker;
-                bubbles.x = (d: IDatum, i: number, s: number) => {
-                    return this.getXCoordinate(d, i, s);
-                };
-                bubbles.y = (d: IDatum, i: number, s: number) => {
-                    return this.getYCoordinate(d, i, s);
-                };
+                var bubbles = new BubbleShape(this._svgSeries, this, serie);
+
+                bubbles
+                    .animation(
+                        this.options.plotOptions.animation.duration,
+                        this.options.plotOptions.animation.ease
+                    )
+                    .color(this.colorPalette.color(serie - 1))
+                    .labels(
+                        this.series.items[serie].format,
+                        this.options.series.labels.rotate,
+                        this.options.series.labels.visible
+                    )
+                    .marker(this.series.items[serie - 1].marker)
+                    .x((d: IDatum, i: number, s: number) => {
+                        return this.getXCoordinate(d, i, s);
+                    })
+                    .y((d: IDatum, i: number, s: number) => {
+                        return this.getYCoordinate(d, i, s);
+                    });
                 bubbles.draw(this.series.getMatrixItem(0));
             }
         }

@@ -29,11 +29,11 @@ export class StackedLineChart extends LineChart {
 
         // negative numbers
         if (d.y0 < 0) {
-            return axis.scale((d.sum + d.y) * this.normalizer(d, i, serie));
+            return axis.scale((d.sum + d.y) * this._normalizer(d, i, serie));
         }
         // positive numbers
         else {
-            return axis.scale(d.sum * this.normalizer(d, i, serie));
+            return axis.scale(d.sum * this._normalizer(d, i, serie));
         }
     }
 
@@ -43,11 +43,11 @@ export class StackedLineChart extends LineChart {
 
         // negative values
         if (d.y < 0) {
-            return (axis.scale(d.sum * this.normalizer(d, i, serie)));
+            return (axis.scale(d.sum * this._normalizer(d, i, serie)));
         }
         // positive values
         else {
-            return (axis.scale((d.sum - d.y) * this.normalizer(d, i, serie)));
+            return (axis.scale((d.sum - d.y) * this._normalizer(d, i, serie)));
         }
     }
 
@@ -55,10 +55,10 @@ export class StackedLineChart extends LineChart {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 
-        return axis.scale(d.sum * this.normalizer(d, i, serie));
+        return axis.scale(d.sum * this._normalizer(d, i, serie));
     }
 
-    protected normalizer(d: IDatum, i: number, serie: number): number {
+    protected _normalizer(d: IDatum, i: number, serie: number): number {
         return StackType.Normal; // no normalization needed as this not 100% stacked
     }
 }

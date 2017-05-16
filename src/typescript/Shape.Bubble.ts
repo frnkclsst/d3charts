@@ -1,22 +1,23 @@
 "use strict";
 
 import * as d3 from "d3";
+import { MarkerType } from "./Enums";
 import { IDatum } from "./IInterfaces";
-import { SVGShape } from "./Shape";
+import { Shape } from "./Shape";
 import { XYChart } from "./XYChart";
 
-export class SVGBubble extends SVGShape {
-    protected chart: XYChart;
+export class BubbleShape extends Shape {
+    protected _chart: XYChart;
 
-    public marker: {
-        type: string;
+    protected _marker: {
+        type: MarkerType;
     };
 
     constructor(svg: d3.Selection<SVGElement>, chart: XYChart, serie: number) {
         super(svg, chart, serie);
-        this.chart = chart;
+        this._chart = chart;
 
-        this.marker = {
+        this._marker = {
             type: "circle"
         };
     }
@@ -24,8 +25,8 @@ export class SVGBubble extends SVGShape {
     public draw(data: IDatum[]): void {
         var _self = this;
 
-        var svgSerie = this.svg.append("g")
-            .attr("id", "serie-" + (this.serie - 1))
+        var svgSerie = this._svg.append("g")
+            .attr("id", "serie-" + (this._serie - 1))
             .selectAll("path")
             .data(data)
             .enter();
@@ -37,11 +38,11 @@ export class SVGBubble extends SVGShape {
                         "class": "bubble",
                         "d": d3.svg.symbol()
                             .size(0)
-                            .type(_self.marker.type)(0, 0),
-                        "fill": _self.color,
-                        "stroke": _self.color,
+                            .type(_self._marker.type)(0, 0),
+                        "fill": _self._color,
+                        "stroke": _self._color,
                         "stroke-width": 0,
-                        "transform": "translate(" + _self.x(d, i, 0) + ", " + _self.y(d, i, _self.serie) + ")"
+                        "transform": "translate(" + _self._x(d, i, 0) + ", " + _self._y(d, i, _self._serie) + ")"
                     });
             });
 
@@ -52,44 +53,44 @@ export class SVGBubble extends SVGShape {
                 count++; // count number of bars
             })
             .transition()
-            .duration(this.animation.duration)
-            .ease(this.animation.ease)
+            .duration(this._animation.duration)
+            .ease(this._animation.ease)
             .attr("d", (d: IDatum, i: number): string => {
-                var size: number = _self.chart.series.items[this.serie].size != undefined ? _self.chart.series.items[this.serie].size[i] * 10 : 60;
+                var size: number = _self._chart.series.items[this._serie].size != undefined ? _self._chart.series.items[this._serie].size[i] * 10 : 60;
                 return d3.svg.symbol()
                     .size(size)
-                    .type(_self.marker.type)(d, i);
+                    .type(_self._marker.type)(d, i);
             })
             .each("end", (): void => {
                 count--;
-                if (this.labels.visible === true && !count) { // only draw labels after all transitions ended
+                if (this._labels.visible === true && !count) { // only draw labels after all transitions ended
                     this.drawLabels();
                 }
             });
 
         // draw tooltip
-        this.chart.tooltip.draw(svgBubbles, this.serie);
+        this._chart.tooltip.draw(svgBubbles, this._serie);
     }
 
     public drawLabels(): void {
-        this.svgLabels = this.svg.append("g")
-            .attr("id", "labels-" + (this.serie - 1))
+        this._svgLabels = this._svg.append("g")
+            .attr("id", "labels-" + (this._serie - 1))
             .attr("opacity", "1");
 
-        this.svg.selectAll("g#serie-" + (this.serie - 1)).selectAll("path.bubble")
+        this._svg.selectAll("g#serie-" + (this._serie - 1)).selectAll("path.bubble")
             .each((d: IDatum, i: number): void => {
                 var rotation = 0;
-                var x = this.x(d, i, this.serie);
-                var y = this.y(d, i, this.serie);
+                var x = this._x(d, i, this._serie);
+                var y = this._y(d, i, this._serie);
                 var dx = 0;
                 var dy = 0;
 
-                if (this.labels.rotate === true) {
+                if (this._labels.rotate === true) {
                     rotation = -90;
                 }
 
-                var text = this.svgLabels.append("text")
-                    .text(d3.format(this.labels.format)(this.chart.series.items[this.serie].data[i]))
+                var text = this._svgLabels.append("text")
+                    .text(d3.format(this._labels.format)(this._chart.series.items[this._serie].data[i]))
                     .style("text-anchor", "middle")
                     .attr({
                         "alignment-baseline": "central",
@@ -104,4 +105,40 @@ export class SVGBubble extends SVGShape {
             });
     }
 
+    public animation(duration: number, ease: string): BubbleShape {
+        super.animation(duration, ease);
+        return this;
+    }
+
+    public color(color: string): BubbleShape {
+        super.color(color);
+        return this;
+    }
+
+    public marker(type: MarkerType): BubbleShape {
+        this._marker = {
+            type: type
+        };
+        return this;
+    }
+
+    public labels(format: string, rotate: boolean, visible: boolean): BubbleShape {
+        super.labels(format, rotate, visible);
+        return this;
+    }
+
+    public opacity(opacity: number): BubbleShape {
+        super.opacity(opacity);
+        return this;
+    }
+
+    public x(x: (d: IDatum, i: number, s: number) => number): BubbleShape {
+        super.x(x);
+        return this;
+    }
+
+    public y(y: (d: IDatum, i: number, s: number) => number): BubbleShape {
+        super.y(y);
+        return this;
+    }
 }

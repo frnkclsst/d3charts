@@ -2,6 +2,7 @@
 
 import * as d3 from "d3";
 import { Chart } from "./Chart";
+import { MarkerType } from "./Enums";
 import { ISerie } from "./IInterfaces";
 import { SymbolType } from "./Enums";
 
@@ -10,7 +11,7 @@ export class Serie {
     public data: number[];
     public format: string;
     public index: number;
-    public marker: string;
+    public marker: MarkerType;
     public name: string;
     public max: number[];
     public min: number[];
@@ -53,12 +54,12 @@ export class Serie {
         return "Serie " + (i + 1);
     }
 
-    private _setMarkerType(serie: ISerie): string {
+    private _setMarkerType(serie: ISerie): MarkerType {
         if (serie.marker != undefined) {
             return serie.marker;
         }
         else if (this._chart.options.plotOptions.markers.type === "mixed") {
-            return SymbolType[this.index % SymbolType.length];
+            return <MarkerType>SymbolType[this.index % SymbolType.length];
         }
         else if (this._chart.options.plotOptions.markers.type != undefined) {
             return this._chart.options.plotOptions.markers.type;

@@ -3,26 +3,24 @@
 import * as d3 from "d3";
 import { IDatum } from "./IInterfaces";
 import { AxisType } from "./Enums";
-import { SVGShape } from "./Shape";
+import { Shape } from "./Shape";
 import { XYChart } from "./XYChart";
 
-export class SVGColumn extends SVGShape {
-    protected chart: XYChart;
-
-    public height: (d: IDatum, i: number, serie: number) => number;
-    public width: (d: IDatum, i: number, serie: number) => number;
+export class ColumnShape extends Shape {
+    protected _chart: XYChart;
+    protected _height: (d: IDatum, i: number, serie: number) => number;
+    protected _width: (d: IDatum, i: number, serie: number) => number;
 
     constructor(svg: d3.Selection<SVGElement>, chart: XYChart, serie: number) {
         super(svg, chart, serie);
-        this.chart = chart;
-
-        this.height = null;
-        this.width = null;
+        this._chart = chart;
+        this.height(null);
+        this.width(null);
     }
 
     public draw(data: IDatum[]): void {
-        var svgSerie = this.svg.append("g")
-            .attr("id", "serie-" + this.serie)
+        var svgSerie = this._svg.append("g")
+            .attr("id", "serie-" + this._serie)
             .selectAll("rect")
             .data(data)
             .enter();
@@ -31,19 +29,19 @@ export class SVGColumn extends SVGShape {
         var svgColumn = svgSerie.append("rect")
             .attr({
                 "class": "column",
-                "fill": this.color,
+                "fill": this._color,
                 "height": 0,
-                "stroke": this.color,
+                "stroke": this._color,
                 "stroke-width": "1px",
-                "width": (d: IDatum, i: number): number => { return this.width(d, i, this.serie); },
-                "x": (d: IDatum, i: number): number => { return this.x(d, i, this.serie); },
+                "width": (d: IDatum, i: number): number => { return this._width(d, i, this._serie); },
+                "x": (d: IDatum, i: number): number => { return this._x(d, i, this._serie); },
                 "y": (d: IDatum, i: number): number => {
                     if (d.y < 0) {
-                        var index = this.chart.getAxisByName(AxisType.Y, this.chart.series.items[this.serie].axis);
-                        return this.chart.axes[index].scale(0);
+                        var index = this._chart.getAxisByName(AxisType.Y, this._chart.series.items[this._serie].axis);
+                        return this._chart.axes[index].scale(0);
                     }
                     else {
-                        return (this.height(d, i, this.serie) + this.y(d, i, this.serie));
+                        return (this._height(d, i, this._serie) + this._y(d, i, this._serie));
                     }
                 }
             });
@@ -55,48 +53,48 @@ export class SVGColumn extends SVGShape {
                 count++; // count number of bars
             })
             .transition()
-            .duration(this.animation.duration)
-            .ease(this.animation.ease)
+            .duration(this._animation.duration)
+            .ease(this._animation.ease)
             .attr({
-                "height": (d: IDatum, i: number): number => { return this.height(d, i, this.serie); },
-                "y": (d: IDatum, i: number): number => { return this.y(d, i, this.serie); }
+                "height": (d: IDatum, i: number): number => { return this._height(d, i, this._serie); },
+                "y": (d: IDatum, i: number): number => { return this._y(d, i, this._serie); }
             })
             .each("end", (): void => {
                 count--;
-                if (this.labels.visible === true && !count) { // only draw labels after all transitions ended
+                if (this._labels.visible === true && !count) { // only draw labels after all transitions ended
                     this.drawLabels();
                 }
             });
 
         // draw tooltip
-        this.chart.tooltip.draw(svgColumn, this.serie);
+        this._chart.tooltip.draw(svgColumn, this._serie);
     }
 
     public drawLabels(): void {
         super.drawLabels();
-        this.svg.selectAll("g#serie-" + this.serie).selectAll("rect")
+        this._svg.selectAll("g#serie-" + this._serie).selectAll("rect")
             .each((d: IDatum, i: number): void  => {
                 var rotation = 0;
-                var x = this.x(d, i, this.serie);
-                var y = this.y(d, i, this.serie);
+                var x = this._x(d, i, this._serie);
+                var y = this._y(d, i, this._serie);
                 var dx = 0;
                 var dy = 0;
 
-                if (this.labels.rotate === true) {
+                if (this._labels.rotate === true) {
                     rotation = -90;
                 }
 
                 if (rotation != 0) {
-                    dx = -this.height(d, i, this.serie) / 2;
-                    dy = this.width(d, i, this.serie) / 2;
+                    dx = -this._height(d, i, this._serie) / 2;
+                    dy = this._width(d, i, this._serie) / 2;
                 }
                 else {
-                    dx = this.width(d, i, this.serie) / 2;
-                    dy = this.height(d, i, this.serie) / 2;
+                    dx = this._width(d, i, this._serie) / 2;
+                    dy = this._height(d, i, this._serie) / 2;
                 }
 
-                this.svgLabels.append("text")
-                    .text(d3.format(this.labels.format)(d.y))
+                this._svgLabels.append("text")
+                    .text(d3.format(this._labels.format)(d.y))
                     .style("text-anchor", "middle")
                     .attr({
                         "alignment-baseline": "central",
@@ -107,5 +105,44 @@ export class SVGColumn extends SVGShape {
                         "dy": dy
                     });
             });
+    }
+    public animation(duration: number, ease: string): ColumnShape {
+        super.animation(duration, ease);
+        return this;
+    }
+
+    public color(color: string): ColumnShape {
+        super.color(color);
+        return this;
+    }
+
+    public height(height: (d: IDatum, i: number, s: number) => number): ColumnShape {
+        this._height = height;
+        return this;
+    }
+
+    public labels(format: string, rotate: boolean, visible: boolean): ColumnShape {
+        super.labels(format, rotate, visible);
+        return this;
+    }
+
+    public opacity(opacity: number): ColumnShape {
+        super.opacity(opacity);
+        return this;
+    }
+
+    public width(width: (d: IDatum, i: number, s: number) => number): ColumnShape {
+        this._width = width;
+        return this;
+    }
+
+    public x(x: (d: IDatum, i: number, s: number) => number): ColumnShape {
+        super.x(x);
+        return this;
+    }
+
+    public y(y: (d: IDatum, i: number, s: number) => number): ColumnShape {
+        super.y(y);
+        return this;
     }
 }

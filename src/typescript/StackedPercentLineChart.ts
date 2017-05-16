@@ -30,7 +30,7 @@ export class StackedPercentLineChart extends StackedLineChart {
             .range([start, end]);
     }
 
-    protected normalizer(d: IDatum, i: number, serie: number): number {
+    protected _normalizer(d: IDatum, i: number, serie: number): number {
         var index = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
         var axis = this.axes[index];
 

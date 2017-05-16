@@ -3,7 +3,7 @@
 import * as d3 from "d3";
 import { Chart } from "./Chart";
 import { IDatum } from "./IInterfaces";
-import { SVGSymbol } from "./Shape.Symbol";
+import { SVGSymbol } from "./Symbol";
 
 export class Tooltip {
     public chart: Chart;

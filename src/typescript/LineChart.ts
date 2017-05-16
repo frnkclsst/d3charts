@@ -3,8 +3,8 @@
 import { AxisType, MarkerType, ScaleType } from "./Enums";
 import { IDatum, IChartData, IOptions } from "./IInterfaces";
 import { XYChart } from "./XYChart";
-import { SVGArea } from "./Shape.Area";
-import { SVGLine } from "./Shape.Line";
+import { AreaShape } from "./Shape.Area";
+import { LineShape } from "./Shape.Line";
 
 export class LineChart extends XYChart {
     public area: {
@@ -48,57 +48,56 @@ export class LineChart extends XYChart {
             // areas need to be drawn first, because the line and markers need to be drawn on top of it
             if (this.area.visible === true) {
                 for (var areaSerie = 0; areaSerie < this.series.length; areaSerie++) {
-                    var area = new SVGArea(svgSeries, this, areaSerie);
-                    area.animation = {
-                        duration: this.options.plotOptions.animation.duration,
-                        ease: this.options.plotOptions.animation.ease
-                    };
-                    area.color = this.colorPalette.color(areaSerie);
-                    area.opacity = this.area.opacity;
-                    area.interpolation = this.interpolation;
-                    area.x = (d: IDatum, i: number, s: number): number => {
-                        return this.getXCoordinate(d, i, s);
-                    };
-                    area.y = (d: IDatum, i: number, s: number): number => {
-                        return this.getYCoordinate(d, i, s);
-                    };
-                    area.y0 = (d: IDatum, i: number, s: number): number => {
-                        return this.getY0Coordinate(d, i, s);
-                    };
-                    area.y1 = (d: IDatum, i: number, s: number): number => {
-                        return this.getY1Coordinate(d, i, s);
-                    };
-                    area.draw(this.series.getMatrixItem(areaSerie));
+                    var area = new AreaShape(svgSeries, this, areaSerie);
+                    area
+                        .animation(
+                            this.options.plotOptions.animation.duration,
+                            this.options.plotOptions.animation.ease
+                        )
+                        .color(this.colorPalette.color(areaSerie))
+                        .interpolation(this.interpolation)
+                        .opacity(this.area.opacity)
+                        .x((d: IDatum, i: number, s: number): number => {
+                            return this.getXCoordinate(d, i, s);
+                        })
+                        .y((d: IDatum, i: number, s: number): number => {
+                            return this.getYCoordinate(d, i, s);
+                        })
+                        .y0((d: IDatum, i: number, s: number): number => {
+                            return this.getY0Coordinate(d, i, s);
+                        })
+                        .y1((d: IDatum, i: number, s: number): number => {
+                            return this.getY1Coordinate(d, i, s);
+                        })
+                        .draw(this.series.getMatrixItem(areaSerie));
                 }
             }
 
             // draw lines
             for (var serie = 0; serie < this.series.length; serie++) {
                 if (this.series.items[serie].data.length != 0) {
-                    var line = new SVGLine(svgSeries, this, serie);
-                    line.animation = {
-                        duration: this.options.plotOptions.animation.duration,
-                        ease: this.options.plotOptions.animation.ease
-                    };
-                    line.color = this.colorPalette.color(serie);
-                    line.interpolation = this.interpolation;
-                    line.labels = {
-                        format: this.series.items[serie].format,
-                        rotate: this.options.series.labels.rotate,
-                        visible: this.options.series.labels.visible
-                    };
-                    line.marker = {
-                        visible: this.markers.visible,
-                        size: this.markers.size,
-                        type: this.series.items[serie].marker
-                    };
-                    line.x = (d: IDatum, i: number, s: number): number => {
-                        return this.getXCoordinate(d, i, s);
-                    };
-                    line.y = (d: IDatum, i: number, s: number): number => {
-                        return this.getYCoordinate(d, i, s);
-                    };
-                    line.draw(this.series.getMatrixItem(serie));
+                    var line = new LineShape(svgSeries, this, serie);
+
+                    line
+                        .animation(
+                            this.options.plotOptions.animation.duration,
+                            this.options.plotOptions.animation.ease
+                        )
+                        .color(this.colorPalette.color(serie))
+                        .interpolation(this.interpolation)
+                        .labels(
+                            this.series.items[serie].format,
+                            this.options.series.labels.rotate,
+                            this.options.series.labels.visible
+                        )
+                        .marker(this.markers.size, this.series.items[serie].marker, this.markers.visible)
+                        .x((d: IDatum, i: number, s: number): number => {
+                            return this.getXCoordinate(d, i, s);
+                        })
+                        .y((d: IDatum, i: number, s: number): number => {
+                            return this.getYCoordinate(d, i, s);
+                        })
+                        .draw(this.series.getMatrixItem(serie));
                 }
             }
         }

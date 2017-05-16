@@ -3,8 +3,8 @@
 import { AxisType, ScaleType } from "./Enums";
 import { XYChart } from "./XYChart";
 import { IDatum, IChartData, IOptions } from "./IInterfaces";
-import { SVGColumn } from "./Shape.Column";
-import { SVGLine } from "./Shape.Line";
+import { ColumnShape } from "./Shape.Column";
+import { LineShape } from "./Shape.Line";
 
 export class ComboChart extends XYChart {
 
@@ -28,54 +28,58 @@ export class ComboChart extends XYChart {
             // draw lines
             for (var columnSerie = 0; columnSerie < this.series.length; columnSerie++) {
                 if (this.series.items[columnSerie].type === "column") {
-                    var column = new SVGColumn(svgSeries, this, columnSerie);
-                    column.animation = {
-                        duration: this.options.plotOptions.animation.duration,
-                        ease: this.options.plotOptions.animation.ease
-                    };
-                    column.color = this.colorPalette.color(columnSerie);
-                    column.labels = {
-                        format: this.series.items[columnSerie].format,
-                        rotate: this.options.series.labels.rotate,
-                        visible: this.options.series.labels.visible
-                    };
-                    column.height = (d: IDatum, i: number, s: number) => {
-                        return this.getHeightColumn(d, i, s);
-                    };
-                    column.width = (d: IDatum, i: number, s: number) => {
-                        return this.getWidthColumn(d, i, s);
-                    };
-                    column.x = (d: IDatum, i: number, s: number) => {
-                        return this.getXCoordinateColumn(d, i, s);
-                    };
-                    column.y = (d: IDatum, i: number, s: number) => {
-                        return this.getYCoordinateColumn(d, i, s);
-                    };
-                    column.draw(this.series.getMatrixItem(columnSerie));
+                    var column = new ColumnShape(svgSeries, this, columnSerie);
+
+                    column
+                        .animation(
+                            this.options.plotOptions.animation.duration,
+                            this.options.plotOptions.animation.ease
+                        )
+                        .color(this.colorPalette.color(columnSerie))
+                        .height((d: IDatum, i: number, s: number) => {
+                            return this.getHeightColumn(d, i, s);
+                        })
+                        .labels(
+                            this.series.items[columnSerie].format,
+                            this.options.series.labels.rotate,
+                            this.options.series.labels.visible
+                        )
+                        .width((d: IDatum, i: number, s: number) => {
+                            return this.getWidthColumn(d, i, s);
+                        })
+                        .x((d: IDatum, i: number, s: number) => {
+                            return this.getXCoordinateColumn(d, i, s);
+                        })
+                        .y((d: IDatum, i: number, s: number) => {
+                            return this.getYCoordinateColumn(d, i, s);
+                        })
+                        .draw(this.series.getMatrixItem(columnSerie));
                 }
             }
 
             for (var lineSerie = 0; lineSerie < this.series.length; lineSerie++) {
                 if (this.series.items[lineSerie].type === "line") {
                     if (this.series.items[lineSerie].data.length != 0) {
-                        var line = new SVGLine(svgSeries, this, lineSerie);
-                        line.animation = {
-                            duration: this.options.plotOptions.animation.duration,
-                            ease: this.options.plotOptions.animation.ease
-                        };
-                        line.color = this.colorPalette.color(lineSerie);
-                        line.labels = {
-                            format: this.series.items[lineSerie].format,
-                            rotate: this.options.series.labels.rotate,
-                            visible: this.options.series.labels.visible
-                        };
-                        line.x = (d: IDatum, i: number, s: number): number => {
-                            return this.getXCoordinateLine(d, i, s);
-                        };
-                        line.y = (d: IDatum, i: number, s: number): number => {
-                            return this.getYCoordinateLine(d, i, s);
-                        };
-                        line.draw(this.series.getMatrixItem(lineSerie));
+                        var line = new LineShape(svgSeries, this, lineSerie);
+
+                        line
+                            .animation(
+                                this.options.plotOptions.animation.duration,
+                                this.options.plotOptions.animation.ease
+                            )
+                            .color(this.colorPalette.color(lineSerie))
+                            .labels(
+                                this.series.items[lineSerie].format,
+                                this.options.series.labels.rotate,
+                                this.options.series.labels.visible
+                            )
+                            .x((d: IDatum, i: number, s: number): number => {
+                                return this.getXCoordinateLine(d, i, s);
+                            })
+                            .y((d: IDatum, i: number, s: number): number => {
+                                return this.getYCoordinateLine(d, i, s);
+                            })
+                            .draw(this.series.getMatrixItem(lineSerie));
                     }
                 }
             }
@@ -94,10 +98,10 @@ export class ComboChart extends XYChart {
         var axis = this.axes[index];
 
         if (axis.getScaleType() === ScaleType.Ordinal) {
-            return axis.scale.rangeBand() / this.getColumnTotal();
+            return axis.scale.rangeBand() / this._getColumnTotal();
         }
         else {
-            return this.canvas.plotArea.width / this.getColumnTotal() / this.categories.length;
+            return this.canvas.plotArea.width / this._getColumnTotal() / this.categories.length;
         }
     }
 
@@ -107,10 +111,10 @@ export class ComboChart extends XYChart {
         var axisScale = this.categories.parseFormat(this.categories.getItem(i));
 
         if (axis.getScaleType() === ScaleType.Ordinal) {
-            return axis.scale(axisScale) + (axis.scale.rangeBand() / this.getColumnTotal() * this.getCurrentColumn(serie));
+            return axis.scale(axisScale) + (axis.scale.rangeBand() / this._getColumnTotal() * this._getCurrentColumn(serie));
         }
         else {
-            return axis.scale(axisScale) + (this.canvas.plotArea.width / this.categories.length / this.getColumnTotal() * this.getCurrentColumn(serie));
+            return axis.scale(axisScale) + (this.canvas.plotArea.width / this.categories.length / this._getColumnTotal() * this._getCurrentColumn(serie));
         }
     }
 
@@ -151,7 +155,7 @@ export class ComboChart extends XYChart {
         return this.axes[index].scale(0);
     }
 
-    private getCurrentColumn(serie: number): number {
+    private _getCurrentColumn(serie: number): number {
         var count = -1;
         for (var i = 0; i < this.series.length; i++) {
             if (this.series.items[i].type === "column") {
@@ -164,7 +168,7 @@ export class ComboChart extends XYChart {
         return -1;
     }
 
-    private getColumnTotal(): number {
+    private _getColumnTotal(): number {
         var count = 0;
         for (var i = 0; i < this.series.length; i++) {
             if (this.series.items[i].type === "column") {
