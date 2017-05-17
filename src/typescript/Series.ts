@@ -47,9 +47,10 @@ export class Series {
 
     public getLabels(): string[] {
         var array: string[] = [],
-            i = this.items.length;
+            i = 0,
+            length = this.items.length;
 
-        while (i--) {
+        for (i = 0; i < length; i++) {
             array.push(this.items[i].getName(i));
         }
         return array;
