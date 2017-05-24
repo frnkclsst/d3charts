@@ -39,6 +39,7 @@ export interface ISerie {
     size: number[];
     suffix: string;
     type: string;
+    visible: boolean;
 }
 
 export interface IOptions {

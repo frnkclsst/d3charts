@@ -26,7 +26,7 @@ export class BarShape extends Shape {
             .enter();
 
         // draw bar
-        var svgBar: d3.Selection<{}> = svgSerie.append("rect")
+        var svgBar: d3.Selection<any> = svgSerie.append("rect")
             .attr({
                 "class": "bar",
                 "fill": this._color,
@@ -74,43 +74,6 @@ export class BarShape extends Shape {
         this._chart.tooltip.draw(svgBar, this._serie);
     }
 
-    public drawLabels(): void {
-        super.drawLabels();
-        this._svg.selectAll("g#serie-" + this._serie).selectAll("rect")
-            .each((d: IDatum, i: number): void => {
-                var rotation = 0;
-                var x = this._x(d, i, this._serie);
-                var y = this._y(d, i, this._serie);
-                var dx = 0;
-                var dy = 0;
-
-                if (this._labels.rotate === true) {
-                    rotation = -90;
-                }
-
-                if (rotation != 0) {
-                    dx = -this._height(d, i, this._serie) / 2;
-                    dy = this._width(d, i, this._serie) / 2;
-                }
-                else {
-                    dx = this._width(d, i, this._serie) / 2;
-                    dy = this._height(d, i, this._serie) / 2;
-                }
-
-                this._svgLabels.append("text")
-                    .text(d3.format(this._labels.format)(d.y))
-                    .style("text-anchor", "middle")
-                    .attr({
-                        "alignment-baseline": "central",
-                        "class": "label",
-                        "fill": "#fff",
-                        "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")",
-                        "dx": dx,
-                        "dy": dy
-                    });
-            });
-    }
-
     public animation(duration: number, ease: string): BarShape {
         super.animation(duration, ease);
         return this;
@@ -149,5 +112,42 @@ export class BarShape extends Shape {
     public y(y: (d: IDatum, i: number, s: number) => number): BarShape {
         super.y(y);
         return this;
+    }
+
+    protected drawLabels(): void {
+        super.drawLabels();
+        this._svg.selectAll("g#serie-" + this._serie).selectAll("rect")
+            .each((d: IDatum, i: number): void => {
+                var rotation = 0;
+                var x = this._x(d, i, this._serie);
+                var y = this._y(d, i, this._serie);
+                var dx = 0;
+                var dy = 0;
+
+                if (this._labels.rotate === true) {
+                    rotation = -90;
+                }
+
+                if (rotation != 0) {
+                    dx = -this._height(d, i, this._serie) / 2;
+                    dy = this._width(d, i, this._serie) / 2;
+                }
+                else {
+                    dx = this._width(d, i, this._serie) / 2;
+                    dy = this._height(d, i, this._serie) / 2;
+                }
+
+                this._svgLabels.append("text")
+                    .text(d3.format(this._labels.format)(d.y))
+                    .style("text-anchor", "middle")
+                    .attr({
+                        "alignment-baseline": "central",
+                        "class": "label",
+                        "fill": "#fff",
+                        "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")",
+                        "dx": dx,
+                        "dy": dy
+                    });
+            });
     }
 }

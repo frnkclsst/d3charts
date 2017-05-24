@@ -25,7 +25,14 @@ export class LineShape extends Shape {
     }
 
     public draw(data: any): void {
-        var line = d3.svg.line()
+        var count: number,
+            line: d3.svg.Line<any>,
+            svgPath: d3.Selection<SVGElement>,
+            svgPathElement: SVGPathElement,
+            svgPathLenght: number,
+            svgSerie: d3.Selection<SVGElement>;
+
+        line = d3.svg.line()
             .interpolate(this._interpolation)
             .x((d: any, i: number): number => {
                 return this._x(d, i, this._serie);
@@ -34,10 +41,10 @@ export class LineShape extends Shape {
                 return this._y(d, i, this._serie);
             });
 
-        var svgSerie = this._svg.append("g")
+        svgSerie = this._svg.append("g")
             .attr("id", "serie-" + this._serie);
 
-        var svgPath = svgSerie.append("path")
+        svgPath = svgSerie.append("path")
             .attr("class", "line")
             .attr("d", line(data))
             .attr("stroke", this._color)
@@ -45,15 +52,15 @@ export class LineShape extends Shape {
             .attr("fill", "none");
 
         // add animation
-        var pathElement: SVGPathElement = <SVGPathElement>svgPath[0][0];
-        var pathLenght = pathElement.getTotalLength();
-        var count = 0;
+        svgPathElement = <SVGPathElement>svgPath[0][0];
+        svgPathLenght = svgPathElement.getTotalLength();
+        count = 0;
         svgPath
             .each((): void => {
                 count++; // count number of bars
             })
-            .attr("stroke-dasharray", pathLenght + " " + pathLenght)
-            .attr("stroke-dashoffset", pathLenght)
+            .attr("stroke-dasharray", svgPathLenght + " " + svgPathLenght)
+            .attr("stroke-dashoffset", svgPathLenght)
             .transition()
             .duration(this._animation.duration)
             .ease(this._animation.ease)
@@ -71,64 +78,6 @@ export class LineShape extends Shape {
                 // draw labels
                 if (this._labels.visible === true && !count) {
                     this.drawLabels();
-                }
-            });
-    }
-
-    public drawLabels(): void {
-        this._svgLabels = this._svg.append("g")
-            .attr("id", "labels-" + this._serie)
-            .attr("opacity", "1");
-
-        this._svg.selectAll("g#serie-" + this._serie).selectAll("path.marker")
-            .each((d: IDatum, i: number): void => {
-                var rotation = 0;
-                var x = this._x(d, i, this._serie);
-                var y = this._y(d, i, this._serie);
-                var dx = 0;
-                var dy = 0;
-
-                if (this._labels.rotate === true) {
-                    rotation = -90;
-                }
-
-                var text = this._svgLabels.append("text")
-                    .text(d3.format(this._labels.format)(d.y))
-                    .style("text-anchor", "middle")
-                    .attr({
-                        "alignment-baseline": "central",
-                        "class": "label",
-                        "fill": "#fff",
-                        "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")"
-                    });
-
-                if (rotation != 0) {
-                    dx = Html.getHeight(text) + this._marker.size / 2;
-                }
-                else {
-                    dy = -Html.getHeight(text) - this._marker.size / 2;
-                }
-
-                text
-                    .attr("dy", dy)
-                    .attr("dx", dx);
-            });
-    }
-
-    public drawMarkers(data: any): any {
-        return this._svg.selectAll("g#serie-" + this._serie).selectAll(".marker")
-            .data(data)
-            .enter()
-            .append("path")
-            .attr({
-                "class": "marker",
-                "stroke": this._color,
-                "stroke-width": 0,
-                "d": d3.svg.symbol()
-                    .size(this._marker.size * 10)
-                    .type(this._marker.type)(0, 0),
-                "transform": (d: IDatum, i: number): string => {
-                    return "translate(" + this._x(d, i, this._serie) + ", " + this._y(d, i, this._serie) + ")";
                 }
             });
     }
@@ -175,5 +124,63 @@ export class LineShape extends Shape {
     public y(y: (d: IDatum, i: number, s: number) => number): LineShape {
         super.y(y);
         return this;
+    }
+
+    protected drawLabels(): void {
+        this._svgLabels = this._svg.append("g")
+            .attr("id", "labels-" + this._serie)
+            .attr("opacity", "1");
+
+        this._svg.selectAll("g#serie-" + this._serie).selectAll("path.marker")
+            .each((d: IDatum, i: number): void => {
+                var rotation = 0;
+                var x = this._x(d, i, this._serie);
+                var y = this._y(d, i, this._serie);
+                var dx = 0;
+                var dy = 0;
+
+                if (this._labels.rotate === true) {
+                    rotation = -90;
+                }
+
+                var text = this._svgLabels.append("text")
+                    .text(d3.format(this._labels.format)(d.y))
+                    .style("text-anchor", "middle")
+                    .attr({
+                        "alignment-baseline": "central",
+                        "class": "label",
+                        "fill": "#fff",
+                        "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")"
+                    });
+
+                if (rotation != 0) {
+                    dx = Html.getHeight(text) + this._marker.size / 2;
+                }
+                else {
+                    dy = -Html.getHeight(text) - this._marker.size / 2;
+                }
+
+                text
+                    .attr("dy", dy)
+                    .attr("dx", dx);
+            });
+    }
+
+    protected drawMarkers(data: any): any {
+        return this._svg.selectAll("g#serie-" + this._serie).selectAll(".marker")
+            .data(data)
+            .enter()
+            .append("path")
+            .attr({
+                "class": "marker",
+                "stroke": this._color,
+                "stroke-width": 0,
+                "d": d3.svg.symbol()
+                    .size(this._marker.size * 10)
+                    .type(this._marker.type)(0, 0),
+                "transform": (d: IDatum, i: number): string => {
+                    return "translate(" + this._x(d, i, this._serie) + ", " + this._y(d, i, this._serie) + ")";
+                }
+            });
     }
 }

@@ -72,39 +72,6 @@ export class BubbleShape extends Shape {
         this._chart.tooltip.draw(svgBubbles, this._serie);
     }
 
-    public drawLabels(): void {
-        this._svgLabels = this._svg.append("g")
-            .attr("id", "labels-" + (this._serie - 1))
-            .attr("opacity", "1");
-
-        this._svg.selectAll("g#serie-" + (this._serie - 1)).selectAll("path.bubble")
-            .each((d: IDatum, i: number): void => {
-                var rotation = 0;
-                var x = this._x(d, i, this._serie);
-                var y = this._y(d, i, this._serie);
-                var dx = 0;
-                var dy = 0;
-
-                if (this._labels.rotate === true) {
-                    rotation = -90;
-                }
-
-                var text = this._svgLabels.append("text")
-                    .text(d3.format(this._labels.format)(this._chart.series.items[this._serie].data[i]))
-                    .style("text-anchor", "middle")
-                    .attr({
-                        "alignment-baseline": "central",
-                        "class": "label",
-                        "fill": "#fff",
-                        "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")"
-                    });
-
-                text
-                    .attr("dy", dy)
-                    .attr("dx", dx);
-            });
-    }
-
     public animation(duration: number, ease: string): BubbleShape {
         super.animation(duration, ease);
         return this;
@@ -140,5 +107,38 @@ export class BubbleShape extends Shape {
     public y(y: (d: IDatum, i: number, s: number) => number): BubbleShape {
         super.y(y);
         return this;
+    }
+
+    protected drawLabels(): void {
+        this._svgLabels = this._svg.append("g")
+            .attr("id", "labels-" + (this._serie - 1))
+            .attr("opacity", "1");
+
+        this._svg.selectAll("g#serie-" + (this._serie - 1)).selectAll("path.bubble")
+            .each((d: IDatum, i: number): void => {
+                var rotation = 0;
+                var x = this._x(d, i, this._serie);
+                var y = this._y(d, i, this._serie);
+                var dx = 0;
+                var dy = 0;
+
+                if (this._labels.rotate === true) {
+                    rotation = -90;
+                }
+
+                var text = this._svgLabels.append("text")
+                    .text(d3.format(this._labels.format)(this._chart.series.items[this._serie].data[i]))
+                    .style("text-anchor", "middle")
+                    .attr({
+                        "alignment-baseline": "central",
+                        "class": "label",
+                        "fill": "#fff",
+                        "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")"
+                    });
+
+                text
+                    .attr("dy", dy)
+                    .attr("dx", dx);
+            });
     }
 }

@@ -31,7 +31,7 @@ export class Serie {
 
         // TODO - separate the options from the real data
         this.axis = serie.axis;
-        this.visible = true;
+        this.visible = serie.visible === false ? false : true;
         this.format = serie.format;
         this.index = index;
         this.marker = this._setMarkerType(serie);

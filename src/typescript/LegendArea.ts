@@ -49,7 +49,8 @@ export class LegendArea extends ChartArea {
                 .on("click", function (): void {
                     // TODO - add checkbox next to legend item to show / hide the serie
                     var item = Number(d3.select(this).attr("data-serie"));
-                    _self._chart.toggleSerie(_self.items, item);
+                    _self._chart.dispatcher.rescale();
+                    _self._chart.dispatcher.onlegendclick(item);
                 });
 
             var symbol = new SVGSymbol(g, this._chart, i);

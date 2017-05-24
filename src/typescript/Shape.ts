@@ -33,16 +33,15 @@ export class Shape {
         this.color("#000");
         this.opacity(1);
         this.labels("", false, false);
+
+        // Register event callback
+        this._chart.dispatcher.on("onlegendclick.shape", (i: number): void => {
+            this.toggleShapeVisibility(i);
+        });
     }
 
     public draw(data: IDatum[]): void {
 
-    }
-
-    public drawLabels(): void {
-        this._svgLabels = this._svg.append("g")
-            .attr("id", "labels-" + this._serie)
-            .attr("opacity", "1");
     }
 
     public animation(duration: number, ease: string): Shape {
@@ -80,5 +79,21 @@ export class Shape {
     public y(y: (d: IDatum, i: number, s: number) => number): Shape {
         this._y = y;
         return this;
+    }
+
+    // TODO - refactor
+    public toggleShapeVisibility(index: number): void {
+        var serie = d3.selectAll(this._chart.selector + " #serie-" + index),
+            opacity = serie.style("opacity") === "1" ? 0 : 1;
+
+        d3.select(this._chart.selector + " #serie-" + index).transition().duration(200).style("opacity", opacity);
+        d3.select(this._chart.selector + " #labels-" + index).transition().duration(200).style("opacity", opacity);
+        d3.select(this._chart.selector + " #area-" + index).transition().duration(200).style("opacity", opacity);
+    }
+
+    protected drawLabels(): void {
+        this._svgLabels = this._svg.append("g")
+            .attr("id", "labels-" + this._serie)
+            .attr("opacity", "1");
     }
 }

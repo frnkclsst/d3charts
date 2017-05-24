@@ -19,6 +19,8 @@ export class ColumnShape extends Shape {
     }
 
     public draw(data: IDatum[]): void {
+        var count: number;
+
         var svgSerie = this._svg.append("g")
             .attr("id", "serie-" + this._serie)
             .selectAll("rect")
@@ -47,7 +49,7 @@ export class ColumnShape extends Shape {
             });
 
         // add animation
-        var count = 0;
+        count = 0;
         svgColumn
             .each((): void => {
                 count++; // count number of bars
@@ -70,42 +72,6 @@ export class ColumnShape extends Shape {
         this._chart.tooltip.draw(svgColumn, this._serie);
     }
 
-    public drawLabels(): void {
-        super.drawLabels();
-        this._svg.selectAll("g#serie-" + this._serie).selectAll("rect")
-            .each((d: IDatum, i: number): void  => {
-                var rotation = 0;
-                var x = this._x(d, i, this._serie);
-                var y = this._y(d, i, this._serie);
-                var dx = 0;
-                var dy = 0;
-
-                if (this._labels.rotate === true) {
-                    rotation = -90;
-                }
-
-                if (rotation != 0) {
-                    dx = -this._height(d, i, this._serie) / 2;
-                    dy = this._width(d, i, this._serie) / 2;
-                }
-                else {
-                    dx = this._width(d, i, this._serie) / 2;
-                    dy = this._height(d, i, this._serie) / 2;
-                }
-
-                this._svgLabels.append("text")
-                    .text(d3.format(this._labels.format)(d.y))
-                    .style("text-anchor", "middle")
-                    .attr({
-                        "alignment-baseline": "central",
-                        "class": "label",
-                        "fill": "#fff",
-                        "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")",
-                        "dx": dx,
-                        "dy": dy
-                    });
-            });
-    }
     public animation(duration: number, ease: string): ColumnShape {
         super.animation(duration, ease);
         return this;
@@ -144,5 +110,42 @@ export class ColumnShape extends Shape {
     public y(y: (d: IDatum, i: number, s: number) => number): ColumnShape {
         super.y(y);
         return this;
+    }
+
+    protected drawLabels(): void {
+        super.drawLabels();
+        this._svg.selectAll("g#serie-" + this._serie).selectAll("rect")
+            .each((d: IDatum, i: number): void  => {
+                var rotation = 0;
+                var x = this._x(d, i, this._serie);
+                var y = this._y(d, i, this._serie);
+                var dx = 0;
+                var dy = 0;
+
+                if (this._labels.rotate === true) {
+                    rotation = -90;
+                }
+
+                if (rotation != 0) {
+                    dx = -this._height(d, i, this._serie) / 2;
+                    dy = this._width(d, i, this._serie) / 2;
+                }
+                else {
+                    dx = this._width(d, i, this._serie) / 2;
+                    dy = this._height(d, i, this._serie) / 2;
+                }
+
+                this._svgLabels.append("text")
+                    .text(d3.format(this._labels.format)(d.y))
+                    .style("text-anchor", "middle")
+                    .attr({
+                        "alignment-baseline": "central",
+                        "class": "label",
+                        "fill": "#fff",
+                        "transform": "translate(" + x + ", " + y + ") rotate(" + rotation + ")",
+                        "dx": dx,
+                        "dy": dy
+                    });
+            });
     }
 }
