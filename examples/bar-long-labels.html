@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Bar chart - long labels</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 900px; height: 500px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Bar chart - long labels</h2>
+<p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { BarChart, GridLineType } from "@frnkclsst/d3charts";
+
+    const data = {
+      categories: {
+        format: "%s",
+        data: [
+          "Africa (population in millions)",
+          "America (population in millions)",
+          "Asia (population in millions)",
+          "Europe (population in millions)",
+          "Oceania (population in millions)"
+        ]
+      },
+      series: [
+        { name: "Year 1800", data: [107,  31,  635, 203,  2], format: "," },
+        { name: "Year 1900", data: [133, 156,  947, 408,  6], format: "," },
+        { name: "Year 2008", data: [973, 914, 4054, 732, 34], format: "," }
+      ]
+    };
+
+    const options = {
+      titleArea: { text: "World Population by Continent", align: "center", height: 50 },
+      legendArea: { width: 120, title: "Year" },
+      yAxis: [{ orient: "left" }],
+      xAxis: [{ orient: "bottom", gridlines: GridLineType.Major, title: { text: "Population (millions)" } }],
+      series: { labels: { visible: true } },
+      tooltip: { title: "Population", valueSuffix: " M" },
+      plotOptions: { animation: { duration: 600 } }
+    };
+
+    const chart = new BarChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>

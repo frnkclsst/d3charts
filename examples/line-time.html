@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Line chart - time scale</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 800px; height: 400px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Line chart - time scale</h2>
+<p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { LineChart, GridLineType } from "@frnkclsst/d3charts";
+
+    const data = {
+      categories: {
+        format: "%Y-%m-%d",
+        data: [
+          "2024-01-01","2024-02-01","2024-03-01","2024-04-01",
+          "2024-05-01","2024-06-01","2024-07-01","2024-08-01",
+          "2024-09-01","2024-10-01","2024-11-01","2024-12-01"
+        ]
+      },
+      series: [
+        { name: "Revenue",  data: [120, 135, 148, 162, 170, 195, 210, 205, 188, 172, 155, 168] },
+        { name: "Expenses", data: [95, 102, 110, 118, 125, 130, 138, 135, 128, 120, 115, 122] }
+      ]
+    };
+
+    const options = {
+      titleArea: { text: "Revenue vs Expenses 2024", height: 50 },
+      legendArea: { width: 120, title: "Metric" },
+      yAxis: [{ orient: "left", gridlines: GridLineType.Major, title: { text: "$K" } }],
+      xAxis: [{ orient: "bottom", gridlines:"major", labels: { format: "%b" } }],
+      plotOptions: {
+        markers: { visible: true, type:"cross", size: 5 },
+        animation: { duration: 800 }
+      }
+    };
+
+    const chart = new LineChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>

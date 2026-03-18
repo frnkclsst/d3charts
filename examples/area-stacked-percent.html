@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Area Chart - 100% Stacked</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 800px; height: 400px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Area Chart - 100% Stacked</h2>
+<p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { StackedPercentLineChart, GridLineType } from "@frnkclsst/d3charts";
+
+    const data = {
+      categories: {
+        format: "%s",
+        data: ["1750", "1800", "1850", "1900", "1950", "1999", "2050"]
+      },
+      series: [
+        { name: "Oceania", data: [2, 2, 2, 6, 13, 30, 46] },
+        { name: "Asia",    data: [502, 635, 809, 947, 1402, 3634, 5268] },
+        { name: "Africa",  data: [106, 107, 111, 133, 221, 767, 1766] },
+        { name: "Europe",  data: [163, 203, 276, 408, 547, 729, 628], marker: "diamond" },
+        { name: "America", data: [18, 31, 54, 156, 339, 818, 1201] }
+      ]
+    };
+
+    const options = {
+      titleArea: { text: "Area Chart - 100% Stacked", height: 50 },
+      legendArea: { title: "Continent", width: 200 },
+      plotArea: { padding: 20 },
+      plotOptions: {
+        area: { visible: true },
+        line: { interpolation: "linear" },
+        markers: { visible: true, type: "circle", size: 6 }
+      },
+      xAxis: [{ gridlines: GridLineType.None, tickmarks: false, title: { text: "Year" } }],
+      yAxis: [
+        { gridlines: GridLineType.None, labels: { format: "%" }, tickmarks: true, title: { text: "Percent" } },
+        { gridlines: GridLineType.None, labels: { format: "%" }, orient: "right", tickmarks: true, title: { text: "Percent" } }
+      ]
+    };
+
+    const chart = new StackedPercentLineChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>

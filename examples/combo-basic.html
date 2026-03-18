@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Combo chart</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 800px; height: 400px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Combo chart - columns &amp; line</h2>
+<p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { ComboChart, GridLineType } from "@frnkclsst/d3charts";
+
+    const data = {
+      categories: { format: "%s", data: ["Jan","Feb","Mar","Apr","May","Jun"] },
+      series: [
+        { name: "Revenue",  type: "column", data: [120, 135, 148, 162, 170, 195] },
+        { name: "Costs",    type: "column", data: [95,  102, 110, 118, 125, 130] },
+        { name: "Margin %", type: "line",   data: [21,  24,  26,  27,  26,  33] }
+      ]
+    };
+
+    const options = {
+      titleArea: { text: "Revenue, Costs and Margin", height: 50 },
+      legendArea: { width: 120, title: "Metric" },
+      yAxis: [{ orient: "left", gridlines: GridLineType.Major, title: { text: "Value" } }],
+      xAxis: [{ orient: "bottom" }],
+      plotOptions: {
+        markers: { visible: true, size: 5 },
+        animation: { duration: 600 }
+      }
+    };
+
+    const chart = new ComboChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>

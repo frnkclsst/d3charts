@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Column Chart - Negative Stack</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 800px; height: 500px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Column Chart - Negative Stack</h2>
+<p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { StackedColumnChart, GridLineType } from "@frnkclsst/d3charts";
+
+    const data = {
+      categories: {
+        format: "%s",
+        data: [
+          "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44",
+          "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84",
+          "85-89", "90-94", "95-99", "100 +"
+        ]
+      },
+      series: [
+        {
+          name: "Male",
+          format: ",",
+          data: [
+            -1746181, -1884428, -2089758, -2222362, -2537431, -2507081, -2443179,
+            -2664537, -3556505, -3680231, -3143062, -2721122, -2229181, -2227768,
+            -2176300, -1329968, -836804, -354784, -90569, -28367, -3878
+          ]
+        },
+        {
+          name: "Female",
+          format: ",",
+          data: [
+            1656154, 1787564, 1981671, 2108575, 2403438, 2366003, 2301402, 2519874,
+            3360596, 3493473, 3050775, 2759560, 2304444, 2426504, 2568938, 1785638,
+            1447162, 1005011, 330870, 130632, 21208
+          ]
+        }
+      ]
+    };
+
+    const options = {
+      titleArea: { text: "Column Chart - Negative Stack", height: 50 },
+      legendArea: { title: "Category", width: 200 },
+      plotArea: { padding: 20 },
+      xAxis: [
+        { gridlines: GridLineType.None, orient: "top",    tickmarks: true, title: { text: "Age Men" } },
+        { gridlines: GridLineType.None, orient: "bottom", tickmarks: true, title: { text: "Age Women" } }
+      ],
+      yAxis: [{ gridlines: GridLineType.Major, orient: "left", tickmarks: false, title: { text: "Population" } }]
+    };
+
+    const chart = new StackedColumnChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>

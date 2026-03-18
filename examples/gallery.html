@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>@frnkclsst/d3charts — Gallery</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: #f4f5f7;
+      color: #222;
+    }
+
+    header {
+      margin-bottom: 2.5rem;
+    }
+
+    header h1 {
+      margin: 0 0 0.25rem;
+      font-size: 1.5rem;
+    }
+
+    header a {
+      font-size: 0.875rem;
+      color: #5491F6;
+      text-decoration: none;
+    }
+
+    header a:hover { text-decoration: underline; }
+
+    h2 {
+      margin: 2.5rem 0 1rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #999;
+      border-bottom: 1px solid #e2e2e2;
+      padding-bottom: 0.4rem;
+    }
+
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+
+    /* Each card is a plain <a> wrapping preview + label */
+    .card {
+      display: block;
+      width: 320px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      transform: translateY(-3px);
+    }
+
+    /* Clipping window for the scaled iframe */
+    .preview {
+      width: 320px;
+      height: 260px;
+      overflow: hidden;
+      position: relative;
+      background: #fff;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    /*
+     * The iframe renders the chart page at its native 800×650 size.
+     * We scale it down by 40% so it fills the 320×260 preview window.
+     * pointer-events: none lets the parent <a> capture clicks.
+     */
+    .preview iframe {
+      width: 800px;
+      height: 650px;
+      border: none;
+      overflow: hidden;
+      transform: scale(0.4);
+      transform-origin: top left;
+      pointer-events: none;
+    }
+
+    .card-label {
+      padding: 0.55rem 0.9rem;
+      font-size: 0.8rem;
+      color: #5491F6;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>@frnkclsst/d3charts v2 — Gallery</h1>
+  <a href="index.html">← Index</a>
+</header>
+
+<h2>Area</h2>
+<div class="grid">
+  <a class="card" href="area-basic.html">
+    <div class="preview"><iframe scrolling="no" src="area-basic.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Area chart — basic</div>
+  </a>
+  <a class="card" href="area-negative.html">
+    <div class="preview"><iframe scrolling="no" src="area-negative.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Area chart — negative values</div>
+  </a>
+  <a class="card" href="area-spline.html">
+    <div class="preview"><iframe scrolling="no" src="area-spline.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Area chart — spline</div>
+  </a>
+  <a class="card" href="area-stepbefore.html">
+    <div class="preview"><iframe scrolling="no" src="area-stepbefore.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Area chart — step before</div>
+  </a>
+  <a class="card" href="area-range.html">
+    <div class="preview"><iframe scrolling="no" src="area-range.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Area chart — range</div>
+  </a>
+  <a class="card" href="area-stacked.html">
+    <div class="preview"><iframe scrolling="no" src="area-stacked.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Area chart — stacked</div>
+  </a>
+  <a class="card" href="area-stacked-percent.html">
+    <div class="preview"><iframe scrolling="no" src="area-stacked-percent.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Area chart — 100% stacked</div>
+  </a>
+  <a class="card" href="area-dual-axes.html">
+    <div class="preview"><iframe scrolling="no" src="area-dual-axes.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Area chart — dual axes</div>
+  </a>
+</div>
+
+<h2>Line</h2>
+<div class="grid">
+  <a class="card" href="line-basic.html">
+    <div class="preview"><iframe scrolling="no" src="line-basic.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Line chart — basic</div>
+  </a>
+  <a class="card" href="line-area.html">
+    <div class="preview"><iframe scrolling="no" src="line-area.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Line chart — with area</div>
+  </a>
+  <a class="card" href="line-time.html">
+    <div class="preview"><iframe scrolling="no" src="line-time.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Line chart — time scale</div>
+  </a>
+  <a class="card" href="line-labels.html">
+    <div class="preview"><iframe scrolling="no" src="line-labels.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Line chart — data labels</div>
+  </a>
+  <a class="card" href="line-basic-cross-markers.html">
+    <div class="preview"><iframe scrolling="no" src="line-basic-cross-markers.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Line chart — cross markers</div>
+  </a>
+  <a class="card" href="line-rotated-cat-labels.html">
+    <div class="preview"><iframe scrolling="no" src="line-rotated-cat-labels.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Line chart — rotated axis labels</div>
+  </a>
+  <a class="card" href="line-dual-axes.html">
+    <div class="preview"><iframe scrolling="no" src="line-dual-axes.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Line chart — dual axes</div>
+  </a>
+  <a class="card" href="line-stacked.html">
+    <div class="preview"><iframe scrolling="no" src="line-stacked.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Line chart — stacked</div>
+  </a>
+  <a class="card" href="line-stacked-percent.html">
+    <div class="preview"><iframe scrolling="no" src="line-stacked-percent.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Line chart — 100% stacked</div>
+  </a>
+  <a class="card" href="external-data-weather.html">
+    <div class="preview"><iframe scrolling="no" src="external-data-weather.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Line chart — external data (weather)</div>
+  </a>
+</div>
+
+<h2>Column</h2>
+<div class="grid">
+  <a class="card" href="column-basic.html">
+    <div class="preview"><iframe scrolling="no" src="column-basic.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Column chart — basic</div>
+  </a>
+  <a class="card" href="column-negative.html">
+    <div class="preview"><iframe scrolling="no" src="column-negative.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Column chart — negative values</div>
+  </a>
+  <a class="card" href="column-labels.html">
+    <div class="preview"><iframe scrolling="no" src="column-labels.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Column chart — data labels</div>
+  </a>
+  <a class="card" href="column-rotated-labels.html">
+    <div class="preview"><iframe scrolling="no" src="column-rotated-labels.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Column chart — rotated labels</div>
+  </a>
+  <a class="card" href="column-range.html">
+    <div class="preview"><iframe scrolling="no" src="column-range.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Column chart — range</div>
+  </a>
+  <a class="card" href="column-dual-axes.html">
+    <div class="preview"><iframe scrolling="no" src="column-dual-axes.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Column chart — dual axes</div>
+  </a>
+  <a class="card" href="column-stacked.html">
+    <div class="preview"><iframe scrolling="no" src="column-stacked.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Column chart — stacked</div>
+  </a>
+  <a class="card" href="column-stacked-percent.html">
+    <div class="preview"><iframe scrolling="no" src="column-stacked-percent.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Column chart — 100% stacked</div>
+  </a>
+  <a class="card" href="column-negative-stack.html">
+    <div class="preview"><iframe scrolling="no" src="column-negative-stack.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Column chart — negative stack</div>
+  </a>
+  <a class="card" href="column-negative-stack-mixed.html">
+    <div class="preview"><iframe scrolling="no" src="column-negative-stack-mixed.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Column chart — negative stack (mixed)</div>
+  </a>
+</div>
+
+<h2>Bar</h2>
+<div class="grid">
+  <a class="card" href="bar-basic.html">
+    <div class="preview"><iframe scrolling="no" src="bar-basic.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Bar chart — basic</div>
+  </a>
+  <a class="card" href="bar-labels.html">
+    <div class="preview"><iframe scrolling="no" src="bar-labels.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Bar chart — data labels</div>
+  </a>
+  <a class="card" href="bar-long-labels.html">
+    <div class="preview"><iframe scrolling="no" src="bar-long-labels.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Bar chart — long labels</div>
+  </a>
+  <a class="card" href="bar-range.html">
+    <div class="preview"><iframe scrolling="no" src="bar-range.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Bar chart — range</div>
+  </a>
+  <a class="card" href="bar-dual-axes.html">
+    <div class="preview"><iframe scrolling="no" src="bar-dual-axes.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Bar chart — dual axes</div>
+  </a>
+  <a class="card" href="bar-stacked.html">
+    <div class="preview"><iframe scrolling="no" src="bar-stacked.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Bar chart — stacked</div>
+  </a>
+  <a class="card" href="bar-stacked-percent.html">
+    <div class="preview"><iframe scrolling="no" src="bar-stacked-percent.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Bar chart — 100% stacked</div>
+  </a>
+  <a class="card" href="bar-negative-stack.html">
+    <div class="preview"><iframe scrolling="no" src="bar-negative-stack.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Bar chart — negative stack</div>
+  </a>
+</div>
+
+<h2>Pie &amp; Donut</h2>
+<div class="grid">
+  <a class="card" href="pie-basic.html">
+    <div class="preview"><iframe scrolling="no" src="pie-basic.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Pie chart — basic</div>
+  </a>
+  <a class="card" href="pie-multiple-series.html">
+    <div class="preview"><iframe scrolling="no" src="pie-multiple-series.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Pie chart — multiple series</div>
+  </a>
+  <a class="card" href="donut-basic.html">
+    <div class="preview"><iframe scrolling="no" src="donut-basic.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Donut chart — basic</div>
+  </a>
+  <a class="card" href="donut-multiple-series.html">
+    <div class="preview"><iframe scrolling="no" src="donut-multiple-series.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Donut chart — multiple series</div>
+  </a>
+</div>
+
+<h2>Scatter &amp; Bubble</h2>
+<div class="grid">
+  <a class="card" href="scatter-basic.html">
+    <div class="preview"><iframe scrolling="no" src="scatter-basic.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Scatter chart — basic</div>
+  </a>
+  <a class="card" href="scatterplot.html">
+    <div class="preview"><iframe scrolling="no" src="scatterplot.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Scatter chart — scatterplot</div>
+  </a>
+  <a class="card" href="bubble.html">
+    <div class="preview"><iframe scrolling="no" src="bubble.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Bubble chart</div>
+  </a>
+</div>
+
+<h2>Combo</h2>
+<div class="grid">
+  <a class="card" href="combo-basic.html">
+    <div class="preview"><iframe scrolling="no" src="combo-basic.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Combo chart — basic</div>
+  </a>
+  <a class="card" href="combo.html">
+    <div class="preview"><iframe scrolling="no" src="combo.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Combo chart — dual axes</div>
+  </a>
+</div>
+
+<h2>Other</h2>
+<div class="grid">
+  <a class="card" href="no-data-available.html">
+    <div class="preview"><iframe scrolling="no" src="no-data-available.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">No data available</div>
+  </a>
+  <a class="card" href="options-explorer.html">
+    <div class="preview"><iframe scrolling="no" src="options-explorer.html" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="card-label">Options Explorer</div>
+  </a>
+</div>
+
+</body>
+</html>

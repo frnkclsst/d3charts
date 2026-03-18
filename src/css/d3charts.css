@@ -1,0 +1,153 @@
+/* @frnkclsst/d3charts — base styles */
+
+.svg_chart {
+  font-family: sans-serif;
+  font-size: 12px;
+  overflow: visible;
+}
+
+/* Axes */
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  fill: #555;
+}
+
+.axis-title {
+  fill: #333;
+  font-size: 11px;
+}
+
+/* Gridlines */
+.grid line {
+  stroke: #e8e8e8;
+  stroke-dasharray: 2, 2;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+
+/* Zero line */
+.zero-line line {
+  stroke: #aaa;
+  stroke-width: 1;
+}
+
+/* Series separators (borders) */
+.sep {
+  stroke: #ddd;
+  stroke-width: 1;
+  fill: none;
+}
+
+/* Legend */
+.legend .title text {
+  font-weight: 600;
+  fill: #333;
+}
+
+.legend .item {
+  cursor: pointer;
+}
+
+.legend .item text {
+  fill: #444;
+  font-size: 12px;
+  dominant-baseline: central;
+}
+
+/* Title area */
+.titlearea .title {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.titlearea .subtitle {
+  fill: #666;
+  font-size: 12px;
+}
+
+/* Data labels */
+.label {
+  font-size: 11px;
+  pointer-events: none;
+}
+
+/* Tooltip */
+.d3charts-tooltip {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px 12px;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  font-size: 12px;
+  min-width: 120px;
+  z-index: 9999;
+}
+
+.d3charts-tooltip .title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.d3charts-tooltip .subtitle {
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.d3charts-tooltip .items .item {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.d3charts-tooltip .color {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.d3charts-tooltip .value {
+  font-weight: 600;
+  margin-left: auto;
+}
+
+.d3charts-tooltip .percent {
+  color: #888;
+}
+
+.bubble {
+  fill-opacity: 0.4;
+  stroke-width: 1px;
+  stroke-opacity: 0.8;
+}
+
+.bar {
+  fill-opacity: 0.4;
+  stroke-width: 1px;
+  stroke-opacity: 0.8;
+}
+
+.column {
+  fill-opacity: 0.4;
+  stroke-width: 1px;
+  stroke-opacity: 0.8;
+}
+
+.slice {
+  fill-opacity: 0.8;
+  stroke-width: 1px;
+  stroke-opacity: 0.8;
+}

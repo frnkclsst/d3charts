@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Area Chart - Range</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 800px; height: 400px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Area Chart - Range</h2>
+<p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { LineChart, GridLineType } from "@frnkclsst/d3charts";
+
+    const data = {
+      categories: {
+        format: "%s",
+        data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+      },
+      series: [
+        {
+          name: "Rainfall",
+          axis: "Rainfall",
+          data: [49.94, 71.53, 106.40, 129.21, 144.05, 176.07, 135.68, 148.58, 216.49, 194.11, 95.64, 54.43],
+          min:  [45.4,  61.53,  96.40, 119.21, 134.05, 166.07, 125.68, 138.58, 186.49, 184.11,  85.64, 44.43],
+          max:  [59.94, 91.53, 116.40, 139.21, 154.05, 186.07, 145.68, 158.58, 256.49, 204.11, 105.64, 64.43],
+          suffix: " mm"
+        },
+        {
+          name: "Temperature",
+          axis: "Temperature",
+          data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+          min:  [5.0, 4.9, 7.5, 12.5,  8.2, 17.5, 15.2, 16.5, 13.3,  8.3,  3.9, 4.6],
+          max:  [10.0, 8.9, 11.5, 16.5, 21.2, 30.5, 32.2, 29.5, 24.3, 28.3, 23.9, 24.6],
+          suffix: " Ã‚Â°C"
+        }
+      ]
+    };
+
+    const options = {
+      titleArea: { text: "Area Chart - Range", height: 50 },
+      legendArea: { title: "Rainfall vs Temperature", width: 200 },
+      plotArea: { padding: 20 },
+      plotOptions: {
+        area: { visible: true },
+        line: { interpolation: "cardinal" },
+        markers: { visible: true, type: "circle" }
+      },
+      xAxis: [{ gridlines: GridLineType.None, tickmarks: true, title: { text: "Month" } }],
+      yAxis: [
+        { name: "Rainfall",    gridlines: GridLineType.None, orient: "left",  tickmarks: true, title: { text: "mm" } },
+        { name: "Temperature", gridlines: GridLineType.None, orient: "right", tickmarks: true, title: { text: "Ã‚Â°C" } }
+      ]
+    };
+
+    const chart = new LineChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>

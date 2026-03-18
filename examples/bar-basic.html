@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Bar chart - basic</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 700px; height: 450px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Bar chart - basic</h2>
+<p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { BarChart, GridLineType } from "@frnkclsst/d3charts";
+
+    const data = {
+      categories: {
+        format: "%s",
+        data: ["United States","China","Japan","Germany","India","United Kingdom","France","Brazil"]
+      },
+      series: [
+        { name: "GDP (T$)", data: [25.5, 17.9, 4.2, 4.1, 3.4, 3.1, 2.9, 2.1] }
+      ]
+    };
+
+    const options = {
+      titleArea: { text: "GDP by Country 2023", height: 50 },
+      legendArea: { width: 100, title: "Metric" },
+      yAxis: [{ orient: "left" }],
+      xAxis: [{ orient: "bottom", gridlines: GridLineType.Major, title: { text: "Trillion USD" } }],
+      plotOptions: { animation: { duration: 600 } }
+    };
+
+    const chart = new BarChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>

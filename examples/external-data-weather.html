@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Weather - external data (Open-Meteo)</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 900px; height: 450px; position: relative; }
+    #status { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; min-height: 1.2em; }
+    .error { color: #c00; }
+    #controls { margin-bottom: 0.75rem; }
+    #controls label { font-size: 0.9rem; margin-right: 0.5rem; }
+    #controls select { font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h2>Daily Maximum Temperature</h2>
+<p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="controls">
+    <label for="period">Period:</label>
+    <select id="period">
+      <option value="30">1 month</option>
+      <option value="90">3 months</option>
+      <option value="365" selected>1 year</option>
+      <option value="1095">3 years</option>
+      <option value="1825">5 years</option>
+    </select>
+  </div>
+  <p id="status">Loading data from Open-Meteo Archive APIÃ¢â‚¬Â¦</p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { LineChart, GridLineType } from "@frnkclsst/d3charts";
+
+    const cities = [
+      { name: "Berlin",   lat: 52.52,  lon:  13.41 },
+      { name: "London",   lat: 51.51,  lon:  -0.13 },
+      { name: "New York", lat: 40.71,  lon: -74.01 },
+      { name: "Tokyo",    lat: 35.68,  lon: 139.69 },
+    ];
+
+    const status = document.getElementById("status");
+    let chart = null;
+
+    async function loadChart(days) {
+      status.textContent = "Loading data from Open-Meteo Archive APIÃ¢â‚¬Â¦";
+      status.classList.remove("error");
+
+      if (chart) { chart.destroy(); chart = null; }
+
+      // Archive API lags by ~1 day, so end yesterday
+      const endDate   = new Date();
+      endDate.setUTCDate(endDate.getUTCDate() - 1);
+      const startDate = new Date(endDate);
+      startDate.setUTCDate(startDate.getUTCDate() - (days - 1));
+
+      const toISO = d => d.toISOString().slice(0, 10);
+
+      async function fetchCity({ lat, lon }) {
+        const url =
+          `https://archive-api.open-meteo.com/v1/archive` +
+          `?latitude=${lat}&longitude=${lon}` +
+          `&daily=temperature_2m_max` +
+          `&timezone=UTC` +
+          `&start_date=${toISO(startDate)}&end_date=${toISO(endDate)}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      }
+
+      try {
+        const results = await Promise.all(cities.map(fetchCity));
+
+        // Align to the shortest response - APIs can return different lengths per location
+        const minLen = Math.min(...results.map(r => r.daily.time.length));
+        const dates  = results[0].daily.time.slice(0, minLen); // ["2025-09-01", ...]
+
+        const data = {
+          categories: {
+            format: "%Y-%m-%d",   // parsed as dates Ã¢â€ â€™ time scale, auto-thinned tick labels
+            data:   dates,
+          },
+          series: cities.map((city, i) => ({
+            name: city.name,
+            data: results[i].daily.temperature_2m_max.slice(0, minLen).map(v => v ?? NaN),
+          })),
+        };
+
+        const options = {
+          titleArea: {
+            text:     "Daily Maximum Temperature",
+            subtitle: "Source: Open-Meteo Archive API (open-meteo.com) - UTC",
+            height:   65,
+          },
+          legendArea: { width: 120, title: "City" },
+          xAxis: [{ orient: "bottom", labels: { format: "%b %Y", rotate: -45 } }],
+          yAxis: [{ orient: "left",   gridlines: GridLineType.Major, title: { text: "Ã‚Â°C" } }],
+          plotOptions: {
+            area:      { visible: true, opacity: 0.08 },
+            markers:   { visible: false },
+            animation: { duration: 600 },
+            line:      { interpolation: "linear" },
+          },
+        };
+
+        status.textContent = `Loaded ${dates.length} days of data for ${cities.length} cities.`;
+        chart = new LineChart("#chart", data, options);
+        chart.draw();
+      } catch (err) {
+        status.textContent = `Error: ${err.message}`;
+        status.classList.add("error");
+        console.error(err);
+      }
+    }
+
+    document.getElementById("period").addEventListener("change", e => {
+      loadChart(parseInt(e.target.value));
+    });
+
+    loadChart(365);
+  </script>
+</body>
+</html>

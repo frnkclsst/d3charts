@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Line chart - basic</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 800px; height: 400px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Line chart - basic</h2>
+<p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { LineChart, GridLineType } from "@frnkclsst/d3charts";
+
+    const data = {
+      categories: {
+        format: "%s",
+        data: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+      },
+      series: [
+        { name: "Tokyo",    data: [7, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6] },
+        { name: "New York", data: [-0.2, 0.8, 5.7, 11.3, 17, 22, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5] },
+        { name: "Berlin",   data: [-0.9, 0.6, 3.5, 8.4, 13.5, 1, 18.6, 17.9, 14.3, 9, 3.9, 1] },
+        { name: "London",   data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 39, 16.6, 14.2, 10.3, 6.6, 4.8] }
+      ]
+    };
+
+    const options = {
+      titleArea: {
+        text: "Monthly Average Temperature",
+        subtitle: "Source: WorldClimate.com",
+        height: 60
+      },
+      legendArea: { width: 120, title: "City" },
+      yAxis: [{ orient: "left", gridlines: GridLineType.Major, title: { text: "Ã‚Â°C" } }],
+      xAxis: [{ orient: "bottom" }],
+      plotOptions: {
+        markers: { visible: true, size: 6 },
+        animation: { duration: 800 }
+      },
+	  markers: {
+		  visible: false,
+		  size: 0,
+		  type: "circle"
+		}
+    };
+
+    const chart = new LineChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>

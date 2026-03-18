@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Line Chart - Rotated Axis Labels</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 800px; height: 400px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Line Chart - Rotated Axis Labels</h2>
+<p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { LineChart, GridLineType } from "@frnkclsst/d3charts";
+
+    const data = {
+      categories: {
+        format: "%s",
+        data: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+      },
+      series: [
+        { axis: "Rainfall",    suffix: " mm", data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4] },
+        { axis: "Temperature", suffix: " Ã‚Â°C", data: [-5.0, -6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6] }
+      ]
+    };
+
+    const options = {
+      titleArea: { text: "Line Chart - Rotated Axes Labels", height: 50 },
+      legendArea: { title: "Rainfall vs Temperature", width: 200 },
+      plotArea: { padding: 20 },
+      plotOptions: {
+        line: { interpolation: "cardinal" },
+        markers: { visible: true }
+      },
+      xAxis: [{ gridlines: GridLineType.None, orient: "bottom", tickmarks: true, labels: { rotate: -45 }, title: { text: "Month" } }],
+      yAxis: [
+        { name: "Rainfall",    gridlines: GridLineType.None, orient: "left",  tickmarks: true, title: { text: "mm" } },
+        { name: "Temperature", gridlines: GridLineType.None, orient: "right", tickmarks: true, title: { text: "Ã‚Â°C" } }
+      ]
+    };
+
+    const chart = new LineChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>

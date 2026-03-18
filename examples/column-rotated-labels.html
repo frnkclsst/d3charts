@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Column Chart - Rotated Labels</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 800px; height: 400px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Column Chart - Rotated Labels</h2>
+<p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { ColumnChart, GridLineType } from "@frnkclsst/d3charts";
+
+    const data = {
+      categories: {
+        format: "%s",
+        data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+      },
+      series: [
+        { name: "Tokyo",    data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4] },
+        { name: "New York", data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3] },
+        { name: "London",   data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2] },
+        { name: "Berlin",   data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1] }
+      ]
+    };
+
+    const options = {
+      titleArea: { text: "Column Chart - Basic", subtitle: "Source: WorldClimate.com", height: 50 },
+      legendArea: { title: "City", width: 200 },
+      plotArea: { padding: 20 },
+      series: { labels: { visible: true, rotate: true } },
+      xAxis: [{ gridlines: GridLineType.None, tickmarks: false, title: { text: "Month" } }],
+      yAxis: [{ gridlines: GridLineType.Major, tickmarks: true, title: { text: "Rainfall (mm)" } }]
+    };
+
+    const chart = new ColumnChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>

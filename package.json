@@ -1,0 +1,46 @@
+{
+  "name": "@frnkclsst/d3charts",
+  "version": "1.0.0",
+  "description": "Reusable chart library built with D3 v7 and TypeScript",
+  "author": "frank.closset@gmail.com",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "dist/d3charts.cjs",
+  "module": "dist/d3charts.js",
+  "types": "dist/d3charts.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/d3charts.d.ts",
+      "import": "./dist/d3charts.js",
+      "require": "./dist/d3charts.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "echo \"[1/3] Linting...\" && node scripts/lint.mjs && echo \"[2/3] Testing...\" && vitest run && echo \"[3/3] Bundling...\" && tsup && node -e \"const{mkdirSync,copyFileSync}=require('fs');mkdirSync('dist/css',{recursive:true});copyFileSync('src/css/d3charts.css','dist/css/d3charts.css')\"",
+    "dev": "vite",
+    "lint": "node scripts/lint.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "d3": "^7.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/d3": "^7.4.3",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@vitest/coverage-v8": "^2.1.9",
+    "d3": "^7.9.0",
+    "eslint": "^9.0.0",
+    "jsdom": "^25.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0",
+    "vite": "^6.0.0",
+    "vitest": "^2.0.0"
+  }
+}

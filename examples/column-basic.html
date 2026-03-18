@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Column chart - basic</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 800px; height: 400px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Column chart - basic</h2>
+<p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { ColumnChart, GridLineType } from "@frnkclsst/d3charts";
+
+    const data = {
+      categories: { format: "%s", data: ["Q1","Q2","Q3","Q4"] },
+      series: [
+        { name: "Product A", data: [120, 145, 130, 160] },
+        { name: "Product B", data: [80,  95, 110,  90] },
+        { name: "Product C", data: [55,  60,  75,  85] }
+      ]
+    };
+
+    const options = {
+      titleArea: { text: "Quarterly Sales", height: 50 },
+      legendArea: { width: 110, title: "Product" },
+      yAxis: [{ orient: "left", gridlines: GridLineType.Major, title: { text: "Units" } }],
+      xAxis: [{ orient: "bottom" }],
+      plotOptions: { animation: { duration: 600 } }
+    };
+
+    const chart = new ColumnChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>

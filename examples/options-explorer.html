@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Options Explorer — d3charts</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #1B487F;
+      color: #fff;
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      z-index: 10;
+    }
+    header h1 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      white-space: nowrap;
+      letter-spacing: 0.02em;
+    }
+    #type-bar { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .type-btn {
+      padding: 0.25rem 0.65rem;
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 4px;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: background 0.12s;
+    }
+    .type-btn:hover  { background: rgba(255,255,255,0.18); }
+    .type-btn.active { background: #fff; color: #1B487F; font-weight: 700; border-color: #fff; }
+
+    /* ── Layout ── */
+    main { display: flex; flex: 1; overflow: hidden; }
+
+    #panel {
+      width: 300px;
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid #dde1e8;
+      overflow-y: auto;
+      padding: 6px;
+    }
+    #panel details {
+      margin-bottom: 4px;
+    }
+
+    #chart-wrap {
+      flex: 1;
+      padding: 1rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    #chart-wrap a { font-size: 0.8rem; color: #5491F6; text-decoration: none; }
+    #chart { flex: 1; background: #fff; border-radius: 8px; box-shadow: 0 1px 5px rgba(0,0,0,0.1); position: relative; }
+
+    /* ── Accordion sections ── */
+    details {
+      border: 1px solid #e4e7ed;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    summary {
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #4a5568;
+      background: #f7f8fa;
+      user-select: none;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    summary::before { content: "▶"; font-size: 0.55rem; transition: transform 0.15s; }
+    details[open] summary::before { transform: rotate(90deg); }
+    details[open] summary { background: #eef2fb; color: #1B487F; }
+
+    .sb { padding: 0.55rem 0.6rem; display: flex; flex-direction: column; gap: 0.45rem; }
+
+    /* ── Form controls ── */
+    .row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    label { font-size: 0.72rem; color: #555; }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.2rem 0.35rem;
+      font-size: 0.72rem;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      background: #fafafa;
+      color: #222;
+      font-family: inherit;
+    }
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus,
+    textarea:focus { outline: 2px solid #5491F6; outline-offset: -1px; border-color: #5491F6; }
+
+    .range-wrap { display: flex; align-items: center; gap: 0.3rem; }
+    .range-wrap input[type="range"] { flex: 1; }
+    .range-val { font-size: 0.68rem; color: #666; min-width: 30px; text-align: right; }
+
+    .checks { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .cb { display: flex; align-items: center; gap: 0.25rem; }
+    .cb input { margin: 0; cursor: pointer; }
+    .cb label { font-size: 0.72rem; color: #444; cursor: pointer; }
+
+    .divider {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #aaa;
+      padding-top: 0.15rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Options Explorer</h1>
+  <div id="type-bar">
+    <button class="type-btn active" data-type="LineChart">Line</button>
+    <button class="type-btn" data-type="StackedLineChart">Stacked Line</button>
+    <button class="type-btn" data-type="StackedPercentLineChart">100% Line</button>
+    <button class="type-btn" data-type="ColumnChart">Column</button>
+    <button class="type-btn" data-type="StackedColumnChart">Stacked Column</button>
+    <button class="type-btn" data-type="StackedPercentColumnChart">100% Column</button>
+    <button class="type-btn" data-type="BarChart">Bar</button>
+    <button class="type-btn" data-type="StackedBarChart">Stacked Bar</button>
+    <button class="type-btn" data-type="StackedPercentBarChart">100% Bar</button>
+    <button class="type-btn" data-type="PieChart">Pie</button>
+    <button class="type-btn" data-type="DonutChart">Donut</button>
+    <button class="type-btn" data-type="ComboChart">Combo</button>
+    <button class="type-btn" data-type="ScatterChart">Scatter</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ═══ Options panel ═══ -->
+  <div id="panel">
+
+    <!-- Title Area -->
+    <details open>
+      <summary>Title Area</summary>
+      <div class="sb">
+        <div class="row"><label>Text</label><input type="text" id="title-text" value="Monthly Sales by Category" /></div>
+        <div class="row"><label>Subtitle</label><input type="text" id="title-subtitle" value="Jan 2023 – Dec 2024" /></div>
+        <div class="row">
+          <label>Align</label>
+          <select id="title-align">
+            <option value="left" selected>left</option>
+            <option value="center">center</option>
+            <option value="right">right</option>
+          </select>
+        </div>
+        <div class="row">
+          <label>Position</label>
+          <select id="title-position">
+            <option value="top" selected>top</option>
+            <option value="bottom">bottom</option>
+          </select>
+        </div>
+        <div class="row"><label>Height (0=hidden)</label><input type="number" id="title-height" value="50" min="0" /></div>
+        <div class="row"><label>Margin</label><input type="number" id="title-margin" value="15" min="0" /></div>
+        <div class="divider">Border</div>
+        <div class="checks">
+          <div class="cb"><input type="checkbox" id="title-b-top"    /><label for="title-b-top">top</label></div>
+          <div class="cb"><input type="checkbox" id="title-b-right"  /><label for="title-b-right">right</label></div>
+          <div class="cb"><input type="checkbox" id="title-b-bottom" checked /><label for="title-b-bottom">bottom</label></div>
+          <div class="cb"><input type="checkbox" id="title-b-left"   /><label for="title-b-left">left</label></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Legend -->
+    <details>
+      <summary>Legend</summary>
+      <div class="sb">
+        <div class="row">
+          <label>Position</label>
+          <select id="legend-position">
+            <option value="right" selected>right</option>
+            <option value="left">left</option>
+            <option value="top">top</option>
+            <option value="bottom">bottom</option>
+          </select>
+        </div>
+        <div class="row"><label>Title</label><input type="text" id="legend-title" value="" placeholder="optional" /></div>
+        <div class="row"><label>Width (0=hidden)</label><input type="number" id="legend-width" value="120" min="0" /></div>
+        <div class="row"><label>Height (0=hidden)</label><input type="number" id="legend-height" value="0" min="0" /></div>
+        <div class="divider">Border</div>
+        <div class="checks">
+          <div class="cb"><input type="checkbox" id="legend-b-top"    /><label for="legend-b-top">top</label></div>
+          <div class="cb"><input type="checkbox" id="legend-b-right"  /><label for="legend-b-right">right</label></div>
+          <div class="cb"><input type="checkbox" id="legend-b-bottom" /><label for="legend-b-bottom">bottom</label></div>
+          <div class="cb"><input type="checkbox" id="legend-b-left" checked /><label for="legend-b-left">left</label></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Plot Area -->
+    <details>
+      <summary>Plot Area</summary>
+      <div class="sb">
+        <div class="row"><label>Padding</label><input type="number" id="pa-padding" value="20" min="0" /></div>
+        <div class="divider">Border</div>
+        <div class="checks">
+          <div class="cb"><input type="checkbox" id="pa-b-top"    /><label for="pa-b-top">top</label></div>
+          <div class="cb"><input type="checkbox" id="pa-b-right"  /><label for="pa-b-right">right</label></div>
+          <div class="cb"><input type="checkbox" id="pa-b-bottom" /><label for="pa-b-bottom">bottom</label></div>
+          <div class="cb"><input type="checkbox" id="pa-b-left"   /><label for="pa-b-left">left</label></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Animation -->
+    <details>
+      <summary>Animation</summary>
+      <div class="sb">
+        <div class="row"><label>Duration (ms)</label><input type="number" id="anim-duration" value="800" min="0" max="5000" step="100" /></div>
+        <div class="row">
+          <label>Easing</label>
+          <select id="anim-ease">
+            <option value="linear" selected>linear</option>
+            <option value="cubic">cubic</option>
+            <option value="elastic">elastic</option>
+            <option value="bounce">bounce</option>
+            <option value="back">back</option>
+            <option value="sin">sin</option>
+            <option value="exp">exp</option>
+            <option value="circle">circle</option>
+            <option value="quad">quad</option>
+          </select>
+        </div>
+      </div>
+    </details>
+
+    <!-- Line & Area -->
+    <details id="sec-line" open>
+      <summary>Line &amp; Area</summary>
+      <div class="sb">
+        <div class="row">
+          <label>Interpolation</label>
+          <select id="line-interp">
+            <option value="linear" selected>linear</option>
+            <option value="basis">basis</option>
+            <option value="cardinal">cardinal</option>
+            <option value="catmull-rom">catmull-rom</option>
+            <option value="natural">natural</option>
+            <option value="monotone">monotone</option>
+            <option value="monotone-x">monotone-x</option>
+            <option value="step">step</option>
+            <option value="step-before">step-before</option>
+            <option value="step-after">step-after</option>
+          </select>
+        </div>
+        <div class="cb"><input type="checkbox" id="area-visible" /><label for="area-visible">Show area fill</label></div>
+        <div class="row">
+          <label>Area opacity</label>
+          <div class="range-wrap">
+            <input type="range" id="area-opacity" min="0" max="1" step="0.05" value="0.4" />
+            <span class="range-val" id="area-opacity-val">0.40</span>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Markers -->
+    <details id="sec-markers">
+      <summary>Markers</summary>
+      <div class="sb">
+        <div class="cb"><input type="checkbox" id="markers-visible" checked /><label for="markers-visible">Visible</label></div>
+        <div class="row"><label>Size</label><input type="number" id="markers-size" value="6" min="1" max="30" /></div>
+        <div class="row">
+          <label>Type</label>
+          <select id="markers-type">
+            <option value="circle" selected>circle</option>
+            <option value="cross">cross</option>
+            <option value="diamond">diamond</option>
+            <option value="square">square</option>
+            <option value="triangle-up">triangle-up</option>
+            <option value="triangle-down">triangle-down</option>
+            <option value="mixed">mixed</option>
+          </select>
+        </div>
+      </div>
+    </details>
+
+    <!-- Bands -->
+    <details id="sec-bands">
+      <summary>Bands (Column / Bar)</summary>
+      <div class="sb">
+        <div class="row">
+          <label>Inner padding</label>
+          <div class="range-wrap">
+            <input type="range" id="bands-inner" min="0" max="1" step="0.05" value="0.5" />
+            <span class="range-val" id="bands-inner-val">0.50</span>
+          </div>
+        </div>
+        <div class="row">
+          <label>Outer padding</label>
+          <div class="range-wrap">
+            <input type="range" id="bands-outer" min="0" max="1" step="0.05" value="0.5" />
+            <span class="range-val" id="bands-outer-val">0.50</span>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Pie / Donut -->
+    <details id="sec-pie">
+      <summary>Pie / Donut</summary>
+      <div class="sb">
+        <div class="row">
+          <label>Inner radius</label>
+          <div class="range-wrap">
+            <input type="range" id="pie-radius" min="0" max="0.9" step="0.05" value="0" />
+            <span class="range-val" id="pie-radius-val">0.00</span>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Data Labels -->
+    <details>
+      <summary>Data Labels</summary>
+      <div class="sb">
+        <div class="cb"><input type="checkbox" id="labels-visible" /><label for="labels-visible">Visible</label></div>
+        <div class="row"><label>Format</label><input type="text" id="labels-format" value="" placeholder='e.g. .1f' /></div>
+        <div class="cb"><input type="checkbox" id="labels-rotate" /><label for="labels-rotate">Rotate 90°</label></div>
+      </div>
+    </details>
+
+    <!-- Tooltip -->
+    <details open>
+      <summary>Tooltip</summary>
+      <div class="sb">
+        <div class="row"><label>Title</label><input type="text" id="tt-title" value="" placeholder="fixed title" /></div>
+        <div class="row"><label>Value suffix</label><input type="text" id="tt-suffix" value=" k" /></div>
+        <div class="row"><label>Value format</label><input type="text" id="tt-format" value="" placeholder='e.g. .1f' /></div>
+      </div>
+    </details>
+
+    <!-- X Axis -->
+    <details open>
+      <summary>X Axis</summary>
+      <div class="sb">
+        <div class="row">
+          <label>Gridlines</label>
+          <select id="x-gridlines">
+            <option value="0" selected>none</option>
+            <option value="1">major</option>
+            <option value="2">minor</option>
+          </select>
+        </div>
+        <div class="row"><label>Label format</label><input type="text" id="x-label-format" value="" placeholder='e.g. %b %Y' /></div>
+        <div class="row"><label>Label rotate (°)</label><input type="number" id="x-label-rotate" value="0" step="5" /></div>
+        <div class="cb"><input type="checkbox" id="x-tickmarks" /><label for="x-tickmarks">Tick marks</label></div>
+        <div class="row"><label>Title text</label><input type="text" id="x-title-text" value="Month" /></div>
+        <div class="row">
+          <label>Title align</label>
+          <select id="x-title-align">
+            <option value="left">left</option>
+            <option value="center" selected>center</option>
+            <option value="right">right</option>
+          </select>
+        </div>
+      </div>
+    </details>
+
+    <!-- Y Axis -->
+    <details open>
+      <summary>Y Axis</summary>
+      <div class="sb">
+        <div class="row">
+          <label>Gridlines</label>
+          <select id="y-gridlines">
+            <option value="0">none</option>
+            <option value="1" selected>major</option>
+            <option value="2">minor</option>
+          </select>
+        </div>
+        <div class="row"><label>Label format</label><input type="text" id="y-label-format" value="" placeholder='e.g. .0f' /></div>
+        <div class="cb"><input type="checkbox" id="y-tickmarks" /><label for="y-tickmarks">Tick marks</label></div>
+        <div class="row"><label>Title text</label><input type="text" id="y-title-text" value="Sales (k)" /></div>
+        <div class="row">
+          <label>Title align</label>
+          <select id="y-title-align">
+            <option value="left">left</option>
+            <option value="center" selected>center</option>
+            <option value="right">right</option>
+          </select>
+        </div>
+        <div class="row">
+          <label>Title valign</label>
+          <select id="y-title-valign">
+            <option value="top">top</option>
+            <option value="middle" selected>middle</option>
+            <option value="bottom">bottom</option>
+          </select>
+        </div>
+      </div>
+    </details>
+
+    <!-- Colors -->
+    <details>
+      <summary>Series Colors</summary>
+      <div class="sb">
+        <label style="font-size:0.7rem;color:#888">One hex/CSS color per line</label>
+        <textarea id="colors" rows="7">#5491F6
+#7AC124
+#FFA300
+#129793
+#F16A73
+#FF6409
+#8E44AD</textarea>
+      </div>
+    </details>
+
+  </div><!-- /panel -->
+
+  <!-- ═══ Chart area ═══ -->
+  <div id="chart-wrap">
+    <a href="gallery.html">← Gallery</a>
+    <div id="chart"></div>
+  </div>
+
+</main>
+
+<script type="module">
+  import {
+    LineChart, StackedLineChart, StackedPercentLineChart,
+    ColumnChart, StackedColumnChart, StackedPercentColumnChart,
+    BarChart, StackedBarChart, StackedPercentBarChart,
+    PieChart, DonutChart,
+    ComboChart,
+    ScatterChart,
+    GridLineType
+  } from "@frnkclsst/d3charts";
+
+  // ── Data ────────────────────────────────────────────────────────────────────
+
+  const MONTHS = [
+    "Jan 23","Feb 23","Mar 23","Apr 23","May 23","Jun 23",
+    "Jul 23","Aug 23","Sep 23","Oct 23","Nov 23","Dec 23",
+    "Jan 24","Feb 24","Mar 24","Apr 24","May 24","Jun 24",
+    "Jul 24","Aug 24","Sep 24","Oct 24","Nov 24","Dec 24"
+  ];
+
+  const mainData = {
+    categories: { format: "%s", data: MONTHS },
+    series: [
+      { name: "Electronics",   suffix: " k", data: [120,135,148,162,178,195,182,170,190,215,245,280,130,145,158,175,192,208,196,185,205,230,262,298] },
+      { name: "Clothing",      suffix: " k", data: [ 95,102,115,125,138,145,132,128,142,155,168,192,100,110,122,134,148,158,144,140,156,170,184,210] },
+      { name: "Food & Drink",  suffix: " k", data: [220,235,228,242,258,265,272,268,258,245,252,290,235,250,244,260,278,285,292,288,278,265,272,310] },
+      { name: "Home & Garden", suffix: " k", data: [ 68, 72, 88,105,125,138,145,138,118, 98, 82, 75, 72, 78, 95,115,138,152,160,152,130,108, 88, 80] },
+      { name: "Sports",        suffix: " k", data: [ 82, 88, 95,102,118,128,135,130,112, 95, 78, 72, 88, 95,102,112,128,140,148,142,122,105, 85, 78] },
+    ]
+  };
+
+  const pieData = {
+    categories: { format: "%s", data: ["Electronics","Clothing","Food & Drink","Home & Garden","Sports","Books","Toys","Automotive","Health","Beauty"] },
+    series: [{ name: "Market share", suffix: "%", data: [28, 18, 22, 10, 8, 5, 3, 3, 2, 1] }]
+  };
+
+  const comboData = {
+    categories: { format: "%s", data: MONTHS },
+    series: [
+      { name: "Electronics",  type: "column", suffix: " k", data: [120,135,148,162,178,195,182,170,190,215,245,280,130,145,158,175,192,208,196,185,205,230,262,298] },
+      { name: "Clothing",     type: "column", suffix: " k", data: [ 95,102,115,125,138,145,132,128,142,155,168,192,100,110,122,134,148,158,144,140,156,170,184,210] },
+      { name: "Avg Trend",    type: "line",   suffix: " k", data: [152,162,168,178,188,200,194,188,196,206,218,234,162,172,178,190,204,216,210,202,212,220,232,248] },
+    ]
+  };
+
+  const scatterData = {
+    categories: { format: "%s", data: MONTHS },
+    series: [
+      { name: "X axis",    data: [120,135,148,162,178,195,182,170,190,215,245,280,130,145,158,175,192,208,196,185,205,230,262,298] },
+      { name: "Group A",   data: [ 95,102,115,125,138,145,132,128,142,155,168,192,100,110,122,134,148,158,144,140,156,170,184,210],
+        size: [4,5,6,5,7,6,5,4,6,7,8,9,4,5,6,5,7,8,7,6,7,8,9,10] },
+      { name: "Group B",   data: [220,235,228,242,258,265,272,268,258,245,252,290,235,250,244,260,278,285,292,288,278,265,272,310],
+        size: [6,7,5,8,6,7,8,7,6,5,6,9,7,8,6,9,7,8,9,8,7,6,7,10] },
+    ]
+  };
+
+  // ── Chart registry ──────────────────────────────────────────────────────────
+
+  const CHARTS = {
+    LineChart, StackedLineChart, StackedPercentLineChart,
+    ColumnChart, StackedColumnChart, StackedPercentColumnChart,
+    BarChart, StackedBarChart, StackedPercentBarChart,
+    PieChart, DonutChart,
+    ComboChart,
+    ScatterChart
+  };
+
+  const IS_PIE     = t => t === "PieChart" || t === "DonutChart";
+  const IS_LINE    = t => ["LineChart","StackedLineChart","StackedPercentLineChart","ComboChart"].includes(t);
+  const IS_BANDED  = t => t.includes("Column") || t.includes("Bar");
+  const IS_SCATTER = t => t === "ScatterChart";
+
+  // ── Helpers ─────────────────────────────────────────────────────────────────
+
+  const el  = id => document.getElementById(id);
+  const val = id => el(id).value;
+  const num = id => parseFloat(val(id)) || 0;
+  const chk = id => el(id).checked;
+
+  // ── Options builder ─────────────────────────────────────────────────────────
+
+  function buildOptions() {
+    const colors = val("colors").split("\n").map(s => s.trim()).filter(Boolean);
+    return {
+      titleArea: {
+        text:     val("title-text"),
+        subtitle: val("title-subtitle"),
+        align:    val("title-align"),
+        position: val("title-position"),
+        height:   num("title-height"),
+        margin:   num("title-margin"),
+        border: { top: chk("title-b-top"), right: chk("title-b-right"), bottom: chk("title-b-bottom"), left: chk("title-b-left") }
+      },
+      legendArea: {
+        position: val("legend-position"),
+        title:    val("legend-title"),
+        width:    num("legend-width"),
+        height:   num("legend-height"),
+        border: { top: chk("legend-b-top"), right: chk("legend-b-right"), bottom: chk("legend-b-bottom"), left: chk("legend-b-left") }
+      },
+      plotArea: {
+        padding: num("pa-padding"),
+        border: { top: chk("pa-b-top"), right: chk("pa-b-right"), bottom: chk("pa-b-bottom"), left: chk("pa-b-left") }
+      },
+      plotOptions: {
+        animation: { duration: num("anim-duration"), ease: val("anim-ease") },
+        area:      { visible: chk("area-visible"), opacity: parseFloat(el("area-opacity").value) },
+        bands:     { innerPadding: parseFloat(el("bands-inner").value), outerPadding: parseFloat(el("bands-outer").value) },
+        colors:    colors.length ? colors : undefined,
+        line:      { interpolation: val("line-interp") },
+        markers:   { visible: chk("markers-visible"), size: num("markers-size"), type: val("markers-type") },
+        pie:       { innerRadius: parseFloat(el("pie-radius").value) }
+      },
+      series: {
+        labels: { visible: chk("labels-visible"), format: val("labels-format"), rotate: chk("labels-rotate") }
+      },
+      tooltip: {
+        title:            val("tt-title"),
+        valueSuffix:      val("tt-suffix"),
+        valuePointFormat: val("tt-format")
+      },
+      xAxis: {
+        gridlines: +val("x-gridlines"),
+        labels: { format: val("x-label-format"), rotate: num("x-label-rotate") },
+        tickmarks: chk("x-tickmarks"),
+        title: { text: val("x-title-text"), align: val("x-title-align") }
+      },
+      yAxis: {
+        gridlines: +val("y-gridlines"),
+        labels: { format: val("y-label-format") },
+        tickmarks: chk("y-tickmarks"),
+        title: { text: val("y-title-text"), align: val("y-title-align"), valign: val("y-title-valign") }
+      }
+    };
+  }
+
+  function getDataFor(type) {
+    if (IS_PIE(type))     return pieData;
+    if (type === "ComboChart") return comboData;
+    if (IS_SCATTER(type)) return scatterData;
+    return mainData;
+  }
+
+  // ── Rendering ───────────────────────────────────────────────────────────────
+
+  let activeChart = null;
+  let activeType  = "LineChart";
+
+  function render() {
+    if (activeChart) { activeChart.destroy(); activeChart = null; }
+
+    try {
+      activeChart = new CHARTS[activeType]("#chart", getDataFor(activeType), buildOptions());
+      activeChart.draw();
+    } catch (e) {
+      console.error("Chart error:", e);
+    }
+  }
+
+  // ── Section visibility ──────────────────────────────────────────────────────
+
+  function syncSections(type) {
+    el("sec-line").style.display    = IS_LINE(type)    ? "" : "none";
+    el("sec-markers").style.display = (IS_LINE(type) || IS_SCATTER(type)) ? "" : "none";
+    el("sec-bands").style.display   = IS_BANDED(type)  ? "" : "none";
+    el("sec-pie").style.display     = IS_PIE(type)     ? "" : "none";
+  }
+
+  // ── Chart type buttons ──────────────────────────────────────────────────────
+
+  document.querySelectorAll(".type-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".type-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeType = btn.dataset.type;
+      syncSections(activeType);
+      render();
+    });
+  });
+
+  // ── Range inputs — live value display ───────────────────────────────────────
+
+  [
+    ["area-opacity",   "area-opacity-val"],
+    ["bands-inner",    "bands-inner-val"],
+    ["bands-outer",    "bands-outer-val"],
+    ["pie-radius",     "pie-radius-val"],
+  ].forEach(([rangeId, spanId]) => {
+    el(rangeId).addEventListener("input", () => {
+      el(spanId).textContent = parseFloat(el(rangeId).value).toFixed(2);
+    });
+  });
+
+  // ── All inputs → debounced render ───────────────────────────────────────────
+
+  let timer;
+  function schedule() { clearTimeout(timer); timer = setTimeout(render, 280); }
+
+  document.querySelectorAll("input, select, textarea").forEach(inp => {
+    const event = (inp.type === "text" || inp.tagName === "TEXTAREA") ? "input" : "change";
+    inp.addEventListener(event, schedule);
+  });
+
+  // ── Boot ────────────────────────────────────────────────────────────────────
+
+  syncSections(activeType);
+  render();
+</script>
+</body>
+</html>

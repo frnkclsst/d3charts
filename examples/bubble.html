@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Bubble chart</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 800px; height: 400px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Bubble chart</h2>
+<p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { ScatterChart, GridLineType } from "@frnkclsst/d3charts";
+
+    const data = {
+      categories: {
+        format: "%s",
+        data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+      },
+      series: [
+        {
+          // series[0] = X values (not rendered, drives horizontal position)
+          data: [49.94, 71.53, 106.40, 129.21, 144.05, 176.07, 135.68, 148.58, 216.49, 194.11, 95.64, 54.43]
+        },
+        {
+          name: "Serie 1",
+          data: [129.94, 31.53, 16.40, 149.21, 174.05, 189.07, 235.68, 48.58, 16.49, 94.11, 55.64, 44.43],
+          size: [100, 200, 120, 45, 74, 89, 36, 9, 16, 4, 56, 44],
+          format: ".2f",
+          axis: "A"
+        },
+        {
+          name: "Serie 2",
+          data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+          size: [59, 20, 220, 78, 174, 18, 66, 59, 46, 24, 6, 94],
+          format: ".1f",
+          axis: "B"
+        }
+      ]
+    };
+
+    const options = {
+      titleArea: { text: "Bubble Chart", height: 50 },
+      legendArea: { width: 120, title: "Series" },
+      plotOptions: {
+        markers: { visible: true, type: "circle" },
+        animation: { duration: 1000 }
+      },
+      plotArea: { padding: 20 },
+      xAxis: [{ orient: "bottom", gridlines: GridLineType.None }],
+      yAxis: [
+        { name: "A", orient: "left",  gridlines: GridLineType.Major, title: { text: "Serie 1" } },
+        { name: "B", orient: "right", gridlines: GridLineType.Major, title: { text: "Serie 2" } }
+      ]
+    };
+
+    const chart = new ScatterChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>
