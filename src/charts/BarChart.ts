@@ -37,6 +37,9 @@ export class BarChart extends CartesianChart {
     for (const axis of this.axes) {
       axis.isDataAxis = axis.type === AxisType.X;
     }
+
+    // Match legend swatch opacity to the CSS fill-opacity on .bar elements
+    this.canvas.legendArea.swatchFillOpacity = 0.4;
   }
 
   /** Renders axes and bar series. */

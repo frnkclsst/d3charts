@@ -20,6 +20,12 @@ export class LegendArea extends ChartArea {
   public readonly position: string;
   /** Optional title rendered above the item list. */
   public readonly title: string;
+  /**
+   * Fill opacity applied to `drawRect()` swatches in the legend.
+   * Should match the CSS `fill-opacity` of the chart element type
+   * (e.g. `0.4` for columns/bars, `0.8` for pie slices). Defaults to `1`.
+   */
+  public swatchFillOpacity: number = 1;
 
   private readonly _opts: ResolvedOptions;
 
@@ -101,6 +107,7 @@ export class LegendArea extends ChartArea {
       const symbol = new SVGSymbol(symSvg, {
         areaVisible:   this._opts.plotOptions.area.visible,
         areaOpacity:   this._opts.plotOptions.area.opacity,
+        fillOpacity:   this.swatchFillOpacity,
         markerSize:    this._opts.plotOptions.markers.size,
         markerType:    this._opts.plotOptions.markers.type,
         markerVisible: this._opts.plotOptions.markers.visible

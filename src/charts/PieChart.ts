@@ -48,6 +48,9 @@ export class PieChart extends Chart {
 
     // Legend labels = category names (one per slice)
     this.canvas.legendArea.items = this.categories.labels;
+
+    // Match legend swatch opacity to the CSS fill-opacity on .slice elements
+    this.canvas.legendArea.swatchFillOpacity = 0.8;
   }
 
   /** Renders the canvas layout and all pie/donut rings. */

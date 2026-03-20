@@ -43,6 +43,9 @@ export class VariwideColumnChart extends CartesianChart {
     for (const axis of this.axes) {
       axis.isDataAxis = axis.type === AxisType.Y;
     }
+
+    // Match legend swatch opacity to the CSS fill-opacity on .column elements
+    this.canvas.legendArea.swatchFillOpacity = 0.4;
   }
 
   /** Renders axes and variwide column series. */
