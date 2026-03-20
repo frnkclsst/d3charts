@@ -64,7 +64,7 @@ export class BarShape extends Shape {
 
   /**
    * Renders the bar rects and starts the grow animation.
-   * @param data - The datum row for this series from {@link Series.getMatrixItem}.
+   * @param data - The datum row for this series from {@link Series.getSeriesData}.
    */
   public draw(data: IDatum[]): void {
     const enter = this._svg

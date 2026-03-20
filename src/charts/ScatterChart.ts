@@ -62,7 +62,6 @@ export class ScatterChart extends CartesianChart {
       new BubbleShape(svgSeries, s)
         .animation(duration, ease)
         .color(this.colorPalette.color(s - 1))
-        .marker(this.series.items[s - 1].marker)
         .sizes(this.series.items[s].size ?? [])
         .labels(
           this.series.items[s].format,
@@ -72,7 +71,7 @@ export class ScatterChart extends CartesianChart {
         .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie, serie - 1))
         .x((d, i) => this.getXCoordinate(d, i, s))
         .y((d, i) => this.getYCoordinate(d, i, s))
-        .draw(this.series.getMatrixItem(0)); // drive bubble position from X series
+        .draw(this.series.getSeriesData(0)); // drive bubble position from X series
     }
   }
 
@@ -92,7 +91,7 @@ export class ScatterChart extends CartesianChart {
   public override getYCoordinate(_d: IDatum, i: number, serie: number): number {
     const idx   = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
-    return scale(this.series.getMatrixItem(serie)[i].y);
+    return scale(this.series.getSeriesData(serie)[i].y);
   }
 
   /**

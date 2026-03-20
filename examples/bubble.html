@@ -20,6 +20,7 @@
 
     const data = {
       categories: {
+        name: "months",
         format: "%s",
         data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
       },
@@ -49,11 +50,10 @@
       titleArea: { text: "Bubble Chart", height: 50 },
       legendArea: { width: 120, title: "Series" },
       plotOptions: {
-        markers: { visible: true, type: "circle" },
         animation: { duration: 1000 }
       },
       plotArea: { padding: 20 },
-      xAxis: [{ orient: "bottom", gridlines: GridLineType.None }],
+      xAxis: [{ orient: "bottom", gridlines: GridLineType.None, title: { text: "X" }  }],
       yAxis: [
         { name: "A", orient: "left",  gridlines: GridLineType.Major, title: { text: "Serie 1" } },
         { name: "B", orient: "right", gridlines: GridLineType.Major, title: { text: "Serie 2" } }

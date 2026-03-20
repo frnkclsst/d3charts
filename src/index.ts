@@ -33,6 +33,8 @@ export { BarChart, StackedBarChart, StackedPercentBarChart } from "./charts/BarC
 export { ScatterChart } from "./charts/ScatterChart";
 export { PieChart, DonutChart } from "./charts/PieChart";
 export { ComboChart } from "./charts/ComboChart";
+export { SpiderChart } from "./charts/SpiderChart";
+export { HeatmapChart } from "./charts/HeatmapChart";
 
 // Core (for advanced consumers / extension)
 export { Chart }      from "./charts/Chart";

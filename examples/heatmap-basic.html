@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Heatmap chart</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 700px; height: 380px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Heatmap chart</h2>
+  <p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { HeatmapChart, GridLineType } from "@frnkclsst/d3charts";
+
+    const data = {
+      categories: { format: "%s", data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] },
+      series: [
+        { name: "Morning",   data: [30, 45, 50, 40, 55, 70, 60] },
+        { name: "Afternoon", data: [60, 75, 80, 70, 85, 95, 90] },
+        { name: "Evening",   data: [45, 55, 60, 50, 65, 80, 75] },
+        { name: "Night",     data: [15, 20, 18, 22, 25, 40, 35] }
+      ]
+    };
+
+    const options = {
+      titleArea: { text: "Website traffic by day & time", height: 50 },
+      xAxis: { gridlines: GridLineType.None },
+      yAxis: { gridlines: GridLineType.None },
+      plotOptions: {
+        animation: { duration: 800, ease: "cubic" },
+        heatmap: { colorRange: ["#f0f9e8", "#084081"] }
+      }
+    };
+
+    const chart = new HeatmapChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>

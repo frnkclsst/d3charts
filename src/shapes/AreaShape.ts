@@ -63,7 +63,7 @@ export class AreaShape extends Shape {
 
   /**
    * Renders the filled area path and starts the fade-in animation.
-   * @param data - The datum row for this series from {@link Series.getMatrixItem}.
+   * @param data - The datum row for this series from {@link Series.getSeriesData}.
    */
   public draw(data: IDatum[]): void {
     const area = d3.area<IDatum>()

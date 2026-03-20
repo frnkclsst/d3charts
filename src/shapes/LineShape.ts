@@ -24,7 +24,7 @@ import { getHeight } from "../utils/dom";
 export class LineShape extends Shape {
   /** Name of the d3 curve factory to use (see {@link curveFromString}). */
   private _interpolation: string = "linear";
-  /** Marker configuration for this line. */
+  /** Marker configuration */
   private _marker: { size: number; type: MarkerType; visible: boolean };
 
   /** Called once, after animation, to attach tooltip behaviour to the marker selection. */
@@ -70,7 +70,7 @@ export class LineShape extends Shape {
 
   /**
    * Renders the line into the parent SVG group and starts the enter animation.
-   * @param data - The datum row for this series from {@link Series.getMatrixItem}.
+   * @param data - The datum row for this series from {@link Series.getSeriesData}.
    */
   public draw(data: IDatum[]): void {
     const line = d3.line<IDatum>()

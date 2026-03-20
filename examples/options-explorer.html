@@ -166,6 +166,8 @@
     <button class="type-btn" data-type="DonutChart">Donut</button>
     <button class="type-btn" data-type="ComboChart">Combo</button>
     <button class="type-btn" data-type="ScatterChart">Scatter</button>
+    <button class="type-btn" data-type="SpiderChart">Spider</button>
+    <button class="type-btn" data-type="HeatmapChart">Heatmap</button>
   </div>
 </header>
 
@@ -342,6 +344,36 @@
       </div>
     </details>
 
+    <!-- Spider -->
+    <details id="sec-spider">
+      <summary>Spider / Radar</summary>
+      <div class="sb">
+        <div class="row">
+          <label>Gridlines</label>
+          <select id="spider-gridlines">
+            <option value="circle" selected>circle</option>
+            <option value="polygon">polygon</option>
+          </select>
+        </div>
+        <div class="row">
+          <label>Levels</label>
+          <div class="range-wrap">
+            <input type="range" id="spider-levels" min="2" max="10" step="1" value="5" />
+            <span class="range-val" id="spider-levels-val">5</span>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Heatmap -->
+    <details id="sec-heatmap">
+      <summary>Heatmap</summary>
+      <div class="sb">
+        <div class="row"><label>Color (low)</label><input type="text" id="heatmap-color-low"  value="#f0f9e8" /></div>
+        <div class="row"><label>Color (high)</label><input type="text" id="heatmap-color-high" value="#084081" /></div>
+      </div>
+    </details>
+
     <!-- Pie / Donut -->
     <details id="sec-pie">
       <summary>Pie / Donut</summary>
@@ -470,6 +502,8 @@
     PieChart, DonutChart,
     ComboChart,
     ScatterChart,
+    SpiderChart,
+    HeatmapChart,
     GridLineType
   } from "@frnkclsst/d3charts";
 
@@ -518,6 +552,25 @@
     ]
   };
 
+  const spiderData = {
+    categories: { format: "%s", data: ["Speed", "Strength", "Defense", "Stamina", "Agility", "Technique"] },
+    series: [
+      { name: "Warrior", data: [65, 90, 85, 70, 60, 55] },
+      { name: "Mage",    data: [40, 45, 50, 65, 75, 95] },
+      { name: "Rogue",   data: [85, 60, 55, 70, 90, 80] },
+    ]
+  };
+
+  const heatmapData = {
+    categories: { format: "%s", data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] },
+    series: [
+      { name: "Morning",   data: [30, 45, 50, 40, 55, 70, 60] },
+      { name: "Afternoon", data: [60, 75, 80, 70, 85, 95, 90] },
+      { name: "Evening",   data: [45, 55, 60, 50, 65, 80, 75] },
+      { name: "Night",     data: [15, 20, 18, 22, 25, 40, 35] },
+    ]
+  };
+
   // ── Chart registry ──────────────────────────────────────────────────────────
 
   const CHARTS = {
@@ -526,13 +579,17 @@
     BarChart, StackedBarChart, StackedPercentBarChart,
     PieChart, DonutChart,
     ComboChart,
-    ScatterChart
+    ScatterChart,
+    SpiderChart,
+    HeatmapChart
   };
 
   const IS_PIE     = t => t === "PieChart" || t === "DonutChart";
   const IS_LINE    = t => ["LineChart","StackedLineChart","StackedPercentLineChart","ComboChart"].includes(t);
   const IS_BANDED  = t => t.includes("Column") || t.includes("Bar");
   const IS_SCATTER = t => t === "ScatterChart";
+  const IS_SPIDER  = t => t === "SpiderChart";
+  const IS_HEATMAP = t => t === "HeatmapChart";
 
   // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -573,7 +630,9 @@
         colors:    colors.length ? colors : undefined,
         line:      { interpolation: val("line-interp") },
         markers:   { visible: chk("markers-visible"), size: num("markers-size"), type: val("markers-type") },
-        pie:       { innerRadius: parseFloat(el("pie-radius").value) }
+        pie:       { innerRadius: parseFloat(el("pie-radius").value) },
+        spider:    { gridlines: val("spider-gridlines"), levels: parseInt(el("spider-levels").value) },
+        heatmap:   { colorRange: [val("heatmap-color-low"), val("heatmap-color-high")] }
       },
       series: {
         labels: { visible: chk("labels-visible"), format: val("labels-format"), rotate: chk("labels-rotate") }
@@ -602,6 +661,8 @@
     if (IS_PIE(type))     return pieData;
     if (type === "ComboChart") return comboData;
     if (IS_SCATTER(type)) return scatterData;
+    if (IS_SPIDER(type))  return spiderData;
+    if (IS_HEATMAP(type)) return heatmapData;
     return mainData;
   }
 
@@ -624,10 +685,12 @@
   // ── Section visibility ──────────────────────────────────────────────────────
 
   function syncSections(type) {
-    el("sec-line").style.display    = IS_LINE(type)    ? "" : "none";
-    el("sec-markers").style.display = (IS_LINE(type) || IS_SCATTER(type)) ? "" : "none";
-    el("sec-bands").style.display   = IS_BANDED(type)  ? "" : "none";
-    el("sec-pie").style.display     = IS_PIE(type)     ? "" : "none";
+    el("sec-line").style.display    = IS_LINE(type)                              ? "" : "none";
+    el("sec-markers").style.display = (IS_LINE(type) || IS_SCATTER(type) || IS_SPIDER(type)) ? "" : "none";
+    el("sec-bands").style.display   = IS_BANDED(type)                           ? "" : "none";
+    el("sec-pie").style.display     = IS_PIE(type)                              ? "" : "none";
+    el("sec-spider").style.display  = IS_SPIDER(type)                           ? "" : "none";
+    el("sec-heatmap").style.display = IS_HEATMAP(type)                          ? "" : "none";
   }
 
   // ── Chart type buttons ──────────────────────────────────────────────────────
@@ -653,6 +716,10 @@
     el(rangeId).addEventListener("input", () => {
       el(spanId).textContent = parseFloat(el(rangeId).value).toFixed(2);
     });
+  });
+
+  el("spider-levels").addEventListener("input", () => {
+    el("spider-levels-val").textContent = el("spider-levels").value;
   });
 
   // ── All inputs → debounced render ───────────────────────────────────────────

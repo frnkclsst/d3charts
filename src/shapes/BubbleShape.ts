@@ -2,9 +2,7 @@ import * as d3 from "d3";
 import { Shape } from "./Shape";
 import type { SeriesGroup, CoordFn, DataSelection } from "./Shape";
 import type { IDatum } from "../types/interfaces";
-import type { MarkerType } from "../types/enums";
 import { easeFromString } from "../utils/ease";
-import { d3SymbolType } from "../utils/symbols";
 
 /**
  * Renders a single Y series of a scatter/bubble chart as `<path class="bubble">` elements.
@@ -21,8 +19,6 @@ import { d3SymbolType } from "../utils/symbols";
  * index 0 is the X-values series and is not rendered).
  */
 export class BubbleShape extends Shape {
-  /** Symbol shape used for all bubbles in this series. */
-  private _markerType: MarkerType = "circle";
   /** Per-point size values (multiplied ×10 to produce d3 symbol area). */
   private _sizes: number[] = [];
   /** Optional callback to attach tooltip behaviour to the bubble selection. */
@@ -34,15 +30,6 @@ export class BubbleShape extends Shape {
    */
   public constructor(svg: SeriesGroup, serie: number) {
     super(svg, serie);
-  }
-
-  /**
-   * Sets the symbol shape for bubbles in this series.
-   * @param type - A {@link MarkerType} value.
-   */
-  public marker(type: MarkerType): this {
-    this._markerType = type;
-    return this;
   }
 
   /**
@@ -68,9 +55,6 @@ export class BubbleShape extends Shape {
    * @param data - The datum row for `series[0]` (X values) — used to position bubbles on X.
    */
   public draw(data: IDatum[]): void {
-    const symType = d3SymbolType(this._markerType);
-    const rotate  = this._markerType === "triangle-down" ? "rotate(180)" : "";
-
     const enter = this._svg
       .append("g")
       .attr("id", `serie-${this._serie - 1}`)
@@ -84,15 +68,14 @@ export class BubbleShape extends Shape {
       .style("fill", this._color)
       .style("stroke", this._color)
       // Start at size 0 so they grow in from invisible
-      .attr("d", d3.symbol<IDatum>().size(0).type(symType))
+      .attr("d", d3.symbol<IDatum>().size(0).type(d3.symbolCircle))
       .attr("transform", (d, i) => {
         const x = this._x(d, i, 0);               // X from series[0]
         const y = this._y(d, i, this._serie);      // Y from this series
-        return `translate(${x},${y}) ${rotate}`.trim();
+        return `translate(${x},${y})`;
       });
 
-    let endCount = 0;
-    const total  = data.length;
+    let pending = data.length;
 
     bubbles
       .transition()
@@ -101,11 +84,11 @@ export class BubbleShape extends Shape {
       .attrTween("d", (_d, i) => {
         const targetSize = this._sizes[i] !== undefined ? this._sizes[i] * 10 : 60;
         const interp = d3.interpolateNumber(0, targetSize);
-        return (t: number): string => d3.symbol().size(interp(t)).type(symType)() ?? "";
+        return (t: number): string => d3.symbol().size(interp(t)).type(d3.symbolCircle)() ?? "";
       })
       .on("end", () => {
-        endCount++;
-        if (endCount === total && this._labels.visible) {
+        pending--;
+        if (pending === 0 && this._labels.visible) {
           this._drawLabels(data);
         }
       });

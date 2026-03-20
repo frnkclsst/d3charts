@@ -37,7 +37,7 @@ export class Series {
    * Returns the datum row for a given series index.
    * @param i - Zero-based series index.
    */
-  public getMatrixItem(i: number): IDatum[] {
+  public getSeriesData(i: number): IDatum[] {
     return this._matrix[i];
   }
 

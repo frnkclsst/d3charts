@@ -75,7 +75,7 @@ export class ComboChart extends CartesianChart {
         .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie))
         .x((d, i) => this._colX(d, i, s, colTotal))
         .y((d, i) => this._colY(d, i, s))
-        .draw(this.series.getMatrixItem(s));
+        .draw(this.series.getSeriesData(s));
     }
 
     // Draw lines on top
@@ -100,7 +100,7 @@ export class ComboChart extends CartesianChart {
         .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie))
         .x((d, i) => this._lineX(d, i, s))
         .y((d, i) => this._lineY(d, i, s))
-        .draw(this.series.getMatrixItem(s));
+        .draw(this.series.getSeriesData(s));
     }
   }
 

@@ -72,7 +72,7 @@ export class BarChart extends CartesianChart {
         .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie))
         .x((d, i) => this.getXCoordinate(d, i, s))
         .y((d, i) => this.getYCoordinate(d, i, s))
-        .draw(this.series.getMatrixItem(s));
+        .draw(this.series.getSeriesData(s));
     }
   }
 

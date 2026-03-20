@@ -258,6 +258,21 @@ export interface IPlotOptions {
      */
     innerRadius?: number;
   };
+  /** Spider/radar chart options. */
+  spider?: {
+    /** Shape of the concentric gridlines. Defaults to `"circle"`. */
+    gridlines?: "circle" | "polygon";
+    /** Number of concentric gridline rings. Defaults to `5`. */
+    levels?: number;
+  };
+  /** Heatmap chart options. */
+  heatmap?: {
+    /**
+     * Two-stop color range for the sequential cell color scale: `[lowColor, highColor]`.
+     * Defaults to `["#f7fbff", "#084594"]` (white to dark blue).
+     */
+    colorRange?: [string, string];
+  };
 }
 
 /** Data-label options applied uniformly to all series. */

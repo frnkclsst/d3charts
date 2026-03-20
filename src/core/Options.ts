@@ -40,9 +40,11 @@ export interface IResolvedPlotOptions {
   area: { visible: boolean; opacity: number };
   bands: { innerPadding: number; outerPadding: number };
   colors: string[];
+  heatmap: { colorRange: [string, string] };
   line: { interpolation: string };
   markers: { visible: boolean; size: number; type: MarkerType };
   pie: { innerRadius: number };
+  spider: { gridlines: "circle" | "polygon"; levels: number };
 }
 
 /** Fully-resolved series options with all defaults applied. */
@@ -213,6 +215,9 @@ export function resolveOptions(options?: IOptions): IResolvedOptions {
         outerPadding: po?.bands?.outerPadding ?? 0.5
       },
       colors: po?.colors ?? DEFAULT_COLORS,
+      heatmap: {
+        colorRange: po?.heatmap?.colorRange ?? ["#f7fbff", "#084594"]
+      },
       line: {
         interpolation: po?.line?.interpolation ?? "linear"
       },
@@ -223,6 +228,10 @@ export function resolveOptions(options?: IOptions): IResolvedOptions {
       },
       pie: {
         innerRadius: po?.pie?.innerRadius ?? 0
+      },
+      spider: {
+        gridlines: po?.spider?.gridlines ?? "circle",
+        levels:    po?.spider?.levels    ?? 5
       }
     },
     series: {

@@ -32,7 +32,7 @@ export class LineChart extends CartesianChart {
   public constructor(selector: string, data: IChartData, options?: IOptions) {
     super(selector, data, options);
 
-    // Mark Y axes as data axes so zero-lines are drawn when data goes negative
+  // Mark Y axes as data axes so zero-lines are drawn when data goes negative
     for (const axis of this.axes) {
       axis.isDataAxis = axis.type === AxisType.Y;
     }
@@ -63,7 +63,7 @@ export class LineChart extends CartesianChart {
           .y((d, i) => this.getYCoordinate(d, i, s))
           .y0((d, i) => this.getY0Coordinate(d, i, s))
           .y1((d, i) => this.getY1Coordinate(d, i, s))
-          .draw(this.series.getMatrixItem(s));
+          .draw(this.series.getSeriesData(s));
       }
     }
 
@@ -88,7 +88,7 @@ export class LineChart extends CartesianChart {
         .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie))
         .x((d, i) => this.getXCoordinate(d, i, s))
         .y((d, i) => this.getYCoordinate(d, i, s))
-        .draw(this.series.getMatrixItem(s));
+        .draw(this.series.getSeriesData(s));
     }
   }
 
