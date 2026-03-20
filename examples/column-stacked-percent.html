@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { StackedPercentColumnChart, GridLineType } from "@frnkclsst/d3charts";
+    import { StackedPercentColumnChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -39,7 +39,7 @@
       legendArea: { title: "Population", width: 200 },
       plotArea: { padding: 20 },
       xAxis: [{ gridlines: GridLineType.None, tickmarks: false, title: { text: "States in the US" } }],
-      yAxis: [{ gridlines: GridLineType.Major, labels: { format: ".0%" }, orient: "left", tickmarks: true, title: { text: "" } }]
+      yAxis: [{ gridlines: GridLineType.Major, labels: { format: ".0%" }, orient: OrientationTypes.Left, tickmarks: true, title: { text: "" } }]
     };
 
     const chart = new StackedPercentColumnChart("#chart", data, options);

@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { StackedPercentLineChart, GridLineType } from "@frnkclsst/d3charts";
+    import { StackedPercentLineChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -37,8 +37,8 @@
     const options = {
       titleArea: { text: "Monthly Sales - 100% Stacked Line", height: 50 },
       legendArea: { width: 120, title: "Product" },
-      yAxis: [{ orient: "left", gridlines: GridLineType.Major, labels: { format: ".0%" } }],
-      xAxis: [{ orient: "bottom", labels: { format: "%b" } }],
+      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineType.Major, labels: { format: ".0%" } }],
+      xAxis: [{ orient: OrientationTypes.Bottom, labels: { format: "%b" } }],
       plotOptions: {
         area: { visible: true, opacity: 0.25 },
         markers: { visible: true, size: 4 },

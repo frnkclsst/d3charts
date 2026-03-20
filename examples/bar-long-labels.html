@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { BarChart, GridLineType } from "@frnkclsst/d3charts";
+    import { BarChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -39,8 +39,8 @@
     const options = {
       titleArea: { text: "World Population by Continent", align: "center", height: 50 },
       legendArea: { width: 120, title: "Year" },
-      yAxis: [{ orient: "left" }],
-      xAxis: [{ orient: "bottom", gridlines: GridLineType.Major, title: { text: "Population (millions)" } }],
+      yAxis: [{ orient: OrientationTypes.Left }],
+      xAxis: [{ orient: OrientationTypes.Bottom, gridlines: GridLineType.Major, title: { text: "Population (millions)" } }],
       series: { labels: { visible: true } },
       tooltip: { title: "Population", valueSuffix: " M" },
       plotOptions: { animation: { duration: 600 } }

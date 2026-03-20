@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { ScatterChart, GridLineType } from "@frnkclsst/d3charts";
+    import { ScatterChart, GridLineType, MarkerTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -36,12 +36,12 @@
       legendArea: { title: "Series", width: 200 },
       plotArea: { padding: 20 },
       plotOptions: {
-        markers: { visible: true, type: "circle" }
+        markers: { visible: true, type: MarkerTypes.Circle }
       },
       xAxis: [{ gridlines: GridLineType.None, tickmarks: false }],
       yAxis: [
-        { gridlines: GridLineType.Major, orient: "left",  tickmarks: true },
-        { gridlines: GridLineType.Major, orient: "right", tickmarks: true }
+        { gridlines: GridLineType.Major, orient: OrientationTypes.Left,  tickmarks: true },
+        { gridlines: GridLineType.Major, orient: OrientationTypes.Right, tickmarks: true }
       ]
     };
 

@@ -4,6 +4,8 @@ import type { SeriesGroup, CoordFn } from "./Shape";
 import type { IDatum } from "../types/interfaces";
 import { curveFromString } from "../utils/curves";
 import { easeFromString } from "../utils/ease";
+import { CurveTypes } from "../types/enums";
+import type { CurveType } from "../types/enums";
 
 /**
  * Renders a filled area band beneath a line series.
@@ -20,7 +22,7 @@ import { easeFromString } from "../utils/ease";
  */
 export class AreaShape extends Shape {
   /** Name of the d3 curve factory (see {@link curveFromString}). */
-  private _interpolation: string = "linear";
+  private _interpolation: CurveType = CurveTypes.Linear;
   /** Lower boundary coordinate function (maps to the y0 field of IDatum). */
   private _y0!: CoordFn;
   /** Upper boundary coordinate function (maps to the y1 / y field of IDatum). */
@@ -38,7 +40,7 @@ export class AreaShape extends Shape {
    * Sets the d3 curve factory name.
    * @param name - One of the names accepted by {@link curveFromString}.
    */
-  public interpolation(name: string): this {
+  public interpolation(name: CurveType): this {
     this._interpolation = name;
     return this;
   }

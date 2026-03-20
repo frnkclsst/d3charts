@@ -17,7 +17,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { ScatterChart, GridLineType } from "@frnkclsst/d3charts";
+    import { ScatterChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
 
     // series[0] = X values; series[1..n] = Y values per group
     const data = {
@@ -32,8 +32,8 @@
     const options = {
       titleArea: { text: "Scatter Plot", height: 50 },
       legendArea: { width: 110, title: "Group" },
-      yAxis: [{ orient: "left", gridlines: GridLineType.Major, title: { text: "Y" } }],
-      xAxis: [{ orient: "bottom", gridlines: GridLineType.Major, title: { text: "X" } }],
+      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineType.Major, title: { text: "Y" } }],
+      xAxis: [{ orient: OrientationTypes.Bottom, gridlines: GridLineType.Major, title: { text: "X" } }],
       plotOptions: { animation: { duration: 600 } }
     };
 

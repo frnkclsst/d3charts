@@ -1,4 +1,4 @@
-import type { GridLineType, MarkerType, OrientationType } from "./enums";
+import type { GridLineType, MarkerType, OrientationType, EaseType, CurveType, SeriesType, SpiderGridlineType } from "./enums";
 
 /**
  * Computed data point produced by {@link Series._buildMatrix}.
@@ -86,7 +86,7 @@ export interface ISerie {
   /** Unit suffix appended to formatted values in tooltips (e.g. `" %"`). */
   suffix?: string;
   /** Series render type used by {@link ComboChart}: `"column"` or `"line"`. */
-  type?: "column" | "line";
+  type?: SeriesType;
 }
 
 /**
@@ -208,7 +208,7 @@ export interface IPlotOptions {
      * d3 easing function name: `"linear"` | `"cubic"` | `"elastic"` | `"bounce"` |
      * `"back"` | `"sin"` | `"exp"` | `"circle"` | `"quad"`. Defaults to `"linear"`.
      */
-    ease?: string;
+    ease?: EaseType;
   };
   /** Area fill shown beneath line chart series. */
   area?: {
@@ -236,7 +236,7 @@ export interface IPlotOptions {
      * `"natural"` | `"monotone"` | `"monotone-x"` | `"step"` | `"step-before"` |
      * `"step-after"`. Defaults to `"linear"`.
      */
-    interpolation?: string;
+    interpolation?: CurveType;
   };
   /** Data-point marker options for line and scatter charts. */
   markers?: {
@@ -261,7 +261,7 @@ export interface IPlotOptions {
   /** Spider/radar chart options. */
   spider?: {
     /** Shape of the concentric gridlines. Defaults to `"circle"`. */
-    gridlines?: "circle" | "polygon";
+    gridlines?: SpiderGridlineType;
     /** Number of concentric gridline rings. Defaults to `5`. */
     levels?: number;
   };

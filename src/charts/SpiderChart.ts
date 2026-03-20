@@ -1,4 +1,6 @@
 import * as d3 from "d3";
+import { SpiderGridlineTypes } from "../types/enums";
+import type { EaseType } from "../types/enums";
 import { Chart } from "./Chart";
 import { SpiderShape } from "../shapes/SpiderShape";
 import type { IChartData, IOptions } from "../types/interfaces";
@@ -104,7 +106,7 @@ export class SpiderChart extends Chart {
     for (let level = 1; level <= levels; level++) {
       const r = (level / levels) * radius;
 
-      if (gridlines === "polygon") {
+      if (gridlines === SpiderGridlineTypes.Polygon) {
         const pts = Array.from({ length: n }, (_, i) => {
           const a = angle(i);
           return `${r * Math.cos(a)},${r * Math.sin(a)}`;
@@ -177,7 +179,7 @@ export class SpiderChart extends Chart {
     rScale: d3.ScaleLinear<number, number>,
     angle: (i: number) => number,
     duration: number,
-    ease: string
+    ease: EaseType
   ): void {
     for (let s = 0; s < this.series.length; s++) {
       const data  = this.series.getSeriesData(s);

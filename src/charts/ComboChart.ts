@@ -1,6 +1,6 @@
 import type * as d3 from "d3";
 import { CartesianChart } from "./CartesianChart";
-import { AxisType, ScaleType } from "../types/enums";
+import { AxisType, ScaleType, SeriesTypes } from "../types/enums";
 import type { IDatum, IChartData, IOptions } from "../types/interfaces";
 import { ColumnShape } from "../shapes/ColumnShape";
 import { LineShape } from "../shapes/LineShape";
@@ -107,7 +107,7 @@ export class ComboChart extends CartesianChart {
 
   /** Dispatches to the column or line X helper based on series type. */
   public override getXCoordinate(d: IDatum, i: number, serie: number): number {
-    if (this.series.items[serie].type === "column") {
+    if (this.series.items[serie].type === SeriesTypes.Column) {
       return this._colX(d, i, serie, this._columnCount());
     }
     return this._lineX(d, i, serie);
@@ -115,7 +115,7 @@ export class ComboChart extends CartesianChart {
 
   /** Dispatches to the column or line Y helper based on series type. */
   public override getYCoordinate(d: IDatum, i: number, serie: number): number {
-    if (this.series.items[serie].type === "column") {
+    if (this.series.items[serie].type === SeriesTypes.Column) {
       return this._colY(d, i, serie);
     }
     return this._lineY(d, i, serie);
@@ -204,7 +204,7 @@ export class ComboChart extends CartesianChart {
 
   /** Returns the total number of column-type series (used to divide band width). */
   private _columnCount(): number {
-    return this.series.items.filter((s) => s.type === "column").length;
+    return this.series.items.filter((s) => s.type === SeriesTypes.Column).length;
   }
 
   /**
@@ -216,7 +216,7 @@ export class ComboChart extends CartesianChart {
   private _columnIndex(serie: number): number {
     let count = -1;
     for (let i = 0; i <= serie; i++) {
-      if (this.series.items[i].type === "column") {count++;}
+      if (this.series.items[i].type === SeriesTypes.Column) {count++;}
     }
     return count;
   }

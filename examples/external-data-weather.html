@@ -32,7 +32,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { LineChart, GridLineType } from "@frnkclsst/d3charts";
+    import { LineChart, GridLineType, CurveTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     const cities = [
       { name: "Berlin",   lat: 52.52,  lon:  13.41 },
@@ -95,13 +95,13 @@
             height:   65,
           },
           legendArea: { width: 120, title: "City" },
-          xAxis: [{ orient: "bottom", labels: { format: "%b %Y", rotate: -45 } }],
-          yAxis: [{ orient: "left",   gridlines: GridLineType.Major, title: { text: "Ã‚Â°C" } }],
+          xAxis: [{ orient: OrientationTypes.Bottom, labels: { format: "%b %Y", rotate: -45 } }],
+          yAxis: [{ orient: OrientationTypes.Left,   gridlines: GridLineType.Major, title: { text: "Ã‚Â°C" } }],
           plotOptions: {
             area:      { visible: true, opacity: 0.08 },
             markers:   { visible: false },
             animation: { duration: 600 },
-            line:      { interpolation: "linear" },
+            line:      { interpolation: CurveTypes.Linear },
           },
         };
 

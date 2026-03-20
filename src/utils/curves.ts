@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import type { CurveType } from "../types/enums";
 
 /**
  * Maps a curve name string to the corresponding d3 curve factory.
@@ -22,7 +23,7 @@ import * as d3 from "d3";
  * @param name - Curve name string (case-sensitive).
  * @returns The corresponding d3 `CurveFactory`.
  */
-export function curveFromString(name: string): d3.CurveFactory {
+export function curveFromString(name: CurveType): d3.CurveFactory {
   switch (name) {
     case "basis":       return d3.curveBasis;
     case "cardinal":    return d3.curveCardinal;

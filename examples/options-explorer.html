@@ -504,7 +504,8 @@
     ScatterChart,
     SpiderChart,
     HeatmapChart,
-    GridLineType
+    GridLineType,
+    SeriesTypes
   } from "@frnkclsst/d3charts";
 
   // ── Data ────────────────────────────────────────────────────────────────────
@@ -535,9 +536,9 @@
   const comboData = {
     categories: { format: "%s", data: MONTHS },
     series: [
-      { name: "Electronics",  type: "column", suffix: " k", data: [120,135,148,162,178,195,182,170,190,215,245,280,130,145,158,175,192,208,196,185,205,230,262,298] },
-      { name: "Clothing",     type: "column", suffix: " k", data: [ 95,102,115,125,138,145,132,128,142,155,168,192,100,110,122,134,148,158,144,140,156,170,184,210] },
-      { name: "Avg Trend",    type: "line",   suffix: " k", data: [152,162,168,178,188,200,194,188,196,206,218,234,162,172,178,190,204,216,210,202,212,220,232,248] },
+      { name: "Electronics",  type: SeriesTypes.Column, suffix: " k", data: [120,135,148,162,178,195,182,170,190,215,245,280,130,145,158,175,192,208,196,185,205,230,262,298] },
+      { name: "Clothing",     type: SeriesTypes.Column, suffix: " k", data: [ 95,102,115,125,138,145,132,128,142,155,168,192,100,110,122,134,148,158,144,140,156,170,184,210] },
+      { name: "Avg Trend",    type: SeriesTypes.Line,   suffix: " k", data: [152,162,168,178,188,200,194,188,196,206,218,234,162,172,178,190,204,216,210,202,212,220,232,248] },
     ]
   };
 

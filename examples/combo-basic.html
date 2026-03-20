@@ -16,22 +16,22 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { ComboChart, GridLineType } from "@frnkclsst/d3charts";
+    import { ComboChart, GridLineType, SeriesTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: { format: "%s", data: ["Jan","Feb","Mar","Apr","May","Jun"] },
       series: [
-        { name: "Revenue",  type: "column", data: [120, 135, 148, 162, 170, 195] },
-        { name: "Costs",    type: "column", data: [95,  102, 110, 118, 125, 130] },
-        { name: "Margin %", type: "line",   data: [21,  24,  26,  27,  26,  33] }
+        { name: "Revenue",  type: SeriesTypes.Column, data: [120, 135, 148, 162, 170, 195] },
+        { name: "Costs",    type: SeriesTypes.Column, data: [95,  102, 110, 118, 125, 130] },
+        { name: "Margin %", type: SeriesTypes.Line,   data: [21,  24,  26,  27,  26,  33] }
       ]
     };
 
     const options = {
       titleArea: { text: "Revenue, Costs and Margin", height: 50 },
       legendArea: { width: 120, title: "Metric" },
-      yAxis: [{ orient: "left", gridlines: GridLineType.Major, title: { text: "Value" } }],
-      xAxis: [{ orient: "bottom" }],
+      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineType.Major, title: { text: "Value" } }],
+      xAxis: [{ orient: OrientationTypes.Bottom }],
       plotOptions: {
         markers: { visible: true, size: 5 },
         animation: { duration: 600 }

@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { ColumnChart, GridLineType } from "@frnkclsst/d3charts";
+    import { ColumnChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: { format: "%s", data: ["Q1","Q2","Q3","Q4"] },
@@ -30,8 +30,8 @@
     const options = {
       titleArea: { text: "Quarterly Sales", height: 50 },
       legendArea: { width: 110, title: "Product" },
-      yAxis: [{ orient: "left", gridlines: GridLineType.Major, title: { text: "Units" } }],
-      xAxis: [{ orient: "bottom" }],
+      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineType.Major, title: { text: "Units" } }],
+      xAxis: [{ orient: OrientationTypes.Bottom }],
       plotOptions: { animation: { duration: 600 } }
     };
 

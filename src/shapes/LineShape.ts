@@ -2,7 +2,8 @@ import * as d3 from "d3";
 import { Shape } from "./Shape";
 import type { SeriesGroup, DataSelection, CoordFn } from "./Shape";
 import type { IDatum } from "../types/interfaces";
-import type { MarkerType } from "../types/enums";
+import type { MarkerType, CurveType } from "../types/enums";
+import { CurveTypes } from "../types/enums";
 import { curveFromString } from "../utils/curves";
 import { easeFromString } from "../utils/ease";
 import { d3SymbolType } from "../utils/symbols";
@@ -23,7 +24,7 @@ import { getHeight } from "../utils/dom";
  */
 export class LineShape extends Shape {
   /** Name of the d3 curve factory to use (see {@link curveFromString}). */
-  private _interpolation: string = "linear";
+  private _interpolation: CurveType = CurveTypes.Linear;
   /** Marker configuration */
   private _marker: { size: number; type: MarkerType; visible: boolean };
 
@@ -43,7 +44,7 @@ export class LineShape extends Shape {
    * Sets the d3 curve factory name.
    * @param name - One of the names accepted by {@link curveFromString}.
    */
-  public interpolation(name: string): this {
+  public interpolation(name: CurveType): this {
     this._interpolation = name;
     return this;
   }

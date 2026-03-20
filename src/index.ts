@@ -22,9 +22,15 @@ export {
   GridLineType,
   ScaleType,
   StackType,
-  SymbolTypes
+  SymbolTypes,
+  MarkerTypes,
+  OrientationTypes,
+  EaseTypes,
+  CurveTypes,
+  SeriesTypes,
+  SpiderGridlineTypes
 } from "./types/enums";
-export type { MarkerType, OrientationType } from "./types/enums";
+export type { MarkerType, OrientationType, EaseType, CurveType, SeriesType, SpiderGridlineType } from "./types/enums";
 
 // Chart classes
 export { LineChart, StackedLineChart, StackedPercentLineChart } from "./charts/LineChart";

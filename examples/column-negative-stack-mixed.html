@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { StackedColumnChart, GridLineType } from "@frnkclsst/d3charts";
+    import { StackedColumnChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
 
     // Quarterly profit/loss by product line (in millions)
     // Some quarters have losses (negative) mixed with profits (positive)
@@ -53,8 +53,8 @@
       titleArea: { text: "Quarterly Profit / Loss by Product Line (Ã¢â€šÂ¬M)", height: 50 },
       legendArea: { title: "Product Line", width: 200 },
       plotArea: { padding: 20 },
-      xAxis: [{ gridlines: GridLineType.None, orient: "bottom", tickmarks: true }],
-      yAxis: [{ gridlines: GridLineType.Major, orient: "left", tickmarks: false, title: { text: "Profit / Loss (Ã¢â€šÂ¬M)" } }]
+      xAxis: [{ gridlines: GridLineType.None, orient: OrientationTypes.Bottom, tickmarks: true }],
+      yAxis: [{ gridlines: GridLineType.Major, orient: OrientationTypes.Left, tickmarks: false, title: { text: "Profit / Loss (Ã¢â€šÂ¬M)" } }]
     };
 
     const chart = new StackedColumnChart("#chart", data, options);

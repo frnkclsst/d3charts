@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import type { EaseType } from "../types/enums";
 
 /**
  * Maps an easing name string to the corresponding d3 easing function.
@@ -22,7 +23,7 @@ import * as d3 from "d3";
  * @param name - Easing name string (case-sensitive).
  * @returns A d3 easing function `(t: number) => number`.
  */
-export function easeFromString(name: string): (t: number) => number {
+export function easeFromString(name: EaseType): (t: number) => number {
   switch (name) {
     case "cubic":   return d3.easeCubic;
     case "elastic": return d3.easeElastic;

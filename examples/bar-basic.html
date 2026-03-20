@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { BarChart, GridLineType } from "@frnkclsst/d3charts";
+    import { BarChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -31,8 +31,8 @@
     const options = {
       titleArea: { text: "GDP by Country 2023", height: 50 },
       legendArea: { width: 100, title: "Metric" },
-      yAxis: [{ orient: "left" }],
-      xAxis: [{ orient: "bottom", gridlines: GridLineType.Major, title: { text: "Trillion USD" } }],
+      yAxis: [{ orient: OrientationTypes.Left }],
+      xAxis: [{ orient: OrientationTypes.Bottom, gridlines: GridLineType.Major, title: { text: "Trillion USD" } }],
       plotOptions: { animation: { duration: 600 } }
     };
 

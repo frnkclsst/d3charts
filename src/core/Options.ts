@@ -1,6 +1,6 @@
 import type { IOptions, IAxisOptions } from "../types/interfaces";
-import { GridLineType } from "../types/enums";
-import type { MarkerType, OrientationType } from "../types/enums";
+import { GridLineType, EaseTypes, CurveTypes, SpiderGridlineTypes, MarkerTypes, OrientationTypes } from "../types/enums";
+import type { MarkerType, OrientationType, EaseType, CurveType, SpiderGridlineType } from "../types/enums";
 
 /** Fully-resolved axis options with all defaults applied. */
 export interface IResolvedAxisOptions {
@@ -36,15 +36,15 @@ export interface IResolvedPlotAreaOptions {
 
 /** Fully-resolved plot options with all defaults applied. */
 export interface IResolvedPlotOptions {
-  animation: { duration: number; ease: string };
+  animation: { duration: number; ease: EaseType };
   area: { visible: boolean; opacity: number };
   bands: { innerPadding: number; outerPadding: number };
   colors: string[];
   heatmap: { colorRange: [string, string] };
-  line: { interpolation: string };
+  line: { interpolation: CurveType };
   markers: { visible: boolean; size: number; type: MarkerType };
   pie: { innerRadius: number };
-  spider: { gridlines: "circle" | "polygon"; levels: number };
+  spider: { gridlines: SpiderGridlineType; levels: number };
 }
 
 /** Fully-resolved series options with all defaults applied. */
@@ -119,7 +119,7 @@ function resolveAxis(ax?: IAxisOptions): IResolvedAxisOptions {
       rotate: ax?.labels?.rotate ?? 0
     },
     name: ax?.name ?? "",
-    orient: ax?.orient ?? "",
+    orient: ax?.orient ?? OrientationTypes.None,
     tickmarks: ax?.tickmarks ?? false,
     title: {
       align: ax?.title?.align ?? "center",
@@ -204,7 +204,7 @@ export function resolveOptions(options?: IOptions): IResolvedOptions {
     plotOptions: {
       animation: {
         duration: po?.animation?.duration ?? 1000,
-        ease:     po?.animation?.ease     ?? "linear"
+        ease:     po?.animation?.ease     ?? EaseTypes.Linear
       },
       area: {
         visible: po?.area?.visible ?? false,
@@ -219,18 +219,18 @@ export function resolveOptions(options?: IOptions): IResolvedOptions {
         colorRange: po?.heatmap?.colorRange ?? ["#f7fbff", "#084594"]
       },
       line: {
-        interpolation: po?.line?.interpolation ?? "linear"
+        interpolation: po?.line?.interpolation ?? CurveTypes.Linear
       },
       markers: {
         visible: po?.markers?.visible ?? true,
         size:    po?.markers?.size    ?? 6,
-        type:    po?.markers?.type    ?? "circle"
+        type:    po?.markers?.type    ?? MarkerTypes.Circle
       },
       pie: {
         innerRadius: po?.pie?.innerRadius ?? 0
       },
       spider: {
-        gridlines: po?.spider?.gridlines ?? "circle",
+        gridlines: po?.spider?.gridlines ?? SpiderGridlineTypes.Circle,
         levels:    po?.spider?.levels    ?? 5
       }
     },

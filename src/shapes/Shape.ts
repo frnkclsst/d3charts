@@ -1,5 +1,7 @@
 import type * as d3 from "d3";
 import type { IDatum } from "../types/interfaces";
+import { EaseTypes } from "../types/enums";
+import type { EaseType } from "../types/enums";
 
 /** A function that maps a datum + category index + series index to a pixel coordinate. */
 export type CoordFn    = (d: IDatum, i: number, serie: number) => number;
@@ -29,7 +31,7 @@ export type DataSelection<E extends Element = Element> = d3.Selection<E, IDatum,
  */
 export class Shape {
   /** Animation duration (ms) and easing function name. */
-  protected _animation: { duration: number; ease: string };
+  protected _animation: { duration: number; ease: EaseType };
   /** Fill / stroke colour for this shape. */
   protected _color:     string;
   /** Data-label configuration. */
@@ -56,7 +58,7 @@ export class Shape {
   public constructor(svg: SeriesGroup, serie: number) {
     this._svg          = svg;
     this._serie        = serie;
-    this._animation    = { duration: 0, ease: "linear" };
+    this._animation    = { duration: 0, ease: EaseTypes.Linear };
     this._color        = "#000";
     this._opacity      = 1;
     this._labels       = { format: "", rotate: false, visible: false };
@@ -68,7 +70,7 @@ export class Shape {
    * @param duration - Duration in milliseconds.
    * @param ease     - d3 easing function name (see {@link easeFromString}).
    */
-  public animation(duration: number, ease: string): this {
+  public animation(duration: number, ease: EaseType): this {
     this._animation = { duration, ease };
     return this;
   }

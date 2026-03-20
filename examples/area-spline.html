@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { LineChart, GridLineType } from "@frnkclsst/d3charts";
+    import { LineChart, GridLineType, CurveTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -35,7 +35,7 @@
       plotArea: { padding: 20 },
       plotOptions: {
         area: { visible: true },
-        line: { interpolation: "cardinal" },
+        line: { interpolation: CurveTypes.Cardinal },
         markers: { visible: true }
       },
       xAxis: [{ gridlines: GridLineType.None, tickmarks: false, title: { text: "Day" } }],

@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { BarChart, GridLineType } from "@frnkclsst/d3charts";
+    import { BarChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -34,10 +34,10 @@
       legendArea: { title: "Rainfall vs Temperature", width: 200 },
       plotArea: { padding: 20 },
       xAxis: [
-        { name: "Rainfall",    gridlines: GridLineType.None, orient: "top",    tickmarks: true, title: { text: "mm" } },
-        { name: "Temperature", gridlines: GridLineType.None, orient: "bottom", tickmarks: true, title: { text: "Ã‚Â°C" } }
+        { name: "Rainfall",    gridlines: GridLineType.None, orient: OrientationTypes.Top,    tickmarks: true, title: { text: "mm" } },
+        { name: "Temperature", gridlines: GridLineType.None, orient: OrientationTypes.Bottom, tickmarks: true, title: { text: "Ã‚Â°C" } }
       ],
-      yAxis: [{ gridlines: GridLineType.None, orient: "left", tickmarks: true, title: { text: "Month" } }]
+      yAxis: [{ gridlines: GridLineType.None, orient: OrientationTypes.Left, tickmarks: true, title: { text: "Month" } }]
     };
 
     const chart = new BarChart("#chart", data, options);

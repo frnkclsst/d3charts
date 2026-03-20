@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { LineChart, GridLineType } from "@frnkclsst/d3charts";
+    import { LineChart, GridLineType, CurveTypes, MarkerTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -49,13 +49,13 @@
       plotArea: { padding: 20 },
       plotOptions: {
         area: { visible: true },
-        line: { interpolation: "cardinal" },
-        markers: { visible: true, type: "circle" }
+        line: { interpolation: CurveTypes.Cardinal },
+        markers: { visible: true, type: MarkerTypes.Circle }
       },
       xAxis: [{ gridlines: GridLineType.None, tickmarks: true, title: { text: "Month" } }],
       yAxis: [
-        { name: "Rainfall",    gridlines: GridLineType.None, orient: "left",  tickmarks: true, title: { text: "mm" } },
-        { name: "Temperature", gridlines: GridLineType.None, orient: "right", tickmarks: true, title: { text: "Ã‚Â°C" } }
+        { name: "Rainfall",    gridlines: GridLineType.None, orient: OrientationTypes.Left,  tickmarks: true, title: { text: "mm" } },
+        { name: "Temperature", gridlines: GridLineType.None, orient: OrientationTypes.Right, tickmarks: true, title: { text: "Ã‚Â°C" } }
       ]
     };
 

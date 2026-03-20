@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { SpiderChart } from "@frnkclsst/d3charts";
+    import { SpiderChart, EaseTypes, MarkerTypes, SpiderGridlineTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: { format: "%s", data: ["Speed", "Power", "Defense", "Range", "Accuracy", "Agility"] },
@@ -31,10 +31,10 @@
       titleArea: { text: "Unit Comparison", height: 50 },
       legendArea: { width: 120, title: "Unit" },
       plotOptions: {
-        animation: { duration: 900, ease: "cubic" },
+        animation: { duration: 900, ease: EaseTypes.Cubic },
         area: { visible: true, opacity: 0.15 },
-        markers: { visible: true, size: 2, type:"circle" },
-        spider: { gridlines: "circle", levels: 5 }
+        markers: { visible: true, size: 2, type: MarkerTypes.Circle },
+        spider: { gridlines: SpiderGridlineTypes.Circle, levels: 5 }
       }
     };
 

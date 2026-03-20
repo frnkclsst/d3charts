@@ -56,6 +56,50 @@ export const OrientationTypes = {
 } as const;
 export type OrientationType = typeof OrientationTypes[keyof typeof OrientationTypes];
 
+/** d3 easing function name used for enter animations. */
+export const EaseTypes = {
+  Linear:  "linear",
+  Cubic:   "cubic",
+  Elastic: "elastic",
+  Bounce:  "bounce",
+  Back:    "back",
+  Sin:     "sin",
+  Exp:     "exp",
+  Circle:  "circle",
+  Quad:    "quad"
+} as const;
+export type EaseType = typeof EaseTypes[keyof typeof EaseTypes];
+
+/** d3 curve factory name used for line and area interpolation. */
+export const CurveTypes = {
+  Linear:     "linear",
+  Basis:      "basis",
+  Cardinal:   "cardinal",
+  CatmullRom: "catmull-rom",
+  Natural:    "natural",
+  Monotone:   "monotone",
+  MonotoneX:  "monotone-x",
+  Step:       "step",
+  StepBefore: "step-before",
+  StepAfter:  "step-after"
+} as const;
+export type CurveType = typeof CurveTypes[keyof typeof CurveTypes];
+
+/** Render type of a series within a {@link ComboChart}. */
+export const SeriesTypes = {
+  Column: "column",
+  Line:   "line",
+  None:   ""
+} as const;
+export type SeriesType = typeof SeriesTypes[keyof typeof SeriesTypes];
+
+/** Shape of the concentric gridline rings on a spider/radar chart. */
+export const SpiderGridlineTypes = {
+  Circle:  "circle",
+  Polygon: "polygon"
+} as const;
+export type SpiderGridlineType = typeof SpiderGridlineTypes[keyof typeof SpiderGridlineTypes];
+
 /**
  * Ordered list of all non-"mixed" marker types.
  * Used to cycle through shapes when `markers.type === "mixed"`.
