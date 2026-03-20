@@ -35,27 +35,36 @@ export enum StackType {
 }
 
 /** Shape of a data-point marker on line and scatter charts. */
-export type MarkerType =
-  | "circle"
-  | "cross"
-  | "diamond"
-  | "square"
-  | "triangle-up"
-  | "triangle-down"
-  | "mixed";
+export const MarkerTypes = {
+  Circle:       "circle",
+  Cross:        "cross",
+  Diamond:      "diamond",
+  Square:       "square",
+  TriangleUp:   "triangle-up",
+  TriangleDown: "triangle-down",
+  Mixed:        "mixed"
+} as const;
+export type MarkerType = typeof MarkerTypes[keyof typeof MarkerTypes];
 
 /** Placement of an axis or legend area relative to the chart. */
-export type OrientationType = "bottom" | "left" | "right" | "top" | "";
+export const OrientationTypes = {
+  Bottom: "bottom",
+  Left:   "left",
+  Right:  "right",
+  Top:    "top",
+  None:   ""
+} as const;
+export type OrientationType = typeof OrientationTypes[keyof typeof OrientationTypes];
 
 /**
  * Ordered list of all non-"mixed" marker types.
  * Used to cycle through shapes when `markers.type === "mixed"`.
  */
 export const SymbolTypes: MarkerType[] = [
-  "circle",
-  "cross",
-  "diamond",
-  "square",
-  "triangle-up",
-  "triangle-down"
+  MarkerTypes.Circle,
+  MarkerTypes.Cross,
+  MarkerTypes.Diamond,
+  MarkerTypes.Square,
+  MarkerTypes.TriangleUp,
+  MarkerTypes.TriangleDown
 ];

@@ -4,7 +4,7 @@ import { SpiderShape } from "../shapes/SpiderShape";
 import type { IChartData, IOptions } from "../types/interfaces";
 
 /**
- * Spider (radar) chart — multivariate data plotted on N radial axes.
+ * Spider (radar) chart — multivariate data plotted on n radial axes.
  *
  * Each category becomes a spoke radiating from the centre; each series is
  * rendered as a closed polygon connecting its values on those spokes.
@@ -39,6 +39,16 @@ export class SpiderChart extends Chart {
     this.canvas.legendArea.items = this.series.getLabels();
   }
 
+  /**
+   * Overrides the default toggle to also fade the `#markers-N` group, which
+   * lives outside `#serie-N` so that markers always render above all polygons.
+   */
+  public override toggleSerie(index: number): void {
+    super.toggleSerie(index);
+    const opacity = d3.select(`${this.selector} #serie-${index}`).style("opacity") === "1" ? 0 : 1;
+    d3.select(`${this.selector} #markers-${index}`).transition().duration(200).style("opacity", opacity);
+  }
+
   /** Renders the canvas layout, the spider web background, and all series polygons. */
   public override draw(): void {
     super.draw();
@@ -49,15 +59,15 @@ export class SpiderChart extends Chart {
     const { duration, ease } = po.animation;
     const { gridlines, levels } = po.spider;
 
-    const N = this.categories.labels.length;
-    if (N < 3) { return; } // A spider chart needs at least 3 axes
+    const n = this.categories.labels.length;
+    if (n < 3) { return; } // A spider chart needs at least 3 axes
 
     const LABEL_MARGIN = 32; // px of space reserved for category labels outside the web
     const radius = Math.min(pa.width, pa.height) / 2 - LABEL_MARGIN;
     if (radius <= 0) { return; }
 
     // Angle for spoke i — start at the top (−π/2) and go clockwise
-    const angle = (i: number): number => -Math.PI / 2 + (2 * Math.PI * i) / N;
+    const angle = (i: number): number => -Math.PI / 2 + (2 * Math.PI * i) / n;
 
     // Radial scale: data value → pixel distance from centre
     const maxVal = this.series.max();
@@ -72,9 +82,9 @@ export class SpiderChart extends Chart {
       .attr("class", "series")
       .attr("transform", `translate(${cx},${cy})`);
 
-    this._drawWeb(svgSpider, N, radius, levels, gridlines, angle);
-    this._drawSpokes(svgSpider, N, radius, angle);
-    this._drawSeries(svgSpider, N, rScale, angle, duration, ease);
+    this._drawWeb(svgSpider, n, radius, levels, gridlines, angle);
+    this._drawSpokes(svgSpider, n, radius, angle);
+    this._drawSeries(svgSpider, n, rScale, angle, duration, ease);
   }
 
   // ── Private helpers ────────────────────────────────────────────────────────
@@ -85,7 +95,7 @@ export class SpiderChart extends Chart {
    */
   private _drawWeb(
     g: d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>,
-    N: number,
+    n: number,
     radius: number,
     levels: number,
     gridlines: "circle" | "polygon",
@@ -95,7 +105,7 @@ export class SpiderChart extends Chart {
       const r = (level / levels) * radius;
 
       if (gridlines === "polygon") {
-        const pts = Array.from({ length: N }, (_, i) => {
+        const pts = Array.from({ length: n }, (_, i) => {
           const a = angle(i);
           return `${r * Math.cos(a)},${r * Math.sin(a)}`;
         }).join(" ");
@@ -122,13 +132,13 @@ export class SpiderChart extends Chart {
    */
   private _drawSpokes(
     g: d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>,
-    N: number,
+    n: number,
     radius: number,
     angle: (i: number) => number
   ): void {
     const LABEL_PAD = 10; // extra padding beyond the web edge
 
-    for (let i = 0; i < N; i++) {
+    for (let i = 0; i < n; i++) {
       const a  = angle(i);
       const sx = radius * Math.cos(a);
       const sy = radius * Math.sin(a);
@@ -163,7 +173,7 @@ export class SpiderChart extends Chart {
   /** Draws one {@link SpiderShape} polygon per series. */
   private _drawSeries(
     g: d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>,
-    N: number,
+    n: number,
     rScale: d3.ScaleLinear<number, number>,
     angle: (i: number) => number,
     duration: number,
@@ -174,7 +184,7 @@ export class SpiderChart extends Chart {
       const color = this.colorPalette.color(s);
 
       // Guard: skip series that have fewer data points than spokes
-      if (data.length < N) { continue; }
+      if (data.length < n) { continue; }
 
       new SpiderShape(g as never, s)
         .animation(duration, ease)
@@ -184,14 +194,12 @@ export class SpiderChart extends Chart {
         .fill(this.options.plotOptions.area.visible, this.options.plotOptions.area.opacity)
         .marker(
           this.options.plotOptions.markers.size,
-          this.series.items[s].marker ?? this.options.plotOptions.markers.type,
+          this.series.items[s].marker,
           this.options.plotOptions.markers.visible
         )
         .x((d, i) => rScale(isNaN(d.y) ? 0 : d.y) * Math.cos(angle(i)))
         .y((d, i) => rScale(isNaN(d.y) ? 0 : d.y) * Math.sin(angle(i)))
-        .tooltipFn((sel, serieIdx) => {
-          this.tooltip.attach(sel as never, serieIdx);
-        })
+        .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie))
         .draw(data);
     }
   }

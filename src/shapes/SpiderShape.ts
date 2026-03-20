@@ -5,6 +5,7 @@ import type { IDatum } from "../types/interfaces";
 import type { MarkerType } from "../types/enums";
 import { easeFromString } from "../utils/ease";
 import { d3SymbolType } from "../utils/symbols";
+import { getHeight } from "../utils/dom";
 
 /**
  * Renders a single spider/radar series as a closed SVG polygon.
@@ -124,24 +125,31 @@ export class SpiderShape extends Shape {
       .attrTween("d", () => d3.interpolateString(initialPath, finalPath))
       .on("end", () => {
         if (this._marker.visible) {
-          const markers = this._drawMarkers(serieGroup, data);
+          // Append to the parent (svgSpider), not serieGroup, so all markers
+          // sit above all polygon fills/lines in the SVG paint order.
+          const markers = this._drawMarkers(this._svg, data);
           this._tooltipFn?.(markers, this._serie);
+        }
+        if (this._labels.visible) {
+          this._drawLabels(data);
         }
       });
   }
 
   /**
-   * Appends `<path class="marker">` elements at each polygon vertex.
+   * Appends a `<g id="markers-N">` group to `parent` and fills it with
+   * `<path class="marker">` elements at each polygon vertex.
    * @returns D3 selection of marker paths bound to the datum array (used for tooltips).
    */
   private _drawMarkers(
-    serieGroup: d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>,
+    parent: d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>,
     data: IDatum[]
   ): DataSelection<SVGPathElement> {
+    const markersGroup = parent.append("g").attr("id", `markers-${this._serie}`);
     const symType = d3SymbolType(this._marker.type);
     const rotate  = this._marker.type === "triangle-down" ? "rotate(180)" : "";
 
-    return serieGroup
+    return markersGroup
       .selectAll<SVGPathElement, IDatum>(".marker")
       .data(data)
       .enter()
@@ -156,5 +164,32 @@ export class SpiderShape extends Shape {
         const y = this._y(d, i, this._serie);
         return `translate(${x},${y}) ${rotate}`.trim();
       });
+  }
+
+  /**
+   * Appends `<text class="label">` elements near each polygon vertex.
+   * Labels are offset outward from the marker, following the LineShape pattern.
+   */
+  private _drawLabels(data: IDatum[]): void {
+    this._initLabels();
+    const fmt     = this._labels.format ? d3.format(this._labels.format) : String;
+    const markerR = this._marker.size / 2;
+
+    data.forEach((d, i) => {
+      if (isNaN(d.y)) { return; }
+      const x = this._x(d, i, this._serie);
+      const y = this._y(d, i, this._serie);
+
+      const text = this._svgLabels.append("text")
+        .text(fmt(this._labelValueFn(d)))
+        .attr("class", "label")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "central")
+        .attr("fill", this._color)
+        .attr("transform", `translate(${x},${y})`);
+
+      const h = getHeight(text as never);
+      text.attr("dy", -(h + markerR));
+    });
   }
 }

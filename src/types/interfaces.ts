@@ -86,7 +86,7 @@ export interface ISerie {
   /** Unit suffix appended to formatted values in tooltips (e.g. `" %"`). */
   suffix?: string;
   /** Series render type used by {@link ComboChart}: `"column"` or `"line"`. */
-  type?: string;
+  type?: "column" | "line";
 }
 
 /**

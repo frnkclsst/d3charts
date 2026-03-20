@@ -52,7 +52,6 @@ export class ComboChart extends CartesianChart {
       .attr("class", "series") as unknown as d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>;
 
     const { duration, ease } = this.options.plotOptions.animation;
-    const colTotal = this._columnCount();
 
     // Draw columns first (behind lines)
     for (let s = 0; s < this.series.length; s++) {
@@ -66,15 +65,15 @@ export class ComboChart extends CartesianChart {
         .color(this.colorPalette.color(s))
         .startY(zeroY)
         .height((d, i) => this._colHeight(d, i, s))
-        .width((d, i)  => this._colWidth(d, i, s, colTotal))
+        .width((d, i)  => this._colWidth(d, i, s, this._columnCount()))
         .labels(
           this.series.items[s].format,
           this.options.series.labels.rotate,
           this.options.series.labels.visible
         )
         .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie))
-        .x((d, i) => this._colX(d, i, s, colTotal))
-        .y((d, i) => this._colY(d, i, s))
+        .x((d, i) => this.getXCoordinate(d, i, s))
+        .y((d, i) => this.getYCoordinate(d, i, s))
         .draw(this.series.getSeriesData(s));
     }
 
@@ -98,10 +97,28 @@ export class ComboChart extends CartesianChart {
           this.options.plotOptions.markers.visible
         )
         .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie))
-        .x((d, i) => this._lineX(d, i, s))
-        .y((d, i) => this._lineY(d, i, s))
+        .x((d, i) => this.getXCoordinate(d, i, s))
+        .y((d, i) => this.getYCoordinate(d, i, s))
         .draw(this.series.getSeriesData(s));
     }
+  }
+
+  // ─── coordinate overrides ──────────────────────────────────────────────────
+
+  /** Dispatches to the column or line X helper based on series type. */
+  public override getXCoordinate(d: IDatum, i: number, serie: number): number {
+    if (this.series.items[serie].type === "column") {
+      return this._colX(d, i, serie, this._columnCount());
+    }
+    return this._lineX(d, i, serie);
+  }
+
+  /** Dispatches to the column or line Y helper based on series type. */
+  public override getYCoordinate(d: IDatum, i: number, serie: number): number {
+    if (this.series.items[serie].type === "column") {
+      return this._colY(d, i, serie);
+    }
+    return this._lineY(d, i, serie);
   }
 
   // ─── column helpers ────────────────────────────────────────────────────────

@@ -62,7 +62,7 @@ export class ScatterChart extends CartesianChart {
       new BubbleShape(svgSeries, s)
         .animation(duration, ease)
         .color(this.colorPalette.color(s - 1))
-        .sizes(this.series.items[s].size ?? [])
+        .sizes(this.series.items[s].size)
         .labels(
           this.series.items[s].format,
           this.options.series.labels.rotate,

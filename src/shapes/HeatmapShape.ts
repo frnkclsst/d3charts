@@ -112,7 +112,7 @@ export class HeatmapShape extends Shape {
     const fmt = this._labels.format ? d3.format(this._labels.format) : String;
 
     data.forEach((d, i) => {
-      if (isNaN(d.y)) return;
+      if (isNaN(d.y)) { return; }
 
       const x = this._x(d, i, this._serie);
       const y = this._y(d, i, this._serie);

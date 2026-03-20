@@ -34,7 +34,7 @@ export class Serie {
   /** Sum of all `data` values (pre-computed for convenience). */
   public sum: number;
   /** Render type hint used by {@link ComboChart}: `"column"` or `"line"`. */
-  public type: string;
+  public type: "column" | "line" | "";
   /** Whether this series is currently visible (toggled by legend clicks). */
   public visible: boolean;
 
@@ -52,7 +52,7 @@ export class Serie {
     this.format  = serie.format  ?? "";
     this.name    = serie.name    ?? "";
     this.suffix  = serie.suffix  ?? "";
-    this.type    = serie.type    ?? "";
+    this.type    = serie.type ?? "";
     this.index   = index;
     this.visible = true;
     this.sum     = this.data.reduce((acc, v) => acc + v, 0);

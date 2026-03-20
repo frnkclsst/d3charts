@@ -162,7 +162,7 @@ export class LineShape extends Shape {
         const y  = this._y(d, i, this._serie);
 
         const text = this._svgLabels.append("text")
-          .text(fmt(d.y))
+          .text(fmt(this._labelValueFn(d)))
           .attr("class", "label")
           .attr("text-anchor", "middle")
           .attr("dominant-baseline", "central")

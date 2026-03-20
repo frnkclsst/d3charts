@@ -121,12 +121,12 @@ export class HeatmapChart extends CartesianChart {
         .cellWidth(cellWidth)
         .cellHeight(cellHeight)
         .labels(
-          this.series.items[s].format ?? "",
+          this.series.items[s].format,
           this.options.series.labels.rotate,
           this.options.series.labels.visible
         )
         .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie))
-        .x((d, i) => xScale(String(this.categories.getItem(i))) ?? 0)
+        .x((_d, i) => xScale(String(this.categories.getItem(i))) ?? 0)
         .y(() => rowY)
         .draw(this.series.getSeriesData(s));
     }
