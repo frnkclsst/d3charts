@@ -30,6 +30,7 @@ npm install @frnkclsst/d3charts d3
 - [Pie charts](https://github.com/frnkclsst/d3charts/wiki/Pie-Charts)
 - [Range charts](https://github.com/frnkclsst/d3charts/wiki/Range-Charts)
 - [Scatter charts](https://github.com/frnkclsst/d3charts/wiki/Scatter-Charts)
+- [Variwide charts](https://github.com/frnkclsst/d3charts/wiki/Variwide-Charts)
 
 ### Chart Options
 - [Axes](https://github.com/frnkclsst/d3charts/wiki/Axes)
