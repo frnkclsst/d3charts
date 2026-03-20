@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Variwide chart - basic</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 900px; height: 450px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Variwide chart - basic</h2>
+  <p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { VariwideChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
+
+    // Labour cost per hour worked (€) — column height
+    // GDP in billion USD — column width
+    const data = {
+      categories: {
+        format: "%s",
+        data: [
+          "Norway", "Belgium", "Netherlands", "France", "Germany",
+          "Austria", "Ireland", "Sweden", "Italy", "Spain",
+          "Czech Republic", "Greece", "Poland", "Romania"
+        ]
+      },
+      series: [{
+        name: "Labour cost",
+        format: ",.0f",
+        suffix: " €/hr",
+        data:   [52, 48, 47, 43, 42, 41, 41, 40, 39, 37, 30, 25, 18, 16],
+        weight: [594, 627, 1118, 2925, 4444, 510, 529, 624, 2170, 1582, 330, 239, 842, 351]
+      }]
+    };
+
+    const options = {
+      titleArea: {
+        text: "Labour Costs in Europe, 2023",
+        subtitle: "Column height = cost per hour worked · Column width = GDP (billion USD)",
+        height: 65
+      },
+      legendArea: { width: 0 },
+      yAxis: [{
+        orient: OrientationTypes.Left,
+        gridlines: GridLineType.Major,
+        title: { text: "€ per hour worked" }
+      }],
+      xAxis: [{ orient: OrientationTypes.Bottom, labels: { rotate: 45 } }],
+      series: { labels: { visible: true } },
+      plotOptions: {
+        animation: { duration: 800 },
+        bands: { innerPadding: 0, outerPadding: 0 }
+      }
+    };
+
+    const chart = new VariwideChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>

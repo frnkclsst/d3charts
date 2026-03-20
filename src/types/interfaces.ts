@@ -85,6 +85,8 @@ export interface ISerie {
   size?: number[];
   /** Unit suffix appended to formatted values in tooltips (e.g. `" %"`). */
   suffix?: string;
+  /** Column width weights for {@link VariwideChart} — one per category (e.g. GDP per country). */
+  weight?: number[];
   /** Series render type used by {@link ComboChart}: `"column"` or `"line"`. */
   type?: SeriesType;
 }

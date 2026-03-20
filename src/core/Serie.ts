@@ -29,6 +29,8 @@ export class Serie {
   public min: number[];
   /** Bubble area values for scatter charts. Empty array otherwise. */
   public size: number[];
+  /** Column width weights for variwide charts. Empty array otherwise. */
+  public weight: number[];
   /** Unit suffix appended after formatted values in tooltips. */
   public suffix: string;
   /** Sum of all `data` values (pre-computed for convenience). */
@@ -44,10 +46,11 @@ export class Serie {
    * @param index   - Zero-based position of this series in the series array.
    */
   public constructor(options: ResolvedOptions, serie: ISerie, index: number) {
-    this.data    = serie.data  ?? [];
-    this.max     = serie.max   ?? [];
-    this.min     = serie.min   ?? [];
-    this.size    = serie.size  ?? [];
+    this.data    = serie.data   ?? [];
+    this.max     = serie.max    ?? [];
+    this.min     = serie.min    ?? [];
+    this.size    = serie.size   ?? [];
+    this.weight  = serie.weight ?? [];
     this.axis    = serie.axis  ?? "";
     this.format  = serie.format  ?? "";
     this.name    = serie.name    ?? "";

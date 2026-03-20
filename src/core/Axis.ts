@@ -108,6 +108,12 @@ export class Axis {
   /** Sets the scale type (called by the chart when building the scale). */
   public setScaleType(v: ScaleType): void { this._scaleType = v; }
 
+  /** Returns the d3 axis function built during `setSize()`. Used by subclasses that need to re-configure ticks after the draw cycle. */
+  public getAxisFn(): AxisFn { return this._axisFn; }
+
+  /** Returns the SVG `<g class="axis">` selection. Used by subclasses that need to re-render the axis after the draw cycle. */
+  public getSvgAxis(): d3.Selection<SVGGElement, unknown, SVGElement, unknown> { return this._svgAxis; }
+
   /**
    * **Pass 1** — Builds the scale, renders the axis into a temporary `<g>`, measures it,
    * and adjusts the plot area to reserve space for this axis.

@@ -24,6 +24,8 @@ export class ColumnShape extends Shape {
   private _width!:  CoordFn;
   /** Pixel position of the zero line — columns start collapsed here before animating. */
   private _startY: number = 0;
+  /** Optional per-datum colour function — overrides the single `_color` when set. */
+  private _colorFn?: (datumIndex: number) => string;
   /** Optional callback to attach tooltip behaviour to the rect selection. */
   private _tooltipFn?: (sel: DataSelection<SVGRectElement>, serie: number) => void;
 
@@ -55,6 +57,17 @@ export class ColumnShape extends Shape {
   public startY(y: number): this { this._startY = y; return this; }
 
   /**
+   * Sets a per-datum colour function. When provided, each column is coloured
+   * by `fn(datumIndex)` instead of the single series colour. Used by
+   * {@link VariwideChart} to assign a unique colour to each column.
+   * @param fn - `(datumIndex) => cssColorString`.
+   */
+  public colorFn(fn: (datumIndex: number) => string): this {
+    this._colorFn = fn;
+    return this;
+  }
+
+  /**
    * Provides a function to attach tooltip behaviour to the rendered rects.
    * @param fn - Receives the rect selection and the series index.
    */
@@ -78,8 +91,8 @@ export class ColumnShape extends Shape {
     const rects = enter
       .append("rect")
       .attr("class", "column")
-      .attr("fill",   this._color)
-      .attr("stroke", this._color)
+      .attr("fill",   this._colorFn ? (_, i): string => this._colorFn!(i) : this._color)
+      .attr("stroke", this._colorFn ? (_, i): string => this._colorFn!(i) : this._color)
       .attr("stroke-width", 1)
       .attr("width",  (d, i) => this._width(d, i, this._serie))
       .attr("x",      (d, i) => this._x(d, i, this._serie))

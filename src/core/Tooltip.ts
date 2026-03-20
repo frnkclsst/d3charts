@@ -153,6 +153,10 @@ export class Tooltip {
   /**
    * Formats a single datum value for display in the tooltip.
    *
+   * Exposed publicly so chart subclasses (e.g. {@link VariwideChart}) can use
+   * the same formatting logic inside a custom {@link TooltipExtractor} while
+   * overriding only the `colorIndex`.
+   *
    * Format priority: `tooltip.valuePointFormat` → `serie.format` → `String`.
    * Suffix priority: `tooltip.valueSuffix`      → `serie.suffix`.
    *
@@ -160,6 +164,10 @@ export class Tooltip {
    * - Range datum with `NaN` y: returns `"<y0><suffix> – <y1><suffix>"`.
    * - Range datum with explicit y: returns `"<y><suffix> (<y0><suffix> – <y1><suffix>)"`.
    */
+  public formatValue(d: IDatum, serieIndex: number): string {
+    return this._formatDataPoint(d, serieIndex);
+  }
+
   private _formatDataPoint(d: IDatum, serieIndex: number): string {
     const fmt    = this._opts.valuePointFormat || this._series.items[serieIndex].format || "";
     const suffix = this._opts.valueSuffix      || this._series.items[serieIndex].suffix || "";
