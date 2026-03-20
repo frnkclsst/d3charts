@@ -41,7 +41,7 @@ export { PieChart, DonutChart } from "./charts/PieChart";
 export { ComboChart } from "./charts/ComboChart";
 export { SpiderChart } from "./charts/SpiderChart";
 export { HeatmapChart } from "./charts/HeatmapChart";
-export { VariwideChart } from "./charts/VariwideChart";
+export { VariwideColumnChart } from "./charts/VariwideColumnChart";
 
 // Core (for advanced consumers / extension)
 export { Chart }      from "./charts/Chart";
