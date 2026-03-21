@@ -23,9 +23,6 @@ export interface ISymbolOptions {
   areaVisible: boolean;
   /** Opacity of the area fill strip. */
   areaOpacity: number;
-  /** CSS class applied to the `drawRect()` swatch rect, so it inherits the same fill-opacity,
-   * stroke-width, and stroke-opacity as the corresponding chart element class. */
-  cssClass: string;
   /** Marker size (scaled ×10 to produce the d3 symbol size). */
   markerSize: number;
   /** Shape of the marker symbol. */
@@ -64,11 +61,11 @@ export class SVGSymbol {
   public drawRect(): void {
     this._svg
       .append("rect")
-      .attr("class", this._opts.cssClass)
       .attr("x", 0)
       .attr("width", SYMBOL_WIDTH)
       .attr("height", 11)
-      .style("fill", this.color);
+      .style("fill",   this.color)
+      .style("stroke", this.color);
   }
 
   /**

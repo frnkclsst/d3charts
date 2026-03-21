@@ -21,10 +21,11 @@ export class LegendArea extends ChartArea {
   /** Optional title rendered above the item list. */
   public readonly title: string;
   /**
-   * CSS class applied to `drawRect()` swatch rects in the legend.
-   * The class should match the chart element type (e.g. `"column"`, `"bar"`, `"slice"`)
-   * so the swatch inherits the same `fill-opacity`, `stroke-width`, and `stroke-opacity`
-   * as the actual chart elements. Defaults to `""` (no class).
+   * CSS class added to each `<g class="item">` in the legend.
+   * Should match the chart element type (e.g. `"column"`, `"bar"`, `"slice"`) so the swatch
+   * inherits the same `fill-opacity`, `stroke-width`, and `stroke-opacity` as the actual chart
+   * elements. The text label resets its fill-opacity to `1` to stay fully opaque.
+   * Defaults to `""` (no extra class).
    */
   public swatchCssClass: string = "";
 
@@ -94,9 +95,10 @@ export class LegendArea extends ChartArea {
    */
   private _drawItems(colorFn: (i: number) => string, onToggle: (index: number) => void): void {
     this.items.forEach((label, i) => {
+      const itemClass = ["item", this.swatchCssClass].filter(Boolean).join(" ");
       const g = this.svg
         .append("g")
-        .attr("class", "item")
+        .attr("class", itemClass)
         .attr("data-serie", i)
         .attr("transform", `translate(22,${i * 20 + 60})`)
         .on("click", () => onToggle(i));
@@ -108,7 +110,6 @@ export class LegendArea extends ChartArea {
       const symbol = new SVGSymbol(symSvg, {
         areaVisible:   this._opts.plotOptions.area.visible,
         areaOpacity:   this._opts.plotOptions.area.opacity,
-        cssClass:      this.swatchCssClass,
         markerSize:    this._opts.plotOptions.markers.size,
         markerType:    this._opts.plotOptions.markers.type,
         markerVisible: this._opts.plotOptions.markers.visible
@@ -120,6 +121,7 @@ export class LegendArea extends ChartArea {
         .attr("x", 30)
         .attr("y", 9)
         .style("text-anchor", "start")
+        .style("fill-opacity", "1")  // reset: prevent chart-element class from dimming the label
         .text(label);
     });
   }
