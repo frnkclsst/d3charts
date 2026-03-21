@@ -41,6 +41,9 @@ export class ScatterChart extends CartesianChart {
     // Legend shows Y series only (skip the X series at index 0)
     this.canvas.legendArea.items = this.series.getLabels().slice(1);
 
+    // Legend swatches inherit fill-opacity/stroke from the .bubble CSS class
+    this.canvas.legendArea.swatchCssClass = "bubble";
+
     for (const axis of this.axes) {
       axis.isDataAxis = axis.type === AxisType.Y;
     }

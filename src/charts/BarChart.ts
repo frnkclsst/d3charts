@@ -38,8 +38,8 @@ export class BarChart extends CartesianChart {
       axis.isDataAxis = axis.type === AxisType.X;
     }
 
-    // Match legend swatch opacity to the CSS fill-opacity on .bar elements
-    this.canvas.legendArea.swatchFillOpacity = 0.4;
+    // Legend swatches inherit fill-opacity/stroke from the .bar CSS class
+    this.canvas.legendArea.swatchCssClass = "bar";
   }
 
   /** Renders axes and bar series. */
