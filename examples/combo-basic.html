@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { ComboChart, GridLineType, SeriesTypes, OrientationTypes } from "@frnkclsst/d3charts";
+    import { ComboChart, GridLineTypes, SeriesTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: { format: "%s", data: ["Jan","Feb","Mar","Apr","May","Jun"] },
@@ -30,7 +30,7 @@
     const options = {
       titleArea: { text: "Revenue, Costs and Margin", height: 50 },
       legendArea: { width: 120, title: "Metric" },
-      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineType.Major, title: { text: "Value" } }],
+      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineTypes.Major, title: { text: "Value" } }],
       xAxis: [{ orient: OrientationTypes.Bottom }],
       plotOptions: {
         markers: { visible: true, size: 5 },

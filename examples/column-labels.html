@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { ColumnChart, GridLineType } from "@frnkclsst/d3charts";
+    import { ColumnChart, GridLineTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -36,8 +36,8 @@
       legendArea: { title: "City", width: 200 },
       plotArea: { padding: 20 },
       series: { labels: { visible: true, rotate: false } },
-      xAxis: [{ gridlines: GridLineType.None, tickmarks: false, title: { text: "Month" } }],
-      yAxis: [{ gridlines: GridLineType.Major, tickmarks: true, title: { text: "Rainfall (mm)" } }]
+      xAxis: [{ gridlines: GridLineTypes.None, tickmarks: false, title: { text: "Month" } }],
+      yAxis: [{ gridlines: GridLineTypes.Major, tickmarks: true, title: { text: "Rainfall (mm)" } }]
     };
 
     const chart = new ColumnChart("#chart", data, options);

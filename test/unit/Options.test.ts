@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { resolveOptions } from "../../src/core/Options";
-import { GridLineType } from "../../src/types/enums";
+import { GridLineTypes } from "../../src/types/enums";
 
 describe("resolveOptions", () => {
   describe("defaults when called with no arguments", () => {
@@ -94,7 +94,7 @@ describe("resolveOptions", () => {
 
     it("applies axis defaults when an empty object is provided", () => {
       const opts = resolveOptions({ yAxis: {} });
-      expect(opts.yAxes[0].gridlines).toBe(GridLineType.None);
+      expect(opts.yAxes[0].gridlines).toBe(GridLineTypes.None);
       expect(opts.yAxes[0].tickmarks).toBe(false);
       expect(opts.yAxes[0].labels.format).toBe("");
       expect(opts.yAxes[0].labels.rotate).toBe(0);

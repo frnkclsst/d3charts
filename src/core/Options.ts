@@ -1,6 +1,6 @@
 import type { IOptions, IAxisOptions } from "../types/interfaces";
-import { GridLineType, EaseTypes, CurveTypes, SpiderGridlineTypes, MarkerTypes, OrientationTypes } from "../types/enums";
-import type { MarkerType, OrientationType, EaseType, CurveType, SpiderGridlineType } from "../types/enums";
+import { GridLineTypes, EaseTypes, CurveTypes, SpiderGridlineTypes, MarkerTypes, OrientationTypes } from "../types/enums";
+import type { GridLineType, MarkerType, OrientationType, EaseType, CurveType, SpiderGridlineType } from "../types/enums";
 
 /** Fully-resolved axis options with all defaults applied. */
 export interface IResolvedAxisOptions {
@@ -113,7 +113,7 @@ const DEFAULT_COLORS: string[] = [
 /** Applies defaults to a single raw axis options object. */
 function resolveAxis(ax?: IAxisOptions): IResolvedAxisOptions {
   return {
-    gridlines: ax?.gridlines ?? GridLineType.None,
+    gridlines: ax?.gridlines ?? GridLineTypes.None,
     labels: {
       format: ax?.labels?.format ?? "",
       rotate: ax?.labels?.rotate ?? 0

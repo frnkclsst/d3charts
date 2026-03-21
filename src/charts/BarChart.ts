@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { CartesianChart } from "./CartesianChart";
-import { AxisType, ScaleType, StackType } from "../types/enums";
+import { AxisTypes, ScaleTypes, StackTypes } from "../types/enums";
 import type { Axis, ChartScale } from "../core/Axis";
 import type { IDatum, IChartData, IOptions } from "../types/interfaces";
 import { BarShape } from "../shapes/BarShape";
@@ -35,7 +35,7 @@ export class BarChart extends CartesianChart {
 
     // Mark X axes as data axes so zero-lines are drawn when data goes negative
     for (const axis of this.axes) {
-      axis.isDataAxis = axis.type === AxisType.X;
+      axis.isDataAxis = axis.type === AxisTypes.X;
     }
 
     // Legend swatches inherit fill-opacity/stroke from the .bar CSS class
@@ -54,7 +54,7 @@ export class BarChart extends CartesianChart {
     const { duration, ease } = this.options.plotOptions.animation;
 
     for (let s = 0; s < this.series.length; s++) {
-      const xIdx  = this.getAxisByName(AxisType.X, this.series.items[s].axis);
+      const xIdx  = this.getAxisByName(AxisTypes.X, this.series.items[s].axis);
       const zeroX = (this.
         axes[xIdx].scale as d3.ScaleLinear<number, number>)(0);
 
@@ -65,13 +65,13 @@ export class BarChart extends CartesianChart {
         .height((d, i) => this.getHeight(d, i, s))
         .width((d, i)  => this.getWidth(d, i, s))
         .labels(
-          this.stackType === StackType.Percent && !this.series.items[s].format
+          this.stackType === StackTypes.Percent && !this.series.items[s].format
             ? ".0%"
             : this.series.items[s].format,
           this.options.series.labels.rotate,
           this.options.series.labels.visible
         )
-        .labelValue(this.stackType === StackType.Percent ? (d): number => d.perc : (d): number => d.y)
+        .labelValue(this.stackType === StackTypes.Percent ? (d): number => d.perc : (d): number => d.y)
         .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie))
         .x((d, i) => this.getXCoordinate(d, i, s))
         .y((d, i) => this.getYCoordinate(d, i, s))
@@ -85,9 +85,9 @@ export class BarChart extends CartesianChart {
    * - Time scale: `plotHeight / numberOfSeries / numberOfCategories`.
    */
   public getHeight(_d: IDatum, _i: number, serie: number): number {
-    const idx  = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx  = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const axis = this.axes[idx];
-    if (axis.getScaleType() === ScaleType.Ordinal) {
+    if (axis.getScaleType() === ScaleTypes.Ordinal) {
       return (axis.scale as d3.ScaleBand<string>).bandwidth() / this.series.length;
     }
     return this.canvas.plotArea.height / this.series.length / this.categories.length;
@@ -98,7 +98,7 @@ export class BarChart extends CartesianChart {
    * For plain series `y0 = 0`, so this equals `|scale(y) - scale(0)|`.
    */
   public getWidth(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return Math.abs(scale(d.y1) - scale(d.y0));
   }
@@ -109,7 +109,7 @@ export class BarChart extends CartesianChart {
    * Positive bars start at `scale(y0)` (which equals `scale(0)` for plain series).
    */
   public override getXCoordinate(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return d.y < 0 ? Math.abs(scale(d.y)) : scale(d.y0);
   }
@@ -119,11 +119,11 @@ export class BarChart extends CartesianChart {
    * Each series within a band is offset by `seriesIndex × barHeight`.
    */
   public override getYCoordinate(d: IDatum, i: number, serie: number): number {
-    const idx  = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx  = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const axis = this.axes[idx];
     const val  = this.categories.parseFormat(this.categories.getItem(i));
 
-    if (axis.getScaleType() === ScaleType.Ordinal) {
+    if (axis.getScaleType() === ScaleTypes.Ordinal) {
       const scale = axis.scale as d3.ScaleBand<string>;
       return (scale(String(val)) ?? 0) + scale.bandwidth() / this.series.length * serie;
     }
@@ -141,7 +141,7 @@ export class BarChart extends CartesianChart {
     const start = this.canvas.plotArea.axisSize.left;
     const end   = this.canvas.plotArea.axisSize.left + this.canvas.plotArea.width;
 
-    axis.setScaleType(ScaleType.Linear);
+    axis.setScaleType(ScaleTypes.Linear);
     return d3.scaleLinear()
       .domain([min < 0 ? min : 0, max])
       .nice()
@@ -158,7 +158,7 @@ export class BarChart extends CartesianChart {
     const end   = this.canvas.plotArea.axisSize.top + this.canvas.plotArea.height;
 
     if (this.categories.format === "%s") {
-      axis.setScaleType(ScaleType.Ordinal);
+      axis.setScaleType(ScaleTypes.Ordinal);
       return d3.scaleBand<string>()
         .domain(this.categories.labels)
         .range([start, end])
@@ -166,7 +166,7 @@ export class BarChart extends CartesianChart {
         .paddingOuter(this.options.plotOptions.bands.outerPadding);
     }
 
-    axis.setScaleType(ScaleType.Time);
+    axis.setScaleType(ScaleTypes.Time);
     return d3.scaleTime()
       .domain(
         (d3.extent(this.categories.labels, (l) => {
@@ -186,14 +186,14 @@ export class BarChart extends CartesianChart {
 export class StackedBarChart extends BarChart {
   public constructor(selector: string, data: IChartData, options?: IOptions) {
     super(selector, data, options);
-    this.stackType = StackType.Normal;
+    this.stackType = StackTypes.Normal;
   }
 
   /** Height for stacked bars: full band width (no per-series subdivision). */
   public override getHeight(_d: IDatum, _i: number, serie: number): number {
-    const idx  = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx  = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const axis = this.axes[idx];
-    if (axis.getScaleType() === ScaleType.Ordinal) {
+    if (axis.getScaleType() === ScaleTypes.Ordinal) {
       return (axis.scale as d3.ScaleBand<string>).bandwidth();
     }
     return this.canvas.plotArea.height / this.series.length / this.categories.length;
@@ -201,7 +201,7 @@ export class StackedBarChart extends BarChart {
 
   /** Width for stacked bars: `|scale(0) - scale(y)|` (absolute contribution). */
   public override getWidth(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return Math.abs(scale(0) - scale(d.y));
   }
@@ -212,7 +212,7 @@ export class StackedBarChart extends BarChart {
    * - Positive values: start at `scale(sum - y)` (left edge of the positive segment).
    */
   public override getXCoordinate(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return d.perc < 0
       ? scale((d.sum + d.y))
@@ -221,10 +221,10 @@ export class StackedBarChart extends BarChart {
 
   /** Y position for stacked bars: band start (no per-series offset). */
   public override getYCoordinate(d: IDatum, i: number, serie: number): number {
-    const idx  = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx  = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const axis = this.axes[idx];
     const val  = this.categories.parseFormat(this.categories.getItem(i));
-    if (axis.getScaleType() === ScaleType.Ordinal) {
+    if (axis.getScaleType() === ScaleTypes.Ordinal) {
       return (axis.scale as d3.ScaleBand<string>)(String(val)) ?? 0;
     }
     return (axis.scale as d3.ScaleTime<number, number>)(val as Date);
@@ -238,7 +238,7 @@ export class StackedBarChart extends BarChart {
 export class StackedPercentBarChart extends StackedBarChart {
   public constructor(selector: string, data: IChartData, options?: IOptions) {
     super(selector, data, options);
-    this.stackType = StackType.Percent;
+    this.stackType = StackTypes.Percent;
   }
 
   /**
@@ -249,7 +249,7 @@ export class StackedPercentBarChart extends StackedBarChart {
   public override getXScale(axis: Axis): ChartScale {
     const start = this.canvas.plotArea.axisSize.left;
     const end   = this.canvas.plotArea.axisSize.left + this.canvas.plotArea.width;
-    axis.setScaleType(ScaleType.Linear);
+    axis.setScaleType(ScaleTypes.Linear);
     if (!axis.labels.format) {axis.labels.format = ".0%";}
     return d3.scaleLinear()
       .domain([0, 1])
@@ -258,14 +258,14 @@ export class StackedPercentBarChart extends StackedBarChart {
 
   /** X position for percent-stacked bars: `scale(d.y0)` (left edge of the percent segment). */
   public override getXCoordinate(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return scale(d.y0);
   }
 
   /** Width for percent-stacked bars: `|scale(y1) - scale(y0)|`. */
   public override getWidth(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return Math.abs(scale(d.y1) - scale(d.y0));
   }

@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { CartesianChart } from "./CartesianChart";
-import { AxisType, ScaleType } from "../types/enums";
+import { AxisTypes, ScaleTypes } from "../types/enums";
 import type { Axis, ChartScale } from "../core/Axis";
 import type { IDatum, IChartData, IOptions } from "../types/interfaces";
 import { BubbleShape } from "../shapes/BubbleShape";
@@ -45,7 +45,7 @@ export class ScatterChart extends CartesianChart {
     this.canvas.legendArea.swatchCssClass = "bubble";
 
     for (const axis of this.axes) {
-      axis.isDataAxis = axis.type === AxisType.Y;
+      axis.isDataAxis = axis.type === AxisTypes.Y;
     }
   }
 
@@ -83,7 +83,7 @@ export class ScatterChart extends CartesianChart {
    * `d.y` here is the X value from that series.
    */
   public override getXCoordinate(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return scale(d.y); // d.y = X value from series[0]
   }
@@ -92,7 +92,7 @@ export class ScatterChart extends CartesianChart {
    * Y coordinate comes from the corresponding Y series datum at position `i`.
    */
   public override getYCoordinate(_d: IDatum, i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return scale(this.series.getSeriesData(serie)[i].y);
   }
@@ -108,7 +108,7 @@ export class ScatterChart extends CartesianChart {
     const start = this.canvas.plotArea.axisSize.left;
     const end   = this.canvas.plotArea.axisSize.left + this.canvas.plotArea.width;
 
-    axis.setScaleType(ScaleType.Linear);
+    axis.setScaleType(ScaleTypes.Linear);
     return d3.scaleLinear()
       .domain([min < 0 ? min : 0, max])
       .nice()
@@ -125,7 +125,7 @@ export class ScatterChart extends CartesianChart {
     const start = this.canvas.plotArea.axisSize.top;
     const end   = this.canvas.plotArea.axisSize.top + this.canvas.plotArea.height;
 
-    axis.setScaleType(ScaleType.Linear);
+    axis.setScaleType(ScaleTypes.Linear);
     return d3.scaleLinear()
       .domain([max, min < 0 ? min : 0])
       .nice()

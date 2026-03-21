@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { CartesianChart } from "./CartesianChart";
-import { AxisType, ScaleType } from "../types/enums";
+import { AxisTypes, ScaleTypes } from "../types/enums";
 import type { Axis, ChartScale } from "../core/Axis";
 import type { IDatum, IChartData, IOptions } from "../types/interfaces";
 import type { TooltipExtractor } from "../core/Tooltip";
@@ -41,7 +41,7 @@ export class VariwideColumnChart extends CartesianChart {
 
     // Mark Y axes as data axes so zero-lines are drawn when data goes negative
     for (const axis of this.axes) {
-      axis.isDataAxis = axis.type === AxisType.Y;
+      axis.isDataAxis = axis.type === AxisTypes.Y;
     }
 
     // Legend swatches inherit fill-opacity/stroke from the .column CSS class
@@ -51,13 +51,13 @@ export class VariwideColumnChart extends CartesianChart {
   /** Renders axes and variwide column series. */
   public override draw(): void {
     super.draw(); // runs two-pass axis cycle
-    if (!this.hasData()) { return; }
+    if (!this.hasData()) {return;}
 
     const weights    = this.series.items[0].weight;
     const cumulative = weights.map((_, i) => weights.slice(0, i).reduce((a, b) => a + b, 0));
 
     // Retrieve the final linear x-scale from pass 2
-    const xIdx   = this.getAxisByName(AxisType.X, "");
+    const xIdx   = this.getAxisByName(AxisTypes.X, "");
     const xScale = this.axes[xIdx].scale as d3.ScaleLinear<number, number>;
 
     // Replace the default numeric ticks with category labels at column midpoints
@@ -68,7 +68,7 @@ export class VariwideColumnChart extends CartesianChart {
       .attr("class", "series") as unknown as d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>;
 
     const { duration, ease } = this.options.plotOptions.animation;
-    const yIdx  = this.getAxisByName(AxisType.Y, "");
+    const yIdx  = this.getAxisByName(AxisTypes.Y, "");
     const zeroY = (this.axes[yIdx].scale as d3.ScaleLinear<number, number>)(0);
 
     new ColumnShape(svgSeries, 0)
@@ -110,7 +110,7 @@ export class VariwideColumnChart extends CartesianChart {
     const weights = this.series.items[0]?.weight ?? [];
     const total   = weights.reduce((a, b) => a + b, 0) || 1;
 
-    axis.setScaleType(ScaleType.Linear);
+    axis.setScaleType(ScaleTypes.Linear);
     return d3.scaleLinear()
       .domain([0, total])
       .range([start, end]);
@@ -120,7 +120,7 @@ export class VariwideColumnChart extends CartesianChart {
    * Returns the pixel height of a column: `|scale(y1) - scale(y0)|`.
    */
   public getHeight(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return Math.abs(scale(d.y1) - scale(d.y0));
   }
@@ -129,7 +129,7 @@ export class VariwideColumnChart extends CartesianChart {
    * Returns the Y pixel position of the top edge of a column.
    */
   public override getYCoordinate(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return d.y < 0 ? scale(0) : scale(d.y1);
   }

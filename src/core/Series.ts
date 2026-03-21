@@ -1,5 +1,6 @@
 import type { IDatum, ISerie } from "../types/interfaces";
-import { StackType } from "../types/enums";
+import { StackTypes } from "../types/enums";
+import type { StackType } from "../types/enums";
 import type { ResolvedOptions } from "./Options";
 import { Serie } from "./Serie";
 
@@ -74,10 +75,10 @@ export class Series {
    * @param axisName  - Optional axis name to restrict the calculation.
    * @param stackType - Stack mode that determines which field to inspect.
    */
-  public max(axisName?: string, stackType: StackType = StackType.None): number {
+  public max(axisName?: string, stackType: StackType = StackTypes.None): number {
     const matrix = this._getMatrix(axisName, stackType);
 
-    if (stackType !== StackType.None && this.items.length > 1) {
+    if (stackType !== StackTypes.None && this.items.length > 1) {
       return Math.max(...matrix.map((row) => Math.max(...row.map((d) => d.sum))));
     }
     return Math.max(...matrix.map((row) => Math.max(...row.map((d) => (d.y > d.y1 ? d.y : d.y1)))));
@@ -92,10 +93,10 @@ export class Series {
    * @param axisName  - Optional axis name to restrict the calculation.
    * @param stackType - Stack mode that determines which field to inspect.
    */
-  public min(axisName?: string, stackType: StackType = StackType.None): number {
+  public min(axisName?: string, stackType: StackType = StackTypes.None): number {
     const matrix = this._getMatrix(axisName, stackType);
 
-    if (stackType !== StackType.None && this.items.length > 1) {
+    if (stackType !== StackTypes.None && this.items.length > 1) {
       return Math.min(...matrix.map((row) => Math.min(...row.map((d) => d.sum + d.y))));
     }
     return Math.min(...matrix.map((row) => Math.min(...row.map((d) => (d.y < d.y0 ? d.y : d.y0)))));
@@ -107,7 +108,7 @@ export class Series {
    * to that axis are included; otherwise the full matrix is used.
    */
   private _getMatrix(axisName: string | undefined, stackType: StackType): IDatum[][] {
-    if (axisName && axisName !== "" && stackType === StackType.None) {
+    if (axisName && axisName !== "" && stackType === StackTypes.None) {
       const filtered = this.getMatricesByAxis(axisName);
       if (filtered.length > 0) {return filtered;}
     }
@@ -121,7 +122,7 @@ export class Series {
    * 1. `_initRaw()`   — extracts plain number arrays (or NaN placeholders for range series).
    * 2. `_mapToDatum()` — converts numbers to `IDatum` objects, populating `y0`/`y1`.
    * 3. Transposes to column-major order, then computes `sum`, `perc`, and (for
-   *    `StackType.Percent`) rescaled `y0`/`y1` values column by column.
+   *    `StackTypes.Percent`) rescaled `y0`/`y1` values column by column.
    * 4. Transposes back to row-major order.
    *
    * @param stackType - Determines how `sum` and percent values are calculated.
@@ -151,7 +152,7 @@ export class Series {
       });
 
       // For percent stacking: rescale y values
-      if (stackType === StackType.Percent && sum !== 0) {
+      if (stackType === StackTypes.Percent && sum !== 0) {
         let runningPos = 0;
         let runningNeg = 0;
         col.forEach((d) => {

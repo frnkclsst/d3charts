@@ -1,38 +1,39 @@
 /** Identifies whether an axis is horizontal (X) or vertical (Y). */
-export enum AxisType {
-  X,
-  Y,
-}
+export const AxisTypes = { X: "x", Y: "y" } as const;
+export type AxisType = typeof AxisTypes[keyof typeof AxisTypes];
 
 /** Controls which gridlines are drawn across the plot area. */
-export enum GridLineType {
+export const GridLineTypes = {
   /** No gridlines. */
-  None,
+  None:  "none",
   /** One gridline per major tick. */
-  Major,
+  Major: "major",
   /** One gridline per minor tick. */
-  Minor,
-}
+  Minor: "minor"
+} as const;
+export type GridLineType = typeof GridLineTypes[keyof typeof GridLineTypes];
 
 /** The scale used to map data values to pixel coordinates. */
-export enum ScaleType {
+export const ScaleTypes = {
   /** Continuous numeric scale (d3.scaleLinear). */
-  Linear,
+  Linear:  "linear",
   /** Discrete band scale for categorical data (d3.scaleBand). */
-  Ordinal,
+  Ordinal: "ordinal",
   /** Continuous time scale (d3.scaleTime). */
-  Time,
-}
+  Time:    "time"
+} as const;
+export type ScaleType = typeof ScaleTypes[keyof typeof ScaleTypes];
 
 /** Controls how multiple series are combined in a chart. */
-export enum StackType {
+export const StackTypes = {
   /** Series drawn side-by-side (no stacking). */
-  None,
+  None:    "none",
   /** Series stacked to show absolute totals. */
-  Normal,
+  Normal:  "normal",
   /** Series stacked and normalised to 100 %. */
-  Percent,
-}
+  Percent: "percent"
+} as const;
+export type StackType = typeof StackTypes[keyof typeof StackTypes];
 
 /** Shape of a data-point marker on line and scatter charts. */
 export const MarkerTypes = {

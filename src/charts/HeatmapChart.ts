@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { CartesianChart } from "./CartesianChart";
-import { AxisType, ScaleType } from "../types/enums";
+import { AxisTypes, ScaleTypes } from "../types/enums";
 import type { Axis, ChartScale } from "../core/Axis";
 import type { IDatum, IChartData, IOptions } from "../types/interfaces";
 import { HeatmapShape } from "../shapes/HeatmapShape";
@@ -51,7 +51,7 @@ export class HeatmapChart extends CartesianChart {
    */
   public override getXScale(axis: Axis): ChartScale {
     const pa = this.canvas.plotArea;
-    axis.setScaleType(ScaleType.Ordinal);
+    axis.setScaleType(ScaleTypes.Ordinal);
     return d3.scaleBand<string>()
       .domain(this.categories.labels)
       .range([pa.axisSize.left, pa.axisSize.left + pa.width])
@@ -66,7 +66,7 @@ export class HeatmapChart extends CartesianChart {
   public override getYScale(axis: Axis): ChartScale {
     const pa           = this.canvas.plotArea;
     const seriesNames  = this.series.getLabels();
-    axis.setScaleType(ScaleType.Ordinal);
+    axis.setScaleType(ScaleTypes.Ordinal);
     return d3.scaleBand<string>()
       .domain(seriesNames)
       .range([pa.axisSize.top, pa.axisSize.top + pa.height])
@@ -77,7 +77,7 @@ export class HeatmapChart extends CartesianChart {
   /** Renders axes and heatmap cell rows. */
   public override draw(): void {
     super.draw();
-    if (!this.hasData()) { return; }
+    if (!this.hasData()) {return;}
 
     // Compute global value range across all series for the colour scale
     let minVal =  Infinity;
@@ -98,8 +98,8 @@ export class HeatmapChart extends CartesianChart {
       .range([c0, c1])
       .interpolate(d3.interpolateRgb);
 
-    const xIdx      = this.getAxisByName(AxisType.X, "");
-    const yIdx      = this.getAxisByName(AxisType.Y, "");
+    const xIdx      = this.getAxisByName(AxisTypes.X, "");
+    const yIdx      = this.getAxisByName(AxisTypes.Y, "");
     const xScale    = this.axes[xIdx].scale as d3.ScaleBand<string>;
     const yScale    = this.axes[yIdx].scale as d3.ScaleBand<string>;
     const cellWidth  = xScale.bandwidth();
@@ -134,14 +134,14 @@ export class HeatmapChart extends CartesianChart {
 
   /** Returns the X pixel position of a cell's left edge. */
   public override getXCoordinate(_d: IDatum, i: number, _serie: number): number {
-    const idx   = this.getAxisByName(AxisType.X, "");
+    const idx   = this.getAxisByName(AxisTypes.X, "");
     const scale = this.axes[idx].scale as d3.ScaleBand<string>;
     return scale(String(this.categories.getItem(i))) ?? 0;
   }
 
   /** Returns the Y pixel position of a cell's top edge. */
   public override getYCoordinate(_d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.Y, "");
+    const idx   = this.getAxisByName(AxisTypes.Y, "");
     const scale = this.axes[idx].scale as d3.ScaleBand<string>;
     return scale(this.series.getLabels()[serie]) ?? 0;
   }

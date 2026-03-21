@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { ColumnChart, GridLineType } from "@frnkclsst/d3charts";
+    import { ColumnChart, GridLineTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -34,8 +34,8 @@
       titleArea: { text: "Column Chart - Negative", height: 50 },
       legendArea: { title: "Who?", width: 200 },
       plotArea: { padding: 20 },
-      xAxis: [{ gridlines: GridLineType.None, tickmarks: false }],
-      yAxis: [{ gridlines: GridLineType.Major, tickmarks: true, title: { text: "Fruit Units" } }]
+      xAxis: [{ gridlines: GridLineTypes.None, tickmarks: false }],
+      yAxis: [{ gridlines: GridLineTypes.Major, tickmarks: true, title: { text: "Fruit Units" } }]
     };
 
     const chart = new ColumnChart("#chart", data, options);

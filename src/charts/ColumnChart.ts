@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { CartesianChart } from "./CartesianChart";
-import { AxisType, ScaleType, StackType } from "../types/enums";
+import { AxisTypes, ScaleTypes, StackTypes } from "../types/enums";
 import type { Axis, ChartScale } from "../core/Axis";
 import type { IDatum, IChartData, IOptions } from "../types/interfaces";
 import { ColumnShape } from "../shapes/ColumnShape";
@@ -34,7 +34,7 @@ export class ColumnChart extends CartesianChart {
 
     // Mark Y axes as data axes so zero-lines are drawn when data goes negative
     for (const axis of this.axes) {
-      axis.isDataAxis = axis.type === AxisType.Y;
+      axis.isDataAxis = axis.type === AxisTypes.Y;
     }
 
     // Legend swatches inherit fill-opacity/stroke from the .column CSS class
@@ -53,7 +53,7 @@ export class ColumnChart extends CartesianChart {
     const { duration, ease } = this.options.plotOptions.animation;
 
     for (let s = 0; s < this.series.length; s++) {
-      const yIdx  = this.getAxisByName(AxisType.Y, this.series.items[s].axis);
+      const yIdx  = this.getAxisByName(AxisTypes.Y, this.series.items[s].axis);
       const zeroY = (this.axes[yIdx].scale as d3.ScaleLinear<number, number>)(0);
 
       new ColumnShape(svgSeries, s)
@@ -63,13 +63,13 @@ export class ColumnChart extends CartesianChart {
         .height((d, i) => this.getHeight(d, i, s))
         .width((d, i)  => this.getWidth(d, i, s))
         .labels(
-          this.stackType === StackType.Percent && !this.series.items[s].format
+          this.stackType === StackTypes.Percent && !this.series.items[s].format
             ? ".0%"
             : this.series.items[s].format,
           this.options.series.labels.rotate,
           this.options.series.labels.visible
         )
-        .labelValue(this.stackType === StackType.Percent ? (d): number => d.perc : (d): number => d.y)
+        .labelValue(this.stackType === StackTypes.Percent ? (d): number => d.perc : (d): number => d.y)
         .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie))
         .x((d, i) => this.getXCoordinate(d, i, s))
         .y((d, i) => this.getYCoordinate(d, i, s))
@@ -82,7 +82,7 @@ export class ColumnChart extends CartesianChart {
    * For plain series `y0 = 0` and `y1 = y`, so this equals `|scale(y) - scale(0)|`.
    */
   public getHeight(d: IDatum, i: number, serie: number): number {
-    const idx  = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx  = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return Math.abs(scale(d.y1) - scale(d.y0));
   }
@@ -93,9 +93,9 @@ export class ColumnChart extends CartesianChart {
    * - Time scale: `plotWidth / numberOfSeries / numberOfCategories`.
    */
   public getWidth(_d: IDatum, _i: number, serie: number): number {
-    const idx  = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx  = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const axis = this.axes[idx];
-    if (axis.getScaleType() === ScaleType.Ordinal) {
+    if (axis.getScaleType() === ScaleTypes.Ordinal) {
       return (axis.scale as d3.ScaleBand<string>).bandwidth() / this.series.length;
     }
     return this.canvas.plotArea.width / this.series.length / this.categories.length;
@@ -106,11 +106,11 @@ export class ColumnChart extends CartesianChart {
    * Each series within a band is offset by `seriesIndex × columnWidth`.
    */
   public override getXCoordinate(d: IDatum, i: number, serie: number): number {
-    const idx  = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx  = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const axis = this.axes[idx];
     const val  = this.categories.parseFormat(this.categories.getItem(i));
 
-    if (axis.getScaleType() === ScaleType.Ordinal) {
+    if (axis.getScaleType() === ScaleTypes.Ordinal) {
       const scale = axis.scale as d3.ScaleBand<string>;
       return (scale(String(val)) ?? 0) + scale.bandwidth() / this.series.length * serie;
     }
@@ -123,7 +123,7 @@ export class ColumnChart extends CartesianChart {
    * For positive values: `scale(y1)`. For negative values: `scale(0)` (column grows down).
    */
   public override getYCoordinate(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return d.y < 0 ? scale(0) : scale(d.y1);
   }
@@ -136,21 +136,21 @@ export class ColumnChart extends CartesianChart {
 export class StackedColumnChart extends ColumnChart {
   public constructor(selector: string, data: IChartData, options?: IOptions) {
     super(selector, data, options);
-    this.stackType = StackType.Normal;
+    this.stackType = StackTypes.Normal;
   }
 
   /** Height for stacked columns: `|scale(0) - scale(y)|` (absolute contribution). */
   public override getHeight(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return Math.abs(scale(0) - scale(d.y));
   }
 
   /** Width for stacked columns: full band width (no per-series subdivision). */
   public override getWidth(_d: IDatum, _i: number, serie: number): number {
-    const idx  = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx  = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const axis = this.axes[idx];
-    if (axis.getScaleType() === ScaleType.Ordinal) {
+    if (axis.getScaleType() === ScaleTypes.Ordinal) {
       return (axis.scale as d3.ScaleBand<string>).bandwidth();
     }
     return this.canvas.plotArea.width / this.series.length / this.categories.length;
@@ -158,10 +158,10 @@ export class StackedColumnChart extends ColumnChart {
 
   /** X position for stacked columns: band start (no per-series offset). */
   public override getXCoordinate(d: IDatum, i: number, serie: number): number {
-    const idx  = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx  = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const axis = this.axes[idx];
     const val  = this.categories.parseFormat(this.categories.getItem(i));
-    if (axis.getScaleType() === ScaleType.Ordinal) {
+    if (axis.getScaleType() === ScaleTypes.Ordinal) {
       return (axis.scale as d3.ScaleBand<string>)(String(val)) ?? 0;
     }
     return (axis.scale as d3.ScaleTime<number, number>)(val as Date);
@@ -169,7 +169,7 @@ export class StackedColumnChart extends ColumnChart {
 
   /** Y position for stacked columns: `scale(d.sum)` — the running cumulative top. */
   public override getYCoordinate(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return scale(d.sum);
   }
@@ -182,19 +182,19 @@ export class StackedColumnChart extends ColumnChart {
 export class StackedPercentColumnChart extends StackedColumnChart {
   public constructor(selector: string, data: IChartData, options?: IOptions) {
     super(selector, data, options);
-    this.stackType = StackType.Percent;
+    this.stackType = StackTypes.Percent;
   }
 
   /** Y position for percent-stacked columns: `scale(d.y1)` (upper percentage bound). */
   public override getYCoordinate(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return scale(d.y1);
   }
 
   /** Height for percent-stacked columns: `|scale(y1) - scale(y0)|`. */
   public override getHeight(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return Math.abs(scale(d.y1) - scale(d.y0));
   }
@@ -206,7 +206,7 @@ export class StackedPercentColumnChart extends StackedColumnChart {
    */
   public override getYScale(axis: Axis): ChartScale {
     const pa = this.canvas.plotArea;
-    axis.setScaleType(ScaleType.Linear);
+    axis.setScaleType(ScaleTypes.Linear);
     if (!axis.labels.format) {axis.labels.format = ".0%";}
     return d3.scaleLinear()
       .domain([1, 0])

@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { StackedLineChart, GridLineType, CurveTypes, MarkerTypes } from "@frnkclsst/d3charts";
+    import { StackedLineChart, GridLineTypes, CurveTypes, MarkerTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -41,8 +41,8 @@
         line: { interpolation: CurveTypes.Cardinal },
         markers: { visible: true, type: MarkerTypes.Circle }
       },
-      xAxis: [{ gridlines: GridLineType.None, tickmarks: false, title: { text: "Year" } }],
-      yAxis: [{ gridlines: GridLineType.None, tickmarks: true, title: { text: "Billions" } }]
+      xAxis: [{ gridlines: GridLineTypes.None, tickmarks: false, title: { text: "Year" } }],
+      yAxis: [{ gridlines: GridLineTypes.None, tickmarks: true, title: { text: "Billions" } }]
     };
 
     const chart = new StackedLineChart("#chart", data, options);

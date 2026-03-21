@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { BarChart, GridLineType } from "@frnkclsst/d3charts";
+    import { BarChart, GridLineTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -36,8 +36,8 @@
       titleArea: { text: "Bar Chart - Range", height: 50 },
       legendArea: { title: "Temperature Variations", width: 200 },
       plotArea: { padding: 20 },
-      xAxis: [{ gridlines: GridLineType.None, tickmarks: false }],
-      yAxis: [{ gridlines: GridLineType.None, tickmarks: true }]
+      xAxis: [{ gridlines: GridLineTypes.None, tickmarks: false }],
+      yAxis: [{ gridlines: GridLineTypes.None, tickmarks: true }]
     };
 
     const chart = new BarChart("#chart", data, options);

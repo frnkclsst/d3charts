@@ -1,6 +1,6 @@
 import type * as d3 from "d3";
 import { CartesianChart } from "./CartesianChart";
-import { AxisType, ScaleType, StackType } from "../types/enums";
+import { AxisTypes, ScaleTypes, StackTypes } from "../types/enums";
 import type { IDatum, IChartData, IOptions } from "../types/interfaces";
 import { LineShape } from "../shapes/LineShape";
 import { AreaShape } from "../shapes/AreaShape";
@@ -32,10 +32,11 @@ export class LineChart extends CartesianChart {
   public constructor(selector: string, data: IChartData, options?: IOptions) {
     super(selector, data, options);
 
-  // Mark Y axes as data axes so zero-lines are drawn when data goes negative
+    // Mark Y axes as data axes so zero-lines are drawn when data goes negative
     for (const axis of this.axes) {
-      axis.isDataAxis = axis.type === AxisType.Y;
+      axis.isDataAxis = axis.type === AxisTypes.Y;
     }
+    this.canvas.legendArea.swatchType = "line";
   }
 
   /** Renders axes, optional area fills, and line series. */
@@ -97,11 +98,11 @@ export class LineChart extends CartesianChart {
    * For ordinal scales the midpoint of the band is used.
    */
   public override getXCoordinate(d: IDatum, i: number, serie: number): number {
-    const idx  = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx  = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const axis = this.axes[idx];
     const val  = this.categories.parseFormat(this.categories.getItem(i));
 
-    if (axis.getScaleType() === ScaleType.Ordinal) {
+    if (axis.getScaleType() === ScaleTypes.Ordinal) {
       const scale = axis.scale as d3.ScaleBand<string>;
       return scale(String(val))! + scale.bandwidth() / 2;
     }
@@ -110,19 +111,19 @@ export class LineChart extends CartesianChart {
 
   /** Returns the Y pixel position for the raw `d.y` value. */
   public override getYCoordinate(d: IDatum, i: number, serie: number): number {
-    const idx  = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx  = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     return (this.axes[idx].scale as d3.ScaleLinear<number, number>)(d.y);
   }
 
   /** Returns the Y pixel position for the lower boundary `d.y0` (used by area fills). */
   public override getY0Coordinate(d: IDatum, i: number, serie: number): number {
-    const idx = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     return (this.axes[idx].scale as d3.ScaleLinear<number, number>)(d.y0);
   }
 
   /** Returns the Y pixel position for the upper boundary `d.y1` (used by area fills). */
   public getY1Coordinate(d: IDatum, i: number, serie: number): number {
-    const idx = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     return (this.axes[idx].scale as d3.ScaleLinear<number, number>)(d.y1);
   }
 }
@@ -136,24 +137,25 @@ export class LineChart extends CartesianChart {
 export class StackedLineChart extends LineChart {
   public constructor(selector: string, data: IChartData, options?: IOptions) {
     super(selector, data, options);
-    this.stackType = StackType.Normal;
+    this.stackType = StackTypes.Normal;
+    this.canvas.legendArea.swatchType = "line";
   }
 
   /** Maps to `d.sum` (cumulative stacked value). */
   public override getYCoordinate(d: IDatum, i: number, serie: number): number {
-    const idx = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     return (this.axes[idx].scale as d3.ScaleLinear<number, number>)(d.sum);
   }
 
   /** Maps to `d.sum - d.y` (the bottom of this series' stacked segment). */
   public override getY0Coordinate(d: IDatum, i: number, serie: number): number {
-    const idx = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     return (this.axes[idx].scale as d3.ScaleLinear<number, number>)(d.sum - d.y);
   }
 
   /** Maps to `d.sum` (the top of this series' stacked segment). */
   public override getY1Coordinate(d: IDatum, i: number, serie: number): number {
-    const idx = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     return (this.axes[idx].scale as d3.ScaleLinear<number, number>)(d.sum);
   }
 }
@@ -167,18 +169,19 @@ export class StackedLineChart extends LineChart {
 export class StackedPercentLineChart extends LineChart {
   public constructor(selector: string, data: IChartData, options?: IOptions) {
     super(selector, data, options);
-    this.stackType = StackType.Percent;
+    this.stackType = StackTypes.Percent;
+    this.canvas.legendArea.swatchType = "line";
   }
 
   /** Maps to `d.y1` (upper percentage bound of this series' stacked segment). */
   public override getYCoordinate(d: IDatum, i: number, serie: number): number {
-    const idx = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     return (this.axes[idx].scale as d3.ScaleLinear<number, number>)(d.y1);
   }
 
   /** Maps to `d.y0` (lower percentage bound of this series' stacked segment). */
   public override getY0Coordinate(d: IDatum, i: number, serie: number): number {
-    const idx = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     return (this.axes[idx].scale as d3.ScaleLinear<number, number>)(d.y0);
   }
 }

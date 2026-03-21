@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { StackedBarChart, GridLineType } from "@frnkclsst/d3charts";
+    import { StackedBarChart, GridLineTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -34,8 +34,8 @@
       titleArea: { text: "Bar Chart - Stacked", height: 50 },
       legendArea: { title: "Who?", width: 200 },
       plotArea: { padding: 20 },
-      xAxis: [{ gridlines: GridLineType.Major, tickmarks: false }],
-      yAxis: [{ gridlines: GridLineType.None, tickmarks: true }]
+      xAxis: [{ gridlines: GridLineTypes.Major, tickmarks: false }],
+      yAxis: [{ gridlines: GridLineTypes.None, tickmarks: true }]
     };
 
     const chart = new StackedBarChart("#chart", data, options);

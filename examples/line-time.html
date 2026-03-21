@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { LineChart, GridLineType, MarkerTypes, OrientationTypes } from "@frnkclsst/d3charts";
+    import { LineChart, GridLineTypes, MarkerTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -36,8 +36,8 @@
     const options = {
       titleArea: { text: "Revenue vs Expenses 2024", height: 50 },
       legendArea: { width: 120, title: "Metric" },
-      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineType.Major, title: { text: "$K" } }],
-      xAxis: [{ orient: OrientationTypes.Bottom, gridlines: GridLineType.Major, labels: { format: "%b" } }],
+      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineTypes.Major, title: { text: "$K" } }],
+      xAxis: [{ orient: OrientationTypes.Bottom, gridlines: GridLineTypes.Major, labels: { format: "%b" } }],
       plotOptions: {
         markers: { visible: true, type: MarkerTypes.Cross, size: 5 },
         animation: { duration: 800 }

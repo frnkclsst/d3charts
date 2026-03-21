@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { ScatterChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
+    import { ScatterChart, GridLineTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -53,10 +53,10 @@
         animation: { duration: 1000 }
       },
       plotArea: { padding: 20 },
-      xAxis: [{ orient: OrientationTypes.Bottom, gridlines: GridLineType.None, title: { text: "X" }  }],
+      xAxis: [{ orient: OrientationTypes.Bottom, gridlines: GridLineTypes.None, title: { text: "X" }  }],
       yAxis: [
-        { name: "A", orient: OrientationTypes.Left,  gridlines: GridLineType.Major, title: { text: "Serie 1" } },
-        { name: "B", orient: OrientationTypes.Right, gridlines: GridLineType.Major, title: { text: "Serie 2" } }
+        { name: "A", orient: OrientationTypes.Left,  gridlines: GridLineTypes.Major, title: { text: "Serie 1" } },
+        { name: "B", orient: OrientationTypes.Right, gridlines: GridLineTypes.Major, title: { text: "Serie 2" } }
       ]
     };
 

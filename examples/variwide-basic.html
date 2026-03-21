@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { VariwideColumnChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
+    import { VariwideColumnChart, GridLineTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     // Labour cost per hour worked (€) — column height
     // GDP in billion USD — column width
@@ -47,7 +47,7 @@
       legendArea: { width: 0 },
       yAxis: [{
         orient: OrientationTypes.Left,
-        gridlines: GridLineType.Major,
+        gridlines: GridLineTypes.Major,
         title: { text: "€ per hour worked" }
       }],
       xAxis: [{ orient: OrientationTypes.Bottom, labels: { rotate: 45 } }],

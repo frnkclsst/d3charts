@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { StackedColumnChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
+    import { StackedColumnChart, GridLineTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -54,10 +54,10 @@
       legendArea: { title: "Category", width: 200 },
       plotArea: { padding: 20 },
       xAxis: [
-        { gridlines: GridLineType.None, orient: OrientationTypes.Top,    tickmarks: true, title: { text: "Age Men" } },
-        { gridlines: GridLineType.None, orient: OrientationTypes.Bottom, tickmarks: true, title: { text: "Age Women" } }
+        { gridlines: GridLineTypes.None, orient: OrientationTypes.Top,    tickmarks: true, title: { text: "Age Men" } },
+        { gridlines: GridLineTypes.None, orient: OrientationTypes.Bottom, tickmarks: true, title: { text: "Age Women" } }
       ],
-      yAxis: [{ gridlines: GridLineType.Major, orient: OrientationTypes.Left, tickmarks: false, title: { text: "Population" } }]
+      yAxis: [{ gridlines: GridLineTypes.Major, orient: OrientationTypes.Left, tickmarks: false, title: { text: "Population" } }]
     };
 
     const chart = new StackedColumnChart("#chart", data, options);

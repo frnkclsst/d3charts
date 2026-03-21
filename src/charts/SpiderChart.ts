@@ -39,6 +39,7 @@ export class SpiderChart extends Chart {
     super(selector, data, options);
     // Legend shows series names (one entry per polygon)
     this.canvas.legendArea.items = this.series.getLabels();
+    this.canvas.legendArea.swatchType = "line";
   }
 
   /**
@@ -54,7 +55,7 @@ export class SpiderChart extends Chart {
   /** Renders the canvas layout, the spider web background, and all series polygons. */
   public override draw(): void {
     super.draw();
-    if (!this.hasData()) { return; }
+    if (!this.hasData()) {return;}
 
     const pa     = this.canvas.plotArea;
     const po     = this.options.plotOptions;

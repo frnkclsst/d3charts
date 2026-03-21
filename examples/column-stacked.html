@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { StackedColumnChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
+    import { StackedColumnChart, GridLineTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: { format: "%s", data: ["Q1","Q2","Q3","Q4"] },
@@ -30,7 +30,7 @@
     const options = {
       titleArea: { text: "Quarterly Sales - Stacked", height: 50 },
       legendArea: { width: 110, title: "Product" },
-      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineType.Major, title: { text: "Units" } }],
+      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineTypes.Major, title: { text: "Units" } }],
       xAxis: [{ orient: OrientationTypes.Bottom }],
       plotOptions: { animation: { duration: 600 } }
     };

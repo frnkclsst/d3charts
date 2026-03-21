@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { StackedPercentBarChart, GridLineType } from "@frnkclsst/d3charts";
+    import { StackedPercentBarChart, GridLineTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -34,8 +34,8 @@
       titleArea: { text: "Bar Chart - 100% Stacked", height: 50 },
       legendArea: { title: "Who?", width: 200 },
       plotArea: { padding: 20 },
-      xAxis: [{ gridlines: GridLineType.Major, labels: { format: ".0%" }, tickmarks: false }],
-      yAxis: [{ gridlines: GridLineType.None, tickmarks: true }]
+      xAxis: [{ gridlines: GridLineTypes.Major, labels: { format: ".0%" }, tickmarks: false }],
+      yAxis: [{ gridlines: GridLineTypes.None, tickmarks: true }]
     };
 
     const chart = new StackedPercentBarChart("#chart", data, options);

@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { HeatmapChart, GridLineType, EaseTypes } from "@frnkclsst/d3charts";
+    import { HeatmapChart, GridLineTypes, EaseTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: { format: "%s", data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] },
@@ -30,8 +30,8 @@
 
     const options = {
       titleArea: { text: "Website traffic by day & time", height: 50 },
-      xAxis: { gridlines: GridLineType.None },
-      yAxis: { gridlines: GridLineType.None },
+      xAxis: { gridlines: GridLineTypes.None },
+      yAxis: { gridlines: GridLineTypes.None },
       plotOptions: {
         animation: { duration: 800, ease: EaseTypes.Cubic },
         heatmap: { colorRange: ["#f0f9e8", "#084081"] }

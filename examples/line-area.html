@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { LineChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
+    import { LineChart, GridLineTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -33,7 +33,7 @@
     const options = {
       titleArea: { text: "Monthly Average Temperature", subtitle: "Source: WorldClimate.com", height: 60 },
       legendArea: { width: 120, title: "City" },
-      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineType.Major, title: { text: "Ã‚Â°C" } }],
+      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineTypes.Major, title: { text: "Ã‚Â°C" } }],
       xAxis: [{ orient: OrientationTypes.Bottom }],
       plotOptions: {
         area: { visible: true, opacity: 0.2 },

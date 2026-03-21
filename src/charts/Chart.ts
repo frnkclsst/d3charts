@@ -6,7 +6,8 @@ import { Series } from "../core/Series";
 import { Tooltip } from "../core/Tooltip";
 import { resolveOptions } from "../core/Options";
 import type { ResolvedOptions } from "../core/Options";
-import { StackType } from "../types/enums";
+import { StackTypes } from "../types/enums";
+import type { StackType } from "../types/enums";
 import type { IChartData, IOptions } from "../types/interfaces";
 
 /**
@@ -65,7 +66,7 @@ export abstract class Chart {
    */
   public constructor(selector: string, data: IChartData, options?: IOptions) {
     this.selector  = selector;
-    this.stackType = StackType.None;
+    this.stackType = StackTypes.None;
     this.options   = resolveOptions(options);
     this._rawData  = data;
 

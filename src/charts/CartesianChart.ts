@@ -2,8 +2,8 @@ import * as d3 from "d3";
 import { Chart } from "./Chart";
 import { XAxis, YAxis } from "../core/Axis";
 import type { Axis, IAxisContext, ChartScale } from "../core/Axis";
-import type { AxisType} from "../types/enums";
-import { ScaleType } from "../types/enums";
+import type { AxisType } from "../types/enums";
+import { ScaleTypes } from "../types/enums";
 import type { IDatum, IChartData, IOptions } from "../types/interfaces";
 
 /**
@@ -131,7 +131,7 @@ export abstract class CartesianChart extends Chart {
     const end   = pa.axisSize.left + pa.width;
 
     if (this.categories.format === "%s") {
-      axis.setScaleType(ScaleType.Ordinal);
+      axis.setScaleType(ScaleTypes.Ordinal);
       return d3.scaleBand<string>()
         .domain(this.categories.labels)
         .range([start, end])
@@ -139,7 +139,7 @@ export abstract class CartesianChart extends Chart {
         .paddingOuter(this.options.plotOptions.bands.outerPadding);
     }
 
-    axis.setScaleType(ScaleType.Time);
+    axis.setScaleType(ScaleTypes.Time);
     return d3.scaleTime()
       .domain(
         d3.extent(this.categories.labels, (label) => {
@@ -165,7 +165,7 @@ export abstract class CartesianChart extends Chart {
     const min = this.series.min(axis.name, this.stackType);
     const max = this.series.max(axis.name, this.stackType);
 
-    axis.setScaleType(ScaleType.Linear);
+    axis.setScaleType(ScaleTypes.Linear);
     return d3.scaleLinear()
       .domain([max, min < 0 ? min : 0])
       .nice()

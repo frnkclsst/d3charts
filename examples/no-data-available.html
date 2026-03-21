@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { LineChart, GridLineType, CurveTypes } from "@frnkclsst/d3charts";
+    import { LineChart, GridLineTypes, CurveTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -46,8 +46,8 @@
         line: { interpolation: CurveTypes.Linear },
         markers: { visible: false }
       },
-      xAxis: [{ gridlines: GridLineType.None, tickmarks: true, title: { text: "Year" } }],
-      yAxis: [{ gridlines: GridLineType.None, tickmarks: false, title: { text: "Nuclear weapon status" } }]
+      xAxis: [{ gridlines: GridLineTypes.None, tickmarks: true, title: { text: "Year" } }],
+      yAxis: [{ gridlines: GridLineTypes.None, tickmarks: false, title: { text: "Nuclear weapon status" } }]
     };
 
     const chart = new LineChart("#chart", data, options);

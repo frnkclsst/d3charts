@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { LineChart, GridLineType, MarkerTypes, OrientationTypes } from "@frnkclsst/d3charts";
+    import { LineChart, GridLineTypes, MarkerTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -38,7 +38,7 @@
         height: 60
       },
       legendArea: { width: 120, title: "City" },
-      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineType.Major, title: { text: "Ã‚Â°C" } }],
+      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineTypes.Major, title: { text: "Ã‚Â°C" } }],
       xAxis: [{ orient: OrientationTypes.Bottom }],
       plotOptions: {
         markers: { visible: true, size: 6 },

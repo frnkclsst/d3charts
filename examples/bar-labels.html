@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { BarChart, GridLineType } from "@frnkclsst/d3charts";
+    import { BarChart, GridLineTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -35,8 +35,8 @@
       legendArea: { title: "Continent", width: 200 },
       plotArea: { padding: 20 },
       series: { labels: { visible: true } },
-      xAxis: [{ gridlines: GridLineType.Major, tickmarks: false, title: { text: "Population (millions)" } }],
-      yAxis: [{ gridlines: GridLineType.None, tickmarks: true }]
+      xAxis: [{ gridlines: GridLineTypes.Major, tickmarks: false, title: { text: "Population (millions)" } }],
+      yAxis: [{ gridlines: GridLineTypes.None, tickmarks: true }]
     };
 
     const chart = new BarChart("#chart", data, options);

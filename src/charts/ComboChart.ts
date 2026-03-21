@@ -1,6 +1,6 @@
 import type * as d3 from "d3";
 import { CartesianChart } from "./CartesianChart";
-import { AxisType, ScaleType, SeriesTypes } from "../types/enums";
+import { AxisTypes, ScaleTypes, SeriesTypes } from "../types/enums";
 import type { IDatum, IChartData, IOptions } from "../types/interfaces";
 import { ColumnShape } from "../shapes/ColumnShape";
 import { LineShape } from "../shapes/LineShape";
@@ -38,7 +38,7 @@ export class ComboChart extends CartesianChart {
     super(selector, data, options);
 
     for (const axis of this.axes) {
-      axis.isDataAxis = axis.type === AxisType.Y;
+      axis.isDataAxis = axis.type === AxisTypes.Y;
     }
   }
 
@@ -57,7 +57,7 @@ export class ComboChart extends CartesianChart {
     for (let s = 0; s < this.series.length; s++) {
       if (this.series.items[s].type !== "column") {continue;}
 
-      const yIdx  = this.getAxisByName(AxisType.Y, this.series.items[s].axis);
+      const yIdx  = this.getAxisByName(AxisTypes.Y, this.series.items[s].axis);
       const zeroY = (this.axes[yIdx].scale as d3.ScaleLinear<number, number>)(0);
 
       new ColumnShape(svgSeries, s)
@@ -128,7 +128,7 @@ export class ComboChart extends CartesianChart {
    * Negative values produce a downward-growing column.
    */
   private _colHeight(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return Math.abs(scale(d.y) - scale(0));
   }
@@ -139,9 +139,9 @@ export class ComboChart extends CartesianChart {
    * - Time: `plotWidth / columnTotal / categoryCount`.
    */
   private _colWidth(_d: IDatum, _i: number, serie: number, colTotal: number): number {
-    const idx  = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx  = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const axis = this.axes[idx];
-    if (axis.getScaleType() === ScaleType.Ordinal) {
+    if (axis.getScaleType() === ScaleTypes.Ordinal) {
       return (axis.scale as d3.ScaleBand<string>).bandwidth() / colTotal;
     }
     return this.canvas.plotArea.width / colTotal / this.categories.length;
@@ -152,12 +152,12 @@ export class ComboChart extends CartesianChart {
    * Each column-type series is offset by its column-index (not overall series-index).
    */
   private _colX(d: IDatum, i: number, serie: number, colTotal: number): number {
-    const idx  = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx  = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const axis = this.axes[idx];
     const val  = this.categories.parseFormat(this.categories.getItem(i));
     const colIdx = this._columnIndex(serie);
 
-    if (axis.getScaleType() === ScaleType.Ordinal) {
+    if (axis.getScaleType() === ScaleTypes.Ordinal) {
       const scale = axis.scale as d3.ScaleBand<string>;
       return (scale(String(val)) ?? 0) + scale.bandwidth() / colTotal * colIdx;
     }
@@ -170,7 +170,7 @@ export class ComboChart extends CartesianChart {
    * Negative values start above `scale(y)` so the column extends upward to `scale(0)`.
    */
   private _colY(d: IDatum, _i: number, serie: number): number {
-    const idx   = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx   = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     const scale = this.axes[idx].scale as d3.ScaleLinear<number, number>;
     return d.y < 0
       ? scale(d.y) - Math.abs(scale(d.y) - scale(0))
@@ -184,10 +184,10 @@ export class ComboChart extends CartesianChart {
    * For ordinal scales the midpoint of the band is used; for time scales the raw pixel position.
    */
   private _lineX(_d: IDatum, i: number, serie: number): number {
-    const idx  = this.getAxisByName(AxisType.X, this.series.items[serie].axis);
+    const idx  = this.getAxisByName(AxisTypes.X, this.series.items[serie].axis);
     const axis = this.axes[idx];
     const val  = this.categories.parseFormat(this.categories.getItem(i));
-    if (axis.getScaleType() === ScaleType.Ordinal) {
+    if (axis.getScaleType() === ScaleTypes.Ordinal) {
       const scale = axis.scale as d3.ScaleBand<string>;
       return (scale(String(val)) ?? 0) + scale.bandwidth() / 2;
     }
@@ -196,7 +196,7 @@ export class ComboChart extends CartesianChart {
 
   /** Y position for a line series data point: `scale(d.y)`. */
   private _lineY(d: IDatum, _i: number, serie: number): number {
-    const idx = this.getAxisByName(AxisType.Y, this.series.items[serie].axis);
+    const idx = this.getAxisByName(AxisTypes.Y, this.series.items[serie].axis);
     return (this.axes[idx].scale as d3.ScaleLinear<number, number>)(d.y);
   }
 

@@ -1,5 +1,6 @@
 import * as d3 from "d3";
-import { AxisType, GridLineType, ScaleType } from "../types/enums";
+import { AxisTypes, GridLineTypes, ScaleTypes } from "../types/enums";
+import type { AxisType, GridLineType, ScaleType } from "../types/enums";
 import type { OrientationType } from "../types/enums";
 import type { ResolvedAxisOptions } from "./Options";
 import { getHeight, getWidth } from "../utils/dom";
@@ -72,7 +73,7 @@ export class Axis {
   protected _orient: OrientationType;
   protected _gridlineType: GridLineType;
   protected _hasTickmarks: boolean;
-  protected _scaleType: ScaleType = ScaleType.Linear;
+  protected _scaleType: ScaleType = ScaleTypes.Linear;
   protected _axisFn!: AxisFn;
   protected _svgAxis!: d3.Selection<SVGGElement, unknown, SVGElement, unknown>;
   /**
@@ -127,7 +128,7 @@ export class Axis {
     this._axisFn = this._buildAxisFn();
 
     if (this.labels.format) {
-      const fmt = this._scaleType === ScaleType.Time
+      const fmt = this._scaleType === ScaleTypes.Time
         ? d3.timeFormat(this.labels.format)
         : d3.format(this.labels.format);
       this._axisFn.tickFormat(fmt as (d: d3.AxisDomain) => string);
@@ -239,7 +240,7 @@ export class Axis {
    * Does nothing when `_gridlineType` is `None`.
    */
   protected _drawGridlines(ctx: IAxisContext): void {
-    if (this._gridlineType === GridLineType.None) {return;}
+    if (this._gridlineType === GridLineTypes.None) {return;}
 
     const gridAxisFn = this._buildAxisFn()
       .tickSize(this._getInnerTickSize(ctx))
@@ -275,7 +276,7 @@ export class Axis {
   /** Returns the default orientation for a new axis based on its type. */
   private _defaultOrient(type: AxisType, orient: OrientationType): OrientationType {
     if (orient) {return orient;}
-    return type === AxisType.X ? "bottom" : "left";
+    return type === AxisTypes.X ? "bottom" : "left";
   }
 }
 
@@ -292,7 +293,7 @@ export class Axis {
 export class XAxis extends Axis {
   /** @param options - Resolved axis options. */
   public constructor(options: ResolvedAxisOptions) {
-    super(AxisType.X, options);
+    super(AxisTypes.X, options);
   }
 
   protected override _getScale(ctx: IAxisContext): ChartScale {
@@ -492,7 +493,7 @@ export class XAxis extends Axis {
 export class YAxis extends Axis {
   /** @param options - Resolved axis options. */
   public constructor(options: ResolvedAxisOptions) {
-    super(AxisType.Y, options);
+    super(AxisTypes.Y, options);
   }
 
   protected override _getScale(ctx: IAxisContext): ChartScale {

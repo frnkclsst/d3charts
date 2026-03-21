@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { ColumnChart, GridLineType, OrientationTypes } from "@frnkclsst/d3charts";
+    import { ColumnChart, GridLineTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -33,10 +33,10 @@
       titleArea: { text: "Column Chart - Dual Axes", height: 50 },
       legendArea: { title: "Rainfall vs Temperature", width: 200 },
       plotArea: { padding: 20 },
-      xAxis: [{ gridlines: GridLineType.None, orient: OrientationTypes.Bottom, tickmarks: true, title: { text: "Month" } }],
+      xAxis: [{ gridlines: GridLineTypes.None, orient: OrientationTypes.Bottom, tickmarks: true, title: { text: "Month" } }],
       yAxis: [
-        { name: "Rainfall",    gridlines: GridLineType.None, orient: OrientationTypes.Left,  tickmarks: true, title: { text: "mm" } },
-        { name: "Temperature", gridlines: GridLineType.None, orient: OrientationTypes.Right, tickmarks: true, title: { text: "Ã‚Â°C" } }
+        { name: "Rainfall",    gridlines: GridLineTypes.None, orient: OrientationTypes.Left,  tickmarks: true, title: { text: "mm" } },
+        { name: "Temperature", gridlines: GridLineTypes.None, orient: OrientationTypes.Right, tickmarks: true, title: { text: "Ã‚Â°C" } }
       ]
     };
 

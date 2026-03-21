@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { LineChart, GridLineType, CurveTypes } from "@frnkclsst/d3charts";
+    import { LineChart, GridLineTypes, CurveTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -39,8 +39,8 @@
         line: { interpolation: CurveTypes.Linear },
         markers: { visible: true }
       },
-      xAxis: [{ gridlines: GridLineType.None, tickmarks: true, title: { text: "Fruit" } }],
-      yAxis: [{ gridlines: GridLineType.Major, tickmarks: true, title: { text: "Fruit Units" } }]
+      xAxis: [{ gridlines: GridLineTypes.None, tickmarks: true, title: { text: "Fruit" } }],
+      yAxis: [{ gridlines: GridLineTypes.Major, tickmarks: true, title: { text: "Fruit Units" } }]
     };
 
     const chart = new LineChart("#chart", data, options);

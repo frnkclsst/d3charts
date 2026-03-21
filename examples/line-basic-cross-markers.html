@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { LineChart, GridLineType, CurveTypes, MarkerTypes, OrientationTypes } from "@frnkclsst/d3charts";
+    import { LineChart, GridLineTypes, CurveTypes, MarkerTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     const data = {
       categories: {
@@ -39,8 +39,8 @@
         line: { interpolation: CurveTypes.Linear },
         markers: { visible: true, type: MarkerTypes.Cross }
       },
-      xAxis: [{ gridlines: GridLineType.None, tickmarks: false, title: { text: "Month" } }],
-      yAxis: [{ gridlines: GridLineType.None, orient: OrientationTypes.Left, tickmarks: true, title: { text: "Temperature" } }]
+      xAxis: [{ gridlines: GridLineTypes.None, tickmarks: false, title: { text: "Month" } }],
+      yAxis: [{ gridlines: GridLineTypes.None, orient: OrientationTypes.Left, tickmarks: true, title: { text: "Temperature" } }]
     };
 
     const chart = new LineChart("#chart", data, options);

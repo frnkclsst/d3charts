@@ -28,6 +28,12 @@ export class LegendArea extends ChartArea {
    * Defaults to `""` (no extra class).
    */
   public swatchCssClass: string = "";
+  /**
+   * Controls the symbol drawing method used for each legend swatch.
+   * Use `"line"` for line/spider charts (draws a coloured stroke with optional marker),
+   * and `"rect"` (the default) for area-fill charts such as column, bar, and pie.
+   */
+  public swatchType: "rect" | "line" = "rect";
 
   private readonly _opts: ResolvedOptions;
 
@@ -115,7 +121,11 @@ export class LegendArea extends ChartArea {
         markerVisible: this._opts.plotOptions.markers.visible
       });
       symbol.color = colorFn(i);
-      symbol.drawRect();
+      if (this.swatchType === "line") {
+        symbol.drawLine();
+      } else {
+        symbol.drawRect();
+      }
 
       g.append("text")
         .attr("x", 30)
