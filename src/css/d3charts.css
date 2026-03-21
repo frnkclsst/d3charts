@@ -128,6 +128,12 @@
   color: #888;
 }
 
+.area {
+  fill-opacity: 0.2;
+  stroke-width: 1px;
+  stroke-opacity: 0.8;
+}
+
 .bubble {
   fill-opacity: 0.4;
   stroke-width: 1px;
