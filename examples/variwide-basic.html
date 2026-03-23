@@ -16,7 +16,7 @@
   <div id="chart"></div>
 
   <script type="module">
-    import { VariwideColumnChart, GridLineTypes, OrientationTypes } from "@frnkclsst/d3charts";
+    import { VariwideChart, GridLineTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
     // Labour cost per hour worked (€) — column height
     // GDP in billion USD — column width
@@ -58,7 +58,7 @@
       }
     };
 
-    const chart = new VariwideColumnChart("#chart", data, options);
+    const chart = new VariwideChart("#chart", data, options);
     chart.draw();
   </script>
 </body>

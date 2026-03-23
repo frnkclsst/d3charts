@@ -26,11 +26,11 @@ import { ColumnShape } from "../shapes/ColumnShape";
  *     weight: [594, 627, 4444]  // GDP in billions USD
  *   }],
  * };
- * const chart = new VariwideColumnChart("#chart", data);
+ * const chart = new VariwideChart("#chart", data);
  * chart.draw();
  * ```
  */
-export class VariwideColumnChart extends CartesianChart {
+export class VariwideChart extends CartesianChart {
   /**
    * @param selector - CSS selector for the container element.
    * @param data     - Chart data. The first series must supply a `weight` array.
