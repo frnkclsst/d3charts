@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Radial Bar Chart</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; }
+    #chart { width: 600px; height: 500px; position: relative; }
+  </style>
+</head>
+<body>
+  <h2>Radial Bar Chart</h2>
+  <p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+
+  <script type="module">
+    import { RadialBarChart } from "@frnkclsst/d3charts";
+
+    // Winter Olympic medals — Top 5 countries (all-time)
+    const data = {
+      categories: {
+        format: "%s",
+        data: ["Canada", "Austria", "Germany", "United States", "Norway"]
+      },
+      series: [
+        { name: "Gold",   data: [73,  64,  92,  96, 148] },
+        { name: "Silver", data: [64,  81,  86, 102, 133] },
+        { name: "Bronze", data: [62,  87,  60,  84, 124] }
+      ]
+    };
+
+    const options = {
+      titleArea: {
+        text:     "Winter Olympic Medals — Top 5 Countries",
+        subtitle: "All-time medal count by country",
+        height:   60
+      },
+      legendArea: { title: "Medal", width: 140 },
+      plotOptions: {
+        colors:    ["#FFD700", "#C0C0C0", "#CD7F32"],
+        animation: { duration: 800, ease: "cubic" }
+      }
+    };
+
+    const chart = new RadialBarChart("#chart", data, options);
+    chart.draw();
+  </script>
+</body>
+</html>

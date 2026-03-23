@@ -6,8 +6,8 @@
   <title>Spider chart</title>
   <link rel="stylesheet" href="../src/css/d3charts.css" />
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #fff; }
-    #chart { width: 550px; height: 480px; position: relative; }
+    body { font-family: sans-serif; padding: 2rem; background: #fff; max-width: 960px; }
+    #chart { width: 100%; height: 480px; position: relative; }
   </style>
 </head>
 <body>
@@ -33,8 +33,8 @@
       plotOptions: {
         animation: { duration: 900, ease: EaseTypes.Cubic },
         area: { visible: true, opacity: 0.15 },
-        markers: { visible: true, size: 2, type: MarkerTypes.Circle },
-        spider: { gridlines: SpiderGridlineTypes.Polygon, levels: 5 }
+        markers: { visible: true, size: 2, type: MarkerTypes.Mixed },
+        spider: { gridlines: SpiderGridlineTypes.Polygon, levels: 10 }
       }
     };
 

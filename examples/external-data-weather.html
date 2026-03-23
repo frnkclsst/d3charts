@@ -6,8 +6,8 @@
   <title>Weather - external data (Open-Meteo)</title>
   <link rel="stylesheet" href="../src/css/d3charts.css" />
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #fff; }
-    #chart { width: 900px; height: 450px; position: relative; }
+    body { font-family: sans-serif; padding: 2rem; background: #fff; max-width: 960px; }
+    #chart { width: 100%; height: 450px; position: relative; }
     #status { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; min-height: 1.2em; }
     .error { color: #c00; }
     #controls { margin-bottom: 0.75rem; }
@@ -96,7 +96,7 @@
           },
           legendArea: { width: 120, title: "City" },
           xAxis: [{ orient: OrientationTypes.Bottom, labels: { format: "%b %Y", rotate: -45 } }],
-          yAxis: [{ orient: OrientationTypes.Left,   gridlines: GridLineTypes.Major, title: { text: "Ã‚Â°C" } }],
+          yAxis: [{ orient: OrientationTypes.Left,   gridlines: GridLineTypes.Major, title: { text: " °C" } }],
           plotOptions: {
             area:      { visible: true, opacity: 0.08 },
             markers:   { visible: false },

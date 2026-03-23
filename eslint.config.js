@@ -11,6 +11,11 @@ export default [
       parserOptions: {
         project: "./tsconfig.json",
       },
+      globals: {
+        setTimeout:     "readonly",
+        clearTimeout:   "readonly",
+        ResizeObserver: "readonly",
+      },
     },
     plugins: {
       "@typescript-eslint": tsPlugin,

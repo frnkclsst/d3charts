@@ -42,6 +42,7 @@ export { ComboChart } from "./charts/ComboChart";
 export { SpiderChart } from "./charts/SpiderChart";
 export { HeatmapChart } from "./charts/HeatmapChart";
 export { VariwideColumnChart } from "./charts/VariwideColumnChart";
+export { RadialBarChart } from "./charts/RadialBarChart";
 
 // Core (for advanced consumers / extension)
 export { Chart }      from "./charts/Chart";

@@ -157,3 +157,27 @@
   stroke-width: 1px;
   stroke-opacity: 0.8;
 }
+
+.arc {
+  fill-opacity: 0.85;
+  stroke-width: 0;
+}
+
+.radial-track {
+  fill: #f0f0f0;
+}
+
+.radial-label {
+  fill: #444;
+  font-size: 11px;
+}
+
+.scale-tick {
+  stroke: #bbb;
+  stroke-width: 1;
+}
+
+.scale-label {
+  fill: #888;
+  font-size: 10px;
+}
