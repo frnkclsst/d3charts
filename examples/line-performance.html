@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>Line chart - performance (100 000 pts)</title>
+  <link rel="stylesheet" href="../src/css/d3charts.css" />
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fff; max-width: 1200px; }
+    #chart { width: 100%; height: 400px; position: relative; }
+    #stats { margin-top: 1rem; font-size: 0.875rem; color: #555; }
+  </style>
+</head>
+<body>
+  <h2>Line chart - performance (100 000 points)</h2>
+  <p><a href="gallery.html" style="font-family:sans-serif;font-size:0.875rem;color:#5491F6;text-decoration:none;">← Gallery</a></p>
+  <div id="chart"></div>
+  <div id="stats"></div>
+
+  <script type="module">
+    import { LineChart, GridLineTypes, OrientationTypes } from "@frnkclsst/d3charts";
+
+    function getData(n) {
+      const arr = [];
+      let i, x, a, b, c, spike;
+      for (
+        i = 0, x = Date.UTC(new Date().getUTCFullYear(), 0, 1) - n * 36e5;
+        i < n;
+        i = i + 1, x = x + 36e5
+      ) {
+        if (i % 100   === 0) { a = 2 * Math.random(); }
+        if (i % 1000  === 0) { b = 2 * Math.random(); }
+        if (i % 10000 === 0) { c = 2 * Math.random(); }
+        spike = (i % 100000 === 0) ? 10 : 0;
+        arr.push([x, 2 * Math.sin(i / 100) + a + b + c + spike + Math.random()]);
+      }
+      return arr;
+    }
+
+    const N = 100000;
+    const raw = getData(N);
+
+    const data = {
+      categories: {
+        format: "%Q",
+        data: raw.map(d => d[0])
+      },
+      series: [
+        { name: "Series A", data: raw.map(d => d[1]) }
+      ]
+    };
+
+    const options = {
+      titleArea: { text: `Line chart — ${N.toLocaleString()} data points`, height: 50 },
+      yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineTypes.Major }],
+      xAxis: [{ orient: OrientationTypes.Bottom, labels: { format: "%Y-%m" } }],
+      plotOptions: {
+        markers: { visible: false },
+        animation: { duration: 0 }
+      }
+    };
+
+    const t0 = performance.now();
+    const chart = new LineChart("#chart", data, options);
+    chart.draw();
+    const t1 = performance.now();
+
+    document.getElementById("stats").textContent =
+      `Rendered ${N.toLocaleString()} points in ${(t1 - t0).toFixed(1)} ms`;
+  </script>
+</body>
+</html>
