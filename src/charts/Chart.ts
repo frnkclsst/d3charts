@@ -6,6 +6,7 @@ import { Series } from "../core/Series";
 import { Tooltip } from "../core/Tooltip";
 import { resolveOptions } from "../core/Options";
 import type { ResolvedOptions } from "../core/Options";
+import { validateData } from "../core/Validate";
 import { StackTypes } from "../types/enums";
 import type { StackType } from "../types/enums";
 import type { IChartData, IOptions } from "../types/interfaces";
@@ -75,6 +76,8 @@ export abstract class Chart {
     if (d3.select(selector).empty()) {
       throw new Error(`Chart selector '${selector}' not found in DOM`);
     }
+
+    validateData(data);
 
     this.categories  = new Categories(data.categories.data, data.categories.format);
     this.colorPalette = new ColorPalette(this.options.plotOptions.colors);

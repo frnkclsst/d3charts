@@ -12,9 +12,10 @@ export default [
         project: "./tsconfig.json",
       },
       globals: {
-        setTimeout:     "readonly",
         clearTimeout:   "readonly",
+        console:        "readonly",
         ResizeObserver: "readonly",
+        setTimeout:     "readonly",
       },
     },
     plugins: {
