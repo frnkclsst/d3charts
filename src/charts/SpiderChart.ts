@@ -194,5 +194,4 @@ export class SpiderChart extends Chart {
         .text(this.categories.labels[i]);
     }
   }
-
 }

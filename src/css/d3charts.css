@@ -181,3 +181,19 @@
   fill: #888;
   font-size: 10px;
 }
+
+.spider-gridline {
+  fill: none;
+  stroke: #e0e0e0;
+  stroke-width: 1;
+}
+
+.spider-spoke {
+  stroke: #ccc;
+  stroke-width: 1;
+}
+
+.spider-label {
+  fill: #555;
+  font-size: 12px;
+}
