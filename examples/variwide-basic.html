@@ -46,11 +46,16 @@
       },
       legendArea: { width: 0 },
       yAxis: [{
-        orient: OrientationTypes.Left,
+        orient: OrientationTypes.Right,
         gridlines: GridLineTypes.Major,
         title: { text: "€ per hour worked" }
       }],
-      xAxis: [{ orient: OrientationTypes.Bottom, labels: { rotate: 45 } }],
+      xAxis: [{ 
+        orient: OrientationTypes.Bottom, 
+        gridlines: GridLineTypes.Major,
+        labels: { rotate: 45 },
+        tickmarks: true 
+    }],
       series: { labels: { visible: true } },
       plotOptions: {
         animation: { duration: 800 },

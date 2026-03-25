@@ -53,17 +53,11 @@ export class VariwideChart extends CartesianChart {
     super.draw(); // runs two-pass axis cycle
     if (!this.hasData()) {return;}
 
-    const weights    = this.series.items[0].weight;
+    const weights = this.series.items[0].weight;
     const cumulative = weights.map((_, i) => weights.slice(0, i).reduce((a, b) => a + b, 0));
-
-    // Retrieve the final linear x-scale from pass 2
-    const xIdx   = this.getAxisByName(AxisTypes.X, "");
+    const xIdx = this.getAxisByName(AxisTypes.X, "");
     const xScale = this.axes[xIdx].scale as d3.ScaleLinear<number, number>;
-
-    // Replace the default numeric ticks with category labels at column midpoints
-    this._patchXAxisTicks(xIdx, cumulative, weights);
-
-    const pa        = this.canvas.plotArea;
+    const pa = this.canvas.plotArea;
     const svgSeries = pa.svg
       .append("g")
       .attr("class", "series") as unknown as d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>;
@@ -71,6 +65,9 @@ export class VariwideChart extends CartesianChart {
     const { duration, ease } = this.options.plotOptions.animation;
     const yIdx  = this.getAxisByName(AxisTypes.Y, "");
     const zeroY = (this.axes[yIdx].scale as d3.ScaleLinear<number, number>)(0);
+
+    // Replace the default numeric ticks with category labels at column midpoints
+    this._patchXAxisTicks(xIdx, cumulative, weights);
 
     new ColumnShape(svgSeries, 0)
       .animation(duration, ease)
@@ -159,10 +156,11 @@ export class VariwideChart extends CartesianChart {
     // Re-apply label rotation if explicitly configured (d3 resets transforms on new ticks)
     const rotate = axis.labels.rotate;
     if (rotate) {
-      const angle = -Math.abs(rotate); // bottom axis always rotates to a negative angle
       axis.getSvgAxis().selectAll<SVGTextElement, unknown>(".tick text").each(function () {
-        const text = d3.select(this);
-        const y    = Number(text.attr("y"));
+        const text  = d3.select(this);
+        const y     = Number(text.attr("y"));
+        // Sign mirrors XAxis._rotateLabels: bottom axis (y > 0) rotates negative, top (y < 0) positive
+        const angle = y >= 0 ? -Math.abs(rotate) : Math.abs(rotate);
         text
           .style("alignment-baseline", "middle")
           .style("text-anchor", "end")
