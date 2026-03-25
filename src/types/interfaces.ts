@@ -1,4 +1,4 @@
-import type { GridLineType, MarkerType, OrientationType, EaseType, CurveType, SeriesType, SpiderGridlineType } from "./enums";
+import type { CurveType, EaseType, GridLineType, MarkerType, OrientationType, SeriesType, SpiderGridlineType } from "./enums";
 
 /**
  * Data point produced by d3.pie() — used internally by {@link PieChart}.
