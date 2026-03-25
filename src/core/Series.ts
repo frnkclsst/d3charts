@@ -35,11 +35,16 @@ export class Series {
   }
 
   /**
-   * Returns the datum row for a given series index.
+   * Returns the display label for a single series.
    * @param i - Zero-based series index.
    */
-  public getSeriesData(i: number): IDatum[] {
-    return this._matrix[i];
+  public getLabel(i: number): string {
+    return this.items[i].getName();
+  }
+
+  /** Returns display labels for all series, in order. */
+  public getLabels(): string[] {
+    return this.items.map((s) => s.getName());
   }
 
   /**
@@ -54,16 +59,11 @@ export class Series {
   }
 
   /**
-   * Returns the display label for a single series.
+   * Returns the datum row for a given series index.
    * @param i - Zero-based series index.
    */
-  public getLabel(i: number): string {
-    return this.items[i].getName();
-  }
-
-  /** Returns display labels for all series, in order. */
-  public getLabels(): string[] {
-    return this.items.map((s) => s.getName());
+  public getSeriesData(i: number): IDatum[] {
+    return this._matrix[i];
   }
 
   /**

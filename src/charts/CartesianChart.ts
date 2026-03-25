@@ -87,33 +87,11 @@ export abstract class CartesianChart extends Chart {
     return last;
   }
 
-  // ─── Coordinate helpers — overridden by concrete charts ──────────────────
-
   /**
    * Returns the X pixel coordinate for a datum.
    * Overridden by all concrete cartesian chart classes.
    */
   public getXCoordinate(_d: IDatum, _i: number, _serie: number): number { return 0; }
-
-  /**
-   * Returns the Y pixel coordinate for a datum.
-   * Overridden by all concrete cartesian chart classes.
-   */
-  public getYCoordinate(_d: IDatum, _i: number, _serie: number): number { return 0; }
-
-  /**
-   * Returns the lower Y pixel coordinate for a range datum (`y0`).
-   * Relevant for area and range-bar charts.
-   */
-  public getY0Coordinate(_d: IDatum, _i: number, _serie: number): number { return 0; }
-
-  /**
-   * Returns the upper Y pixel coordinate for a range datum (`y1`).
-   * Relevant for area and range-bar charts.
-   */
-  public getY1Coordinate(_d: IDatum, _i: number, _serie: number): number { return 0; }
-
-  // ─── Default scale factories ──────────────────────────────────────────────
 
   /**
    * Builds the X scale for a given axis.
@@ -150,6 +128,24 @@ export abstract class CartesianChart extends Chart {
       .nice()
       .range([start, end]);
   }
+
+  /**
+   * Returns the lower Y pixel coordinate for a range datum (`y0`).
+   * Relevant for area and range-bar charts.
+   */
+  public getY0Coordinate(_d: IDatum, _i: number, _serie: number): number { return 0; }
+
+  /**
+   * Returns the upper Y pixel coordinate for a range datum (`y1`).
+   * Relevant for area and range-bar charts.
+   */
+  public getY1Coordinate(_d: IDatum, _i: number, _serie: number): number { return 0; }
+
+  /**
+   * Returns the Y pixel coordinate for a datum.
+   * Overridden by all concrete cartesian chart classes.
+   */
+  public getYCoordinate(_d: IDatum, _i: number, _serie: number): number { return 0; }
 
   /**
    * Builds the Y scale for a given axis (always a linear scale).

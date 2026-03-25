@@ -70,18 +70,18 @@ export class Axis {
   /** Axis title configuration. */
   public readonly title: { align: string; text: string; valign: string };
 
-  protected _orient: OrientationType;
-  protected _gridlineType: GridLineType;
-  protected _hasTickmarks: boolean;
-  protected _scaleType: ScaleType = ScaleTypes.Linear;
   protected _axisFn!: AxisFn;
-  protected _svgAxis!: d3.Selection<SVGGElement, unknown, SVGElement, unknown>;
   /**
    * The rotation angle actually applied to tick labels (degrees).
    * Equals `labels.rotate` when set explicitly, or is set by auto-rotation in {@link XAxis}.
    * Used by `draw()` to re-apply alignment after d3 re-renders the axis in pass 2.
    */
   protected _effectiveRotation: number = 0;
+  protected _gridlineType: GridLineType;
+  protected _hasTickmarks: boolean;
+  protected _orient: OrientationType;
+  protected _scaleType: ScaleType = ScaleTypes.Linear;
+  protected _svgAxis!: d3.Selection<SVGGElement, unknown, SVGElement, unknown>;
   /**
    * The tick-thinning step computed during `setSize()`.
    * A value of N means only every Nth tick label is shown.
@@ -103,17 +103,58 @@ export class Axis {
     this._gridlineType = options.gridlines;
   }
 
-  /** Returns the scale type currently assigned to this axis. */
-  public getScaleType(): ScaleType { return this._scaleType; }
+  /**
+   * **Pass 2** — Repositions the axis group using the final plot-area dimensions,
+   * then draws gridlines and (if applicable) a zero line.
+   *
+   * @param ctx - Axis rendering context from {@link CartesianChart}.
+   */
+  public draw(ctx: IAxisContext): void {
+    this.scale = this._getScale(ctx);
+    this._axisFn.scale(this.scale as d3.AxisScale<d3.AxisDomain>);
 
-  /** Sets the scale type (called by the chart when building the scale). */
-  public setScaleType(v: ScaleType): void { this._scaleType = v; }
+    this._svgAxis
+      .call(this._axisFn)
+      .attr("transform", `translate(${this._getX(ctx)},${this._getY(ctx)})`);
+
+    if (this._tickStep > 1) {
+      this._thinTicks(this._tickStep);
+    }
+
+    if (this._effectiveRotation % 360 !== 0) {
+      this._svgAxis.selectAll(".tick text")
+        .style("alignment-baseline", "middle")
+        .style("text-anchor", "end")
+        .attr("y", "0").attr("dy", "0");
+    }
+
+    this._alignTitle(ctx);
+    this._drawGridlines(ctx);
+    this._drawZeroLine(ctx);
+  }
 
   /** Returns the d3 axis function built during `setSize()`. Used by subclasses that need to re-configure ticks after the draw cycle. */
   public getAxisFn(): AxisFn { return this._axisFn; }
 
+  /** Returns the scale type currently assigned to this axis. */
+  public getScaleType(): ScaleType { return this._scaleType; }
+
   /** Returns the SVG `<g class="axis">` selection. Used by subclasses that need to re-render the axis after the draw cycle. */
   public getSvgAxis(): d3.Selection<SVGGElement, unknown, SVGElement, unknown> { return this._svgAxis; }
+
+  /**
+   * Sets the stroke colour of the axis domain line.
+   * Used by {@link CartesianChart} to colour multi-axis charts.
+   *
+   * @param color - CSS colour string.
+   */
+  public setColor(color: string): void {
+    const path = this._svgAxis.select("path");
+    if (!path.empty()) {path.style("stroke", color);}
+  }
+
+  /** Sets the scale type (called by the chart when building the scale). */
+  public setScaleType(v: ScaleType): void { this._scaleType = v; }
 
   /**
    * **Pass 1** — Builds the scale, renders the axis into a temporary `<g>`, measures it,
@@ -152,70 +193,11 @@ export class Axis {
     this._adjustPlotArea(ctx);
   }
 
-  /**
-   * **Pass 2** — Repositions the axis group using the final plot-area dimensions,
-   * then draws gridlines and (if applicable) a zero line.
-   *
-   * @param ctx - Axis rendering context from {@link CartesianChart}.
-   */
-  public draw(ctx: IAxisContext): void {
-    this.scale = this._getScale(ctx);
-    this._axisFn.scale(this.scale as d3.AxisScale<d3.AxisDomain>);
-
-    this._svgAxis
-      .call(this._axisFn)
-      .attr("transform", `translate(${this._getX(ctx)},${this._getY(ctx)})`);
-
-    if (this._tickStep > 1) {
-      this._thinTicks(this._tickStep);
-    }
-
-    if (this._effectiveRotation % 360 !== 0) {
-      this._svgAxis.selectAll(".tick text")
-        .style("alignment-baseline", "middle")
-        .style("text-anchor", "end")
-        .attr("y", "0").attr("dy", "0");
-    }
-
-    this._alignTitle(ctx);
-    this._drawGridlines(ctx);
-    this._drawZeroLine(ctx);
-  }
-
-  /**
-   * Sets the stroke colour of the axis domain line.
-   * Used by {@link CartesianChart} to colour multi-axis charts.
-   *
-   * @param color - CSS colour string.
-   */
-  public setColor(color: string): void {
-    const path = this._svgAxis.select("path");
-    if (!path.empty()) {path.style("stroke", color);}
-  }
-
-  // ─── abstract-like helpers overridden by XAxis / YAxis ───────────────────
-
-  /** Returns the appropriate scale from `ctx` for this axis type. Overridden by subclasses. */
-  protected _getScale(ctx: IAxisContext): ChartScale {
-    return ctx.getXScale(this); // overridden
-  }
-
   /** Shrinks the plot area to make room for this axis. Overridden by subclasses. */
   protected _adjustPlotArea(_ctx: IAxisContext): void { /* overridden */ }
 
-  /** Returns the X translation for this axis group. Overridden by subclasses. */
-  protected _getX(_ctx: IAxisContext): number { return 0; }
-
-  /** Returns the Y translation for this axis group. Overridden by subclasses. */
-  protected _getY(_ctx: IAxisContext): number { return 0; }
-
-  /** Draws a line at y=0 (or x=0) when the series has negative values. Overridden by subclasses. */
-  protected _drawZeroLine(_ctx: IAxisContext): void { /* overridden */ }
-
   /** Positions the axis title text. Overridden by subclasses. */
   protected _alignTitle(_ctx: IAxisContext): void { /* overridden */ }
-
-  // ─── shared helpers ───────────────────────────────────────────────────────
 
   /** Builds the appropriate d3 axis function for `_orient`. */
   protected _buildAxisFn(): AxisFn {
@@ -226,13 +208,6 @@ export class Axis {
       case "right":  return d3.axisRight(scale);
       default:       return d3.axisLeft(scale);
     }
-  }
-
-  /** Appends a `<text class="axis-title">` placeholder to the axis group. */
-  protected _drawTitle(): void {
-    this._svgAxis.append("text")
-      .text(this.title.text)
-      .attr("class", "axis-title");
   }
 
   /**
@@ -251,11 +226,32 @@ export class Axis {
       .call(gridAxisFn);
   }
 
+  /** Appends a `<text class="axis-title">` placeholder to the axis group. */
+  protected _drawTitle(): void {
+    this._svgAxis.append("text")
+      .text(this.title.text)
+      .attr("class", "axis-title");
+  }
+
+  /** Draws a line at y=0 (or x=0) when the series has negative values. Overridden by subclasses. */
+  protected _drawZeroLine(_ctx: IAxisContext): void { /* overridden */ }
+
   /**
    * Returns the negative tick length used for full-plot-area gridlines.
    * Overridden by subclasses to return the appropriate dimension (width or height).
    */
   protected _getInnerTickSize(_ctx: IAxisContext): number { return 0; }
+
+  /** Returns the appropriate scale from `ctx` for this axis type. Overridden by subclasses. */
+  protected _getScale(ctx: IAxisContext): ChartScale {
+    return ctx.getXScale(this); // overridden
+  }
+
+  /** Returns the X translation for this axis group. Overridden by subclasses. */
+  protected _getX(_ctx: IAxisContext): number { return 0; }
+
+  /** Returns the Y translation for this axis group. Overridden by subclasses. */
+  protected _getY(_ctx: IAxisContext): number { return 0; }
 
   /** Applies label rotation to tick text elements. Overridden by {@link XAxis}. */
   protected _rotateLabels(): void { /* overridden by XAxis */ }
@@ -296,10 +292,6 @@ export class XAxis extends Axis {
     super(AxisTypes.X, options);
   }
 
-  protected override _getScale(ctx: IAxisContext): ChartScale {
-    return ctx.getXScale(this);
-  }
-
   /** Reduces `plotArea.height` and increments the appropriate `axisSize` offset. */
   protected override _adjustPlotArea(ctx: IAxisContext): void {
     if (this._orient === "bottom") {
@@ -308,20 +300,6 @@ export class XAxis extends Axis {
       ctx.plotArea.axisSize.top += this.height;
     }
     ctx.plotArea.height -= this.height;
-  }
-
-  protected override _getX(_ctx: IAxisContext): number { return 0; }
-
-  /** Positions the axis at the bottom or top of the plot area. */
-  protected override _getY(ctx: IAxisContext): number {
-    return this._orient === "bottom"
-      ? ctx.plotArea.axisSize.top + ctx.plotArea.height
-      : ctx.plotArea.axisSize.top;
-  }
-
-  /** Returns negative plot height so gridlines span the full height. */
-  protected override _getInnerTickSize(ctx: IAxisContext): number {
-    return -ctx.plotArea.height;
   }
 
   /** Horizontally aligns the axis title based on `title.align`. */
@@ -350,6 +328,24 @@ export class XAxis extends Axis {
       .attr("x2", (this.scale as d3.ScaleLinear<number, number>)(0))
       .attr("y1", 0)
       .attr("y2", this._orient === "bottom" ? -ctx.plotArea.height : ctx.plotArea.height);
+  }
+
+  /** Returns negative plot height so gridlines span the full height. */
+  protected override _getInnerTickSize(ctx: IAxisContext): number {
+    return -ctx.plotArea.height;
+  }
+
+  protected override _getScale(ctx: IAxisContext): ChartScale {
+    return ctx.getXScale(this);
+  }
+
+  protected override _getX(_ctx: IAxisContext): number { return 0; }
+
+  /** Positions the axis at the bottom or top of the plot area. */
+  protected override _getY(ctx: IAxisContext): number {
+    return this._orient === "bottom"
+      ? ctx.plotArea.axisSize.top + ctx.plotArea.height
+      : ctx.plotArea.axisSize.top;
   }
 
   /**
@@ -496,10 +492,6 @@ export class YAxis extends Axis {
     super(AxisTypes.Y, options);
   }
 
-  protected override _getScale(ctx: IAxisContext): ChartScale {
-    return ctx.getYScale(this);
-  }
-
   /** Reduces `plotArea.width` and increments the appropriate `axisSize` offset. */
   protected override _adjustPlotArea(ctx: IAxisContext): void {
     if (this._orient === "left") {
@@ -508,20 +500,6 @@ export class YAxis extends Axis {
       ctx.plotArea.axisSize.right += this.width;
     }
     ctx.plotArea.width -= this.width;
-  }
-
-  /** Positions the axis at the left or right edge of the plot area. */
-  protected override _getX(ctx: IAxisContext): number {
-    return this._orient === "left"
-      ? ctx.plotArea.axisSize.left
-      : ctx.plotArea.axisSize.left + ctx.plotArea.width;
-  }
-
-  protected override _getY(_ctx: IAxisContext): number { return 0; }
-
-  /** Returns negative plot width so gridlines span the full width. */
-  protected override _getInnerTickSize(ctx: IAxisContext): number {
-    return -ctx.plotArea.width;
   }
 
   /** Vertically aligns the axis title and rotates it ±90°. */
@@ -555,4 +533,22 @@ export class YAxis extends Axis {
       .attr("x2", this._orient === "left" ? ctx.plotArea.width : -ctx.plotArea.width)
       .attr("y1", y0).attr("y2", y0);
   }
+
+  /** Returns negative plot width so gridlines span the full width. */
+  protected override _getInnerTickSize(ctx: IAxisContext): number {
+    return -ctx.plotArea.width;
+  }
+
+  protected override _getScale(ctx: IAxisContext): ChartScale {
+    return ctx.getYScale(this);
+  }
+
+  /** Positions the axis at the left or right edge of the plot area. */
+  protected override _getX(ctx: IAxisContext): number {
+    return this._orient === "left"
+      ? ctx.plotArea.axisSize.left
+      : ctx.plotArea.axisSize.left + ctx.plotArea.width;
+  }
+
+  protected override _getY(_ctx: IAxisContext): number { return 0; }
 }

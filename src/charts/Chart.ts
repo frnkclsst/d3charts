@@ -39,10 +39,10 @@ export abstract class Chart {
   public categories: Categories;
   /** Cyclic colour palette used to assign colours to series. */
   public colorPalette: ColorPalette;
-  /** The collection of normalised series and their datum matrix. */
-  public series: Series;
   /** Fully-resolved chart options (with defaults applied). */
   public options: ResolvedOptions;
+  /** The collection of normalised series and their datum matrix. */
+  public series: Series;
   /** CSS selector of the DOM element the chart is mounted into. */
   public selector: string;
   /**
@@ -54,11 +54,11 @@ export abstract class Chart {
   /** Hover tooltip manager. */
   public tooltip: Tooltip;
 
-  private readonly _resizeObserver: ResizeObserver | null = null;
+  private _initialObserverFired: boolean = false;
   private _resizeTimer: ReturnType<typeof setTimeout> | null = null;
-  private _initialObserverFired = false;
   /** Preserved raw input data so `draw()` can rebuild `Series` with the current `stackType`. */
   private readonly _rawData: IChartData;
+  private readonly _resizeObserver: ResizeObserver | null = null;
 
   /**
    * @param selector - CSS selector for the container element (e.g. `"#my-chart"`).
@@ -105,6 +105,19 @@ export abstract class Chart {
   }
 
   /**
+   * Disconnects the `ResizeObserver` and removes all child elements from the container.
+   * Call this before unmounting the chart from the DOM.
+   */
+  public destroy(): void {
+    this._resizeObserver?.disconnect();
+    if (this._resizeTimer !== null) {
+      clearTimeout(this._resizeTimer);
+      this._resizeTimer = null;
+    }
+    d3.select(this.selector).selectAll("*").remove();
+  }
+
+  /**
    * Renders the chart into the container.
    *
    * Rebuilds `Series` (to pick up any `stackType` set by a subclass constructor)
@@ -121,19 +134,6 @@ export abstract class Chart {
       (i) => this.colorPalette.color(i),
       (i) => this.toggleSerie(i)
     );
-  }
-
-  /**
-   * Disconnects the `ResizeObserver` and removes all child elements from the container.
-   * Call this before unmounting the chart from the DOM.
-   */
-  public destroy(): void {
-    this._resizeObserver?.disconnect();
-    if (this._resizeTimer !== null) {
-      clearTimeout(this._resizeTimer);
-      this._resizeTimer = null;
-    }
-    d3.select(this.selector).selectAll("*").remove();
   }
 
   /**
