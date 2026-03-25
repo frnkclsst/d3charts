@@ -116,9 +116,11 @@ export class RadialBarChart extends Chart {
     // allData.indexOf(datum) === ci → tooltip subtitle resolves correctly.
     interface IArcDatum { value: number; arcStart: number; arcEnd: number; rInner: number; rOuter: number; }
 
-    this.series.items.forEach((serie, si) => {
+    for (let s = 0; s < this.series.length; s++) {
+      const serie = this.series.items[s];
+
       const serieGroup = svgSeries.append("g")
-        .attr("id", `serie-${si}`)
+        .attr("id", `serie-${s}`)
         .attr("class", "arc");
 
       // One datum per category, in original category order.
@@ -126,7 +128,7 @@ export class RadialBarChart extends Chart {
         const ringIdx = ciToRingIdx.get(ci) ?? 0;
         const rInner  = innerRadius + ringIdx       * ringWidth + ringWidth * gapRatio / 2;
         const rOuter  = innerRadius + (ringIdx + 1) * ringWidth - ringWidth * gapRatio / 2;
-        const { arcStart, arcEnd } = arcAngles[ci][si];
+        const { arcStart, arcEnd } = arcAngles[ci][s];
         return { value: serie.data[ci] ?? 0, arcStart, arcEnd, rInner, rOuter };
       });
 
@@ -135,7 +137,7 @@ export class RadialBarChart extends Chart {
         .data(arcData)
         .enter()
         .append("path")
-        .attr("fill", this.colorPalette.color(si))
+        .attr("fill", this.colorPalette.color(s))
         .attr("d", (d) => {
           if (d.value <= 0) {return "";}
           const arcFn = d3.arc<unknown, unknown>().innerRadius(d.rInner).outerRadius(d.rOuter);
@@ -154,11 +156,11 @@ export class RadialBarChart extends Chart {
       const fmt    = this.options.tooltip.valuePointFormat || serie.format || "";
       const suffix = this.options.tooltip.valueSuffix      || serie.suffix || "";
       const f      = fmt ? d3.format(fmt) : String;
-      this.tooltip.attach(paths as never, si, (datum) => {
+      this.tooltip.attach(paths as never, s, (datum) => {
         const d = datum as IArcDatum;
-        return { value: `${f(d.value)}${suffix}`, percent: "", colorIndex: si };
+        return { value: `${f(d.value)}${suffix}`, percent: "", colorIndex: s };
       });
-    });
+    }
 
     // --- Category labels: one per ring, last character at the arc start ---
     sortedIndices.forEach((ci, ringIdx) => {

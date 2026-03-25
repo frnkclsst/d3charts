@@ -105,8 +105,8 @@ export class SpiderChart extends Chart {
           this.series.items[s].marker,
           this.options.plotOptions.markers.visible
         )
-        .x((d, i) => rScale(isNaN(d.y) ? 0 : d.y) * Math.cos(angle(i)))
-        .y((d, i) => rScale(isNaN(d.y) ? 0 : d.y) * Math.sin(angle(i)))
+        .x((d, spoke) => rScale(isNaN(d.y) ? 0 : d.y) * Math.cos(angle(spoke)))
+        .y((d, spoke) => rScale(isNaN(d.y) ? 0 : d.y) * Math.sin(angle(spoke)))
         .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie))
         .draw(data);
     }
@@ -130,8 +130,8 @@ export class SpiderChart extends Chart {
       const r = (level / levels) * radius;
 
       if (gridlines === SpiderGridlineTypes.Polygon) {
-        const pts = Array.from({ length: n }, (_, i) => {
-          const a = angle(i);
+        const pts = Array.from({ length: n }, (_, spoke) => {
+          const a = angle(spoke);
           return `${r * Math.cos(a)},${r * Math.sin(a)}`;
         }).join(" ");
         g.append("polygon")
@@ -163,8 +163,8 @@ export class SpiderChart extends Chart {
   ): void {
     const LABEL_PAD = 10; // extra padding beyond the web edge
 
-    for (let i = 0; i < n; i++) {
-      const a  = angle(i);
+    for (let spoke = 0; spoke < n; spoke++) {
+      const a  = angle(spoke);
       const sx = radius * Math.cos(a);
       const sy = radius * Math.sin(a);
 
@@ -191,7 +191,7 @@ export class SpiderChart extends Chart {
         .attr("dominant-baseline", baseline)
         .attr("font-size", "12px")
         .attr("fill", "#555")
-        .text(this.categories.labels[i]);
+        .text(this.categories.labels[spoke]);
     }
   }
 }
