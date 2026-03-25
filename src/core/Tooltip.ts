@@ -19,7 +19,7 @@ export type TooltipExtractor = (
   datum: unknown,
   index: number,
   allData: unknown[],
-) => { value: string; percent: string; colorIndex: number };
+) => { value: string; percent: string; colorIndex: number; color?: string };
 
 /**
  * Manages hover tooltips for chart data points.
@@ -124,13 +124,14 @@ export class Tooltip {
       .on("mouseover", (event: MouseEvent, datum: unknown) => {
         const allData = svg.data();
         const i       = allData.indexOf(datum);
-        const { value, percent, colorIndex } = extract(datum, i, allData);
+        const { value, percent, colorIndex, color } = extract(datum, i, allData);
+        const swatchColor = color ?? this._palette.color(colorIndex);
 
         div.html(
           `<div class="title">${this._opts.title}</div>` +
           `<div class="subtitle">${this._categories.getItem(i)}</div>` +
           "<div class=\"items\"><div class=\"item\">" +
-          `<span class="color" style="background:${this._palette.color(colorIndex)}"></span>` +
+          `<span class="color" style="background:${swatchColor}"></span>` +
           `<span class="serie">${this._series.getLabel(serieIndex)}</span>` +
           `<span class="value">${value}</span>` +
           `<span class="percent">${percent}</span>` +

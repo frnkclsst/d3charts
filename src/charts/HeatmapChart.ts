@@ -125,7 +125,10 @@ export class HeatmapChart extends CartesianChart {
           this.options.series.labels.rotate,
           this.options.series.labels.visible
         )
-        .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie))
+        .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie, (datum) => {
+          const d = datum as IDatum;
+          return { value: this.tooltip.formatValue(d, serie), percent: "", colorIndex: serie, color: colorFn(d.y) };
+        }))
         .x((_d, i) => xScale(String(this.categories.getItem(i))) ?? 0)
         .y(() => rowY)
         .draw(this.series.getSeriesData(s));
