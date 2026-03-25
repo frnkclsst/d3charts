@@ -7,75 +7,75 @@
 }
 
 /* Axes */
-.axis path,
-.axis line {
+.svg_chart .axis path,
+.svg_chart .axis line {
   fill: none;
   stroke: #ccc;
   shape-rendering: crispEdges;
 }
 
-.axis text {
+.svg_chart .axis text {
   fill: #555;
 }
 
-.axis-title {
+.svg_chart .axis-title {
   fill: #333;
   font-size: 11px;
 }
 
 /* Gridlines */
-.grid line {
+.svg_chart .grid line {
   stroke: #e8e8e8;
   stroke-dasharray: 2, 2;
   shape-rendering: crispEdges;
 }
 
-.grid path {
+.svg_chart .grid path {
   stroke-width: 0;
 }
 
 /* Zero line */
-.zero-line line {
+.svg_chart .zero-line line {
   stroke: #aaa;
   stroke-width: 1;
 }
 
 /* Series separators (borders) */
-.sep {
+.svg_chart .sep {
   stroke: #ddd;
   stroke-width: 1;
   fill: none;
 }
 
 /* Legend */
-.legend .title text {
+.svg_chart .legend .title text {
   font-weight: 600;
   fill: #333;
 }
 
-.legend .item {
+.svg_chart .legend .item {
   cursor: pointer;
 }
 
-.legend .item text {
+.svg_chart .legend .item text {
   fill: #444;
   font-size: 12px;
   dominant-baseline: central;
 }
 
 /* Title area */
-.titlearea .title {
+.svg_chart .titlearea .title {
   font-size: 12px;
   font-weight: 400;
 }
 
-.titlearea .subtitle {
+.svg_chart .titlearea .subtitle {
   fill: #666;
   font-size: 12px;
 }
 
 /* Data labels */
-.label {
+.svg_chart .label {
   font-size: 11px;
   pointer-events: none;
 }
@@ -128,72 +128,72 @@
   color: #888;
 }
 
-.area {
+.svg_chart .area {
   fill-opacity: 0.2;
   stroke-width: 1px;
   stroke-opacity: 0.8;
 }
 
-.bubble {
+.svg_chart .bubble {
   fill-opacity: 0.4;
   stroke-width: 1px;
   stroke-opacity: 0.8;
 }
 
-.bar {
+.svg_chart .bar {
   fill-opacity: 0.4;
   stroke-width: 1px;
   stroke-opacity: 0.8;
 }
 
-.column {
+.svg_chart .column {
   fill-opacity: 0.4;
   stroke-width: 1px;
   stroke-opacity: 0.8;
 }
 
-.slice {
+.svg_chart .slice {
   fill-opacity: 0.8;
   stroke-width: 1px;
   stroke-opacity: 0.8;
 }
 
-.arc {
+.svg_chart .arc {
   fill-opacity: 0.85;
   stroke-width: 0;
 }
 
-.radial-track {
+.svg_chart .radial-track {
   fill: #f0f0f0;
 }
 
-.radial-label {
+.svg_chart .radial-label {
   fill: #444;
   font-size: 11px;
 }
 
-.scale-tick {
+.svg_chart .scale-tick {
   stroke: #bbb;
   stroke-width: 1;
 }
 
-.scale-label {
+.svg_chart .scale-label {
   fill: #888;
   font-size: 10px;
 }
 
-.spider-gridline {
+.svg_chart .spider-gridline {
   fill: none;
   stroke: #e0e0e0;
   stroke-width: 1;
 }
 
-.spider-spoke {
+.svg_chart .spider-spoke {
   stroke: #ccc;
   stroke-width: 1;
 }
 
-.spider-label {
+.svg_chart .spider-label {
   fill: #555;
   font-size: 12px;
 }
