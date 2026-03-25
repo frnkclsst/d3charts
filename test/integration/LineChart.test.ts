@@ -62,6 +62,36 @@ describe("LineChart", () => {
     chart.destroy();
     expect(document.querySelector("#chart")!.children).toHaveLength(0);
   });
+
+  describe("mismatched data length (more data than categories)", () => {
+    const shortCats = {
+      categories: { format: "%s", data: ["Jan", "Feb", "Mar"] },
+      series: [{ name: "A", data: [10, 25, 15, 30, 20] }],   // 5 values, 3 categories
+    };
+
+    it("renders without throwing when data is longer than categories", () => {
+      expect(() => {
+        new LineChart("#chart", shortCats, NO_ANIM).draw();
+      }).not.toThrow();
+    });
+
+    it("line path contains no NaN coordinates when data exceeds categories", () => {
+      new LineChart("#chart", shortCats, NO_ANIM).draw();
+      document.querySelectorAll<SVGPathElement>("path.line").forEach((path) => {
+        expect(path.getAttribute("d")).not.toContain("NaN");
+      });
+    });
+
+    it("area path contains no NaN coordinates when data exceeds categories", () => {
+      new LineChart("#chart", shortCats, {
+        ...NO_ANIM,
+        plotOptions: { ...NO_ANIM.plotOptions, area: { visible: true } },
+      }).draw();
+      document.querySelectorAll<SVGPathElement>("path.area").forEach((path) => {
+        expect(path.getAttribute("d")).not.toContain("NaN");
+      });
+    });
+  });
 });
 
 describe("StackedLineChart", () => {

@@ -128,8 +128,22 @@ export abstract class Chart {
    * and data shapes, always calling `super.draw()` first.
    */
   public draw(): void {
-    // Rebuild with the correct stackType — subclasses set it after super() returns
-    this.series = new Series(this._rawData.series, this.options, this.stackType);
+    // Rebuild with the correct stackType — subclasses set it after super() returns.
+    // Clip every array to the categories length so shapes never receive data points
+    // that have no corresponding X coordinate (which would produce NaN path commands).
+    const catLen = this.categories.labels.length;
+    this.series = new Series(
+      this._rawData.series.map(s => ({
+        ...s,
+        data:   s.data?.slice(0, catLen),
+        max:    s.max?.slice(0, catLen),
+        min:    s.min?.slice(0, catLen),
+        size:   s.size?.slice(0, catLen),
+        weight: s.weight?.slice(0, catLen)
+      })),
+      this.options,
+      this.stackType
+    );
 
     this.canvas.draw(
       this.selector,
