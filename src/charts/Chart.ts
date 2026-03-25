@@ -56,7 +56,7 @@ export abstract class Chart {
 
   private readonly _resizeObserver: ResizeObserver | null = null;
   private _resizeTimer: ReturnType<typeof setTimeout> | null = null;
-  private _drawn: boolean = false;
+  private _initialObserverFired = false;
   /** Preserved raw input data so `draw()` can rebuild `Series` with the current `stackType`. */
   private readonly _rawData: IChartData;
 
@@ -92,7 +92,7 @@ export abstract class Chart {
     const node = d3.select(selector).node() as Element | null;
     if (node && typeof ResizeObserver !== "undefined") {
       this._resizeObserver = new ResizeObserver(() => {
-        if (!this._drawn) { return; }                          // skip initial notification
+        if (!this._initialObserverFired) { this._initialObserverFired = true; return; } // skip initial notification
         if (this._resizeTimer !== null) { clearTimeout(this._resizeTimer); }
         this._resizeTimer = setTimeout(() => {
           this._resizeTimer = null;
@@ -112,7 +112,6 @@ export abstract class Chart {
    * and data shapes, always calling `super.draw()` first.
    */
   public draw(): void {
-    this._drawn = true;
     // Rebuild with the correct stackType — subclasses set it after super() returns
     this.series = new Series(this._rawData.series, this.options, this.stackType);
 
