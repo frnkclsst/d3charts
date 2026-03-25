@@ -1,25 +1,6 @@
 import type { GridLineType, MarkerType, OrientationType, EaseType, CurveType, SeriesType, SpiderGridlineType } from "./enums";
 
 /**
- * Computed data point produced by {@link Series._buildMatrix}.
- * Every value in the series matrix is an `IDatum`.
- */
-export interface IDatum {
-  /** Absolute maximum of all `|y|` values in the same column (used for % stacking). */
-  max: number;
-  /** Fractional share of this data point relative to the column total (`y / max`). */
-  perc: number;
-  /** Running cumulative total up to and including this datum (used for stacking). */
-  sum: number;
-  /** Raw data value. NaN for range series that supply only `min`/`max`. */
-  y: number;
-  /** Lower bound of the data range (equals 0 for plain series). */
-  y0: number;
-  /** Upper bound of the data range (equals `y` for plain series). */
-  y1: number;
-}
-
-/**
  * Data point produced by d3.pie() — used internally by {@link PieChart}.
  */
 export interface IArcDatum {
@@ -33,93 +14,6 @@ export interface IArcDatum {
   startAngle: number;
   /** Computed value passed through d3.pie(). */
   value: number;
-}
-
-/**
- * Top-level input data object passed to every chart constructor.
- *
- * @example
- * ```ts
- * const data: IChartData = {
- *   categories: { format: "%s", data: ["Q1", "Q2", "Q3"] },
- *   series: [{ name: "Revenue", data: [100, 200, 150] }],
- * };
- * ```
- */
-export interface IChartData {
-  categories: {
-    /**
-     * d3 format string that describes how `data` values should be parsed.
-     * Use `"%s"` for plain strings (ordinal axis) or a d3 time-format string
-     * such as `"%Y-%m-%d"` for date axes.
-     */
-    format: string;
-    /** Array of category labels (one per data point). */
-    data: string[];
-  };
-  series: ISerie[];
-}
-
-/**
- * Definition of a single data series.
- *
- * Supply `data` for most chart types, or `min`/`max` for range (band) series.
- * `size` is used by {@link ScatterChart} to control bubble area.
- */
-export interface ISerie {
-  /** Name of the Y axis this series belongs to. Used for multi-axis charts. */
-  axis?: string;
-  /** Numeric data values — one per category. */
-  data?: number[];
-  /** d3 number-format string applied to data labels and tooltips (`d3.format`). */
-  format?: string;
-  /** Display name shown in the legend and tooltip. */
-  name?: string;
-  /** Marker shape override for this series (overrides the global `plotOptions.markers.type`). */
-  marker?: MarkerType;
-  /** Lower-bound values for range (band) series. */
-  min?: number[];
-  /** Upper-bound values for range (band) series. */
-  max?: number[];
-  /** Bubble area values for {@link ScatterChart} (scaled ×10 to produce d3 symbol size). */
-  size?: number[];
-  /** Unit suffix appended to formatted values in tooltips (e.g. `" %"`). */
-  suffix?: string;
-  /** Column width weights for {@link VariwideChart} — one per category (e.g. GDP per country). */
-  weight?: number[];
-  /** Series render type used by {@link ComboChart}: `"column"` or `"line"`. */
-  type?: SeriesType;
-}
-
-/**
- * Root options object accepted by every chart constructor.
- * All properties are optional; sensible defaults are applied by {@link resolveOptions}.
- */
-export interface IOptions {
-  /** SVG canvas dimensions and border visibility. */
-  canvas?: ICanvasOptions;
-  /** Legend area position, size, and border. */
-  legendArea?: ILegendAreaOptions;
-  /** Plot area padding and border. */
-  plotArea?: IPlotAreaOptions;
-  /** Visual rendering options (animation, colors, markers, …). */
-  plotOptions?: IPlotOptions;
-  /** Data-label options applied to all series. */
-  series?: ISeriesOptions;
-  /** Title and subtitle options. */
-  titleArea?: ITitleAreaOptions;
-  /** Tooltip content options. */
-  tooltip?: ITooltipOptions;
-  /**
-   * X axis configuration. Accepts a single object or an array for multi-axis charts.
-   * Defaults to a single bottom axis.
-   */
-  xAxis?: IAxisOptions | IAxisOptions[];
-  /**
-   * Y axis configuration. Accepts a single object or an array for multi-axis charts.
-   * Defaults to a single left axis.
-   */
-  yAxis?: IAxisOptions | IAxisOptions[];
 }
 
 /** Configuration for one chart axis (X or Y). */
@@ -168,6 +62,50 @@ export interface ICanvasOptions {
   width?: number;
 }
 
+/**
+ * Top-level input data object passed to every chart constructor.
+ *
+ * @example
+ * ```ts
+ * const data: IChartData = {
+ *   categories: { format: "%s", data: ["Q1", "Q2", "Q3"] },
+ *   series: [{ name: "Revenue", data: [100, 200, 150] }],
+ * };
+ * ```
+ */
+export interface IChartData {
+  categories: {
+    /**
+     * d3 format string that describes how `data` values should be parsed.
+     * Use `"%s"` for plain strings (ordinal axis) or a d3 time-format string
+     * such as `"%Y-%m-%d"` for date axes.
+     */
+    format: string;
+    /** Array of category labels (one per data point). */
+    data: string[];
+  };
+  series: ISerie[];
+}
+
+/**
+ * Computed data point produced by {@link Series._buildMatrix}.
+ * Every value in the series matrix is an `IDatum`.
+ */
+export interface IDatum {
+  /** Absolute maximum of all `|y|` values in the same column (used for % stacking). */
+  max: number;
+  /** Fractional share of this data point relative to the column total (`y / max`). */
+  perc: number;
+  /** Running cumulative total up to and including this datum (used for stacking). */
+  sum: number;
+  /** Raw data value. NaN for range series that supply only `min`/`max`. */
+  y: number;
+  /** Lower bound of the data range (equals 0 for plain series). */
+  y0: number;
+  /** Upper bound of the data range (equals `y` for plain series). */
+  y1: number;
+}
+
 /** Legend area dimensions, position, and border. */
 export interface ILegendAreaOptions {
   /** Which sides of the legend area should have a border line. */
@@ -185,6 +123,37 @@ export interface ILegendAreaOptions {
   title?: string;
   /** Width of the legend area in pixels. Set to `0` to hide the legend. */
   width?: number;
+}
+
+/**
+ * Root options object accepted by every chart constructor.
+ * All properties are optional; sensible defaults are applied by {@link resolveOptions}.
+ */
+export interface IOptions {
+  /** SVG canvas dimensions and border visibility. */
+  canvas?: ICanvasOptions;
+  /** Legend area position, size, and border. */
+  legendArea?: ILegendAreaOptions;
+  /** Plot area padding and border. */
+  plotArea?: IPlotAreaOptions;
+  /** Visual rendering options (animation, colors, markers, …). */
+  plotOptions?: IPlotOptions;
+  /** Data-label options applied to all series. */
+  series?: ISeriesOptions;
+  /** Title and subtitle options. */
+  titleArea?: ITitleAreaOptions;
+  /** Tooltip content options. */
+  tooltip?: ITooltipOptions;
+  /**
+   * X axis configuration. Accepts a single object or an array for multi-axis charts.
+   * Defaults to a single bottom axis.
+   */
+  xAxis?: IAxisOptions | IAxisOptions[];
+  /**
+   * Y axis configuration. Accepts a single object or an array for multi-axis charts.
+   * Defaults to a single left axis.
+   */
+  yAxis?: IAxisOptions | IAxisOptions[];
 }
 
 /** Plot area padding and border. */
@@ -231,6 +200,14 @@ export interface IPlotOptions {
    * Cycles automatically when there are more series than colors.
    */
   colors?: string[];
+  /** Heatmap chart options. */
+  heatmap?: {
+    /**
+     * Two-stop color range for the sequential cell color scale: `[lowColor, highColor]`.
+     * Defaults to `["#f7fbff", "#084594"]` (white to dark blue).
+     */
+    colorRange?: [string, string];
+  };
   /** Line interpolation options. */
   line?: {
     /**
@@ -267,14 +244,37 @@ export interface IPlotOptions {
     /** Number of concentric gridline rings. Defaults to `5`. */
     levels?: number;
   };
-  /** Heatmap chart options. */
-  heatmap?: {
-    /**
-     * Two-stop color range for the sequential cell color scale: `[lowColor, highColor]`.
-     * Defaults to `["#f7fbff", "#084594"]` (white to dark blue).
-     */
-    colorRange?: [string, string];
-  };
+}
+
+/**
+ * Definition of a single data series.
+ *
+ * Supply `data` for most chart types, or `min`/`max` for range (band) series.
+ * `size` is used by {@link ScatterChart} to control bubble area.
+ */
+export interface ISerie {
+  /** Name of the Y axis this series belongs to. Used for multi-axis charts. */
+  axis?: string;
+  /** Numeric data values — one per category. */
+  data?: number[];
+  /** d3 number-format string applied to data labels and tooltips (`d3.format`). */
+  format?: string;
+  /** Display name shown in the legend and tooltip. */
+  name?: string;
+  /** Marker shape override for this series (overrides the global `plotOptions.markers.type`). */
+  marker?: MarkerType;
+  /** Lower-bound values for range (band) series. */
+  min?: number[];
+  /** Upper-bound values for range (band) series. */
+  max?: number[];
+  /** Bubble area values for {@link ScatterChart} (scaled ×10 to produce d3 symbol size). */
+  size?: number[];
+  /** Unit suffix appended to formatted values in tooltips (e.g. `" %"`). */
+  suffix?: string;
+  /** Column width weights for {@link VariwideChart} — one per category (e.g. GDP per country). */
+  weight?: number[];
+  /** Series render type used by {@link ComboChart}: `"column"` or `"line"`. */
+  type?: SeriesType;
 }
 
 /** Data-label options applied uniformly to all series. */
