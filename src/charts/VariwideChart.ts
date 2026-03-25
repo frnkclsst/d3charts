@@ -63,7 +63,8 @@ export class VariwideChart extends CartesianChart {
     // Replace the default numeric ticks with category labels at column midpoints
     this._patchXAxisTicks(xIdx, cumulative, weights);
 
-    const svgSeries = this.canvas.plotArea.svg
+    const pa        = this.canvas.plotArea;
+    const svgSeries = pa.svg
       .append("g")
       .attr("class", "series") as unknown as d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>;
 
