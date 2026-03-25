@@ -1,4 +1,4 @@
-import type * as d3 from "d3";
+import * as d3 from "d3";
 import { CartesianChart } from "./CartesianChart";
 import { AxisTypes, ScaleTypes, StackTypes } from "../types/enums";
 import type { IDatum, IChartData, IOptions } from "../types/interfaces";
