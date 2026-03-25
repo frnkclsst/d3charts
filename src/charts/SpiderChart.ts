@@ -1,6 +1,5 @@
 import * as d3 from "d3";
 import { SpiderGridlineTypes } from "../types/enums";
-import type { EaseType } from "../types/enums";
 import { Chart } from "./Chart";
 import { SpiderShape } from "../shapes/SpiderShape";
 import type { IChartData, IOptions } from "../types/interfaces";
@@ -87,7 +86,30 @@ export class SpiderChart extends Chart {
 
     this._drawWeb(svgSpider, n, radius, levels, gridlines, angle);
     this._drawSpokes(svgSpider, n, radius, angle);
-    this._drawSeries(svgSpider, n, rScale, angle, duration, ease);
+
+    for (let s = 0; s < this.series.length; s++) {
+      const data  = this.series.getSeriesData(s);
+      const color = this.colorPalette.color(s);
+
+      // Guard: skip series that have fewer data points than spokes
+      if (data.length < n) { continue; }
+
+      new SpiderShape(svgSpider as never, s)
+        .animation(duration, ease)
+        .color(color)
+        .cx(0)
+        .cy(0)
+        .fill(this.options.plotOptions.area.visible, this.options.plotOptions.area.opacity)
+        .marker(
+          this.options.plotOptions.markers.size,
+          this.series.items[s].marker,
+          this.options.plotOptions.markers.visible
+        )
+        .x((d, i) => rScale(isNaN(d.y) ? 0 : d.y) * Math.cos(angle(i)))
+        .y((d, i) => rScale(isNaN(d.y) ? 0 : d.y) * Math.sin(angle(i)))
+        .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie))
+        .draw(data);
+    }
   }
 
   // ── Private helpers ────────────────────────────────────────────────────────
@@ -173,37 +195,4 @@ export class SpiderChart extends Chart {
     }
   }
 
-  /** Draws one {@link SpiderShape} polygon per series. */
-  private _drawSeries(
-    g: d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>,
-    n: number,
-    rScale: d3.ScaleLinear<number, number>,
-    angle: (i: number) => number,
-    duration: number,
-    ease: EaseType
-  ): void {
-    for (let s = 0; s < this.series.length; s++) {
-      const data  = this.series.getSeriesData(s);
-      const color = this.colorPalette.color(s);
-
-      // Guard: skip series that have fewer data points than spokes
-      if (data.length < n) { continue; }
-
-      new SpiderShape(g as never, s)
-        .animation(duration, ease)
-        .color(color)
-        .cx(0)
-        .cy(0)
-        .fill(this.options.plotOptions.area.visible, this.options.plotOptions.area.opacity)
-        .marker(
-          this.options.plotOptions.markers.size,
-          this.series.items[s].marker,
-          this.options.plotOptions.markers.visible
-        )
-        .x((d, i) => rScale(isNaN(d.y) ? 0 : d.y) * Math.cos(angle(i)))
-        .y((d, i) => rScale(isNaN(d.y) ? 0 : d.y) * Math.sin(angle(i)))
-        .tooltipFn((sel, serie) => this.tooltip.attach(sel as never, serie))
-        .draw(data);
-    }
-  }
 }
