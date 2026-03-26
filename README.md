@@ -26,10 +26,14 @@ npm install @frnkclsst/d3charts d3
 - [Combo charts](https://github.com/frnkclsst/d3charts/wiki/Combo-Charts)
 - [Column charts](https://github.com/frnkclsst/d3charts/wiki/Column-Charts)
 - [Donut charts](https://github.com/frnkclsst/d3charts/wiki/Donut-Charts)
+- [Heatmap charts](https://github.com/frnkclsst/d3charts/wiki/Heatmap-Charts)
 - [Line charts](https://github.com/frnkclsst/d3charts/wiki/Line-Charts)
 - [Pie charts](https://github.com/frnkclsst/d3charts/wiki/Pie-Charts)
+- [Radial bar charts](https://github.com/frnkclsst/d3charts/wiki/Radial-Bar-Charts)
 - [Range charts](https://github.com/frnkclsst/d3charts/wiki/Range-Charts)
 - [Scatter charts](https://github.com/frnkclsst/d3charts/wiki/Scatter-Charts)
+- [Spider charts](https://github.com/frnkclsst/d3charts/wiki/Spider-Charts)
+- [Variwide charts](https://github.com/frnkclsst/d3charts/wiki/Variwide-Charts)
 
 ### Chart Options
 - [Axes](https://github.com/frnkclsst/d3charts/wiki/Axes)
@@ -40,3 +44,7 @@ npm install @frnkclsst/d3charts d3
 - [Series](https://github.com/frnkclsst/d3charts/wiki/Series)
 - [Title](https://github.com/frnkclsst/d3charts/wiki/Title)
 - [Tooltip](https://github.com/frnkclsst/d3charts/wiki/Tooltip)
+
+## Examples
+
+The `examples/` directory contains 50+ standalone HTML demos covering all chart types, stacking variants, dual axes, data labels, animations, and more. Open any file directly in a browser after running `npm run dev`.
