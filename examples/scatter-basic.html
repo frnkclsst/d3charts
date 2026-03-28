@@ -19,7 +19,9 @@
   <script type="module">
     import { ScatterChart, GridLineTypes, OrientationTypes } from "@frnkclsst/d3charts";
 
-    // series[0] = X values; series[1..n] = Y values per group
+    // series[0] = X values; series[1..n] = Y values per group.
+    // No size[] arrays here — all dots render at plotOptions.bubble.minRadius (default 4px).
+    // Add size: [...] to any Y series to turn it into a bubble chart with variable-size symbols.
     const data = {
       categories: { format: "%s", data: ["A","B","C","D","E","F","G","H","I","J"] },
       series: [
@@ -34,7 +36,10 @@
       legendArea: { width: 110, title: "Group" },
       yAxis: [{ orient: OrientationTypes.Left, gridlines: GridLineTypes.Major, title: { text: "Y" } }],
       xAxis: [{ orient: OrientationTypes.Bottom, gridlines: GridLineTypes.Major, title: { text: "X" } }],
-      plotOptions: { animation: { duration: 600 } }
+      plotOptions: { 
+        animation: { duration: 600 },
+        bubble: { minRadius: 8 }
+      }
     };
 
     const chart = new ScatterChart("#chart", data, options);

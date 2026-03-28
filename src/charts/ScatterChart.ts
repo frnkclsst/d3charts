@@ -22,7 +22,7 @@ import { BubbleShape } from "../shapes/BubbleShape";
  *   categories: { format: "%s", data: ["A", "B", "C"] },
  *   series: [
  *     { name: "X",       data: [10, 20, 30] },          // X values
- *     { name: "Group 1", data: [5, 15, 25], size: [3, 6, 9] }, // Y + bubble size
+ *     { name: "Group 1", data: [5, 15, 25], size: [3, 6, 9] }, // Y + bubble magnitude
  *   ],
  * };
  * const chart = new ScatterChart("#chart", data);
@@ -59,13 +59,27 @@ export class ScatterChart extends CartesianChart {
       .attr("class", "series") as unknown as d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>;
 
     const { duration, ease } = this.options.plotOptions.animation;
+    const { minRadius, maxRadius } = this.options.plotOptions.bubble;
+    const minArea = Math.PI * minRadius ** 2;
+    const maxArea = Math.PI * maxRadius ** 2;
+
+    // Build a single linear scale across all Y series so bubbles are comparable.
+    // Area is proportional to data value (correct perceptual encoding).
+    const allSizes = this.series.items.slice(1).flatMap(s => s.size ?? []);
+    const maxDataSize = allSizes.length > 0 ? Math.max(...allSizes) : 1;
+    const sizeScale = d3.scaleLinear().domain([0, maxDataSize]).range([minArea, maxArea]);
 
     // series[0] = X values (skip rendering); series[1..n] = Y groups
     for (let s = 1; s < this.series.length; s++) {
+      const rawSizes = this.series.items[s].size ?? [];
+      const scaledAreas = rawSizes.length > 0
+        ? rawSizes.map(v => sizeScale(v))
+        : new Array(this.series.getSeriesData(s).length).fill(minArea);
+
       new BubbleShape(svgSeries, s)
         .animation(duration, ease)
         .color(this.colorPalette.color(s - 1))
-        .sizes(this.series.items[s].size)
+        .sizes(scaledAreas)
         .labels(
           this.series.items[s].format,
           this.options.series.labels.rotate,

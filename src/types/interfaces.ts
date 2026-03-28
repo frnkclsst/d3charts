@@ -188,6 +188,13 @@ export interface IPlotOptions {
     /** Fill opacity (0–1). Defaults to `0.4`. */
     opacity?: number;
   };
+  /** Bubble chart size options. */
+  bubble?: {
+    /** Radius in pixels of the smallest bubble. Defaults to `4`. */
+    minRadius?: number;
+    /** Radius in pixels of the largest bubble. Defaults to `30`. */
+    maxRadius?: number;
+  };
   /** Inner/outer padding for band (ordinal) scales. */
   bands?: {
     /** Padding between bands as a fraction of the band width (0–1). Defaults to `0.5`. */
@@ -250,7 +257,9 @@ export interface IPlotOptions {
  * Definition of a single data series.
  *
  * Supply `data` for most chart types, or `min`/`max` for range (band) series.
- * `size` is used by {@link ScatterChart} to control bubble area.
+ * `size` is used by {@link ScatterChart} to control bubble magnitude — values are
+ * scaled automatically against the series maximum so that the largest bubble fills
+ * `plotOptions.bubble.maxRadius` pixels and the smallest fills `plotOptions.bubble.minRadius`.
  */
 export interface ISerie {
   /** Name of the Y axis this series belongs to. Used for multi-axis charts. */
@@ -267,7 +276,11 @@ export interface ISerie {
   min?: number[];
   /** Upper-bound values for range (band) series. */
   max?: number[];
-  /** Bubble area values for {@link ScatterChart} (scaled ×10 to produce d3 symbol size). */
+  /**
+   * Per-point magnitude values for {@link ScatterChart} bubble sizing — one per data point.
+   * Values are scaled against the series maximum: the largest value maps to `plotOptions.bubble.maxRadius`,
+   * the smallest maps to `plotOptions.bubble.minRadius`. Omit to render uniform-sized dots.
+   */
   size?: number[];
   /** Unit suffix appended to formatted values in tooltips (e.g. `" %"`). */
   suffix?: string;

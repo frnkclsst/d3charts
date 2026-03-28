@@ -8,9 +8,8 @@ import { easeFromString } from "../utils/ease";
  * Renders a single Y series of a scatter/bubble chart as `<path class="bubble">` elements.
  *
  * Each bubble is a d3 symbol path that grows from size 0 to its target size over
- * the animation duration. Bubble sizes come from `ISerie.size[]` (each value is
- * multiplied by 10 to produce the d3 symbol area). When no `size` array is provided
- * a default area of 60 is used (equivalent to `size = 6`).
+ * the animation duration. Bubble sizes are passed in as pre-computed d3 symbol areas
+ * (square pixels) by the owning chart — see `ScatterChart` for the scaling logic.
  *
  * X coordinates are driven from `series[0]` data values (the dedicated X series),
  * while Y coordinates come from the matching Y series data.
@@ -19,7 +18,7 @@ import { easeFromString } from "../utils/ease";
  * index 0 is the X-values series and is not rendered).
  */
 export class BubbleShape extends Shape {
-  /** Per-point size values (multiplied ×10 to produce d3 symbol area). */
+  /** Per-point d3 symbol area values (square pixels), pre-scaled by the owning chart. */
   private _sizes: number[] = [];
   /** Optional callback to attach tooltip behaviour to the bubble selection. */
   private _tooltipFn?: (sel: DataSelection<SVGPathElement>, serie: number) => void;
@@ -33,8 +32,9 @@ export class BubbleShape extends Shape {
   }
 
   /**
-   * Provides per-point size values.
-   * @param s - Array of size values, one per data point. Each is multiplied ×10.
+   * Provides pre-scaled d3 symbol area values (square pixels), one per data point.
+   * Scaling from raw data magnitudes to areas is handled by the owning chart.
+   * @param s - Array of d3 symbol area values.
    */
   public sizes(s: number[]): this {
     this._sizes = s;
@@ -82,7 +82,7 @@ export class BubbleShape extends Shape {
       .duration(this._animation.duration)
       .ease(easeFromString(this._animation.ease))
       .attrTween("d", (_d, i) => {
-        const targetSize = this._sizes[i] !== undefined ? this._sizes[i] * 10 : 60;
+        const targetSize = this._sizes[i] ?? 0;
         const interp = d3.interpolateNumber(0, targetSize);
         return (t: number): string => d3.symbol().size(interp(t)).type(d3.symbolCircle)() ?? "";
       })

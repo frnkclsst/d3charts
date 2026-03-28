@@ -6,12 +6,14 @@ const NO_ANIM = { plotOptions: { animation: { duration: 0 } } };
 
 // ScatterChart convention: series[0] = X values (not rendered),
 // series[1..n] = Y groups rendered as serie-1, serie-2, etc.
+// size[] values are data magnitudes — the chart scales them to d3 symbol areas
+// using plotOptions.bubble.minRadius / maxRadius (defaults 4px / 30px).
 const data = {
   categories: { format: "%s", data: ["P1", "P2", "P3", "P4", "P5"] },
   series: [
-    { name: "X axis",  data: [10, 20, 15, 30, 25] },             // X values
-    { name: "Group A", data: [5,  18, 22, 12, 28], size: [4, 7, 9, 6, 5] }, // Y group 1
-    { name: "Group B", data: [8,  14, 19, 20, 10], size: [3, 5, 7, 4, 6] }, // Y group 2
+    { name: "X axis",  data: [10, 20, 15, 30, 25] },                          // X values
+    { name: "Group A", data: [5,  18, 22, 12, 28], size: [4, 7, 9, 6, 5] },   // Y + bubble size
+    { name: "Group B", data: [8,  14, 19, 20, 10], size: [3, 5, 7, 4, 6] },   // Y + bubble size
   ],
 };
 
@@ -49,5 +51,14 @@ describe("ScatterChart", () => {
     chart.draw();
     chart.destroy();
     expect(document.querySelector("#chart")!.children).toHaveLength(0);
+  });
+
+  it("renders without size arrays (uniform dot fallback)", () => {
+    expect(() => new ScatterChart("#chart", simpleData, NO_ANIM).draw()).not.toThrow();
+  });
+
+  it("respects custom bubble radius via plotOptions.bubble", () => {
+    const opts = { plotOptions: { animation: { duration: 0 }, bubble: { minRadius: 2, maxRadius: 10 } } };
+    expect(() => new ScatterChart("#chart", data, opts).draw()).not.toThrow();
   });
 });

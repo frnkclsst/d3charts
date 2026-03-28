@@ -39,6 +39,7 @@ export interface IResolvedPlotOptions {
   animation: { duration: number; ease: EaseType };
   area: { visible: boolean; opacity: number };
   bands: { innerPadding: number; outerPadding: number };
+  bubble: { minRadius: number; maxRadius: number };
   colors: string[];
   heatmap: { colorRange: [string, string] };
   line: { interpolation: CurveType };
@@ -213,6 +214,10 @@ export function resolveOptions(options?: IOptions): IResolvedOptions {
       bands: {
         innerPadding: po?.bands?.innerPadding ?? 0.5,
         outerPadding: po?.bands?.outerPadding ?? 0.5
+      },
+      bubble: {
+        minRadius: po?.bubble?.minRadius ?? 4,
+        maxRadius: po?.bubble?.maxRadius ?? 30
       },
       colors: po?.colors ?? DEFAULT_COLORS,
       heatmap: {

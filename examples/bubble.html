@@ -50,7 +50,11 @@
       titleArea: { text: "Bubble Chart", height: 50 },
       legendArea: { width: 120, title: "Series" },
       plotOptions: {
-        animation: { duration: 1000 }
+        animation: { duration: 1000 },
+        // bubble: control the visual radius range (pixels).
+        // The largest size value in any series maps to maxRadius;
+        // the smallest maps to minRadius. Defaults: minRadius 4, maxRadius 30.
+        bubble: { minRadius: 4, maxRadius: 30 }
       },
       plotArea: { padding: 20 },
       xAxis: [{ orient: OrientationTypes.Bottom, gridlines: GridLineTypes.None, title: { text: "X" }  }],
